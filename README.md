@@ -6,7 +6,7 @@ This repository was created with the intent of presenting users with the lastest
 This extension will work both with Android and iOS platform exports. However note that iOS version will require [installing CocoaPods](https://help.yoyogames.com/hc/en-us/articles/360008958858-iOS-and-tvOS-Using-CocoaPods) in your system.
 
 ANDROID SOURCE:
-source/AdMob_gml/extensions/admob/AndroidSource/Java/
+`source/AdMob_gml/extensions/admob/AndroidSource/Java/`
 
 IOS SOURCE:
-source/AdMob_gml/extensions/admob/iOSSource/
+`source/AdMob_gml/extensions/admob/iOSSource/`
