@@ -177,7 +177,7 @@
   "gradleinject": "\r\n\r\nimplementation 'com.google.android.gms:play-services-ads:21.2.0'\r\nconstraints {\r\n  implementation('androidx.work:work-runtime:2.7.0')\r\n}\r\n\r\n// The include below was giving issues uploading to the google store.\r\n//GDPR -> https://developers.google.com/admob/ump/android/quick-start\r\n// implementation 'com.google.android.ads.consent:consent-library:1.0.8'\r\n\r\n//Mediations Here:\r\n\r\n\r\n",
   "androidcodeinjection": "\r\n<YYAndroidManifestApplicationInject>\r\n\r\n<meta-data\r\n            android:name=\"com.google.android.gms.ads.APPLICATION_ID\"\r\n            android:value=\"${YYEXTOPT_AdMob_Android_AppID}\"/>\r\n\r\n<meta-data\r\n            android:name=\"com.google.android.gms.ads.AD_MANAGER_APP\"\r\n            android:value=\"true\"/>\r\n\r\n<meta-data\r\n          android:name=\"com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION\"\r\n          android:value=\"true\"/>\r\n\r\n<meta-data\r\n          android:name=\"com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING\"\r\n          android:value=\"true\"/>\r\n\r\n</YYAndroidManifestApplicationInject>\r\n\r\n\r\n\r\n<YYAndroidGradleAndroid>\r\n  compileOptions {\r\n                   sourceCompatibility 1.8\r\n                   targetCompatibility 1.8\r\n               }\r\n</YYAndroidGradleAndroid>\r\n\r\n\r\n<YYAndroidGradleDependencies>\r\n\r\nimplementation 'com.google.android.gms:play-services-ads:21.2.0'\r\nconstraints {\r\n  implementation('androidx.work:work-runtime:2.7.0')\r\n}\r\n\r\n// The include below was giving issues uploading to the google store.\r\n//GDPR -> https://developers.google.com/admob/ump/android/quick-start\r\n// implementation 'com.google.android.ads.consent:consent-library:1.0.8'\r\n\r\n//Mediations Here:\r\n\r\n\r\n</YYAndroidGradleDependencies>\r\n\r\n\r\n<YYAndroidManifestManifestInject>\r\n        <meta-data\r\n            android:name=\"com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT\"\r\n            android:value=\"true\"/>\r\n</YYAndroidManifestManifestInject>\r\n\r\n",
   "hasConvertedCodeInjection": true,
-  "ioscodeinjection": "<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n<key>SKAdNetworkIdentifier</key>\r\n<string>cstr6suwn9.skadnetwork</string>\r\n</dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\n\r\npod 'Google-Mobile-Ads-SDK'\r\n\r\n</YYIosCocoaPods>\r\n\r\n",
+  "ioscodeinjection": "<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n<key>SKAdNetworkIdentifier</key>\r\n<string>cstr6suwn9.skadnetwork</string>\r\n</dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\n\r\npod 'Google-Mobile-Ads-SDK','8.13.0'\r\n\r\n</YYIosCocoaPods>\r\n\r\n",
   "tvoscodeinjection": "",
   "iosSystemFrameworkEntries": [
     {"resourceType":"GMExtensionFrameworkEntry","resourceVersion":"1.0","name":"AdSupport.framework","weakReference":false,"embed":0,},
@@ -190,7 +190,7 @@
     "com.google.android.gms.permission.AD_ID",
   ],
   "copyToTargets": 12,
-  "iosCocoaPods": "\r\n\r\npod 'Google-Mobile-Ads-SDK'\r\n\r\n",
+  "iosCocoaPods": "\r\n\r\npod 'Google-Mobile-Ads-SDK','8.13.0'\r\n\r\n",
   "tvosCocoaPods": "",
   "iosCocoaPodDependencies": "",
   "tvosCocoaPodDependencies": "",

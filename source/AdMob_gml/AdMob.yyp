@@ -52,29 +52,29 @@
     {"roomId":{"name":"Room_AdMob","path":"rooms/Room_AdMob/Room_AdMob.yy",},},
   ],
   "Folders": [
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob","folderPath":"folders/AdMob.yy","order":2,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/AdMob/Extensions.yy","order":1,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob Demo","folderPath":"folders/AdMob Demo.yy","order":3,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Objects","folderPath":"folders/AdMob Demo/Objects.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Rooms","folderPath":"folders/AdMob Demo/Rooms.yy","order":1,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob","folderPath":"folders/AdMob.yy","order":2,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/AdMob/Extensions.yy","order":1,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy","order":4,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Font","folderPath":"folders/YoYo Extensions Assets/Font.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Objects","folderPath":"folders/YoYo Extensions Assets/Objects.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Sprites","folderPath":"folders/YoYo Extensions Assets/Sprites.yy","order":3,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob Demo","folderPath":"folders/AdMob Demo.yy","order":3,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy","order":4,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy","order":0,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
   ],
   "TextureGroups": [
-    {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","isScaled":true,"compressFormat":"bz2","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,},
+    {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","isScaled":true,"compressFormat":"bz2","loadType":"default","directory":"","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"AdMob Extension.docx","CopyToMask":-1,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"AdMob Extension.pdf","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "MetaData": {
-    "IDEVersion": "2022.8.0.34",
+    "IDEVersion": "2022.900.0.39",
   },
 }
