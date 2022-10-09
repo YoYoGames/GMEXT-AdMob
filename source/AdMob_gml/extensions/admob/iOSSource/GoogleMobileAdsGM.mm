@@ -140,7 +140,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
     if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
         int dsMapIndex = dsMapCreate();
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
         createSocialAsyncEventWithDSMap(dsMapIndex);
     }
     

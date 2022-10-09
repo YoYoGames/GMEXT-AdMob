@@ -610,6 +610,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 	public void AdMob_AppOpenAd_Load()
 	{
+		appOpenAd = null;
 		RunnerActivity.ViewHandler.post(new Runnable() 
 		{
 			public void run() 
@@ -653,6 +654,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 				{
 					@Override
 					public void onAdDismissedFullScreenContent() {
+						appOpenAd = null;
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
@@ -660,8 +662,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 					@Override
 					public void onAdFailedToShowFullScreenContent(AdError adError) {
+						appOpenAd = null;
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnShowFailed");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnShowFailed");
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
@@ -669,24 +672,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 					@Override
 					public void onAdShowedFullScreenContent() {
+						appOpenAd = null;
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnFullyShown");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
 				});
 
-				mRewardedInterstitialAd.show(activity, new OnUserEarnedRewardListener() {
-					@Override
-					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-						int rewardAmount = rewardItem.getAmount();
-						String rewardType = rewardItem.getType();
-
-						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnReward");
-						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-					}
-				});
-				mRewardedInterstitialAd = null;
 				appOpenAd.show(activity);
 			}
 		});

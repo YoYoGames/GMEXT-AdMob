@@ -227,5 +227,25 @@ switch(async_load[?"type"])
 		// At this point you can reward the user.
 		show_message_async("User Earned Reward");
 		break;
+		
+		
+	
+	case "AdMob_AppOpenAd_onLoaded":
+	break
+	
+	case "AdMob_AppOpenAd_onAdFailedToLoad":
+		
+	break
+		
+	case "AdMob_AppOpenAd_OnDismissed":
+	break
+	
+	case "AdMob_AppOpenAd_OnShowFailed":
+		AdMob_AppOpenAd_Load()
+	break
+	
+	case "AdMob_AppOpenAd_OnFullyShown":
+		AdMob_AppOpenAd_Load()
+	break
 }
 
