@@ -25,12 +25,19 @@
 @property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAd;
 @property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAd_keepMe;
 @property(nonatomic, strong) NSString *rewardInterstitialAd_ID;
+@property(nonatomic, strong) NSString *appOpenAdID;
 
 @property(nonatomic, strong) UMPConsentForm *myForm;
 
 @property(nonatomic, strong) GADRequest *request_interstitial;
 @property(nonatomic, strong) GADRequest *request_rewarded;
 
+@property(nonatomic, strong) GADAppOpenAd *appOpenAd;
+
+@property(nonatomic, strong) NSDate *loadTime;
+
+
+-(double) AdMob_AppOpenAd_isAdAvailable;
 
 @end
 

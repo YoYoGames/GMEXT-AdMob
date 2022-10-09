@@ -70,11 +70,11 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         self.interstitialAdID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_INTERSTITIAL")];
         self.rewardAd_ID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_REWARDED")];
         self.rewardInterstitialAd_ID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_REWARDED_INTERSTITIAL")];
+		self.appOpenAdID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_OPENAPPAD")];
         
         int dsMapIndex = dsMapCreate();
         dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_OnInitialized");
         createSocialAsyncEventWithDSMap(dsMapIndex);
-        
     }];
 }
 
@@ -136,6 +136,14 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
     }
     
+    
+    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    {
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
+        createSocialAsyncEventWithDSMap(dsMapIndex);
+    }
+    
     dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
     dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
     createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -165,6 +173,13 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnFullyShown");
 		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
+    
+    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    {
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
+        createSocialAsyncEventWithDSMap(dsMapIndex);
+    }
 }
 
 /// Tells the delegate that the ad dismissed full screen content.
@@ -190,6 +205,13 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnDismissed");
 		createSocialAsyncEventWithDSMap(dsMapIndex);
+    }
+    
+    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    {
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }
 }
 
@@ -563,6 +585,64 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         return 1.0;
     else
         return 0.0;
+}
+
+/////////////////App Open Ad/////////////////////////////////////////////////////////////////////////
+-(void) AdMob_AppOpenAd_Init:(NSString*) adUnitId
+{
+	self.appOpenAdID = adUnitId;
+}
+
+-(void) AdMob_AppOpenAd_Load
+{	
+	  self.appOpenAd = nil;
+	  [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
+				if (error) {
+					NSLog(@"Failed to load app open ad: %@", error);
+                    
+                    int dsMapIndex = dsMapCreate();
+                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_onAdFailedToLoad");
+                    createSocialAsyncEventWithDSMap(dsMapIndex);
+                    
+					return;
+				}
+				self.appOpenAd = appOpenAd;
+				self.appOpenAd.fullScreenContentDelegate = self;
+				self.loadTime = [NSDate date];
+              
+              int dsMapIndex = dsMapCreate();
+              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_onLoaded");
+              createSocialAsyncEventWithDSMap(dsMapIndex);
+		   }];
+}
+
+-(void) AdMob_AppOpenAd_Show
+{
+	if([self AdMob_AppOpenAd_isAdAvailable]<0.5)
+		return;
+	
+	if (self.appOpenAd)
+    {
+        self.appOpenAd.fullScreenContentDelegate = self;
+		[self.appOpenAd presentFromRootViewController:g_controller];
+    }
+}
+
+double loadTime = 0;
+-(double) AdMob_AppOpenAd_isAdAvailable
+{
+	if (self.appOpenAd && [self wasLoadTimeLessThanNHoursAgo:4])
+		return 1.0;
+	else
+		return 0.0;
+}
+
+- (BOOL)wasLoadTimeLessThanNHoursAgo:(int)n {
+	NSDate *now = [NSDate date];
+	NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
+	double secondsPerHour = 3600.0;
+	double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
+	return intervalInHours < n;
 }
 
 ///// TARGETING ///////////////////////////////////////////////////////////////////////////////////

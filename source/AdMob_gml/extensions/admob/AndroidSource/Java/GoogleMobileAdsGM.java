@@ -43,6 +43,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.RequestConfiguration;
 
+import com.google.android.gms.ads.appopen.AppOpenAd;
+import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
+
 import com.google.ads.mediation.admob.AdMobAdapter;
 
 import com.google.android.ump.*;//UserMessagingPlatform;
@@ -61,6 +64,8 @@ import java.util.List;
 
 import android.util.DisplayMetrics;
 import android.view.Display;
+
+import java.util.Date;
 
 public class GoogleMobileAdsGM extends RunnerSocial {
 	private static final int EVENT_OTHER_SOCIAL = 70;
@@ -100,6 +105,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 							AdMob_Interstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL"));
 							AdMob_RewardedVideo_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
 							AdMob_RewardedInterstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
+							AdMob_AppOpenAd_Init(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
 						}
 					});
 				} catch (Exception e) {
@@ -591,6 +597,113 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 		return 1.0;
 	}
+	
+	///////////////////////////////////// Open App Format
+	
+	private AppOpenAd appOpenAd = null;
+	public String mAppOpenAdID = "";
+	
+	public void AdMob_AppOpenAd_Init(String adUnitId)
+	{
+		mAppOpenAdID = adUnitId;
+	}
+	
+	public void AdMob_AppOpenAd_Load()
+	{
+		RunnerActivity.ViewHandler.post(new Runnable() 
+		{
+			public void run() 
+			{
+				AppOpenAd.load(activity, mAppOpenAdID, AdMob_AdRequest(),AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,new AppOpenAdLoadCallback() 
+				{
+					  @Override
+					  public void onAdLoaded(AppOpenAd ad) 
+					  {
+							loadTime = (new Date()).getTime();
+							
+							appOpenAd = ad;
+						
+							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onLoaded");
+							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					  }
+
+					  @Override
+					  public void onAdFailedToLoad(LoadAdError loadAdError) {
+							//Log.d(LOG_TAG, loadAdError.getMessage());
+							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onAdFailedToLoad");
+							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					  }
+				});
+			}
+		});
+	}
+	
+	public void AdMob_AppOpenAd_Show()
+	{
+		if(AdMob_AppOpenAd_isAdAvailable() < 0.5)
+			return;
+		
+		RunnerActivity.ViewHandler.post(new Runnable() 
+		{
+			public void run() 
+			{
+				appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback()
+				{
+					@Override
+					public void onAdDismissedFullScreenContent() {
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnDismissed");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+
+					@Override
+					public void onAdFailedToShowFullScreenContent(AdError adError) {
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnShowFailed");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
+						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+
+					@Override
+					public void onAdShowedFullScreenContent() {
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnFullyShown");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+				});
+
+				mRewardedInterstitialAd.show(activity, new OnUserEarnedRewardListener() {
+					@Override
+					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+						int rewardAmount = rewardItem.getAmount();
+						String rewardType = rewardItem.getType();
+
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnReward");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+				});
+				mRewardedInterstitialAd = null;
+				appOpenAd.show(activity);
+			}
+		});
+	}
+	
+	private boolean wasLoadTimeLessThanNHoursAgo(long numHours) 
+	{
+		long dateDifference = (new Date()).getTime() - this.loadTime;
+		long numMilliSecondsPerHour = 3600000;
+		return (dateDifference < (numMilliSecondsPerHour * numHours));
+	}
+
+	private long loadTime = 0;
+	public double AdMob_AppOpenAd_isAdAvailable()
+	{
+		return (appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4))? 1.0:0.0;
+	}	
 
 	///// TARGETING
 	///// ///////////////////////////////////////////////////////////////////////////////////

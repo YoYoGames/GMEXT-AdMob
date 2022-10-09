@@ -21,6 +21,7 @@
     {"id":{"name":"Room_AdMob","path":"rooms/Room_AdMob/Room_AdMob.yy",},"order":0,},
     {"id":{"name":"Obj_AdMob_Interstitial","path":"objects/Obj_AdMob_Interstitial/Obj_AdMob_Interstitial.yy",},"order":3,},
     {"id":{"name":"Spr_YoYo_textbox","path":"sprites/Spr_YoYo_textbox/Spr_YoYo_textbox.yy",},"order":2,},
+    {"id":{"name":"Obj_AdMob_AppOpenAd","path":"objects/Obj_AdMob_AppOpenAd/Obj_AdMob_AppOpenAd.yy",},"order":8,},
     {"id":{"name":"Obj_AdMob_RewardedInterstitial","path":"objects/Obj_AdMob_RewardedInterstitial/Obj_AdMob_RewardedInterstitial.yy",},"order":6,},
     {"id":{"name":"Obj_AdMob_Volume","path":"objects/Obj_AdMob_Volume/Obj_AdMob_Volume.yy",},"order":5,},
     {"id":{"name":"AdMob","path":"extensions/AdMob/AdMob.yy",},"order":0,},
