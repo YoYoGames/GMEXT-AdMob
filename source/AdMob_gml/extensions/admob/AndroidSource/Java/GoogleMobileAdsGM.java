@@ -126,7 +126,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	///// //////////////////////////////////////////////////////////////////////////////////////
 
 	private AdView adView = null;
-	private String bannerID;
+	private String bannerID = "";
 	private RelativeLayout layout;
 
 	public void AdMob_Banner_Init(String adUnitId) {
@@ -134,6 +134,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_Banner_Create(final double size, final double bottom) {
+		
+		if(bannerID == "")
+			return;
+		
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
 				if (adView != null) {
@@ -329,39 +333,45 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	///// ////////////////////////////////////////////////////////////////////////////////
 
 	private InterstitialAd mInterstitialAd = null;
-	private String mInterstitialID = null;
+	private String mInterstitialID = "";
 
 	public void AdMob_Interstitial_Init(String adUnitId) {
 		mInterstitialID = adUnitId;
 	}
 
 	public void AdMob_Interstitial_Load() {
-		if (mInterstitialAd == null)
-			RunnerActivity.ViewHandler.post(new Runnable() {
-				public void run() {
-					InterstitialAd.load(activity, mInterstitialID, AdMob_AdRequest(), new InterstitialAdLoadCallback() {
-						@Override
-						public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-							mInterstitialAd = interstitialAd;
+		
+		if(mInterstitialID == "")
+			return;
+		
+		if (mInterstitialAd != null)
+			return;
+			
+		RunnerActivity.ViewHandler.post(new Runnable() {
+			public void run() {
+				InterstitialAd.load(activity, mInterstitialID, AdMob_AdRequest(), new InterstitialAdLoadCallback() {
+					@Override
+					public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+						mInterstitialAd = interstitialAd;
 
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoaded");
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-						}
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoaded");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
 
-						@Override
-						public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-							mInterstitialAd = null;
+					@Override
+					public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+						mInterstitialAd = null;
 
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoadFailed");
-							RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
-							RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-						}
-					});
-				}
-			});
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoadFailed");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
+						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+				});
+			}
+		});
 	}
 
 	public void AdMob_Interstitial_Show() {
@@ -413,39 +423,45 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	///// //////////////////////////////////////////////////////////////////////////////
 
 	public RewardedAd mRewardedAd = null;
-	public String mRewardedAdID = null;
+	public String mRewardedAdID = "";
 
 	public void AdMob_RewardedVideo_Init(String adUnitId) {
 		mRewardedAdID = adUnitId;
 	}
 
 	public void AdMob_RewardedVideo_Load() {
-		if (mRewardedAd == null)
-			RunnerActivity.ViewHandler.post(new Runnable() {
-				public void run() {
-					RewardedAd.load(activity, mRewardedAdID, AdMob_AdRequest(), new RewardedAdLoadCallback() {
-						@Override
-						public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-							mRewardedAd = null;
+		
+		if(mRewardedAdID == "")
+			return;
+		
+		if (mRewardedAd != null)
+			return;
+		
+		RunnerActivity.ViewHandler.post(new Runnable() {
+			public void run() {
+				RewardedAd.load(activity, mRewardedAdID, AdMob_AdRequest(), new RewardedAdLoadCallback() {
+					@Override
+					public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+						mRewardedAd = null;
 
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoadFailed");
-							RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
-							RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-						}
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoadFailed");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
+						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
 
-						@Override
-						public void onAdLoaded(@NonNull RewardedAd rewardedAd_) {
-							mRewardedAd = rewardedAd_;
+					@Override
+					public void onAdLoaded(@NonNull RewardedAd rewardedAd_) {
+						mRewardedAd = rewardedAd_;
 
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoaded");
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-						}
-					});
-				}
-			});
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoaded");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+				});
+			}
+		});
 	}
 
 	public void AdMob_RewardedVideo_Show() {
@@ -506,42 +522,48 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	///// ////////////////////////////////////////////////////////////////////////
 
 	public RewardedInterstitialAd mRewardedInterstitialAd = null;
-	public String mRewardedInterstitialAdID = null;
+	public String mRewardedInterstitialAdID = "";
 
 	public void AdMob_RewardedInterstitial_Init(String adUnitId) {
 		mRewardedInterstitialAdID = adUnitId;
 	}
 
 	public void AdMob_RewardedInterstitial_Load() {
-		if (mRewardedInterstitialAd == null)
-			RunnerActivity.ViewHandler.post(new Runnable() {
-				public void run() {
-					RewardedInterstitialAd.load(activity, mRewardedInterstitialAdID, AdMob_AdRequest(),
-							new RewardedInterstitialAdLoadCallback() {
-								@Override
-								public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-									mRewardedInterstitialAd = null;
+		
+		if(mRewardedInterstitialAdID == "")
+			return;
+		
+		if (mRewardedInterstitialAd != null)
+			return;
+		
+		RunnerActivity.ViewHandler.post(new Runnable() {
+			public void run() {
+				RewardedInterstitialAd.load(activity, mRewardedInterstitialAdID, AdMob_AdRequest(),
+						new RewardedInterstitialAdLoadCallback() {
+							@Override
+							public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+								mRewardedInterstitialAd = null;
 
-									int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-									RunnerJNILib.DsMapAddString(dsMapIndex, "type",
-											"AdMob_RewardedInterstitial_OnLoadFailed");
-									RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
-									RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
-									RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-								}
+								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+								RunnerJNILib.DsMapAddString(dsMapIndex, "type",
+										"AdMob_RewardedInterstitial_OnLoadFailed");
+								RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", loadAdError.getMessage());
+								RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", loadAdError.getCode());
+								RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+							}
 
-								@Override
-								public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd_) {
-									mRewardedInterstitialAd = rewardedInterstitialAd_;
+							@Override
+							public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd_) {
+								mRewardedInterstitialAd = rewardedInterstitialAd_;
 
-									int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-									RunnerJNILib.DsMapAddString(dsMapIndex, "type",
-											"AdMob_RewardedInterstitial_OnLoaded");
-									RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-								}
-							});
-				}
-			});
+								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+								RunnerJNILib.DsMapAddString(dsMapIndex, "type",
+										"AdMob_RewardedInterstitial_OnLoaded");
+								RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+							}
+						});
+			}
+		});
 	}
 
 	public void AdMob_RewardedInterstitial_Show() {
@@ -610,6 +632,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 	public void AdMob_AppOpenAd_Load(double orientation)
 	{
+		if(mAppOpenAdID == "")
+			return;
+		
 		appOpenAd = null;
 		RunnerActivity.ViewHandler.post(new Runnable() 
 		{

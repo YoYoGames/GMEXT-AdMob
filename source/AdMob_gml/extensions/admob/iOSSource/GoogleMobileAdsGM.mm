@@ -33,6 +33,12 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         testingAds = false;
         NPA = false;
 		
+		self.BannerAdID = @"";
+		self.interstitialAdID = @"";
+		self.rewardAd_ID = @"";
+		self.rewardInterstitialAd_ID = @"";
+		self.appOpenAdID = @"";
+
         return self;
     }
     return NULL;
@@ -224,6 +230,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 -(void) AdMob_Banner_Create:(double) size bottom: (double)bottom
 {
+	if ([self.BannerAdID isEqualToString:@""])
+		return;
+		
     if(self.bannerView != nil)
     {
         [self.bannerView removeFromSuperview];
@@ -412,6 +421,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 -(void) AdMob_Interstitial_Load
 {
+	if ([self.interstitialAdID isEqualToString:@""])
+		return;
+	
     if(self.interstitial != nil)
         return;
     
@@ -470,6 +482,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 -(void) AdMob_RewardedVideo_Load
 {
+	if ([self.rewardAd_ID isEqualToString:@""])
+		return;
+	
     if(self.rewardAd != nil)
         return;
     
@@ -534,6 +549,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 -(void) AdMob_RewardedInterstitial_Load
 {
+	if ([self.rewardInterstitialAd_ID isEqualToString:@""])
+		return;
+	
     if(self.rewardedInterstitialAd != nil)
         return;
 	
@@ -595,6 +613,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 -(void) AdMob_AppOpenAd_Load:(double) orientation
 {	
+	if ([self.appOpenAdID isEqualToString:@""])
+		return;
+	
 	  self.appOpenAd = nil;
 	  [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:(orientation==0)?UIInterfaceOrientationLandscapeRight:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
 				if (error) {
