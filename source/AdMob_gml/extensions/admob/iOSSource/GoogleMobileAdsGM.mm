@@ -593,10 +593,10 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 	self.appOpenAdID = adUnitId;
 }
 
--(void) AdMob_AppOpenAd_Load
+-(void) AdMob_AppOpenAd_Load:(double) orientation
 {	
 	  self.appOpenAd = nil;
-	  [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
+	  [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:(orientation==0)?UIInterfaceOrientationLandscapeRight:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
 				if (error) {
 					NSLog(@"Failed to load app open ad: %@", error);
                     

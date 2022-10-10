@@ -97,7 +97,9 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_NonPersonalizedAds_Set","externalName":"AdMob_NonPersonalizedAds_Set","kind":4,"help":"AdMob_NonPersonalizedAds_Set(value)","hidden":false,"returnType":1,"argCount":0,"args":[
             2,
           ],},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Load","externalName":"AdMob_AppOpenAd_Load","kind":4,"help":"AdMob_AppOpenAd_Load()","hidden":false,"returnType":1,"argCount":0,"args":[],},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Load","externalName":"AdMob_AppOpenAd_Load","kind":4,"help":"AdMob_AppOpenAd_Load(orientation)","hidden":false,"returnType":1,"argCount":0,"args":[
+            2,
+          ],},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Show","externalName":"AdMob_AppOpenAd_Show","kind":4,"help":"AdMob_AppOpenAd_Show()","hidden":false,"returnType":1,"argCount":0,"args":[],},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Init","externalName":"AdMob_AppOpenAd_Init","kind":4,"help":"AdMob_AppOpenAd_Init(String adUnitId)","hidden":false,"returnType":1,"argCount":0,"args":[
             1,

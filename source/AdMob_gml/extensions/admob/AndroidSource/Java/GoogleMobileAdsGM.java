@@ -608,14 +608,14 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		mAppOpenAdID = adUnitId;
 	}
 	
-	public void AdMob_AppOpenAd_Load()
+	public void AdMob_AppOpenAd_Load(double orientation)
 	{
 		appOpenAd = null;
 		RunnerActivity.ViewHandler.post(new Runnable() 
 		{
 			public void run() 
 			{
-				AppOpenAd.load(activity, mAppOpenAdID, AdMob_AdRequest(),AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,new AppOpenAdLoadCallback() 
+				AppOpenAd.load(activity, mAppOpenAdID, AdMob_AdRequest(),(orientation==0)?AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE:AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,new AppOpenAdLoadCallback() 
 				{
 					  @Override
 					  public void onAdLoaded(AppOpenAd ad) 

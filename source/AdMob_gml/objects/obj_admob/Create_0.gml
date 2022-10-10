@@ -56,7 +56,7 @@ function loadAllAds() {
 	AdMob_Interstitial_Load();
 	AdMob_RewardedVideo_Load();
 	AdMob_RewardedInterstitial_Load();
-	AdMob_AppOpenAd_Load()
+	AdMob_AppOpenAd_Load(display_landscape)
 }
 
 // This function updates both consent Status and Type strings
