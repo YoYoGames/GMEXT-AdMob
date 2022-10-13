@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMExtension",
+  "resourceVersion": "1.2",
+  "name": "ext_AppTrackingTransparency",
   "optionsFile": "options.json",
   "options": [],
   "exportToGame": true,
@@ -7,7 +10,7 @@
   "packageId": "",
   "productId": "",
   "author": "",
-  "date": "2021-05-07T02:41:05.9312614+01:00",
+  "date": "2021-05-06T18:41:05.9312614-07:00",
   "license": "",
   "description": "",
   "helpfile": "",
@@ -16,20 +19,20 @@
   "androidProps": false,
   "installdir": "",
   "files": [
-    {"filename":"ext_AppTrackingTransparency.ext","origname":"","init":"","final":"","kind":4,"uncompress":false,"functions":[
-        {"externalName":"AppTrackingTransparency_available","kind":4,"help":"AppTrackingTransparency_available()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"AppTrackingTransparency_available","tags":[],"resourceType":"GMExtensionFunction",},
-        {"externalName":"AppTrackingTransparency_request","kind":4,"help":"AppTrackingTransparency_request()","hidden":false,"returnType":1,"argCount":0,"args":[],"resourceVersion":"1.0","name":"AppTrackingTransparency_request","tags":[],"resourceType":"GMExtensionFunction",},
-        {"externalName":"AppTrackingTransparency_status","kind":4,"help":"AppTrackingTransparency_status()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"AppTrackingTransparency_status","tags":[],"resourceType":"GMExtensionFunction",},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"ext_AppTrackingTransparency.ext","origname":"","init":"","final":"","kind":4,"uncompress":false,"functions":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_available","externalName":"AppTrackingTransparency_available","kind":4,"help":"AppTrackingTransparency_available()","hidden":false,"returnType":2,"argCount":0,"args":[],},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_request","externalName":"AppTrackingTransparency_request","kind":4,"help":"AppTrackingTransparency_request()","hidden":false,"returnType":1,"argCount":0,"args":[],},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_status","externalName":"AppTrackingTransparency_status","kind":4,"help":"AppTrackingTransparency_status()","hidden":false,"returnType":2,"argCount":0,"args":[],},
       ],"constants":[
-        {"value":"0","hidden":false,"resourceVersion":"1.0","name":"AppTrackingTransparency_NotDetermined","tags":[],"resourceType":"GMExtensionConstant",},
-        {"value":"1","hidden":false,"resourceVersion":"1.0","name":"AppTrackingTransparency_Authorized","tags":[],"resourceType":"GMExtensionConstant",},
-        {"value":"2","hidden":false,"resourceVersion":"1.0","name":"AppTrackingTransparency_Denied","tags":[],"resourceType":"GMExtensionConstant",},
-        {"value":"3","hidden":false,"resourceVersion":"1.0","name":"AppTrackingTransparency_Restricted","tags":[],"resourceType":"GMExtensionConstant",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_NotDetermined","value":"0","hidden":false,},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Authorized","value":"1","hidden":false,},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Denied","value":"2","hidden":false,},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Restricted","value":"3","hidden":false,},
       ],"ProxyFiles":[],"copyToTargets":-1,"order":[
         {"name":"AppTrackingTransparency_available","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
         {"name":"AppTrackingTransparency_request","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
         {"name":"AppTrackingTransparency_status","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
-      ],"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMExtensionFile",},
+      ],},
   ],
   "classname": "ext_AppTrackingTransparency",
   "tvosclassname": null,
@@ -54,7 +57,7 @@
   "ioscodeinjection": "<YYIosPlist>\r\n\r\n<key>NSUserTrackingUsageDescription</key>\r\n<string>This identifier will be used to deliver personalized ads to you.</string>\r\n\r\n</YYIosPlist>\r\n\r\n",
   "tvoscodeinjection": "",
   "iosSystemFrameworkEntries": [
-    {"weakReference":false,"embed":0,"resourceVersion":"1.0","name":"AppTrackingTransparency.framework","tags":[],"resourceType":"GMExtensionFrameworkEntry",},
+    {"resourceType":"GMExtensionFrameworkEntry","resourceVersion":"1.0","name":"AppTrackingTransparency.framework","weakReference":false,"embed":0,},
   ],
   "tvosSystemFrameworkEntries": [],
   "iosThirdPartyFrameworkEntries": [],
@@ -70,8 +73,4 @@
     "name": "Extensions",
     "path": "folders/App Tracking Transparency [EXCLUDE]/Extensions.yy",
   },
-  "resourceVersion": "1.2",
-  "name": "ext_AppTrackingTransparency",
-  "tags": [],
-  "resourceType": "GMExtension",
 }

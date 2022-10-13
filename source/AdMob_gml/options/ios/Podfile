@@ -1,7 +1,9 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 # This podfile is provided as a template. It can be modified with your own inputs should you require, once it is within your project.
 
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '10.0'
 
 # ${project_name} macro will be expanded when your game is compiled.
 target '${YYProjectName}' do
