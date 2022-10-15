@@ -668,6 +668,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 	public void AdMob_AppOpenAd_Show()
 	{
+		if(appOpenAd == null)
+			return;
+		
 		if(AdMob_AppOpenAd_isAdAvailable() < 0.5)
 			return;
 		
