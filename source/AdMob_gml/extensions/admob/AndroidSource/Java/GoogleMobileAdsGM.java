@@ -642,25 +642,27 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			{
 				AppOpenAd.load(activity, mAppOpenAdID, AdMob_AdRequest(),(orientation==0)?AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE:AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,new AppOpenAdLoadCallback() 
 				{
-					  @Override
-					  public void onAdLoaded(AppOpenAd ad) 
-					  {
-							loadTime = (new Date()).getTime();
-							
-							appOpenAd = ad;
-						
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onLoaded");
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-					  }
+					@Override
+					public void onAdLoaded(AppOpenAd ad) 
+					{
+						loadTime = (new Date()).getTime();
 
-					  @Override
-					  public void onAdFailedToLoad(LoadAdError loadAdError) {
-							//Log.d(LOG_TAG, loadAdError.getMessage());
-							int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-							RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onAdFailedToLoad");
-							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-					  }
+						appOpenAd = ad;
+
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onLoaded");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
+
+					@Override
+					public void onAdFailedToLoad(LoadAdError loadAdError) 
+					{
+						appOpenAd = null;
+						//Log.d(LOG_TAG, loadAdError.getMessage());
+						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onAdFailedToLoad");
+						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+					}
 				});
 			}
 		});
@@ -708,6 +710,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 				});
 
 				appOpenAd.show(activity);
+				appOpenAd = null;
 			}
 		});
 	}

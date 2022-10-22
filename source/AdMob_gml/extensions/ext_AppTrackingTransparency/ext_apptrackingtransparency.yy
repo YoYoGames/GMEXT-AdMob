@@ -20,15 +20,15 @@
   "installdir": "",
   "files": [
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"ext_AppTrackingTransparency.ext","origname":"","init":"","final":"","kind":4,"uncompress":false,"functions":[
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_available","externalName":"AppTrackingTransparency_available","kind":4,"help":"AppTrackingTransparency_available()","hidden":false,"returnType":2,"argCount":0,"args":[],},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_request","externalName":"AppTrackingTransparency_request","kind":4,"help":"AppTrackingTransparency_request()","hidden":false,"returnType":1,"argCount":0,"args":[],},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_status","externalName":"AppTrackingTransparency_status","kind":4,"help":"AppTrackingTransparency_status()","hidden":false,"returnType":2,"argCount":0,"args":[],},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_available","externalName":"AppTrackingTransparency_available","kind":4,"help":"AppTrackingTransparency_available()","hidden":false,"returnType":2,"argCount":0,"args":[],"documentation":"",},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_request","externalName":"AppTrackingTransparency_request","kind":4,"help":"AppTrackingTransparency_request()","hidden":false,"returnType":1,"argCount":0,"args":[],"documentation":"",},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AppTrackingTransparency_status","externalName":"AppTrackingTransparency_status","kind":4,"help":"AppTrackingTransparency_status()","hidden":false,"returnType":2,"argCount":0,"args":[],"documentation":"",},
       ],"constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_NotDetermined","value":"0","hidden":false,},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Authorized","value":"1","hidden":false,},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Denied","value":"2","hidden":false,},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Restricted","value":"3","hidden":false,},
-      ],"ProxyFiles":[],"copyToTargets":-1,"order":[
+      ],"ProxyFiles":[],"copyToTargets":-1,"usesRunnerInterface":false,"order":[
         {"name":"AppTrackingTransparency_available","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
         {"name":"AppTrackingTransparency_request","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
         {"name":"AppTrackingTransparency_status","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
