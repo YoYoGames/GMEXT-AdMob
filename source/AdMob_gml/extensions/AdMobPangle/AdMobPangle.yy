@@ -37,7 +37,7 @@
   "androidmanifestinject": "",
   "androidactivityinject": "",
   "gradleinject": "\r\n    implementation  'com.google.ads.mediation:pangle:4.7.0.6.0'\r\n",
-  "androidcodeinjection": "\r\n<YYAndroidGradleDependencies>\r\n    implementation  'com.google.ads.mediation:pangle:4.7.0.6.0'\r\n</YYAndroidGradleDependencies>\r\n\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n        url 'https://artifact.bytedance.com/repository/pangle/'\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n",
+  "androidcodeinjection": "\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n        url 'https://artifact.bytedance.com/repository/pangle/'\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n\r\n\r\n<YYAndroidGradleDependencies>\r\n    implementation  'com.google.ads.mediation:pangle:4.7.0.6.0'\r\n</YYAndroidGradleDependencies>\r\n\r\n\r\n",
   "hasConvertedCodeInjection": true,
   "ioscodeinjection": "\r\n<YYIosCocoaPods>\r\npod 'GoogleMobileAdsMediationPangle'\r\n</YYIosCocoaPods>\r\n",
   "tvoscodeinjection": "",
