@@ -67,7 +67,16 @@ import android.view.Display;
 
 import java.util.Date;
 
-public class GoogleMobileAdsGM extends RunnerSocial {
+import android.os.Process;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadPoolExecutor;
+import 	java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+
+public class GoogleMobileAdsGM extends RunnerSocial 
+{
 	private static final int EVENT_OTHER_SOCIAL = 70;
 
 	public static Activity activity;
@@ -79,8 +88,43 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	//////////////////////////////////////////////////// GoogleMobileAds
 	//////////////////////////////////////////////////// ////////////////////////////////////////////////////
 
+
+int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+int KEEP_ALIVE_TIME = 250;
+TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.MILLISECONDS;
+BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>();
+ExecutorService executorService = new ThreadPoolExecutor(NUMBER_OF_CORES,NUMBER_OF_CORES*2,KEEP_ALIVE_TIME,KEEP_ALIVE_TIME_UNIT,taskQueue,new BackgroundThreadFactory());
+
+private static class BackgroundThreadFactory implements ThreadFactory 
+{
+  private static int sTag = 1;
+
+  @Override
+  public Thread newThread(Runnable runnable) 
+  {
+      Thread thread = new Thread(runnable);
+      thread.setName("AdmobInitThread" + sTag);
+      thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
+      // A exception handler is created to log the exception from threads
+      thread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() 
+	  {
+          @Override
+          public void uncaughtException(Thread thread, Throwable ex) 
+		  {
+              Log.e("yoyo", thread.getName() + " encountered an error: " + ex.getMessage());
+          }
+      });
+      return thread;
+  }
+}
+
+	boolean init_success = false;
 	public void AdMob_Initialize() {
-		RunnerActivity.ViewHandler.post(new Runnable() {
+		
+		
+		// ThreadPoolExecutor
+		/*RunnerActivity.ViewHandler.post*/executorService.execute(new Runnable() {
 			public void run() {
 				MobileAds.setRequestConfiguration(requestConfigurationBuilder());
 
@@ -106,6 +150,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 							AdMob_RewardedVideo_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
 							AdMob_RewardedInterstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
 							AdMob_AppOpenAd_Init(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
+							
+							init_success = true;
 						}
 					});
 				} catch (Exception e) {
@@ -134,6 +180,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_Banner_Create(final double size, final double bottom) {
+		
+		if(!init_success)
+			return;
 		
 		if(bannerID == "")
 			return;
@@ -341,6 +390,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public void AdMob_Interstitial_Load() {
 		
+		if(!init_success)
+			return;
+		
 		if(mInterstitialID == "")
 			return;
 		
@@ -375,6 +427,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_Interstitial_Show() {
+		
+		if(!init_success)
+			return;
+		
 		if (mInterstitialAd == null)
 			return;
 
@@ -431,6 +487,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public void AdMob_RewardedVideo_Load() {
 		
+		if(!init_success)
+			return;
+		
 		if(mRewardedAdID == "")
 			return;
 		
@@ -465,6 +524,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_RewardedVideo_Show() {
+		
+		if(!init_success)
+			return;
+		
 		if (mRewardedAd == null)
 			return;
 
@@ -530,6 +593,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public void AdMob_RewardedInterstitial_Load() {
 		
+		if(!init_success)
+			return;
+		
 		if(mRewardedInterstitialAdID == "")
 			return;
 		
@@ -567,6 +633,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_RewardedInterstitial_Show() {
+		
+		if(!init_success)
+			return;
+		
 		if (mRewardedInterstitialAd == null)
 			return;
 
@@ -632,6 +702,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 	public void AdMob_AppOpenAd_Load(double orientation)
 	{
+		
+		if(!init_success)
+			return;
+		
 		if(mAppOpenAdID == "")
 			return;
 		
@@ -639,7 +713,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		RunnerActivity.ViewHandler.post(new Runnable() 
 		{
 			public void run() 
-			{
+			{				
 				AppOpenAd.load(activity, mAppOpenAdID, AdMob_AdRequest(),(orientation==0)?AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE:AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,new AppOpenAdLoadCallback() 
 				{
 					@Override
@@ -670,6 +744,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 	public void AdMob_AppOpenAd_Show()
 	{
+		if(!init_success)
+			return;
+		
 		if(appOpenAd == null)
 			return;
 		
@@ -680,6 +757,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		{
 			public void run() 
 			{
+				if(appOpenAd == null)
+					return;
+				
 				appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback()
 				{
 					@Override
