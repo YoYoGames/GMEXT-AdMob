@@ -425,7 +425,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			}
 		});
 	}
-
+	
 	public void AdMob_Interstitial_Show() {
 		
 		if(!init_success)
@@ -464,6 +464,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 				mInterstitialAd.show(activity);
 				mInterstitialAd = null;
+				showing_ad = true;
 			}
 		});
 	}
@@ -522,7 +523,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			}
 		});
 	}
-
+	
 	public void AdMob_RewardedVideo_Show() {
 		
 		if(!init_success)
@@ -558,6 +559,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					}
 				});
 
+				showing_ad = true;
 				mRewardedAd.show(activity, new OnUserEarnedRewardListener() {
 					@Override
 					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
@@ -667,6 +669,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					}
 				});
 
+				showing_ad = true;
 				mRewardedInterstitialAd.show(activity, new OnUserEarnedRewardListener() {
 					@Override
 					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
@@ -807,6 +810,19 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	{
 		return (appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4))? 1.0:0.0;
 	}	
+	
+	
+	boolean showing_ad = false;
+	public double AdMob_ShowedAd()
+	{
+		return showing_ad?1.0:0.0;
+	}
+	
+	public void AdMob_ShowedAd_onResume_Tick()
+	{
+		showing_ad = false;
+	}
+	
 
 	///// TARGETING
 	///// ///////////////////////////////////////////////////////////////////////////////////

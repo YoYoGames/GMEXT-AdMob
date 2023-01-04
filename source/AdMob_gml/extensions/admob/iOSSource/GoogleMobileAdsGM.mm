@@ -457,6 +457,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         [self.interstitial presentFromRootViewController:g_controller];
         self.interstitial_keepMe = self.interstitial;
         self.interstitial = nil;
+		showing_ad = true;
     }
 }
 
@@ -530,6 +531,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 	
 	self.rewardAd_keepMe = self.rewardAd;
 	self.rewardAd = nil;
+	showing_ad = true;
 }
 
 -(double) AdMob_RewardedVideo_IsLoaded
@@ -595,6 +597,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 	
 	self.rewardedInterstitialAd_keepMe = self.rewardedInterstitialAd;
 	self.rewardedInterstitialAd = nil;
+	showing_ad = true;
 }
 
 -(double) AdMob_RewardedInterstitial_IsLoaded
@@ -658,12 +661,24 @@ double loadTime = 0;
 		return 0.0;
 }
 
-- (BOOL)wasLoadTimeLessThanNHoursAgo:(int)n {
+- (Boolean)wasLoadTimeLessThanNHoursAgo:(int)n {
 	NSDate *now = [NSDate date];
 	NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
 	double secondsPerHour = 3600.0;
 	double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
 	return intervalInHours < n;
+}
+
+BOOL showing_ad = false;
+-(double) AdMob_ShowedAd
+{
+	//return showing_ad?1.0:0.0;
+    return false;
+}
+
+-(void) AdMob_ShowedAd_onResume_Tick
+{
+	showing_ad = false;
 }
 
 ///// TARGETING ///////////////////////////////////////////////////////////////////////////////////

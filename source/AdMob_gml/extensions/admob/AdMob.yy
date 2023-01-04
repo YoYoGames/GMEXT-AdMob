@@ -105,6 +105,8 @@
             1,
           ],"documentation":"",},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_isAdAvailable","externalName":"AdMob_AppOpenAd_isAdAvailable","kind":4,"help":"AdMob_AppOpenAd_isAdAvailable()","hidden":false,"returnType":2,"argCount":0,"args":[],"documentation":"",},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_ShowedAd","externalName":"AdMob_ShowedAd","kind":4,"help":"AdMob_ShowedAd()","hidden":false,"returnType":2,"argCount":0,"args":[],"documentation":"",},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_ShowedAd_onResume_Tick","externalName":"AdMob_ShowedAd_onResume_Tick","kind":4,"help":"AdMob_ShowedAd_onResume_Tick()","hidden":false,"returnType":1,"argCount":0,"args":[],"documentation":"",},
       ],"constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Banner_NORMAL","value":"0","hidden":false,},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Banner_LARGE","value":"1","hidden":false,},
