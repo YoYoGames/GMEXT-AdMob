@@ -131,15 +131,18 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
     if ([ad isMemberOfClass:[GADInterstitialAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnShowFailed");
+		showing_ad = false;
     }
     else if ([ad isMemberOfClass:[GADRewardedAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnShowFailed");
+		showing_ad = false;
     }
 	
     else if ([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
+		showing_ad = false;
     }
     
     
@@ -625,7 +628,8 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 					NSLog(@"Failed to load app open ad: %@", error);
                     
                     int dsMapIndex = dsMapCreate();
-                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_onAdFailedToLoad");
+                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_Load");
+					dsMapAddDouble(dsMapIndex, (char*)"success", 0.0);
                     createSocialAsyncEventWithDSMap(dsMapIndex);
                     
 					return;
@@ -635,7 +639,8 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 				self.loadTime = [NSDate date];
               
               int dsMapIndex = dsMapCreate();
-              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_onLoaded");
+              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_Load");
+			  dsMapAddDouble(dsMapIndex, (char*)"success", 1.0);
               createSocialAsyncEventWithDSMap(dsMapIndex);
 		   }];
 }

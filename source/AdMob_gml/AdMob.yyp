@@ -63,7 +63,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Rooms","folderPath":"folders/AdMob Demo/Rooms.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob","folderPath":"folders/AdMob.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/AdMob/Extensions.yy","order":0,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Mediations","folderPath":"folders/AdMob/Mediations.yy","order":2,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Mediations","folderPath":"folders/AdMob/Extensions/Mediations.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy","order":4,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy","order":1,},

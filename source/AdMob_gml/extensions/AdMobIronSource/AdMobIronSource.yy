@@ -54,6 +54,6 @@
   "tvosCocoaPodDependencies": "",
   "parent": {
     "name": "Mediations",
-    "path": "folders/AdMob/Mediations.yy",
+    "path": "folders/AdMob/Extensions/Mediations.yy",
   },
 }

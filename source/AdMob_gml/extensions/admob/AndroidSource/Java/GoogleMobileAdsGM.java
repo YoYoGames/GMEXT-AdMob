@@ -452,6 +452,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						showing_ad = false;
 					}
 
 					@Override
@@ -549,6 +550,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						showing_ad = false;
 					}
 
 					@Override
@@ -659,6 +661,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						showing_ad = false;
 					}
 
 					@Override
@@ -727,7 +730,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						appOpenAd = ad;
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onLoaded");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_Load");
+						RunnerJNILib.DsMapAddDouble(dsMapIndex, "success", 1.0);
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
 
@@ -738,6 +742,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						//Log.d(LOG_TAG, loadAdError.getMessage());
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onAdFailedToLoad");
+						RunnerJNILib.DsMapAddDouble(dsMapIndex, "success", 0.0);
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
 				});

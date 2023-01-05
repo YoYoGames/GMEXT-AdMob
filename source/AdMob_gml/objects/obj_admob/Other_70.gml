@@ -229,12 +229,8 @@ switch(async_load[?"type"])
 		break;
 		
 		
-	
-	case "AdMob_AppOpenAd_onLoaded":
-	break
-	
-	case "AdMob_AppOpenAd_onAdFailedToLoad":
-		
+	case "AdMob_AppOpenAd_Load":
+		var success = async_load[?"success"]
 	break
 		
 	case "AdMob_AppOpenAd_OnDismissed":
