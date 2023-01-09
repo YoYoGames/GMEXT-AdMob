@@ -730,7 +730,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						appOpenAd = ad;
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_Load");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnLoaded");
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "success", 1.0);
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
@@ -741,7 +741,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						appOpenAd = null;
 						//Log.d(LOG_TAG, loadAdError.getMessage());
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_onAdFailedToLoad");
+						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnLoadFailed");
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "success", 0.0);
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
