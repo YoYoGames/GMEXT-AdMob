@@ -628,8 +628,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 					NSLog(@"Failed to load app open ad: %@", error);
                     
                     int dsMapIndex = dsMapCreate();
-                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_Load");
-					dsMapAddDouble(dsMapIndex, (char*)"success", 0.0);
+                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoadFailed");
+					dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
+					dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
                     createSocialAsyncEventWithDSMap(dsMapIndex);
                     
 					return;
@@ -639,8 +640,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 				self.loadTime = [NSDate date];
               
               int dsMapIndex = dsMapCreate();
-              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_Load");
-			  dsMapAddDouble(dsMapIndex, (char*)"success", 1.0);
+              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoaded");
               createSocialAsyncEventWithDSMap(dsMapIndex);
 		   }];
 }
