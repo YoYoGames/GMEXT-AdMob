@@ -1,0 +1,5 @@
+
+
+v1.0.10
+- Added new script control system
+- Added new ad type: AppOpenAd

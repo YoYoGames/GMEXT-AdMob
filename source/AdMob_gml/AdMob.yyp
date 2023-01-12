@@ -19,6 +19,7 @@
     {"id":{"name":"AdMobApplovin","path":"extensions/AdMobApplovin/AdMobApplovin.yy",},"order":1,},
     {"id":{"name":"Obj_YoYo_button","path":"objects/Obj_YoYo_button/Obj_YoYo_button.yy",},"order":0,},
     {"id":{"name":"Obj_AdMob_Banner","path":"objects/Obj_AdMob_Banner/Obj_AdMob_Banner.yy",},"order":2,},
+    {"id":{"name":"changelog","path":"notes/changelog/changelog.yy",},"order":5,},
     {"id":{"name":"Room_AdMob","path":"rooms/Room_AdMob/Room_AdMob.yy",},"order":0,},
     {"id":{"name":"Obj_AdMob_Interstitial","path":"objects/Obj_AdMob_Interstitial/Obj_AdMob_Interstitial.yy",},"order":3,},
     {"id":{"name":"Spr_YoYo_textbox","path":"sprites/Spr_YoYo_textbox/Spr_YoYo_textbox.yy",},"order":2,},
