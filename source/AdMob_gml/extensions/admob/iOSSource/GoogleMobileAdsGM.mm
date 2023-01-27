@@ -90,36 +90,20 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
     testingAds = true;
 }
 
-- (void)adViewDidReceiveAd:(GADBannerView *)adView {
-    NSLog(@"adViewDidReceiveAd");
-    
-	int dsMapIndex = dsMapCreate();
-	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoaded");
-	createSocialAsyncEventWithDSMap(dsMapIndex);
-}
-
-- (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(NSError *)error {
-    NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
+- (void)bannerView:(nonnull GADBannerView *)bannerView
+didFailToReceiveAdWithError:(nonnull NSError *)error{
 		
 	int dsMapIndex = dsMapCreate();
 	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoadFailed");
+    dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
+    dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
 	createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
-- (void)adViewWillPresentScreen:(GADBannerView *)adView {
-    NSLog(@"adViewWillPresentScreen");
-}
-
-- (void)adViewWillDismissScreen:(GADBannerView *)adView {
-    NSLog(@"adViewWillDismissScreen");
-}
-
-- (void)adViewDidDismissScreen:(GADBannerView *)adView {
-    NSLog(@"adViewDidDismissScreen");
-}
-
-- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
-    NSLog(@"adViewWillLeaveApplication");
+-(void)bannerViewDidReceiveAd:(nonnull GADBannerView *)bannerView{
+	int dsMapIndex = dsMapCreate();
+	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoaded");
+	createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
 /// Tells the delegate that the ad failed to present full screen content.
@@ -246,6 +230,8 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
     
     self.bannerView = [[GADBannerView alloc]
                        initWithAdSize:GADAdSizeBanner];
+    
+    self.bannerView.delegate = self;
     
     self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
     [g_glView addSubview:self.bannerView];
