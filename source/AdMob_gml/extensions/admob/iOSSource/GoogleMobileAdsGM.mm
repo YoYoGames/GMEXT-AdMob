@@ -752,7 +752,6 @@ BOOL showing_ad = false;
         parameters.debugSettings = debugSettings;
     }
     
-    parameters.tagForUnderAgeOfConsent = NO;
     [UMPConsentInformation.sharedInstance requestConsentInfoUpdateWithParameters:parameters completionHandler:^(NSError *_Nullable error)
     {
         int dsMapIndex = dsMapCreate();
