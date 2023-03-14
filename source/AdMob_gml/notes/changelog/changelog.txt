@@ -2,6 +2,13 @@
 v1.1.0
 - Updated script control system to version 2.0
 - Fixed bug on iOS regarding UnderAge property being forced to false while requesting consent update.
+- Added new AppOpen ad type:
+	- AdMob_AppOpenAd_Init
+	- AdMob_AppOpenAd_Show
+	- AdMob_AppOpenAd_Load
+	- AdMob_AppOpenAd_IsLoaded
+- Added new utility function that allows for correctly pause your game if needed:
+	- AddMob_IsShowingAd
 - Added mediations:
 	- AppLovin
 	- IronSource

@@ -84,7 +84,6 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
     }];
 }
 
-
 -(void) AdMob_SetTestDeviceId
 {
     testingAds = true;
@@ -109,32 +108,26 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 /// Tells the delegate that the ad failed to present full screen content.
 - (void)ad:(nonnull id<GADFullScreenPresentingAd>)ad didFailToPresentFullScreenContentWithError:(nonnull NSError *)error
 {
+    showing_ad = false;
+
     NSLog(@"Ad did fail to present full screen content.");
     int dsMapIndex = dsMapCreate();
 
     if ([ad isMemberOfClass:[GADInterstitialAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnShowFailed");
-		showing_ad = false;
     }
     else if ([ad isMemberOfClass:[GADRewardedAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnShowFailed");
-		showing_ad = false;
     }
-	
     else if ([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
-		showing_ad = false;
-    }
-    
-    
-    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    } 
+    else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        int dsMapIndex = dsMapCreate();
         dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
-        createSocialAsyncEventWithDSMap(dsMapIndex);
     }
     
     dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
@@ -146,66 +139,57 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 - (void)adDidPresentFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)ad
 {
     NSLog(@"Ad did present full screen content.");
+    int dsMapIndex = dsMapCreate();
+
     if([ad isMemberOfClass:[GADInterstitialAd class]])
     {
-		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnFullyShown");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-    
-    if([ad isMemberOfClass:[GADRewardedAd class]])
+    else if([ad isMemberOfClass:[GADRewardedAd class]])
     {
 		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnFullyShown");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-	
-    if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
+	else if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
 		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnFullyShown");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-    
-    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
         int dsMapIndex = dsMapCreate();
         dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
-        createSocialAsyncEventWithDSMap(dsMapIndex);
     }
+
+    createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
 /// Tells the delegate that the ad dismissed full screen content.
 - (void)adDidDismissFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)ad
 {
+    showing_ad = false;
+
     NSLog(@"Ad did dismiss full screen content.");
+    int dsMapIndex = dsMapCreate();
+
     if([ad isMemberOfClass:[GADInterstitialAd class]])
     {
-		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnDismissed");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-    
-    if([ad isMemberOfClass:[GADRewardedAd class]])
+    else if([ad isMemberOfClass:[GADRewardedAd class]])
     {
-		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnDismissed");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-	
-    if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
+    else if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-		int dsMapIndex = dsMapCreate();
 		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnDismissed");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
     }
-    
-    if([ad isMemberOfClass:[GADAppOpenAd class]])
+    else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        int dsMapIndex = dsMapCreate();
         dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
-        createSocialAsyncEventWithDSMap(dsMapIndex);
     }
+
+    createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
 ///// BANNER //////////////////////////////////////////////////////////////////////////////////////
@@ -633,7 +617,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(void) AdMob_AppOpenAd_Show
 {
-	if([self AdMob_AppOpenAd_isAdAvailable]<0.5)
+	if([self AdMob_AppOpenAd_IsLoaded]<0.5)
 		return;
 	
 	if (self.appOpenAd)
@@ -643,33 +627,12 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     }
 }
 
-double loadTime = 0;
--(double) AdMob_AppOpenAd_isAdAvailable
+-(double) AdMob_AppOpenAd_IsLoaded
 {
 	if (self.appOpenAd && [self wasLoadTimeLessThanNHoursAgo:4])
 		return 1.0;
 	else
 		return 0.0;
-}
-
-- (Boolean)wasLoadTimeLessThanNHoursAgo:(int)n {
-	NSDate *now = [NSDate date];
-	NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
-	double secondsPerHour = 3600.0;
-	double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
-	return intervalInHours < n;
-}
-
-BOOL showing_ad = false;
--(double) AdMob_ShowedAd
-{
-	//return showing_ad?1.0:0.0;
-    return false;
-}
-
--(void) AdMob_ShowedAd_onResume_Tick
-{
-	showing_ad = false;
 }
 
 ///// TARGETING ///////////////////////////////////////////////////////////////////////////////////
@@ -721,18 +684,11 @@ BOOL showing_ad = false;
 {
 	self->NPA = value >= 0.5;
 }
-	
--(GADRequest*) AdMob_AdRequest
-{
-    GADRequest *request = [GADRequest request];	
-	if(self->NPA)
-	{
-		GADExtras *extras = [[GADExtras alloc] init];
-		extras.additionalParameters = @{@"npa": @"1"};
-		[request registerAdNetworkExtras: extras];
-	}
 
-    return request;
+BOOL showing_ad = false;
+-(double) AdMob_IsShowingAd
+{
+	return showing_ad ? 1.0 : 0.0;
 }
 
 ///// CONSENT /////////////////////////////////////////////////////////////////////////////////////
@@ -874,7 +830,30 @@ BOOL showing_ad = false;
 		GADMobileAds.sharedInstance.applicationMuted = NO;
 }
 
-///// UTILITIES ///////////////////////////////////////////////////////////////////////////////////
+///// INTERNAL ///////////////////////////////////////////////////////////////////////////////////
+
+
+double loadTime = 0;
+- (Boolean)wasLoadTimeLessThanNHoursAgo:(int)n {
+	NSDate *now = [NSDate date];
+	NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
+	double secondsPerHour = 3600.0;
+	double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
+	return intervalInHours < n;
+}
+
+-(GADRequest*) AdMob_AdRequest
+{
+    GADRequest *request = [GADRequest request];	
+	if(self->NPA)
+	{
+		GADExtras *extras = [[GADExtras alloc] init];
+		extras.additionalParameters = @{@"npa": @"1"};
+		[request registerAdNetworkExtras: extras];
+	}
+
+    return request;
+}
 
 const char * getDeviceId()
 {

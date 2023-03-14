@@ -163,7 +163,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	public String testDeviceID;
-
 	public void AdMob_SetTestDeviceId() {
 		testID_on = true;
 	}
@@ -442,6 +441,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						showing_ad = false;
 					}
 
 					@Override
@@ -541,6 +541,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						showing_ad = false;
 					}
 
 					@Override
@@ -612,6 +613,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						new RewardedInterstitialAdLoadCallback() {
 							@Override
 							public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+
+								showing_ad = false;
 								mRewardedInterstitialAd = null;
 
 								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
@@ -649,6 +652,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				mRewardedInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 					@Override
 					public void onAdDismissedFullScreenContent() {
+
+						showing_ad = false;
+						mRewardedInterstitialAd = null;
+
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
@@ -656,12 +663,15 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 					@Override
 					public void onAdFailedToShowFullScreenContent(AdError adError) {
+
+						showing_ad = false;
+						mRewardedInterstitialAd = null;
+
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnShowFailed");
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-						showing_ad = false;
 					}
 
 					@Override
@@ -696,7 +706,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return 1.0;
 	}
 	
-	///////////////////////////////////// Open App Format
+	///// APP OPEN AD
+	///// //////////////////////////////////////////////////////////////////////////////
 	
 	private AppOpenAd appOpenAd = null;
 	public String mAppOpenAdID = "";
@@ -738,6 +749,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					public void onAdFailedToLoad(LoadAdError loadAdError) 
 					{
 						appOpenAd = null;
+						showing_ad = false;
+
 						//Log.d(LOG_TAG, loadAdError.getMessage());
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnLoadFailed");
@@ -758,7 +771,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if(appOpenAd == null)
 			return;
 		
-		if(AdMob_AppOpenAd_isAdAvailable() < 0.5)
+		if(AdMob_AppOpenAd_IsLoaded() < 0.5)
 			return;
 		
 		RunnerActivity.ViewHandler.post(new Runnable() 
@@ -772,7 +785,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				{
 					@Override
 					public void onAdDismissedFullScreenContent() {
+						
 						appOpenAd = null;
+						showing_ad = false;
+						
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
@@ -780,7 +796,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 					@Override
 					public void onAdFailedToShowFullScreenContent(AdError adError) {
+						
 						appOpenAd = null;
+						showing_ad = false;
+
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnShowFailed");
 						RunnerJNILib.DsMapAddString(dsMapIndex, "errorMessage", adError.getMessage());
@@ -797,37 +816,17 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					}
 				});
 
+				showing_ad = true;
 				appOpenAd.show(activity);
 				appOpenAd = null;
 			}
 		});
 	}
 	
-	private boolean wasLoadTimeLessThanNHoursAgo(long numHours) 
-	{
-		long dateDifference = (new Date()).getTime() - this.loadTime;
-		long numMilliSecondsPerHour = 3600000;
-		return (dateDifference < (numMilliSecondsPerHour * numHours));
-	}
-
-	private long loadTime = 0;
-	public double AdMob_AppOpenAd_isAdAvailable()
+	public double AdMob_AppOpenAd_IsLoaded()
 	{
 		return (appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4))? 1.0:0.0;
 	}	
-	
-	
-	boolean showing_ad = false;
-	public double AdMob_ShowedAd()
-	{
-		return showing_ad?1.0:0.0;
-	}
-	
-	public void AdMob_ShowedAd_onResume_Tick()
-	{
-		showing_ad = false;
-	}
-	
 
 	///// TARGETING
 	///// ///////////////////////////////////////////////////////////////////////////////////
@@ -888,39 +887,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		NPA = value >= 0.5;
 	}
 
-	public boolean NPA = false;
-
-	private AdRequest AdMob_AdRequest() {
-		AdRequest.Builder builder = new AdRequest.Builder();
-
-		if (NPA) {
-			Bundle extras = new Bundle();
-			extras.putString("npa", "1");
-			builder.addNetworkExtrasBundle(AdMobAdapter.class, extras);
-		}
-
-		return builder.build();
-	}
-
-	private String getDeviceID() {
-		String android_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
-		String deviceId = MD5(android_id).toUpperCase();
-		return deviceId;
-	}
-
-	// https://stackoverflow.com/questions/4846484/md5-hashing-in-android/21333739#21333739
-	private String MD5(String md5) {
-		try {
-			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-			byte[] array = md.digest(md5.getBytes("UTF-8"));
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < array.length; ++i) {
-				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
-			}
-			return sb.toString();
-		} catch (Exception e) {
-			return null;
-		}
+	boolean showing_ad = false;
+	public double AdMob_IsShowingAd()
+	{
+		return showing_ad?1.0:0.0;
 	}
 
 	///// CONSENT
@@ -1070,6 +1040,51 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if (mRewardedAdID != null) {
 			mRewardedAd = null;
 			AdMob_RewardedVideo_Load();
+		}
+	}
+
+	///// INTERNAL
+	///// //////////////////////////////////////////////////////////////////////////////
+	
+	private long loadTime = 0;
+	private boolean wasLoadTimeLessThanNHoursAgo(long numHours) 
+	{
+		long dateDifference = (new Date()).getTime() - this.loadTime;
+		long numMilliSecondsPerHour = 3600000;
+		return (dateDifference < (numMilliSecondsPerHour * numHours));
+	}
+
+	public boolean NPA = false;
+	private AdRequest AdMob_AdRequest() {
+		AdRequest.Builder builder = new AdRequest.Builder();
+
+		if (NPA) {
+			Bundle extras = new Bundle();
+			extras.putString("npa", "1");
+			builder.addNetworkExtrasBundle(AdMobAdapter.class, extras);
+		}
+
+		return builder.build();
+	}
+
+	private String getDeviceID() {
+		String android_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+		String deviceId = MD5(android_id).toUpperCase();
+		return deviceId;
+	}
+
+	// https://stackoverflow.com/questions/4846484/md5-hashing-in-android/21333739#21333739
+	private String MD5(String md5) {
+		try {
+			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(md5.getBytes("UTF-8"));
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < array.length; ++i) {
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+			}
+			return sb.toString();
+		} catch (Exception e) {
+			return null;
 		}
 	}
 

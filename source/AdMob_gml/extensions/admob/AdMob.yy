@@ -114,9 +114,8 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Init","argCount":0,"args":[
             1,
           ],"documentation":"","externalName":"AdMob_AppOpenAd_Init","help":"AdMob_AppOpenAd_Init(String adUnitId)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_isAdAvailable","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_isAdAvailable","help":"AdMob_AppOpenAd_isAdAvailable()","hidden":false,"kind":4,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_ShowedAd","argCount":0,"args":[],"documentation":"","externalName":"AdMob_ShowedAd","help":"AdMob_ShowedAd()","hidden":false,"kind":4,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_ShowedAd_onResume_Tick","argCount":0,"args":[],"documentation":"","externalName":"AdMob_ShowedAd_onResume_Tick","help":"AdMob_ShowedAd_onResume_Tick()","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_IsLoaded","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_IsLoaded","help":"AdMob_AppOpenAd_IsLoaded()","hidden":false,"kind":4,"returnType":2,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_IsShowingAd","argCount":0,"args":[],"documentation":"","externalName":"AdMob_IsShowingAd","help":"AdMob_IsShowingAd()","hidden":false,"kind":4,"returnType":2,},
       ],"init":"","kind":4,"order":[
         {"name":"AdMob_Initialize","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Init","path":"extensions/AdMob/AdMob.yy",},
