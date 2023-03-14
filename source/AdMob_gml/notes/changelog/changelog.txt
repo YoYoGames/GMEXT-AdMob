@@ -1,4 +1,13 @@
 
+v1.1.0
+- Updated script control system to version 2.0
+- Fixed bug on iOS regarding UnderAge property being forced to false while requesting consent update.
+- Added mediations:
+	- AppLovin
+	- IronSource
+	- Meta
+	- Pangle
+	- UnityAds
 
 v1.0.10
 - Added new script control system

@@ -18,7 +18,7 @@
   "date": "2020-06-14T00:54:26",
   "description": "",
   "exportToGame": true,
-  "extensionVersion": "1.0.10",
+  "extensionVersion": "1.1.0",
   "files": [
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Banner_NORMAL","hidden":false,"value":"0",},
