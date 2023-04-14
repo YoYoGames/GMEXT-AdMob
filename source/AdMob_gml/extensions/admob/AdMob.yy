@@ -18,7 +18,7 @@
   "date": "2020-06-14T00:54:26",
   "description": "",
   "exportToGame": true,
-  "extensionVersion": "1.1.0",
+  "extensionVersion": "1.2.0",
   "files": [
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Banner_NORMAL","hidden":false,"value":"0",},
@@ -202,6 +202,7 @@
     {"resourceType":"GMExtensionOption","resourceVersion":"1.0","name":"versionStable","defaultValue":"2023.1.0.0","description":"","displayName":"","exportToINI":false,"extensionId":null,"guid":"d0d19117-79cc-4668-8bed-1349ca551925","hidden":true,"listItems":[],"optType":2,},
     {"resourceType":"GMExtensionOption","resourceVersion":"1.0","name":"versionBeta","defaultValue":"2023.100.0.0","description":"","displayName":"","exportToINI":false,"extensionId":null,"guid":"18b08591-a1fe-4892-a653-b6cd26479dec","hidden":true,"listItems":[],"optType":2,},
     {"resourceType":"GMExtensionOption","resourceVersion":"1.0","name":"versionDev","defaultValue":"9.9.1.293","description":"","displayName":"","exportToINI":false,"extensionId":null,"guid":"0f61eb8d-f68c-4777-bd04-c14e94f6dc9a","hidden":true,"listItems":[],"optType":2,},
+    {"resourceType":"GMExtensionOption","resourceVersion":"1.0","name":"versionLTS","defaultValue":"2022.0.1.24","description":"","displayName":"","exportToINI":false,"extensionId":null,"guid":"ae27ca8c-4569-427f-abd9-77ae24ab3184","hidden":true,"listItems":[],"optType":2,},
   ],
   "optionsFile": "options.json",
   "packageId": "",

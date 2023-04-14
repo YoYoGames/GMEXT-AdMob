@@ -1,4 +1,9 @@
 
+v1.2.0
+- This is a compatibility version ready to work with LTSr1
+NOTE: The github repo will on be compatible with latest Stable, to use in LTS import
+		the release version local package or use the marketplace asset.
+
 v1.1.0
 - Updated script control system to version 2.0
 - Fixed bug on iOS regarding UnderAge property being forced to false while requesting consent update.
