@@ -435,6 +435,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
+
+				if (mInterstitialAd == null) return;
+
 				mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 					@Override
 					public void onAdDismissedFullScreenContent() {
