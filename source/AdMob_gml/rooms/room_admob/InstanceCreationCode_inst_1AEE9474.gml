@@ -1,3 +1,4 @@
 
+valign = fa_middle;
 text = "Google Mobile Ads"
-font = Font_YoYo_50
+font = Font_YoYo_30
