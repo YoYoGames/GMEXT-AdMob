@@ -4,7 +4,7 @@
         "extensionFile": "source/AdMob_gml/extensions/AdMob/AdMob.yy",
         "packageId": "com.yoyogames.googleadmob",
         "packageName": "AdMob Ext",
-        "packageVersion": "1.2.1",
+        "packageVersion": "1.2.2",
         "includeFolders": "AdMob,AdMob Demo,YoYo Extensions Assets",
         "includeResources": "AdMob Extension.html",
         "excludeFolders": null,
