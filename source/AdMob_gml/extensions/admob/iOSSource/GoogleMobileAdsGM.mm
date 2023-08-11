@@ -844,7 +844,11 @@ double loadTime = 0;
 
 -(GADRequest*) AdMob_AdRequest
 {
-    GADRequest *request = [GADRequest request];	
+    GADRequest *request = [GADRequest request];
+
+    // As instructed by Google
+    request.requestAgent = @"gmext-admob-1.2.3";
+
 	if(self->NPA)
 	{
 		GADExtras *extras = [[GADExtras alloc] init];

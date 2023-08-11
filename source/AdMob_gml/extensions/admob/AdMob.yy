@@ -18,7 +18,7 @@
     "date": "2020-06-14T00:54:26",
     "description": "",
     "exportToGame": true,
-    "extensionVersion": "1.2.2",
+    "extensionVersion": "1.2.3",
     "files": [
         {
             "resourceType": "GMExtensionFile",

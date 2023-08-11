@@ -1060,6 +1060,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	public boolean NPA = false;
 	private AdRequest AdMob_AdRequest() {
 		AdRequest.Builder builder = new AdRequest.Builder();
+		
+		// As instructed by Google
+		builder.setRequestAgent("gmext-admob-1.2.3");
 
 		if (NPA) {
 			Bundle extras = new Bundle();
