@@ -145,11 +145,11 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 
 							// Initialize ad types using extension options
-							AdMob_Banner_Init(RunnerJNILib.extOptGetString("AdMob", "Android_BANNER"));
-							AdMob_Interstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL"));
-							AdMob_RewardedVideo_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
-							AdMob_RewardedInterstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
-							AdMob_AppOpenAd_Init(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
+							AdMob_Banner_Init((bannerID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_BANNER") : bannerID);
+							AdMob_Interstitial_Init((mInterstitialID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL") : mInterstitialID);
+							AdMob_RewardedVideo_Init((mRewardedAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED") : mRewardedAdID);
+							AdMob_RewardedInterstitial_Init((mRewardedInterstitialAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL") : mRewardedInterstitialAdID);
+							AdMob_AppOpenAd_Init((mAppOpenAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD") : mAppOpenAdID);
 							
 							init_success = true;
 						}
