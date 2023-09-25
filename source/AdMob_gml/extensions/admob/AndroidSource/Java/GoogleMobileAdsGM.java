@@ -42,6 +42,8 @@ import com.google.android.gms.ads.mediation.MediationAdapter;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.AdValue;
+import com.google.android.gms.ads.OnPaidEventListener;
 
 import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
@@ -72,7 +74,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadPoolExecutor;
-import 	java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 
 public class GoogleMobileAdsGM extends RunnerSocial 
@@ -145,11 +147,11 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 
 							// Initialize ad types using extension options
-							AdMob_Banner_Init((bannerID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_BANNER") : bannerID);
-							AdMob_Interstitial_Init((mInterstitialID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL") : mInterstitialID);
-							AdMob_RewardedVideo_Init((mRewardedAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED") : mRewardedAdID);
-							AdMob_RewardedInterstitial_Init((mRewardedInterstitialAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL") : mRewardedInterstitialAdID);
-							AdMob_AppOpenAd_Init((mAppOpenAdID == "") ? RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD") : mAppOpenAdID);
+							AdMob_Banner_Init(RunnerJNILib.extOptGetString("AdMob", "Android_BANNER"));
+							AdMob_Interstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL"));
+							AdMob_RewardedVideo_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
+							AdMob_RewardedInterstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
+							AdMob_AppOpenAd_Init(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
 							
 							init_success = true;
 						}
@@ -222,6 +224,15 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Banner_OnLoaded");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+
+						// Set paid event listener
+						adView.setOnPaidEventListener(new OnPaidEventListener() {
+							@Override
+							public void onPaidEvent(AdValue adValue) {
+								handleOnPaidEvent(adValue, "banner", bannerID);
+							}
+						});
+
 					}
 
 					@Override
@@ -408,6 +419,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoaded");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+
+						// Set paid event listener
+						mInterstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
+							@Override
+							public void onPaidEvent(AdValue adValue) {
+								handleOnPaidEvent(adValue, "interstitial", mInterstitialID);
+							}
+						});
 					}
 
 					@Override
@@ -520,8 +539,17 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						mRewardedAd = rewardedAd_;
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoaded");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+
+						// Set paid event listener
+						mRewardedAd.setOnPaidEventListener(new OnPaidEventListener() {
+							@Override
+							public void onPaidEvent(AdValue adValue) {
+								handleOnPaidEvent(adValue, "rewarded", mRewardedAdID);
+							}
+						});
 					}
 				});
 			}
@@ -746,6 +774,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnLoaded");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+
+						// Set paid event listener
+						appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {
+							@Override
+							public void onPaidEvent(AdValue adValue) {
+								handleOnPaidEvent(adValue, "app_open", mAppOpenAdID);
+							}
+						});
 					}
 
 					@Override
@@ -795,6 +831,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnDismissed");
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+
+						// Set paid event listener
+						appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {
+							@Override
+							public void onPaidEvent(AdValue adValue) {
+								handleOnPaidEvent(adValue, "app_open", mAppOpenAdID);
+							}
+						});
 					}
 
 					@Override
@@ -1181,4 +1225,21 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return true;
 	}
 
+	public void handleOnPaidEvent(AdValue adValue, String adType, String adUnitId) {
+		// Extract the impression-level ad revenue data.
+		long valueMicros = adValue.getValueMicros();
+		String currencyCode = adValue.getCurrencyCode();
+		int precision = adValue.getPrecisionType();
+
+		// Send the event to GameMaker
+		int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_OnPaid");
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_format_type", adType);
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "ad_custom_revenue", valueMicros / 1000000.0);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "currency", currencyCode);
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", precision);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", adUnitId);
+
+		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+	}
 }
