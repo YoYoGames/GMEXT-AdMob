@@ -1062,7 +1062,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		AdRequest.Builder builder = new AdRequest.Builder();
 		
 		// As instructed by Google
-		builder.setRequestAgent("gmext-admob-1.2.3");
+		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
 
 		if (NPA) {
 			Bundle extras = new Bundle();
