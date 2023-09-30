@@ -847,7 +847,7 @@ double loadTime = 0;
     GADRequest *request = [GADRequest request];
 
     // As instructed by Google
-    request.requestAgent = @"gmext-admob-1.2.3";
+    request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion("AdMob")];
 
 	if(self->NPA)
 	{
