@@ -22,6 +22,7 @@ extern "C" double dsListGetValueDouble(int _dsList, int _listIdx);
 extern "C" int dsListGetSize(int _dsList);
 
 extern "C" const char* extOptGetString(char* _ext, char* _opt);
+extern "C" const char* extGetVersion(char* _ext);
 
 extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
