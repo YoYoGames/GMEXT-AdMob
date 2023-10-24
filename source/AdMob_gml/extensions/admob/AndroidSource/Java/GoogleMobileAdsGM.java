@@ -92,6 +92,7 @@ public class GoogleMobileAdsGM extends RunnerSocial
 	//////////////////////////////////////////////////// GoogleMobileAds
 	//////////////////////////////////////////////////// ////////////////////////////////////////////////////
 
+List loads = new ArrayList<>();
 
 int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
 int KEEP_ALIVE_TIME = 250;
@@ -417,11 +418,29 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	///// INTERSTITIAL
 	///// ////////////////////////////////////////////////////////////////////////////////
 
-	private InterstitialAd mInterstitialAd = null;
 	private String mInterstitialID = "";
 
 	public void AdMob_Interstitial_Init(String adUnitId) {
 		mInterstitialID = adUnitId;
+	}
+	
+	int InterstitialAd_Search(String id)
+	{
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof InterstitialAd)
+		if (((InterstitialAd) loads.get(i)).getAdUnitId() == id)
+			return i;
+		return -1;
+	}
+	
+	int InterstitialAd_Count(String id)
+	{
+		int count = 0;
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof InterstitialAd)
+		if (((InterstitialAd) loads.get(i)).getAdUnitId() == id)
+			count++;
+		return count;
 	}
 
 	public void AdMob_Interstitial_Load() {
@@ -431,9 +450,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		
 		if(mInterstitialID == "")
 			return;
-		
-		if (mInterstitialAd != null)
-			return;
 			
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			String context_AdUnit = mInterstitialID;
@@ -441,10 +457,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				InterstitialAd.load(activity, mInterstitialID, AdMob_AdRequest(), new InterstitialAdLoadCallback() {
 					@Override
 					public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-						mInterstitialAd = interstitialAd;
-
+						loads.add(interstitialAd);
+						Log.i("yoyo","AdMob_Interstitial_Load added");
 						final InterstitialAd _mInterstitialID = interstitialAd;						
-						mInterstitialAd.setOnPaidEventListener(new OnPaidEventListener() 
+						interstitialAd.setOnPaidEventListener(new OnPaidEventListener() 
 						{
 							@Override
 							public void onPaidEvent(AdValue adValue) 
@@ -484,8 +500,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 					@Override
 					public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-						mInterstitialAd = null;
-
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_Interstitial_OnLoadFailed");
 						RunnerJNILib.DsMapAddString(dsMapIndex, "id", context_AdUnit);
@@ -503,13 +517,13 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if(!init_success)
 			return;
 		
-		if (mInterstitialAd == null)
+		if (InterstitialAd_Search(mInterstitialID) == -1)
 			return;
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
 				String context_AdUnit = mInterstitialID;
-				if (mInterstitialAd == null) return;
+				final InterstitialAd mInterstitialAd = (InterstitialAd)loads.get(InterstitialAd_Search(mInterstitialID));
 
 				mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 					@Override
@@ -530,7 +544,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.DsMapAddDouble(dsMapIndex, "errorCode", adError.getCode());
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 						showing_ad = false;
-						mInterstitialAd = null;
 					}
 
 					@Override
@@ -542,28 +555,44 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					}
 				});
 
-				mInterstitialAd.show(activity);
-				mInterstitialAd = null;
+				((InterstitialAd)loads.get(InterstitialAd_Search(mInterstitialID))).show(activity);
+				 loads.remove(InterstitialAd_Search(mInterstitialID));
+
 				showing_ad = true;
 			}
 		});
 	}
 
 	public double AdMob_Interstitial_IsLoaded() {
-		if (mInterstitialAd == null)
-			return 0.0;
-
-		return 1.0;
+		return InterstitialAd_Count(mInterstitialID);
 	}
 
 	///// REWARDED VIDEO
 	///// //////////////////////////////////////////////////////////////////////////////
 
-	public RewardedAd mRewardedAd = null;
 	public String mRewardedAdID = "";
 
 	public void AdMob_RewardedVideo_Init(String adUnitId) {
 		mRewardedAdID = adUnitId;
+	}
+	
+	int RewardedAd_Search(String id)
+	{
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof RewardedAd)
+		if (((RewardedAd) loads.get(i)).getAdUnitId() == id)
+			return i;
+		return -1;
+	}
+	
+	int RewardedAd_Count(String id)
+	{
+		int count = 0;
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof RewardedAd)
+		if (((RewardedAd) loads.get(i)).getAdUnitId() == id)
+			count++;
+		return count;
 	}
 
 	public void AdMob_RewardedVideo_Load() {
@@ -574,9 +603,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if(mRewardedAdID == "")
 			return;
 		
-		if (mRewardedAd != null)
-			return;
-		
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			
 			String context_AdUnit = mRewardedAdID;
@@ -584,7 +610,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				RewardedAd.load(activity, mRewardedAdID, AdMob_AdRequest(), new RewardedAdLoadCallback() {
 					@Override
 					public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-						mRewardedAd = null;
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedVideo_OnLoadFailed");
@@ -596,10 +621,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 					@Override
 					public void onAdLoaded(@NonNull RewardedAd rewardedAd_) {
-						mRewardedAd = rewardedAd_;
-						
+						loads.add(rewardedAd_);
 						final RewardedAd _mRewardedAd = rewardedAd_;
-						mRewardedAd.setOnPaidEventListener(new OnPaidEventListener() 
+						rewardedAd_.setOnPaidEventListener(new OnPaidEventListener() 
 						{
 							@Override
 							public void onPaidEvent(AdValue adValue) 
@@ -646,11 +670,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if(!init_success)
 			return;
 		
-		if (mRewardedAd == null)
+		if (RewardedAd_Search(mRewardedAdID) == -1)
 			return;
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
+				final RewardedAd mRewardedAd = (RewardedAd)loads.get(RewardedAd_Search(mRewardedAdID));
 				mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 					@Override
 					public void onAdDismissedFullScreenContent() {
@@ -681,8 +706,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					}
 				});
 
-				showing_ad = true;
-				mRewardedAd.show(activity, new OnUserEarnedRewardListener() {
+				((RewardedAd)loads.get(RewardedAd_Search(mRewardedAdID))).show(activity, new OnUserEarnedRewardListener() {
 					@Override
 					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
 						int rewardAmount = rewardItem.getAmount();
@@ -694,26 +718,44 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
 				});
-				mRewardedAd = null;
+
+				 loads.remove(RewardedAd_Search(mRewardedAdID));
+				 
+				 showing_ad = true;
 			}
 		});
 	}
 
 	public double AdMob_RewardedVideo_IsLoaded() {
-		if (mRewardedAd == null)
-			return 0.0;
-
-		return 1.0;
+		return RewardedAd_Count(mRewardedAdID);
 	}
 
 	///// REWARDED INTESTITIAL
 	///// ////////////////////////////////////////////////////////////////////////
 
-	public RewardedInterstitialAd mRewardedInterstitialAd = null;
 	public String mRewardedInterstitialAdID = "";
 
 	public void AdMob_RewardedInterstitial_Init(String adUnitId) {
 		mRewardedInterstitialAdID = adUnitId;
+	}
+	
+	int RewardedInterstitialAd_Search(String id)
+	{
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof RewardedInterstitialAd)
+		if (((RewardedInterstitialAd) loads.get(i)).getAdUnitId() == id)
+			return i;
+		return -1;
+	}
+	
+	int RewardedInterstitialAd_Count(String id)
+	{
+		int count = 0;
+		for(int i = 0 ; i < loads.size() ; i ++)
+		if (loads.get(i) instanceof RewardedInterstitialAd)
+		if (((RewardedInterstitialAd) loads.get(i)).getAdUnitId() == id)
+			count++;
+		return count;
 	}
 
 	public void AdMob_RewardedInterstitial_Load() {
@@ -722,9 +764,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			return;
 		
 		if(mRewardedInterstitialAdID == "")
-			return;
-		
-		if (mRewardedInterstitialAd != null)
 			return;
 		
 		RunnerActivity.ViewHandler.post(new Runnable() {
@@ -736,7 +775,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
 
 								showing_ad = false;
-								mRewardedInterstitialAd = null;
 
 								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 								RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnLoadFailed");
@@ -748,10 +786,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 							@Override
 							public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd_) {
-								mRewardedInterstitialAd = rewardedInterstitialAd_;
+								
+								Log.i("yoyo","RewardedInterstitialAdID onAdLoaded:" + rewardedInterstitialAd_.getAdUnitId());
+								loads.add(rewardedInterstitialAd_);
+								
+								Log.i("yoyo","mRewardedInterstitialAdID:" + String.valueOf(RewardedAd_Search(mRewardedInterstitialAdID)) + " " + mRewardedInterstitialAdID);
 								
 								final RewardedInterstitialAd _mRewardedInterstitialAd = rewardedInterstitialAd_;
-								mRewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener()
+								_mRewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener()
 								{
 									@Override
 									public void onPaidEvent(AdValue adValue) 
@@ -799,17 +841,21 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if(!init_success)
 			return;
 		
-		if (mRewardedInterstitialAd == null)
+		if (mRewardedInterstitialAdID == "")
+			return;
+		
+		if (RewardedInterstitialAd_Search(mRewardedInterstitialAdID) == -1)
 			return;
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
+				
+				final RewardedInterstitialAd mRewardedInterstitialAd = (RewardedInterstitialAd)loads.get(RewardedInterstitialAd_Search(mRewardedInterstitialAdID));
+				
 				mRewardedInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 					@Override
 					public void onAdDismissedFullScreenContent() {
-
 						showing_ad = false;
-						mRewardedInterstitialAd = null;
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_RewardedInterstitial_OnDismissed");
@@ -828,7 +874,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 						
 						showing_ad = false;
-						mRewardedInterstitialAd = null;
 					}
 
 					@Override
@@ -841,7 +886,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				});
 
 				showing_ad = true;
-				mRewardedInterstitialAd.show(activity, new OnUserEarnedRewardListener() {
+				((RewardedInterstitialAd)loads.get(RewardedInterstitialAd_Search(mRewardedInterstitialAdID))).show(activity, new OnUserEarnedRewardListener() {
 					@Override
 					public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
 						int rewardAmount = rewardItem.getAmount();
@@ -853,16 +898,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 					}
 				});
-				mRewardedInterstitialAd = null;
+				loads.remove(RewardedInterstitialAd_Search(mRewardedInterstitialAdID));
 			}
 		});
+		
 	}
 
 	public double AdMob_RewardedInterstitial_IsLoaded() {
-		if (mRewardedInterstitialAd == null)
-			return 0.0;
-
-		return 1.0;
+		return RewardedInterstitialAd_Count(mRewardedInterstitialAdID);
 	}
 	
 	///// APP OPEN AD
@@ -1225,15 +1268,16 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	private void AdsSoundReLoad() {
-		if (mInterstitialID != null) {
-			mInterstitialAd = null;
-			AdMob_Interstitial_Load();
-		}
+		//TODO...
+		// if (mInterstitialID != null) {
+			// mInterstitialAd = null;
+			// AdMob_Interstitial_Load();
+		// }
 
-		if (mRewardedAdID != null) {
-			mRewardedAd = null;
-			AdMob_RewardedVideo_Load();
-		}
+		// if (mRewardedAdID != null) {
+			// mRewardedAd = null;
+			// AdMob_RewardedVideo_Load();
+		// }
 	}
 
 	///// INTERNAL
