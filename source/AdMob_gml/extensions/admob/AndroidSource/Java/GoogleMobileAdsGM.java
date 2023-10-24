@@ -442,6 +442,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			count++;
 		return count;
 	}
+	
+	int Interstitial_Max_Instances = 1;
+	public void Admob_Interstitial_Max_Instances(double value)
+	{
+		Interstitial_Max_Instances = (int)value;
+	}
 
 	public void AdMob_Interstitial_Load() {
 		
@@ -457,8 +463,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				InterstitialAd.load(activity, mInterstitialID, AdMob_AdRequest(), new InterstitialAdLoadCallback() {
 					@Override
 					public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-						loads.add(interstitialAd);
-						Log.i("yoyo","AdMob_Interstitial_Load added");
+						
+						if(InterstitialAd_Count(context_AdUnit) < Interstitial_Max_Instances)
+							loads.add(interstitialAd);
+						
 						final InterstitialAd _mInterstitialID = interstitialAd;						
 						interstitialAd.setOnPaidEventListener(new OnPaidEventListener() 
 						{
@@ -594,6 +602,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			count++;
 		return count;
 	}
+	
+	int RewardedVideo_Max_Instances = 1;
+	public void AdMob_RewardedVideo_Max_Instances(double value)
+	{
+		RewardedVideo_Max_Instances = (int)value;
+	}
 
 	public void AdMob_RewardedVideo_Load() {
 		
@@ -621,7 +635,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 					@Override
 					public void onAdLoaded(@NonNull RewardedAd rewardedAd_) {
-						loads.add(rewardedAd_);
+						
+						if(RewardedAd_Count(context_AdUnit) < RewardedVideo_Max_Instances)
+							loads.add(rewardedAd_);
+						
 						final RewardedAd _mRewardedAd = rewardedAd_;
 						rewardedAd_.setOnPaidEventListener(new OnPaidEventListener() 
 						{
@@ -757,6 +774,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			count++;
 		return count;
 	}
+	
+	int RewardedInterstitial_Max_Instances = 1;
+	public void AdMob_RewardedInterstitial_Max_Instances(double value)
+	{
+		RewardedInterstitial_Max_Instances = (int)value;
+	}
 
 	public void AdMob_RewardedInterstitial_Load() {
 		
@@ -787,10 +810,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							@Override
 							public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd_) {
 								
-								Log.i("yoyo","RewardedInterstitialAdID onAdLoaded:" + rewardedInterstitialAd_.getAdUnitId());
-								loads.add(rewardedInterstitialAd_);
+								if(RewardedInterstitialAd_Count(context_AdUnit) < RewardedInterstitial_Max_Instances)
+									loads.add(rewardedInterstitialAd_);
 								
-								Log.i("yoyo","mRewardedInterstitialAdID:" + String.valueOf(RewardedAd_Search(mRewardedInterstitialAdID)) + " " + mRewardedInterstitialAdID);
 								
 								final RewardedInterstitialAd _mRewardedInterstitialAd = rewardedInterstitialAd_;
 								_mRewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener()
