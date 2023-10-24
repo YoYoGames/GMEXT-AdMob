@@ -39,6 +39,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         self.rewardAd_ID = @"";
         self.rewardInterstitialAd_ID = @"";
         self.appOpenAdID = @"";
+        
+        
+        self.loads = [[NSMutableArray alloc] init];
 
         return self;
     }
@@ -441,12 +444,29 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     self.interstitialAdID = interstitialID;
 }
 
+-(int) interstitial_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+        return i;
+    return -1;
+}
+
+-(int) interstitial_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+        count++;
+    return count;
+}
+
+
 -(void) AdMob_Interstitial_Load
 {
     if ([self.interstitialAdID isEqualToString:@""])
-        return;
-    
-    if(self.interstitial != nil)
         return;
     
     const NSString* contextID = self.interstitialAdID;
@@ -456,8 +476,6 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
         
         if (error)
         {
-            self.interstitial = nil;
-                
             int dsMapIndex = dsMapCreate();
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnLoadFailed");
             dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
@@ -465,14 +483,15 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
             
             return;
         }
+        [self.loads addObject:ad];
+        ad.fullScreenContentDelegate = self;
         
-        self.interstitial = ad;
-        self.interstitial.fullScreenContentDelegate = self;
+        const GADInterstitialAd* interstitial = ad;
         
-        self.interstitial.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+        ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
 
-            GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.interstitial.responseInfo.loadedAdNetworkResponseInfo;
+            GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = interstitial.responseInfo.loadedAdNetworkResponseInfo;
             
             // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
             // NSString *mediationGroupName = extras["mediation_group_name"];
@@ -482,9 +501,9 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
             int dsMapIndex = dsMapCreate();
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
             
-            dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.interstitial.responseInfo.adNetworkClassName UTF8String]);
+            dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[interstitial.responseInfo.adNetworkClassName UTF8String]);
             
-            dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[self.interstitial.adUnitID UTF8String]);
+            dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[interstitial.adUnitID UTF8String]);
             
             dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
             dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
@@ -506,26 +525,20 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(void) AdMob_Interstitial_Show
 {
-    if (self.interstitial)
-    {
-        [self.interstitial presentFromRootViewController:g_controller];
-        self.interstitial_keepMe = self.interstitial;
-        self.interstitial = nil;
+    if([self interstitial_search: self.interstitialAdID] == -1)
+        return;
+    
+    GADInterstitialAd *interstitial = [self.loads objectAtIndex:[self interstitial_search: self.interstitialAdID]];
+        
+        [interstitial presentFromRootViewController:g_controller];
+        self.interstitial_keepMe = interstitial;
+    [self.loads removeObjectAtIndex:[self interstitial_search: self.interstitialAdID]];
         showing_ad = true;
-    }
 }
 
 -(double) AdMob_Interstitial_IsLoaded
 {
-    if(self.interstitial == nil)
-        return 0.0;
-    
-    if(self.interstitial)
-    {
-        return 1;
-    }
-    else
-        return 0;
+    return [self interstitial_count:self.interstitialAdID];
 }
 
 ///// REWARDED VIDEO //////////////////////////////////////////////////////////////////////////////
@@ -535,12 +548,28 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     self.rewardAd_ID = AdId;
 }
 
+-(int) reward_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID])
+        return i;
+    return -1;
+}
+
+-(int) reward_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID])
+        count++;
+    return count;
+}
+
 -(void) AdMob_RewardedVideo_Load
 {
     if ([self.rewardAd_ID isEqualToString:@""])
-        return;
-    
-    if(self.rewardAd != nil)
         return;
     
     self.request_rewarded = [GADRequest request];
@@ -551,8 +580,6 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
         if (error)
         {
-            self.rewardAd = nil;
-                
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnLoadFailed");
             dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
@@ -560,13 +587,13 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
         }
         else
         {
-            self.rewardAd = ad;
-            self.rewardAd.fullScreenContentDelegate = self;
+            [self.loads addObject:ad];
+            ad.fullScreenContentDelegate = self;
             
-            self.rewardAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+            ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
 
-                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.rewardAd.responseInfo.loadedAdNetworkResponseInfo;
+                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
                 
                 // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
                 // NSString *mediationGroupName = extras["mediation_group_name"];
@@ -576,9 +603,9 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
                 int dsMapIndex = dsMapCreate();
                 dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
                 
-                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.rewardAd.responseInfo.adNetworkClassName UTF8String]);
+                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[ad.responseInfo.adNetworkClassName UTF8String]);
                 
-                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[self.rewardAd.adUnitID UTF8String]);
+                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[ad.adUnitID UTF8String]);
                 
                 dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
                 dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
@@ -602,12 +629,14 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(void) AdMob_RewardedVideo_Show
 {
-    if(self.rewardAd == nil)
+    if([self reward_search:self.rewardAd_ID] == -1)
         return;
     
-    const NSString* contextID = self.rewardAd.adUnitID;
+    GADRewardedAd *rewardAd = [self.loads objectAtIndex:[self reward_search:self.rewardAd_ID]];
     
-    [self.rewardAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
+    const NSString* contextID = rewardAd.adUnitID;
+    
+    [rewardAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
     {
         //NSDecimalNumber *amount = self.rewardAd.adReward.amount;
         
@@ -618,17 +647,17 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
     }];
     
-    self.rewardAd_keepMe = self.rewardAd;
-    self.rewardAd = nil;
+    self.rewardAd_keepMe = rewardAd;
     showing_ad = true;
+    
+
+    [self.loads removeObjectAtIndex:[self reward_search: self.rewardAd_ID]];
+    
 }
 
 -(double) AdMob_RewardedVideo_IsLoaded
 {
-    if(self.rewardAd)
-        return 1.0;
-    else
-        return 0.0;
+    return [self reward_count: self.rewardAd_ID];
 }
 
 ///// REWARDED INTESTITIAL ////////////////////////////////////////////////////////////////////////
@@ -638,12 +667,28 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     self.rewardInterstitialAd_ID = AdId;
 }
 
+-(int) interreward_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+        return i;
+    return -1;
+}
+
+-(int) interreward_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+        count++;
+    return count;
+}
+
 -(void) AdMob_RewardedInterstitial_Load
 {
     if ([self.rewardInterstitialAd_ID isEqualToString:@""])
-        return;
-    
-    if(self.rewardedInterstitialAd != nil)
         return;
     
     const NSString* contextID = self.rewardInterstitialAd_ID;
@@ -654,8 +699,6 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
         if (error)
         {
-            self.rewardedInterstitialAd = nil;
-                
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnLoadFailed");
             dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
@@ -663,13 +706,13 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
         }
         else
         {
-            self.rewardedInterstitialAd = ad;
-            self.rewardedInterstitialAd.fullScreenContentDelegate = self;
+            [self.loads addObject:ad];
+            ad.fullScreenContentDelegate = self;
             
-            self.rewardedInterstitialAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+            ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
 
-                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.rewardedInterstitialAd.responseInfo.loadedAdNetworkResponseInfo;
+                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
                 
                 // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
                 // NSString *mediationGroupName = extras["mediation_group_name"];
@@ -679,9 +722,9 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
                 int dsMapIndex = dsMapCreate();
                 dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
                 
-                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.rewardedInterstitialAd.responseInfo.adNetworkClassName UTF8String]);
+                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[ad.responseInfo.adNetworkClassName UTF8String]);
                 
-                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[self.rewardedInterstitialAd.adUnitID UTF8String]);
+                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[ad.adUnitID UTF8String]);
                 
                 dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
                 dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
@@ -705,13 +748,15 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(void) AdMob_RewardedInterstitial_Show
 {
-    if(self.rewardedInterstitialAd == nil)
+    if([self interreward_search:self.rewardInterstitialAd_ID] == -1)
         return;
     
-    const NSString* contextID = self.rewardedInterstitialAd.adUnitID;
+    GADRewardedInterstitialAd *rewardedInterstitialAd = [self.loads objectAtIndex:[self interreward_search:self.rewardInterstitialAd_ID]];
+    
+    const NSString* contextID = rewardedInterstitialAd.adUnitID;
 
     
-    [self.rewardedInterstitialAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
+    [rewardedInterstitialAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
     {
         //GADAdReward *reward = self.rewardedInterstitialAd.adReward;
 
@@ -721,17 +766,15 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
         createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
     
-    self.rewardedInterstitialAd_keepMe = self.rewardedInterstitialAd;
-    self.rewardedInterstitialAd = nil;
+    self.rewardedInterstitialAd_keepMe = rewardedInterstitialAd;
     showing_ad = true;
+    
+    [self.loads removeObjectAtIndex:[self interreward_search: self.rewardInterstitialAd_ID]];
 }
 
 -(double) AdMob_RewardedInterstitial_IsLoaded
 {
-    if(self.rewardedInterstitialAd)
-        return 1.0;
-    else
-        return 0.0;
+    return [self interreward_count:self.rewardInterstitialAd_ID];
 }
 
 /////////////////App Open Ad/////////////////////////////////////////////////////////////////////////

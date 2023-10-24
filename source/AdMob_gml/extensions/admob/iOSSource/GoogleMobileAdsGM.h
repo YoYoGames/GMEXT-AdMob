@@ -10,15 +10,15 @@
 {
     NSMutableDictionary *ListenerMap;
     Boolean testingAds;
-	Boolean NPA;
+    Boolean NPA;
 }
 
 @property(nonatomic, strong) GADBannerView *bannerView;
-@property(nonatomic, strong) GADInterstitialAd*interstitial;
+//@property(nonatomic, strong) GADInterstitialAd*interstitial;
 @property(nonatomic, strong) GADInterstitialAd*interstitial_keepMe;
-@property(nonatomic, strong) GADRewardedAd *rewardAd;
+//@property(nonatomic, strong) GADRewardedAd *rewardAd;
 @property(nonatomic, strong) GADRewardedAd *rewardAd_keepMe;
-@property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAd;
+//@property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAd;
 @property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAd_keepMe;
 
 @property(nonatomic, strong) NSString *BannerAdID;
@@ -35,6 +35,8 @@
 @property(nonatomic, strong) GADAppOpenAd *appOpenAd;
 
 @property(nonatomic, strong) NSDate *loadTime;
+
+@property(nonatomic, strong) NSMutableArray *loads;
 
 
 -(double) AdMob_AppOpenAd_isAdAvailable;
