@@ -128,6 +128,15 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Enable_Paid_Event","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_Enable_Paid_Event","help":"AdMob_Enable_Paid_Event(value)","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"Admob_Interstitial_Forget_Load_Instances","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"Admob_Interstitial_Forget_Load_Instances","help":"Admob_Interstitial_Forget_Load_Instances(num)","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_Forget_Load_Instances","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"AdMob_RewardedVideo_Forget_Load_Instances","help":"AdMob_RewardedVideo_Forget_Load_Instances(num)","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Forget_Load_Instances","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Forget_Load_Instances","help":"AdMob_RewardedInterstitial_Forget_Load_Instances(num)","hidden":false,"kind":4,"returnType":1,},
       ],"init":"","kind":4,"order":[
         {"name":"AdMob_Initialize","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Init","path":"extensions/AdMob/AdMob.yy",},

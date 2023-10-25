@@ -422,6 +422,19 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
+	public void Admob_Interstitial_Forget_Load_Instances(double count)
+	{
+		String id = mInterstitialID;
+		
+		for(int i = loads.size()-1 ; i >= 0 && count > 0; i --)
+		if (loads.get(i) instanceof InterstitialAd)
+		if (((InterstitialAd) loads.get(i)).getAdUnitId() == id)
+		{
+			count --;
+			loads.remove(i);
+		}
+	}
+	
 	int Interstitial_Max_Instances = 1;
 	public void Admob_Interstitial_Max_Instances(double value)
 	{
@@ -558,6 +571,19 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if (((RewardedAd) loads.get(i)).getAdUnitId() == id)
 			count++;
 		return count;
+	}
+	
+	public void AdMob_RewardedVideo_Forget_Load_Instances(double count)
+	{
+		String id = mRewardedAdID;
+		
+		for(int i = loads.size()-1 ; i >= 0 && count > 0; i --)
+		if (loads.get(i) instanceof RewardedAd)
+		if (((RewardedAd) loads.get(i)).getAdUnitId() == id)
+		{
+			count --;
+			loads.remove(i);
+		}
 	}
 	
 	int RewardedVideo_Max_Instances = 1;
@@ -708,6 +734,19 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		if (((RewardedInterstitialAd) loads.get(i)).getAdUnitId() == id)
 			count++;
 		return count;
+	}
+	
+	public void AdMob_RewardedInterstitial_Forget_Load_Instances(double count)
+	{
+		String id = mRewardedInterstitialAdID;
+		
+		for(int i = loads.size()-1 ; i >= 0 && count > 0; i --)
+		if (loads.get(i) instanceof RewardedInterstitialAd)
+		if (((RewardedInterstitialAd) loads.get(i)).getAdUnitId() == id)
+		{
+			count --;
+			loads.remove(i);
+		}
 	}
 	
 	int RewardedInterstitial_Max_Instances = 1;
@@ -1181,7 +1220,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	private void AdsSoundReLoad() {
-		//TODO...
+		//Now this should be munual from GML
 		// if (mInterstitialID != null) {
 			// mInterstitialAd = null;
 			// AdMob_Interstitial_Load();
