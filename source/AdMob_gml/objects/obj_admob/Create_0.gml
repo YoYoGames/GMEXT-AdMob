@@ -1,5 +1,7 @@
 /// @description Initialize variables
 
+//AdMob_Enable_Paid_Event()
+
 // Debug variables (used in draw event)
 status = "UNKNOWN";
 type = "UNKNOWN";
