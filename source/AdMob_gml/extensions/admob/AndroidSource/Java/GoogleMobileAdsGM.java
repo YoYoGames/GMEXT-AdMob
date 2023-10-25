@@ -217,6 +217,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 				adView = new AdView(activity);
 				
 				final AdView _adView = adView;
+				
+				if(Paid_Event)
 				adView.setOnPaidEventListener(new OnPaidEventListener() 
 				{
 					@Override
@@ -444,7 +446,8 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						if(InterstitialAd_Count(context_AdUnit) < Interstitial_Max_Instances)
 							loads.add(interstitialAd);
 						
-						final InterstitialAd _mInterstitialID = interstitialAd;						
+						final InterstitialAd _mInterstitialID = interstitialAd;		
+						if(Paid_Event)						
 						interstitialAd.setOnPaidEventListener(new OnPaidEventListener() 
 						{
 							@Override
@@ -594,6 +597,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							loads.add(rewardedAd_);
 						
 						final RewardedAd _mRewardedAd = rewardedAd_;
+						if(Paid_Event)
 						rewardedAd_.setOnPaidEventListener(new OnPaidEventListener() 
 						{
 							@Override
@@ -746,6 +750,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 								
 								
 								final RewardedInterstitialAd _mRewardedInterstitialAd = rewardedInterstitialAd_;
+								if(Paid_Event)
 								_mRewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener()
 								{
 									@Override
@@ -873,6 +878,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						appOpenAd = ad;
 						
 						final AppOpenAd _appOpenAd = ad;
+						if(Paid_Event)
 						appOpenAd.setOnPaidEventListener(new OnPaidEventListener() 
 						{
 							@Override
@@ -1322,7 +1328,11 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return true;
 	}
 	
-	
+	boolean Paid_Event = false;
+	public void AdMob_Enable_Paid_Event()
+	{
+		Paid_Event = true;
+	}
 	
 	public void onPaidEvent_Handler(AdValue adValue,String adUnitId,String adType,AdapterResponseInfo loadedAdapterResponseInfo,String mediationAdapterClassName) 
 	{
