@@ -242,31 +242,8 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     
     self.bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value)
     {
-
-        GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.bannerView.responseInfo.loadedAdNetworkResponseInfo;
-        
-        // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
-        // NSString *mediationGroupName = extras["mediation_group_name"];
-        // NSString *mediationABTestName = extras["mediation_ab_test_name"];
-        // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
-        
-        int dsMapIndex = dsMapCreate();
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
-        
-        dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.bannerView.responseInfo.adNetworkClassName UTF8String]);
-        
-        dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[self.bannerView.adUnitID UTF8String]);
-        
-        dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
-        dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
-        dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
-        
-        dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
-        dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
-        dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
-        dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
-        
-        createSocialAsyncEventWithDSMap(dsMapIndex);
+        GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.bannerView.responseInfo.loadedAdNetworkResponseInfo;		
+		[self onPaidEvent_Handler:value adUnitId:self.bannerView.adUnitID adType:"Banner" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:self.bannerView.responseInfo.adNetworkClassName];
     };
     
     self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -490,31 +467,8 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
         
         ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
-
             GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = interstitial.responseInfo.loadedAdNetworkResponseInfo;
-            
-            // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
-            // NSString *mediationGroupName = extras["mediation_group_name"];
-            // NSString *mediationABTestName = extras["mediation_ab_test_name"];
-            // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
-            
-            int dsMapIndex = dsMapCreate();
-            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
-            
-            dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[interstitial.responseInfo.adNetworkClassName UTF8String]);
-            
-            dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[interstitial.adUnitID UTF8String]);
-            
-            dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
-            dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
-            dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
-            
-            dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
-            dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
-            dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
-            dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
-            
-            createSocialAsyncEventWithDSMap(dsMapIndex);
+			[self onPaidEvent_Handler:value adUnitId:interstitial.adUnitID adType:"Interstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:interstitial.responseInfo.adNetworkClassName];
         };
         
         int dsMapIndex = dsMapCreate();
@@ -592,31 +546,8 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
             
             ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
-
                 GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
-                
-                // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
-                // NSString *mediationGroupName = extras["mediation_group_name"];
-                // NSString *mediationABTestName = extras["mediation_ab_test_name"];
-                // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
-                
-                int dsMapIndex = dsMapCreate();
-                dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
-                
-                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[ad.responseInfo.adNetworkClassName UTF8String]);
-                
-                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[ad.adUnitID UTF8String]);
-                
-                dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
-                dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
-                dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
-                
-                dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
-                
-                createSocialAsyncEventWithDSMap(dsMapIndex);
+				[self onPaidEvent_Handler:value adUnitId:ad.adUnitID adType:"Rewarded" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:ad.responseInfo.adNetworkClassName];
             };
 
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnLoaded");
@@ -711,35 +642,15 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
             
             ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
-
                 GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
-                
-                // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
-                // NSString *mediationGroupName = extras["mediation_group_name"];
-                // NSString *mediationABTestName = extras["mediation_ab_test_name"];
-                // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
-                
-                int dsMapIndex = dsMapCreate();
-                dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
-                
-                dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[ad.responseInfo.adNetworkClassName UTF8String]);
-                
-                dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[ad.adUnitID UTF8String]);
-                
-                dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
-                dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
-                dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
-                
-                dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
-                dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
-                
-                createSocialAsyncEventWithDSMap(dsMapIndex);
+				[self onPaidEvent_Handler:value adUnitId:ad.adUnitID adType:"RewardedInterstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:ad.responseInfo.adNetworkClassName];
             };
 
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnLoaded");
             dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
+			
+			GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
+			[self onPaidEvent_Handler:value adUnitId:ad.adUnitID adType:"RewardedInterstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:ad.responseInfo.adNetworkClassName];
         }
         
         createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -1173,5 +1084,33 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
 
     return true;
 }
+
+
+-(void)onPaidEvent_Handler:(GADAdValue*) mGADAdValue adUnitId:(NSString*)adUnitId adType:(NSString*)adType loadedAdNetworkResponseInfo:(GADAdNetworkResponseInfo*)loadedAdNetworkResponseInfo mediationAdapterClassName:(NSString*)mediationAdapterClassName
+{
+	// NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
+	// NSString *mediationGroupName = extras["mediation_group_name"];
+	// NSString *mediationABTestName = extras["mediation_ab_test_name"];
+	// NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
+	
+	int dsMapIndex = dsMapCreate();
+	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
+	
+	dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[mediationAdapterClassName UTF8String]);
+	
+	dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[adUnitId UTF8String]);
+	dsMapAddString(dsMapIndex, (char*)"adType", (char*)[adType UTF8String]);
+	
+	dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
+	dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
+	dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
+	
+	dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
+	dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
+	dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
+	dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
+	
+	createSocialAsyncEventWithDSMap(dsMapIndex);
+};
 
 @end

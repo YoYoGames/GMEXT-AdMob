@@ -223,30 +223,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 					public void onPaidEvent(AdValue adValue) 
 					{
 						AdapterResponseInfo loadedAdapterResponseInfo = _adView.getResponseInfo().getLoadedAdapterResponseInfo();
-
-						  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-						  // String mediationGroupName = extras.getString("mediation_group_name");
-						  // String mediationABTestName = extras.getString("mediation_ab_test_name");
-						  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
-						  
-						  
-						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-						
-						RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", _adView.getResponseInfo().getMediationAdapterClassName());
-						
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", _adView.getAdUnitId());
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adType", "Banner");
-						RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-						RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-						RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-						
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
-						RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
-						
-						RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+						onPaidEvent_Handler(adValue,_adView.getAdUnitId(),"Banner",loadedAdapterResponseInfo,_adView.getResponseInfo().getMediationAdapterClassName());
 					}});
 
 				layout.addView((View) adView, params);
@@ -474,30 +451,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							public void onPaidEvent(AdValue adValue) 
 							{
 								AdapterResponseInfo loadedAdapterResponseInfo = _mInterstitialID.getResponseInfo().getLoadedAdapterResponseInfo();
-
-								  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-								  // String mediationGroupName = extras.getString("mediation_group_name");
-								  // String mediationABTestName = extras.getString("mediation_ab_test_name");
-								  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
-								  
-								  
-								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-								RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", _mInterstitialID.getResponseInfo().getMediationAdapterClassName());
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", _mInterstitialID.getAdUnitId());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adType", "Interstitial");
-								RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-								RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
-								
-								RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+								onPaidEvent_Handler(adValue,_mInterstitialID.getAdUnitId(),"Interstitial",loadedAdapterResponseInfo,_mInterstitialID.getResponseInfo().getMediationAdapterClassName());
 							}});
 							
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
@@ -646,30 +600,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							public void onPaidEvent(AdValue adValue) 
 							{
 								AdapterResponseInfo loadedAdapterResponseInfo = _mRewardedAd.getResponseInfo().getLoadedAdapterResponseInfo();
-
-								  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-								  // String mediationGroupName = extras.getString("mediation_group_name");
-								  // String mediationABTestName = extras.getString("mediation_ab_test_name");
-								  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
-								  
-								  
-								int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-								RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", _mRewardedAd.getResponseInfo().getMediationAdapterClassName());
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", _mRewardedAd.getAdUnitId());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adType", "Rewarded");
-								RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-								RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-								
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
-								RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
-								
-								RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+								onPaidEvent_Handler(adValue,_mRewardedAd.getAdUnitId(),"Rewarded",loadedAdapterResponseInfo,_mRewardedAd.getResponseInfo().getMediationAdapterClassName());
 							}});
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
@@ -821,30 +752,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 									public void onPaidEvent(AdValue adValue) 
 									{
 										AdapterResponseInfo loadedAdapterResponseInfo = _mRewardedInterstitialAd.getResponseInfo().getLoadedAdapterResponseInfo();
-
-										  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-										  // String mediationGroupName = extras.getString("mediation_group_name");
-										  // String mediationABTestName = extras.getString("mediation_ab_test_name");
-										  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
-										  
-										  
-										int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-										RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", _mRewardedInterstitialAd.getResponseInfo().getMediationAdapterClassName());
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", _mRewardedInterstitialAd.getAdUnitId());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adType", "RewardedInterstitial");
-										RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-										RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
-										
-										RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+										onPaidEvent_Handler(adValue,_mRewardedInterstitialAd.getAdUnitId(),"RewardedInterstitial",loadedAdapterResponseInfo,_mRewardedInterstitialAd.getResponseInfo().getMediationAdapterClassName());
 									}
 								});
 
@@ -966,37 +874,14 @@ private static class BackgroundThreadFactory implements ThreadFactory
 						
 						final AppOpenAd _appOpenAd = ad;
 						appOpenAd.setOnPaidEventListener(new OnPaidEventListener() 
-								{
-									@Override
-									public void onPaidEvent(AdValue adValue) 
-									{
-										AdapterResponseInfo loadedAdapterResponseInfo = _appOpenAd.getResponseInfo().getLoadedAdapterResponseInfo();
-
-										  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-										  // String mediationGroupName = extras.getString("mediation_group_name");
-										  // String mediationABTestName = extras.getString("mediation_ab_test_name");
-										  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
-										  
-										  
-										int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-										RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", _appOpenAd.getResponseInfo().getMediationAdapterClassName());
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", _appOpenAd.getAdUnitId());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adType", "AppOpen");
-										RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-										RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-										
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
-										RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
-										
-										RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-									}
-								});
+						{
+							@Override
+							public void onPaidEvent(AdValue adValue) 
+							{
+								AdapterResponseInfo loadedAdapterResponseInfo = _appOpenAd.getResponseInfo().getLoadedAdapterResponseInfo();
+								onPaidEvent_Handler(adValue,_appOpenAd.getAdUnitId(),"AppOpen",loadedAdapterResponseInfo,_appOpenAd.getResponseInfo().getMediationAdapterClassName());
+							}
+						});
 
 						int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
 						RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_AppOpenAd_OnLoaded");
@@ -1435,6 +1320,35 @@ private static class BackgroundThreadFactory implements ThreadFactory
 			}
 		}
 		return true;
+	}
+	
+	
+	
+	public void onPaidEvent_Handler(AdValue adValue,String adUnitId,String adType,AdapterResponseInfo loadedAdapterResponseInfo,String mediationAdapterClassName) 
+	{
+		  // Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
+		  // String mediationGroupName = extras.getString("mediation_group_name");
+		  // String mediationABTestName = extras.getString("mediation_ab_test_name");
+		  // String mediationABTestVariant = extras.getString("mediation_ab_test_variant");
+		  
+		  
+		int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
+		
+		RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", mediationAdapterClassName);
+		
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", adUnitId);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adType", adType);
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
+		
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName", loadedAdapterResponseInfo.getAdSourceInstanceName());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId", loadedAdapterResponseInfo.getAdSourceInstanceId());
+		
+		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 	}
 
 }
