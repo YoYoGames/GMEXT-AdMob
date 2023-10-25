@@ -431,7 +431,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 {
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
-    if([(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:_id] == NSOrderedSame)
         return i;
     return -1;
 }
@@ -441,9 +441,20 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     int count = 0;
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
-    if([(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:_id] == NSOrderedSame)
         count++;
     return count;
+}
+
+-(void) Admob_Interstitial_Forget_Load_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.interstitialAdID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
 }
 
 -(void) Admob_Interstitial_Max_Instances:(double) value
@@ -520,7 +531,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 {
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
-    if([(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
         return i;
     return -1;
 }
@@ -530,9 +541,20 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     int count = 0;
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
-    if([(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
         count++;
     return count;
+}
+
+-(void) AdMob_RewardedVideo_Forget_Load_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.rewardAd_ID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
 }
 
 -(void) AdMob_RewardedVideo_Max_Instances:(double) value
@@ -625,7 +647,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 {
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
-    if([(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
         return i;
     return -1;
 }
@@ -635,9 +657,20 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     int count = 0;
     for(int i = 0 ; i < [self.loads count] ; i++)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
-    if([(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
         count++;
     return count;
+}
+
+-(void) AdMob_RewardedInterstitial_Forget_Load_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.rewardInterstitialAd_ID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
 }
 
 -(void) AdMob_RewardedInterstitial_Max_Instances:(double) value
