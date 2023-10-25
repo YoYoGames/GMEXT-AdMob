@@ -21,6 +21,8 @@
     {"name":"Font_YoYo_30","order":2,"path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},
     {"name":"AdMobPangle","order":4,"path":"extensions/AdMobPangle/AdMobPangle.yy",},
     {"name":"Obj_AdMob_RewardedInterstitial","order":6,"path":"objects/Obj_AdMob_RewardedInterstitial/Obj_AdMob_RewardedInterstitial.yy",},
+    {"name":"Obj_AdMob_Rewarded_Multi_Load_Test","order":10,"path":"objects/Obj_AdMob_Rewarded_Multi_Load_Test/Obj_AdMob_Rewarded_Multi_Load_Test.yy",},
+    {"name":"Obj_AdMob_GoTo_Test","order":9,"path":"objects/Obj_AdMob_GoTo_Test/Obj_AdMob_GoTo_Test.yy",},
     {"name":"Obj_AdMob_Volume","order":5,"path":"objects/Obj_AdMob_Volume/Obj_AdMob_Volume.yy",},
   ],
 }

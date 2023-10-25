@@ -59,6 +59,8 @@
     {"id":{"name":"Font_YoYo_30","path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},},
     {"id":{"name":"AdMobPangle","path":"extensions/AdMobPangle/AdMobPangle.yy",},},
     {"id":{"name":"Obj_AdMob_RewardedInterstitial","path":"objects/Obj_AdMob_RewardedInterstitial/Obj_AdMob_RewardedInterstitial.yy",},},
+    {"id":{"name":"Obj_AdMob_Rewarded_Multi_Load_Test","path":"objects/Obj_AdMob_Rewarded_Multi_Load_Test/Obj_AdMob_Rewarded_Multi_Load_Test.yy",},},
+    {"id":{"name":"Obj_AdMob_GoTo_Test","path":"objects/Obj_AdMob_GoTo_Test/Obj_AdMob_GoTo_Test.yy",},},
     {"id":{"name":"Obj_AdMob_Volume","path":"objects/Obj_AdMob_Volume/Obj_AdMob_Volume.yy",},},
     {"id":{"name":"AdMob","path":"extensions/AdMob/AdMob.yy",},},
   ],

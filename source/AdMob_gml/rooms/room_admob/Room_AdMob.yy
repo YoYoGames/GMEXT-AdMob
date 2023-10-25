@@ -16,6 +16,7 @@
     {"name":"inst_2698326B","path":"rooms/Room_AdMob/Room_AdMob.yy",},
     {"name":"inst_4FF79FAD","path":"rooms/Room_AdMob/Room_AdMob.yy",},
     {"name":"inst_7BD2BFBE","path":"rooms/Room_AdMob/Room_AdMob.yy",},
+    {"name":"inst_4B1E5FB5","path":"rooms/Room_AdMob/Room_AdMob.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -29,6 +30,7 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_2698326B","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"Obj_AdMob_Volume","path":"objects/Obj_AdMob_Volume/Obj_AdMob_Volume.yy",},"properties":[],"rotation":0.0,"scaleX":4.0,"scaleY":1.0,"x":1087.9999,"y":352.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4FF79FAD","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"Obj_AdMob_RewardedInterstitial","path":"objects/Obj_AdMob_RewardedInterstitial/Obj_AdMob_RewardedInterstitial.yy",},"properties":[],"rotation":0.0,"scaleX":5.0,"scaleY":1.0,"x":640.0,"y":480.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_7BD2BFBE","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"Obj_AdMob_AppOpenAd","path":"objects/Obj_AdMob_AppOpenAd/Obj_AdMob_AppOpenAd.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":64.0,"y":160.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4B1E5FB5","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"Obj_AdMob_Rewarded_Multi_Load_Test","path":"objects/Obj_AdMob_Rewarded_Multi_Load_Test/Obj_AdMob_Rewarded_Multi_Load_Test.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":352.0,"y":384.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":true,"visible":true,},
     {"resourceType":"GMRBackgroundLayer","resourceVersion":"1.0","name":"Compatibility_Background_0_Background_Kaguva","animationFPS":30.0,"animationSpeedType":0,"colour":4294967295,"depth":2147483500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"hspeed":0.0,"htiled":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"properties":[],"spriteId":{"name":"Spr_YoYo_Background","path":"sprites/Spr_YoYo_Background/Spr_YoYo_Background.yy",},"stretch":false,"userdefinedAnimFPS":false,"userdefinedDepth":true,"visible":true,"vspeed":0.0,"vtiled":false,"x":0,"y":0,},
   ],
