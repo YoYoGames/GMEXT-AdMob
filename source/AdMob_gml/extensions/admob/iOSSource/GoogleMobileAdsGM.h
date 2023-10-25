@@ -11,6 +11,12 @@
     NSMutableDictionary *ListenerMap;
     Boolean testingAds;
     Boolean NPA;
+    
+    int Interstitial_Max_Instances;
+    int RewardedVideo_Max_Instances;
+    int RewardedInterstitial_Max_Instances;
+    
+    bool Paid_Event;
 }
 
 @property(nonatomic, strong) GADBannerView *bannerView;
@@ -40,6 +46,8 @@
 
 
 -(double) AdMob_AppOpenAd_isAdAvailable;
+
+
 
 @end
 

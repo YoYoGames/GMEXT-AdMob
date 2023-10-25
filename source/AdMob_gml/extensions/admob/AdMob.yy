@@ -125,7 +125,9 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Max_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Max_Instances","help":"AdMob_RewardedInterstitial_Max_Instances(value)","hidden":false,"kind":4,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Enable_Paid_Event","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Enable_Paid_Event","help":"","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Enable_Paid_Event","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"AdMob_Enable_Paid_Event","help":"AdMob_Enable_Paid_Event(value)","hidden":false,"kind":4,"returnType":1,},
       ],"init":"","kind":4,"order":[
         {"name":"AdMob_Initialize","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Init","path":"extensions/AdMob/AdMob.yy",},
