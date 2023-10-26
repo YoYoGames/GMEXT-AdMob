@@ -230,14 +230,6 @@ switch(async_load[?"type"])
 		
 		
 	// ########### APP OPEN ###########
-		
-	// AdMob_AppOpenAd_Load succeeded
-	case "AdMob_AppOpenAd_OnLoaded":
-		break;
-		
-	// AdMob_AppOpenAd_Load failed
-	case "AdMob_AppOpenAd_OnLoadFailed":
-		break;
 	
 	// AdMob_AppOpenAd got dismissed
 	case "AdMob_AppOpenAd_OnDismissed":
@@ -246,12 +238,10 @@ switch(async_load[?"type"])
 	// AdMob_AppOpenAd_Show failed
 	case "AdMob_AppOpenAd_OnShowFailed":
 		// At this point the app open ad failed to show.
-		AdMob_AppOpenAd_Load(display_landscape)
 		break;
 	
 	case "AdMob_AppOpenAd_OnFullyShown":
 		// At this point the app open ad succeeded to show.
-		AdMob_AppOpenAd_Load(display_landscape)
 		break;
 }
 

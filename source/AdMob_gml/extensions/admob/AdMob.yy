@@ -107,15 +107,9 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_NonPersonalizedAds_Set","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_NonPersonalizedAds_Set","help":"AdMob_NonPersonalizedAds_Set(value)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Load","argCount":0,"args":[
-            2,
-          ],"documentation":"","externalName":"AdMob_AppOpenAd_Load","help":"AdMob_AppOpenAd_Load(orientation)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Show","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_Show","help":"AdMob_AppOpenAd_Show()","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Init","argCount":0,"args":[
             1,
           ],"documentation":"","externalName":"AdMob_AppOpenAd_Init","help":"AdMob_AppOpenAd_Init(String adUnitId)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_IsLoaded","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_IsLoaded","help":"AdMob_AppOpenAd_IsLoaded()","hidden":false,"kind":4,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_IsShowingAd","argCount":0,"args":[],"documentation":"","externalName":"AdMob_IsShowingAd","help":"AdMob_IsShowingAd()","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"Admob_Interstitial_Max_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"Admob_Interstitial_Max_Instances","help":"Admob_Interstitial_Max_Instances(value)","hidden":false,"kind":4,"returnType":2,},
@@ -135,6 +129,11 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Forget_Load_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Forget_Load_Instances","help":"AdMob_RewardedInterstitial_Forget_Load_Instances(num)","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Enable","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"AdMob_AppOpenAd_Enable","help":"AdMob_AppOpenAd_Enable(orientation)","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_IsEnabled","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_IsEnabled","help":"AdMob_AppOpenAd_IsEnabled()","hidden":false,"kind":4,"returnType":2,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Disable","argCount":0,"args":[],"documentation":"","externalName":"AdMob_AppOpenAd_Disable","help":"AdMob_AppOpenAd_Disable()","hidden":false,"kind":4,"returnType":1,},
       ],"init":"","kind":4,"order":[
         {"name":"AdMob_Initialize","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Init","path":"extensions/AdMob/AdMob.yy",},
@@ -171,9 +170,15 @@
         {"name":"AdMob_RewardedInterstitial_Show","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_IsLoaded","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_NonPersonalizedAds_Set","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"Admob_Interstitial_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedVideo_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedInterstitial_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_Enable_Paid_Event","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"Admob_Interstitial_Forget_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedVideo_Forget_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedInterstitial_Forget_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_AppOpenAd_Init","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_AppOpenAd_Load","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_AppOpenAd_Show","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_AppOpenAd_Enable","path":"extensions/AdMob/AdMob.yy",},
       ],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject": "\r\n\r\nimplementation 'com.google.android.gms:play-services-ads:21.3.0'\r\nconstraints {\r\n  implementation('androidx.work:work-runtime:2.7.0')\r\n}\r\n\r\n// The include below was giving issues uploading to the google store.\r\n//GDPR -> https://developers.google.com/admob/ump/android/quick-start\r\n// implementation 'com.google.android.ads.consent:consent-library:1.0.8'\r\n\r\n//Mediations Here:\r\n\r\n\r\n",
