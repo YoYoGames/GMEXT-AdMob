@@ -893,7 +893,6 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	public void AdMob_AppOpenAd_Enable(double orientation)
 	{
 		AppOpenAd_Enable = true;
-		Log.i("yoyo","AdMob_AppOpenAd_Enable");
 		appOpenAd = null;
 		AppOpenAd_orientation = orientation;
 		AdMob_AppOpenAd_Load();
@@ -980,6 +979,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	
 	private void AdMob_AppOpenAd_Show()
 	{
+		if(!AppOpenAd_Enable)
+			return;
+		
 		if(!init_success)
 			return;
 		

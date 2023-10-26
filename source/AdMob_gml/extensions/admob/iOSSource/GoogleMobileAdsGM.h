@@ -17,6 +17,9 @@
     int RewardedInterstitial_Max_Instances;
     
     bool Paid_Event;
+	
+	bool AppOpenAd_Enable;
+	double AppOpenAd_orientation;
 }
 
 @property(nonatomic, strong) GADBannerView *bannerView;
@@ -43,7 +46,6 @@
 @property(nonatomic, strong) NSDate *loadTime;
 
 @property(nonatomic, strong) NSMutableArray *loads;
-
 
 -(double) AdMob_AppOpenAd_isAdAvailable;
 

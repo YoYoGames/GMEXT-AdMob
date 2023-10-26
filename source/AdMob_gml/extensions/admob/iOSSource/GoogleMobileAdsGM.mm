@@ -45,6 +45,9 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         RewardedInterstitial_Max_Instances = 1;
         
         Paid_Event = false;
+		
+		AppOpenAd_Enable = false;
+		AppOpenAd_orientation = 0;
         
         self.loads = [[NSMutableArray alloc] init];
 
@@ -143,7 +146,8 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
+		[self AdMob_AppOpenAd_Load];
     }
     
     dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
@@ -179,8 +183,9 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        int dsMapIndex = dsMapCreate();
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
+        // int dsMapIndex = dsMapCreate();
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
+		[self AdMob_AppOpenAd_Load];
     }
 
     createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -214,7 +219,8 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
+		[self AdMob_AppOpenAd_Load];
     }
 
     createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -756,8 +762,35 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     self.appOpenAdID = adUnitId;
 }
 
+-(void) onResume
+{
+    [self AdMob_AppOpenAd_Show];
+}
+
+-(void) AdMob_AppOpenAd_Enable:(double) orientation
+{
+	AppOpenAd_Enable = true;
+	self.appOpenAd = nil;
+	AppOpenAd_orientation = orientation;
+	[self AdMob_AppOpenAd_Load];
+}
+
+-(void) AdMob_AppOpenAd_Disable
+{
+	AppOpenAd_Enable = false;
+	self.appOpenAd = nil;
+}
+
+-(double) AdMob_AppOpenAd_IsEnabled
+{
+	return AppOpenAd_Enable ? 1.0:0.0;
+}
+
 -(void) AdMob_AppOpenAd_Load:(double) orientation
 {
+	if(!AppOpenAd_Enable)
+		return;
+		
     if ([self.appOpenAdID isEqualToString:@""])
         return;
     
@@ -766,11 +799,11 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
                 if (error) {
                     NSLog(@"Failed to load app open ad: %@", error);
                     
-                    int dsMapIndex = dsMapCreate();
-                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoadFailed");
-                    dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
-                    dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
-                    createSocialAsyncEventWithDSMap(dsMapIndex);
+                    // int dsMapIndex = dsMapCreate();
+                    // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoadFailed");
+                    // dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
+                    // dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
+                    // createSocialAsyncEventWithDSMap(dsMapIndex);
                     
                     return;
                 }
@@ -778,44 +811,46 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
                 self.appOpenAd.fullScreenContentDelegate = self;
                 self.loadTime = [NSDate date];
                 
-                if(Paid_Event)
-              self.appOpenAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
-              {
+				if(Paid_Event)
+				self.appOpenAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+				{
+					GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.appOpenAd.responseInfo.loadedAdNetworkResponseInfo;
 
-                  GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.appOpenAd.responseInfo.loadedAdNetworkResponseInfo;
-                  
-                  // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
-                  // NSString *mediationGroupName = extras["mediation_group_name"];
-                  // NSString *mediationABTestName = extras["mediation_ab_test_name"];
-                  // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
-                  
-                  int dsMapIndex = dsMapCreate();
-                  dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
-                  
-                  dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.appOpenAd.responseInfo.adNetworkClassName UTF8String]);
-                  
-                  dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[/*self.appOpenAd.adUnitID*/ self.appOpenAdID UTF8String]);
-                  
-                  dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
-                  dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
-                  dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
-                  
-                  dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
-                  dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
-                  dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
-                  dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
-                  
-                  createSocialAsyncEventWithDSMap(dsMapIndex);
-              };
+					// NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
+					// NSString *mediationGroupName = extras["mediation_group_name"];
+					// NSString *mediationABTestName = extras["mediation_ab_test_name"];
+					// NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
+
+					int dsMapIndex = dsMapCreate();
+					dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
+
+					dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.appOpenAd.responseInfo.adNetworkClassName UTF8String]);
+
+					dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[/*self.appOpenAd.adUnitID*/ self.appOpenAdID UTF8String]);
+
+					dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
+					dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
+					dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
+
+					dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
+					dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
+					dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
+					dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
+
+					createSocialAsyncEventWithDSMap(dsMapIndex);
+				};
               
-              int dsMapIndex = dsMapCreate();
-              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoaded");
-              createSocialAsyncEventWithDSMap(dsMapIndex);
+              // int dsMapIndex = dsMapCreate();
+              // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoaded");
+              // createSocialAsyncEventWithDSMap(dsMapIndex);
            }];
 }
 
 -(void) AdMob_AppOpenAd_Show
 {
+	if(!AppOpenAd_Enable)
+		return;
+
     if([self AdMob_AppOpenAd_IsLoaded]<0.5)
         return;
     
