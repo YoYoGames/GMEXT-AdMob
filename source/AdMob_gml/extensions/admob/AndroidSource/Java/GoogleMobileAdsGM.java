@@ -422,7 +422,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void Admob_Interstitial_Forget_Load_Instances(double count)
+	public void Admob_Interstitial_Free_Load_Instances(double count)
 	{
 		String id = mInterstitialID;
 		
@@ -540,6 +540,10 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	public double AdMob_Interstitial_IsLoaded() {
+		return InterstitialAd_Count(mInterstitialID)>0?1.0:0.0;
+	}
+	
+	public double AdMob_Interstitial_Instances_Count() {
 		return InterstitialAd_Count(mInterstitialID);
 	}
 
@@ -571,7 +575,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void AdMob_RewardedVideo_Forget_Load_Instances(double count)
+	public void AdMob_RewardedVideo_Free_Load_Instances(double count)
 	{
 		String id = mRewardedAdID;
 		
@@ -701,8 +705,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	public double AdMob_RewardedVideo_IsLoaded() {
-		return RewardedAd_Count(mRewardedAdID);
+		return RewardedAd_Count(mRewardedAdID)>0?1.0:0.0;
 	}
+	
+	public double AdMob_RewardedVideo_Instances_Count() {
+		return RewardedAd_Count(mRewardedAdID);
+	}	
 
 	///// REWARDED INTESTITIAL
 	///// ////////////////////////////////////////////////////////////////////////
@@ -732,7 +740,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void AdMob_RewardedInterstitial_Forget_Load_Instances(double count)
+	public void AdMob_RewardedInterstitial_Free_Load_Instances(double count)
 	{
 		String id = mRewardedInterstitialAdID;
 		
@@ -868,8 +876,12 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 
 	public double AdMob_RewardedInterstitial_IsLoaded() {
-		return RewardedInterstitialAd_Count(mRewardedInterstitialAdID);
+		return RewardedInterstitialAd_Count(mRewardedInterstitialAdID)>0?1.0:0.0;
 	}
+	
+	public double AdMob_RewardedInterstitial_Instances_Count() {
+		return RewardedInterstitialAd_Count(mRewardedInterstitialAdID);
+	}	
 	
 	///// APP OPEN AD
 	///// //////////////////////////////////////////////////////////////////////////////

@@ -452,7 +452,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) Admob_Interstitial_Forget_Load_Instances:(double) count
+-(void) Admob_Interstitial_Free_Load_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
@@ -523,6 +523,11 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(double) AdMob_Interstitial_IsLoaded
 {
+    return [self interstitial_count:self.interstitialAdID]>0?1.0:0.0;
+}
+
+-(double) AdMob_Interstitial_Instances_Count
+{
     return [self interstitial_count:self.interstitialAdID];
 }
 
@@ -552,7 +557,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) AdMob_RewardedVideo_Forget_Load_Instances:(double) count
+-(void) AdMob_RewardedVideo_Free_Load_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
@@ -639,6 +644,11 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(double) AdMob_RewardedVideo_IsLoaded
 {
+    return [self reward_count: self.rewardAd_ID]>0?1.0:0.0;
+}
+
+-(double) AdMob_RewardedVideo_Instances_Count
+{
     return [self reward_count: self.rewardAd_ID];
 }
 
@@ -668,7 +678,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) AdMob_RewardedInterstitial_Forget_Load_Instances:(double) count
+-(void) AdMob_RewardedInterstitial_Free_Load_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
@@ -752,6 +762,11 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 }
 
 -(double) AdMob_RewardedInterstitial_IsLoaded
+{
+    return [self interreward_count:self.rewardInterstitialAd_ID]>0?1.0:0.0;
+}
+
+-(double) AdMob_RewardedInterstitial_Instances_Count
 {
     return [self interreward_count:self.rewardInterstitialAd_ID];
 }

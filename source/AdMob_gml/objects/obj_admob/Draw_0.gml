@@ -21,7 +21,7 @@ draw_text(70, y + 105, "Interstitial_isLoaded: " + string(interstitial_isLoaded)
 // This function checks if the current rewarded video ad is loaded. This function
 // needs to return true before we can correctly show the rewarded video ad.
 var rewardedVideoAd_isLoaded = AdMob_RewardedVideo_IsLoaded();
-draw_text(70, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded));
+draw_text(70, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded) + " Instances: " + string(AdMob_RewardedVideo_Instances_Count()));
 
 var rewardedInterstitialAd_isLoaded = AdMob_RewardedInterstitial_IsLoaded();
 draw_text(70, y + 175, "RewardedInterstitialAd_isLoaded: " + string(rewardedInterstitialAd_isLoaded));

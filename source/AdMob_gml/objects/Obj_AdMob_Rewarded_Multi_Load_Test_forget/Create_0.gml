@@ -1,5 +1,5 @@
 /// @description Initialize variables
 
 event_inherited();
-text = "Forget";
+text = "Free";
 
