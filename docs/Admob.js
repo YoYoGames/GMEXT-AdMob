@@ -542,7 +542,7 @@ public void AdMob_Consent_Reset() {
 /**
  * @func AdMob_Settings_SetVolume
  * @desc This method provides control over the sound’s loudness when playing rewarded video ads. This method will trigger a reload of the current Interstitial and RewardedVideo ads.
- * @param {real} value
+ * @param {real} value The amount to set the volume to.
  * @func_end
 */
 public void AdMob_Settings_SetVolume(double value) 
