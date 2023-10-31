@@ -150,11 +150,11 @@ private static class BackgroundThreadFactory implements ThreadFactory
 							RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 
 							// Initialize ad types using extension options
-							AdMob_Banner_Init(RunnerJNILib.extOptGetString("AdMob", "Android_BANNER"));
-							AdMob_Interstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL"));
-							AdMob_RewardedVideo_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
-							AdMob_RewardedInterstitial_Init(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
-							AdMob_AppOpenAd_Init(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
+							AdMob_Banner_Target(RunnerJNILib.extOptGetString("AdMob", "Android_BANNER"));
+							AdMob_Interstitial_Target(RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL"));
+							AdMob_RewardedVideo_Target(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED"));
+							AdMob_RewardedInterstitial_Target(RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL"));
+							AdMob_AppOpenAd_Target(RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD"));
 							
 							init_success = true;
 						}
@@ -179,7 +179,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	private String bannerID = "";
 	private RelativeLayout layout;
 
-	public void AdMob_Banner_Init(String adUnitId) {
+	public void AdMob_Banner_Target(String adUnitId) {
 		bannerID = adUnitId;
 	}
 
@@ -399,7 +399,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 	private String mInterstitialID = "";
 
-	public void AdMob_Interstitial_Init(String adUnitId) {
+	public void AdMob_Interstitial_Target(String adUnitId) {
 		mInterstitialID = adUnitId;
 	}
 	
@@ -552,7 +552,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 	public String mRewardedAdID = "";
 
-	public void AdMob_RewardedVideo_Init(String adUnitId) {
+	public void AdMob_RewardedVideo_Target(String adUnitId) {
 		mRewardedAdID = adUnitId;
 	}
 	
@@ -589,9 +589,9 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	}
 	
 	int RewardedVideo_Max_Instances = 1;
-	public void AdMob_RewardedVideo_Max_Instances(double value)
+	public void AdMob_RewardedVideo_Max_Instances(double count)
 	{
-		RewardedVideo_Max_Instances = (int)value;
+		RewardedVideo_Max_Instances = (int)count;
 	}
 
 	public void AdMob_RewardedVideo_Load() {
@@ -717,7 +717,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 
 	public String mRewardedInterstitialAdID = "";
 
-	public void AdMob_RewardedInterstitial_Init(String adUnitId) {
+	public void AdMob_RewardedInterstitial_Target(String adUnitId) {
 		mRewardedInterstitialAdID = adUnitId;
 	}
 	
@@ -895,7 +895,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 	private AppOpenAd appOpenAd = null;
 	public String mAppOpenAdID = "";
 	
-	public void AdMob_AppOpenAd_Init(String adUnitId)
+	public void AdMob_AppOpenAd_Target(String adUnitId)
 	{
 		mAppOpenAdID = adUnitId;
 	}

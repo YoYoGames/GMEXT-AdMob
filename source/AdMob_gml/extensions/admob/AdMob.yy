@@ -46,9 +46,9 @@
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Consent_Mode_PRODUCTION","hidden":false,"value":"3",},
       ],"copyToTargets":-1,"filename":"AdMob.ext","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Initialize","argCount":1,"args":[],"documentation":"","externalName":"AdMob_Initialize","help":"AdMob_Initialize()","hidden":false,"kind":11,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Interstitial_Init","argCount":1,"args":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Interstitial_Target","argCount":1,"args":[
             1,
-          ],"documentation":"","externalName":"AdMob_Interstitial_Init","help":"AdMob_Interstitial_Init(interstitialID)","hidden":false,"kind":11,"returnType":2,},
+          ],"documentation":"","externalName":"AdMob_Interstitial_Target","help":"AdMob_Interstitial_Target(interstitialID)","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Interstitial_Load","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Interstitial_Load","help":"AdMob_Interstitial_Load()","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Create","argCount":4,"args":[
             2,
@@ -59,18 +59,18 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_Load","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedVideo_Load","help":"AdMob_RewardedVideo_Load()","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_IsLoaded","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedVideo_IsLoaded","help":"AdMob_RewardedVideo_IsLoaded()","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_Show","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedVideo_Show","help":"AdMob_RewardedVideo_Show()","hidden":false,"kind":11,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_Init","argCount":1,"args":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedVideo_Target","argCount":1,"args":[
             1,
-          ],"documentation":"","externalName":"AdMob_RewardedVideo_Init","help":"AdMob_RewardedVideo_Init(RewardedID)","hidden":false,"kind":11,"returnType":2,},
+          ],"documentation":"","externalName":"AdMob_RewardedVideo_Target","help":"AdMob_RewardedVideo_Target(RewardedID)","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Remove","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Banner_Remove","help":"AdMob_Banner_Remove()","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Move","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_Banner_Move","help":"AdMob_Banner_Move(bottom)","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Hide","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Banner_Hide","help":"AdMob_Banner_Hide()","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Show","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Banner_Show","help":"AdMob_Banner_Show()","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Init","argCount":0,"args":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_Target","argCount":0,"args":[
             1,
-          ],"documentation":"","externalName":"AdMob_Banner_Init","help":"AdMob_Banner_Init(bannerId)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_Banner_Target","help":"AdMob_Banner_Target(bannerId)","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_SetTestDeviceId","argCount":0,"args":[],"documentation":"","externalName":"AdMob_SetTestDeviceId","help":"AdMob_SetTestDeviceId()","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Consent_RequestInfoUpdate","argCount":0,"args":[
             2,
@@ -98,18 +98,18 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Settings_SetMuted","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_Settings_SetMuted","help":"AdMob_Settings_SetMuted(bool)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Init","argCount":0,"args":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Target","argCount":0,"args":[
             1,
-          ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Init","help":"AdMob_RewardedInterstitial_Init(id)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Target","help":"AdMob_RewardedInterstitial_Target(id)","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Load","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedInterstitial_Load","help":"AdMob_RewardedInterstitial_Load()","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Show","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedInterstitial_Show","help":"AdMob_RewardedInterstitial_Show()","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_IsLoaded","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedInterstitial_IsLoaded","help":"AdMob_RewardedInterstitial_IsLoaded()","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_NonPersonalizedAds_Set","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_NonPersonalizedAds_Set","help":"AdMob_NonPersonalizedAds_Set(value)","hidden":false,"kind":4,"returnType":1,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Init","argCount":0,"args":[
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_AppOpenAd_Target","argCount":0,"args":[
             1,
-          ],"documentation":"","externalName":"AdMob_AppOpenAd_Init","help":"AdMob_AppOpenAd_Init(String adUnitId)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_AppOpenAd_Target","help":"AdMob_AppOpenAd_Target(String adUnitId)","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"Admob_Interstitial_Max_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"Admob_Interstitial_Max_Instances","help":"Admob_Interstitial_Max_Instances(value)","hidden":false,"kind":4,"returnType":2,},
@@ -139,7 +139,7 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Instances_Count","argCount":0,"args":[],"documentation":"","externalName":"AdMob_RewardedInterstitial_Instances_Count","help":"AdMob_RewardedInterstitial_Instances_Count()","hidden":false,"kind":4,"returnType":2,},
       ],"init":"","kind":4,"order":[
         {"name":"AdMob_Initialize","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_Interstitial_Init","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_Interstitial_Target","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Load","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Banner_Create","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Interstitial_Show","path":"extensions/AdMob/AdMob.yy",},
@@ -147,12 +147,12 @@
         {"name":"AdMob_RewardedVideo_Load","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedVideo_IsLoaded","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedVideo_Show","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_RewardedVideo_Init","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedVideo_Target","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Banner_Remove","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Banner_Move","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Banner_Hide","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Banner_Show","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_Banner_Init","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_Banner_Target","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_SetTestDeviceId","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Consent_RequestInfoUpdate","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Consent_Load","path":"extensions/AdMob/AdMob.yy",},
@@ -168,7 +168,7 @@
         {"name":"AdMob_Banner_GetHeight","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Settings_SetVolume","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_Settings_SetMuted","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_RewardedInterstitial_Init","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_RewardedInterstitial_Target","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_Load","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_Show","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_IsLoaded","path":"extensions/AdMob/AdMob.yy",},
@@ -180,7 +180,7 @@
         {"name":"Admob_Interstitial_Free_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedVideo_Free_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_Free_Load_Instances","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_AppOpenAd_Init","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_AppOpenAd_Target","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_AppOpenAd_Enable","path":"extensions/AdMob/AdMob.yy",},
       ],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
   ],

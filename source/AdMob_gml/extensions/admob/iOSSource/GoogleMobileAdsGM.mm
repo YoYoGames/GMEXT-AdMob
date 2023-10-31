@@ -228,7 +228,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// BANNER //////////////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_Banner_Init:(NSString*) bannerID
+-(void) AdMob_Banner_Target:(NSString*) bannerID
 {
     self.BannerAdID = bannerID;
 }
@@ -428,7 +428,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// INTERSTITIAL ////////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_Interstitial_Init:(NSString*) interstitialID
+-(void) AdMob_Interstitial_Target:(NSString*) interstitialID
 {
     self.interstitialAdID = interstitialID;
 }
@@ -533,7 +533,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// REWARDED VIDEO //////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_RewardedVideo_Init:(NSString*) AdId
+-(void) AdMob_RewardedVideo_Target:(NSString*) AdId
 {
     self.rewardAd_ID = AdId;
 }
@@ -654,7 +654,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// REWARDED INTESTITIAL ////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_RewardedInterstitial_Init:(NSString*) AdId
+-(void) AdMob_RewardedInterstitial_Target:(NSString*) AdId
 {
     self.rewardInterstitialAd_ID = AdId;
 }
@@ -772,7 +772,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 }
 
 /////////////////App Open Ad/////////////////////////////////////////////////////////////////////////
--(void) AdMob_AppOpenAd_Init:(NSString*) adUnitId
+-(void) AdMob_AppOpenAd_Target:(NSString*) adUnitId
 {
     self.appOpenAdID = adUnitId;
 }
