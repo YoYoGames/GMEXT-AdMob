@@ -446,7 +446,7 @@ function AdMob_Targeting_MaxAdContentRating(contentRating) { }
 
 /**
  * @func AdMob_NonPersonalizedAds_Set
- * @desc
+ * @desc 
  * @param {real} value
  * @func_end
  */
@@ -564,7 +564,7 @@ function AdMob_Settings_SetMuted(value) { }
  * 
  * @event social
  * @member {string} type `"AdMob_onPaidEvent"`
- * @member {string} mediationAdapterClassName Returns the mediation adapter class name of the ad network that loaded the ad.
+ * @member {string} mediationAdapterClassName The mediation adapter class name of the ad network that loaded the ad.
  * @member {string} adUnitId identifier of the ad
  * @member {string} adType 'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"
  * @member {real} micros The ad's value in micro-units, where 1,000,000 micro-units equal one unit of the currency.
