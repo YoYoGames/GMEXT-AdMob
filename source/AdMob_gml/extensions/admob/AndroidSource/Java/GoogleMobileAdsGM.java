@@ -422,7 +422,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void Admob_Interstitial_Free_Load_Instances(double count)
+	public void Admob_Interstitial_Free_Loaded_Instances(double count)
 	{
 		String id = mInterstitialID;
 		
@@ -575,7 +575,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void AdMob_RewardedVideo_Free_Load_Instances(double count)
+	public void AdMob_RewardedVideo_Free_Loaded_Instances(double count)
 	{
 		String id = mRewardedAdID;
 		
@@ -740,7 +740,7 @@ private static class BackgroundThreadFactory implements ThreadFactory
 		return count;
 	}
 	
-	public void AdMob_RewardedInterstitial_Free_Load_Instances(double count)
+	public void AdMob_RewardedInterstitial_Free_Loaded_Instances(double count)
 	{
 		String id = mRewardedInterstitialAdID;
 		

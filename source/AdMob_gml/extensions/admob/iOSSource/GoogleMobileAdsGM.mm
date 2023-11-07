@@ -452,7 +452,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) Admob_Interstitial_Free_Load_Instances:(double) count
+-(void) Admob_Interstitial_Free_Loaded_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
@@ -557,7 +557,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) AdMob_RewardedVideo_Free_Load_Instances:(double) count
+-(void) AdMob_RewardedVideo_Free_Loaded_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
@@ -678,7 +678,7 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
     return count;
 }
 
--(void) AdMob_RewardedInterstitial_Free_Load_Instances:(double) count
+-(void) AdMob_RewardedInterstitial_Free_Loaded_Instances:(double) count
 {
     for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
     if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
