@@ -13,12 +13,12 @@
   "author": "",
   "classname": "ext_AppTrackingTransparency",
   "copyToTargets": 4,
-  "date": "2021-05-06T18:41:05.9312614-07:00",
+  "date": "2021-05-07T02:41:05.9312614+01:00",
   "description": "",
   "exportToGame": true,
   "extensionVersion": "0.0.1",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"ext_AppTrackingTransparency.ext","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_NotDetermined","hidden":false,"value":"0",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Authorized","hidden":false,"value":"1",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Denied","hidden":false,"value":"2",},
