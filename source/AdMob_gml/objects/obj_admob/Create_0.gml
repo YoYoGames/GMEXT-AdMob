@@ -1,5 +1,7 @@
 /// @description Initialize variables
 
+//AdMob_Enable_Paid_Event()
+
 // Debug variables (used in draw event)
 status = "UNKNOWN";
 type = "UNKNOWN";
@@ -56,7 +58,7 @@ function loadAllAds() {
 	AdMob_Interstitial_Load();
 	AdMob_RewardedVideo_Load();
 	AdMob_RewardedInterstitial_Load();
-	AdMob_AppOpenAd_Load(display_landscape)
+	AdMob_AppOpenAd_Enable(display_landscape)
 }
 
 // This function updates both consent Status and Type strings

@@ -175,14 +175,14 @@ switch(async_load[?"type"])
 	case "AdMob_RewardedVideo_OnShowFailed":
 		// At this point the rewarded video failed to show.
 		// Here we use this event to load the rewarded video again (it could be a load problem).
-		AdMob_RewardedVideo_Load();
+		//AdMob_RewardedVideo_Load();
 		break;
 	
 	// AdMob_RewardedVideo got dismissed
 	case "AdMob_RewardedVideo_OnDismissed":
 		// At this point the rewarded video just got dismissed.
 		// Here we use this event to load the next rewarded video.
-		AdMob_RewardedVideo_Load();
+		//AdMob_RewardedVideo_Load();
 		break;
 	
 	// AdMob_RewardedVideo triggered reward event
@@ -230,14 +230,6 @@ switch(async_load[?"type"])
 		
 		
 	// ########### APP OPEN ###########
-		
-	// AdMob_AppOpenAd_Load succeeded
-	case "AdMob_AppOpenAd_OnLoaded":
-		break;
-		
-	// AdMob_AppOpenAd_Load failed
-	case "AdMob_AppOpenAd_OnLoadFailed":
-		break;
 	
 	// AdMob_AppOpenAd got dismissed
 	case "AdMob_AppOpenAd_OnDismissed":
@@ -246,12 +238,10 @@ switch(async_load[?"type"])
 	// AdMob_AppOpenAd_Show failed
 	case "AdMob_AppOpenAd_OnShowFailed":
 		// At this point the app open ad failed to show.
-		AdMob_AppOpenAd_Load(display_landscape)
 		break;
 	
 	case "AdMob_AppOpenAd_OnFullyShown":
 		// At this point the app open ad succeeded to show.
-		AdMob_AppOpenAd_Load(display_landscape)
 		break;
 }
 

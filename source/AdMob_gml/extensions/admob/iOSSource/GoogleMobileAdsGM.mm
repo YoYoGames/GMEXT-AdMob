@@ -33,12 +33,23 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         
         testingAds = false;
         NPA = false;
-		
-		self.BannerAdID = @"";
-		self.interstitialAdID = @"";
-		self.rewardAd_ID = @"";
-		self.rewardInterstitialAd_ID = @"";
-		self.appOpenAdID = @"";
+        
+        self.BannerAdID = @"";
+        self.interstitialAdID = @"";
+        self.rewardAd_ID = @"";
+        self.rewardInterstitialAd_ID = @"";
+        self.appOpenAdID = @"";
+        
+        Interstitial_Max_Instances = 1;
+        RewardedVideo_Max_Instances = 1;
+        RewardedInterstitial_Max_Instances = 1;
+        
+        Paid_Event = false;
+        
+        AppOpenAd_Enable = false;
+        AppOpenAd_orientation = 0;
+        
+        self.loads = [[NSMutableArray alloc] init];
 
         return self;
     }
@@ -48,7 +59,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 /////////////////////////////////////////////////////GoogleMobileAds
 
 -(void) AdMob_Initialize
-{   
+{
     if (testingAds) {
         #if TARGET_OS_SIMULATOR
         GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = @[ GADSimulatorID ];
@@ -77,7 +88,7 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
         self.interstitialAdID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_INTERSTITIAL")];
         self.rewardAd_ID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_REWARDED")];
         self.rewardInterstitialAd_ID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_REWARDED_INTERSTITIAL")];
-		self.appOpenAdID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_OPENAPPAD")];
+        self.appOpenAdID = [NSString stringWithUTF8String: extOptGetString((char*)"AdMob", (char*)"iOS_OPENAPPAD")];
         
         int dsMapIndex = dsMapCreate();
         dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_OnInitialized");
@@ -92,18 +103,19 @@ extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 - (void)bannerView:(nonnull GADBannerView *)bannerView
 didFailToReceiveAdWithError:(nonnull NSError *)error{
-		
-	int dsMapIndex = dsMapCreate();
-	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoadFailed");
+        
+    int dsMapIndex = dsMapCreate();
+    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoadFailed");
     dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
     dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
-	createSocialAsyncEventWithDSMap(dsMapIndex);
+    createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
 -(void)bannerViewDidReceiveAd:(nonnull GADBannerView *)bannerView{
-	int dsMapIndex = dsMapCreate();
-	dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoaded");
-	createSocialAsyncEventWithDSMap(dsMapIndex);
+    int dsMapIndex = dsMapCreate();
+    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Banner_OnLoaded");
+    dsMapAddString(dsMapIndex, (char*)"id", (char*)[bannerView.adUnitID UTF8String]);
+    createSocialAsyncEventWithDSMap(dsMapIndex);
 }
 
 /// Tells the delegate that the ad failed to present full screen content.
@@ -116,19 +128,26 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
     if ([ad isMemberOfClass:[GADInterstitialAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADInterstitialAd*)ad).adUnitID UTF8String]);
+
     }
     else if ([ad isMemberOfClass:[GADRewardedAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedAd*)ad).adUnitID UTF8String]);
+
     }
     else if ([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
-    } 
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnShowFailed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedInterstitialAd*)ad).adUnitID UTF8String]);
+
+    }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnShowFailed");
+        [self AdMob_AppOpenAd_Load:AppOpenAd_orientation];
     }
     
     dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
@@ -144,22 +163,29 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
     if([ad isMemberOfClass:[GADInterstitialAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnFullyShown");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnFullyShown");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADInterstitialAd*)ad).adUnitID UTF8String]);
+
     }
     else if([ad isMemberOfClass:[GADRewardedAd class]])
     {
-		int dsMapIndex = dsMapCreate();
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnFullyShown");
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnFullyShown");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedAd*)ad).adUnitID UTF8String]);
+
     }
-	else if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
+    else if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-		int dsMapIndex = dsMapCreate();
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnFullyShown");
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnFullyShown");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedInterstitialAd*)ad).adUnitID UTF8String]);
+
     }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        int dsMapIndex = dsMapCreate();
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
+        // int dsMapIndex = dsMapCreate();
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnFullyShown");
+        [self AdMob_AppOpenAd_Load:AppOpenAd_orientation];
     }
 
     createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -175,19 +201,26 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
     if([ad isMemberOfClass:[GADInterstitialAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADInterstitialAd*)ad).adUnitID UTF8String]);
+
     }
     else if([ad isMemberOfClass:[GADRewardedAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedAd*)ad).adUnitID UTF8String]);
+
     }
     else if([ad isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnDismissed");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[((GADRewardedInterstitialAd*)ad).adUnitID UTF8String]);
+
     }
     else if([ad isMemberOfClass:[GADAppOpenAd class]])
     {
-        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
+        // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnReward");
+        [self AdMob_AppOpenAd_Load:AppOpenAd_orientation];
     }
 
     createSocialAsyncEventWithDSMap(dsMapIndex);
@@ -195,16 +228,16 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// BANNER //////////////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_Banner_Init:(NSString*) bannerID
+-(void) AdMob_Banner_Target:(NSString*) bannerID
 {
     self.BannerAdID = bannerID;
 }
 
 -(void) AdMob_Banner_Create:(double) size bottom: (double)bottom
 {
-	if ([self.BannerAdID isEqualToString:@""])
-		return;
-		
+    if ([self.BannerAdID isEqualToString:@""])
+        return;
+        
     if(self.bannerView != nil)
     {
         [self.bannerView removeFromSuperview];
@@ -217,6 +250,13 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
                        initWithAdSize:GADAdSizeBanner];
     
     self.bannerView.delegate = self;
+    
+    if(Paid_Event)
+    self.bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+    {
+        GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.bannerView.responseInfo.loadedAdNetworkResponseInfo;
+        [self onPaidEvent_Handler:value adUnitId:self.bannerView.adUnitID adType:@"Banner" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:self.bannerView.responseInfo.adNetworkClassName];
+    };
     
     self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
     [g_glView addSubview:self.bannerView];
@@ -334,27 +374,27 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(double) AdMob_Banner_GetWidth
 {
-	if(self.bannerView == nil)
-		return 0;
-	
-	CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
-	int adW = size.width;
-	//->display width
-	int dispW = (int)(( adW * g_DeviceWidth ) / g_glView.bounds.size.width);
-	return dispW;
-	
+    if(self.bannerView == nil)
+        return 0;
+    
+    CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
+    int adW = size.width;
+    //->display width
+    int dispW = (int)(( adW * g_DeviceWidth ) / g_glView.bounds.size.width);
+    return dispW;
+    
 }
 
 -(double) AdMob_Banner_GetHeight
 {
-	if(self.bannerView == nil)
-		return 0;
-	
-	CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
-	int adH = size.height;
-	//->display height
-	int dispH = (int)(( adH * g_DeviceHeight ) / g_glView.bounds.size.height);
-	return dispH;
+    if(self.bannerView == nil)
+        return 0;
+    
+    CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
+    int adH = size.height;
+    //->display height
+    int dispH = (int)(( adH * g_DeviceHeight ) / g_glView.bounds.size.height);
+    return dispH;
 }
 
 -(void) AdMob_Banner_Hide
@@ -388,252 +428,460 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 ///// INTERSTITIAL ////////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_Interstitial_Init:(NSString*) interstitialID
+-(void) AdMob_Interstitial_Target:(NSString*) interstitialID
 {
     self.interstitialAdID = interstitialID;
 }
 
+-(int) interstitial_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:_id] == NSOrderedSame)
+        return i;
+    return -1;
+}
+
+-(int) interstitial_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:_id] == NSOrderedSame)
+        count++;
+    return count;
+}
+
+-(void) Admob_Interstitial_Free_Loaded_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADInterstitialAd class]])
+    if([[(GADInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.interstitialAdID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
+}
+
+-(void) Admob_Interstitial_Max_Instances:(double) value
+{
+    Interstitial_Max_Instances = value;
+}
+
+
 -(void) AdMob_Interstitial_Load
 {
-	if ([self.interstitialAdID isEqualToString:@""])
-		return;
-	
-    if(self.interstitial != nil)
+    if ([self.interstitialAdID isEqualToString:@""])
         return;
     
+    const NSString* contextID = self.interstitialAdID;
     self.request_interstitial = [GADRequest request];
     [GADInterstitialAd loadWithAdUnitID: self.interstitialAdID request:self.request_interstitial completionHandler:^(GADInterstitialAd *ad, NSError *error)
     {
+        
         if (error)
         {
-            self.interstitial = nil;
-				
-			int dsMapIndex = dsMapCreate();
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnLoadFailed");
-			createSocialAsyncEventWithDSMap(dsMapIndex);
+            int dsMapIndex = dsMapCreate();
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnLoadFailed");
+            dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
+            createSocialAsyncEventWithDSMap(dsMapIndex);
             
             return;
         }
         
-        self.interstitial = ad;
-        self.interstitial.fullScreenContentDelegate = self;
-		
-		int dsMapIndex = dsMapCreate();
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnLoaded");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        if([self interreward_count:self.interstitialAdID] < Interstitial_Max_Instances)
+            [self.loads addObject:ad];
+        ad.fullScreenContentDelegate = self;
+        
+        const GADInterstitialAd* interstitial = ad;
+        
+        if(Paid_Event)
+        ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+        {
+            GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = interstitial.responseInfo.loadedAdNetworkResponseInfo;
+            [self onPaidEvent_Handler:value adUnitId:interstitial.adUnitID adType:@"Interstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:interstitial.responseInfo.adNetworkClassName];
+        };
+        
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Interstitial_OnLoaded");
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
 -(void) AdMob_Interstitial_Show
 {
-    if (self.interstitial)
-    {
-        [self.interstitial presentFromRootViewController:g_controller];
-        self.interstitial_keepMe = self.interstitial;
-        self.interstitial = nil;
-		showing_ad = true;
-    }
+    if([self interstitial_search: self.interstitialAdID] == -1)
+        return;
+    
+    GADInterstitialAd *interstitial = [self.loads objectAtIndex:[self interstitial_search: self.interstitialAdID]];
+        
+        [interstitial presentFromRootViewController:g_controller];
+        self.interstitial_keepMe = interstitial;
+    [self.loads removeObjectAtIndex:[self interstitial_search: self.interstitialAdID]];
+        showing_ad = true;
 }
 
 -(double) AdMob_Interstitial_IsLoaded
 {
-    if(self.interstitial == nil)
-        return 0.0;
-    
-    if(self.interstitial)
-    {
-        return 1;
-    }
-    else
-        return 0;
+    return [self interstitial_count:self.interstitialAdID]>0?1.0:0.0;
+}
+
+-(double) AdMob_Interstitial_Instances_Count
+{
+    return [self interstitial_count:self.interstitialAdID];
 }
 
 ///// REWARDED VIDEO //////////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_RewardedVideo_Init:(NSString*) AdId
+-(void) AdMob_RewardedVideo_Target:(NSString*) AdId
 {
     self.rewardAd_ID = AdId;
 }
 
+-(int) reward_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
+        return i;
+    return -1;
+}
+
+-(int) reward_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
+        count++;
+    return count;
+}
+
+-(void) AdMob_RewardedVideo_Free_Loaded_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedAd class]])
+    if([[(GADRewardedAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.rewardAd_ID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
+}
+
+-(void) AdMob_RewardedVideo_Max_Instances:(double) value
+{
+    RewardedVideo_Max_Instances = value;
+}
+
+
 -(void) AdMob_RewardedVideo_Load
 {
-	if ([self.rewardAd_ID isEqualToString:@""])
-		return;
-	
-    if(self.rewardAd != nil)
+    if ([self.rewardAd_ID isEqualToString:@""])
         return;
     
     self.request_rewarded = [GADRequest request];
+    const NSString* contextID = self.rewardAd_ID;
     [GADRewardedAd loadWithAdUnitID: self.rewardAd_ID request: self.request_rewarded completionHandler:^(GADRewardedAd *ad, NSError *error)
     {
         int dsMapIndex = dsMapCreate();
 
         if (error)
         {
-            self.rewardAd = nil;
-				
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnLoadFailed");
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnLoadFailed");
+            dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
             dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
         }
         else
         {
-            self.rewardAd = ad;
-            self.rewardAd.fullScreenContentDelegate = self;
+            if([self reward_count:self.rewardAd_ID] < RewardedVideo_Max_Instances)
+                [self.loads addObject:ad];
+            
+            ad.fullScreenContentDelegate = self;
+            
+            if(Paid_Event)
+            ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+            {
+                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
+                [self onPaidEvent_Handler:value adUnitId:ad.adUnitID adType:@"Rewarded" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:ad.responseInfo.adNetworkClassName];
+            };
 
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnLoaded");
+            dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
         }
         
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
 -(void) AdMob_RewardedVideo_Show
 {
-    if(self.rewardAd == nil)
-		return;
-	
-	[self.rewardAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
-	{
-		//NSDecimalNumber *amount = self.rewardAd.adReward.amount;
-		
-		int dsMapIndex = dsMapCreate();
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnReward");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+    if([self reward_search:self.rewardAd_ID] == -1)
+        return;
+    
+    GADRewardedAd *rewardAd = [self.loads objectAtIndex:[self reward_search:self.rewardAd_ID]];
+    
+    const NSString* contextID = rewardAd.adUnitID;
+    
+    [rewardAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
+    {
+        //NSDecimalNumber *amount = self.rewardAd.adReward.amount;
+        
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedVideo_OnReward");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
 
-	}];
-	
-	self.rewardAd_keepMe = self.rewardAd;
-	self.rewardAd = nil;
-	showing_ad = true;
+    }];
+    
+    self.rewardAd_keepMe = rewardAd;
+    showing_ad = true;
+    
+
+    [self.loads removeObjectAtIndex:[self reward_search: self.rewardAd_ID]];
+    
 }
 
 -(double) AdMob_RewardedVideo_IsLoaded
 {
-    if(self.rewardAd)
-        return 1.0;
-    else
-        return 0.0;
+    return [self reward_count: self.rewardAd_ID]>0?1.0:0.0;
+}
+
+-(double) AdMob_RewardedVideo_Instances_Count
+{
+    return [self reward_count: self.rewardAd_ID];
 }
 
 ///// REWARDED INTESTITIAL ////////////////////////////////////////////////////////////////////////
 
--(void) AdMob_RewardedInterstitial_Init:(NSString*) AdId
+-(void) AdMob_RewardedInterstitial_Target:(NSString*) AdId
 {
     self.rewardInterstitialAd_ID = AdId;
 }
 
+-(int) interreward_search:(NSString*) _id
+{
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
+        return i;
+    return -1;
+}
+
+-(int) interreward_count:(NSString*) _id
+{
+    int count = 0;
+    for(int i = 0 ; i < [self.loads count] ; i++)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID]compare:_id] == NSOrderedSame)
+        count++;
+    return count;
+}
+
+-(void) AdMob_RewardedInterstitial_Free_Loaded_Instances:(double) count
+{
+    for(int i = (int)[self.loads count]-1 ; i >= 0 && count>0 ; i--)
+    if([[self.loads objectAtIndex:i] isMemberOfClass:[GADRewardedInterstitialAd class]])
+    if([[(GADRewardedInterstitialAd*)[self.loads objectAtIndex:i] adUnitID] compare:self.rewardInterstitialAd_ID] == NSOrderedSame)
+    {
+        count--;
+        [self.loads removeObjectAtIndex:i];
+    }
+}
+
+-(void) AdMob_RewardedInterstitial_Max_Instances:(double) value
+{
+    RewardedInterstitial_Max_Instances = value;
+}
+
+
 -(void) AdMob_RewardedInterstitial_Load
 {
-	if ([self.rewardInterstitialAd_ID isEqualToString:@""])
-		return;
-	
-    if(self.rewardedInterstitialAd != nil)
+    if ([self.rewardInterstitialAd_ID isEqualToString:@""])
         return;
-	
-	[GADRewardedInterstitialAd loadWithAdUnitID:self.rewardInterstitialAd_ID request:[GADRequest request] completionHandler:^(GADRewardedInterstitialAd* _Nullable ad, NSError* _Nullable error) 
-	{
+    
+    const NSString* contextID = self.rewardInterstitialAd_ID;
+    
+    [GADRewardedInterstitialAd loadWithAdUnitID:self.rewardInterstitialAd_ID request:[GADRequest request] completionHandler:^(GADRewardedInterstitialAd* _Nullable ad, NSError* _Nullable error)
+    {
         int dsMapIndex = dsMapCreate();
 
         if (error)
         {
-			self.rewardedInterstitialAd = nil;
-				
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnLoadFailed");
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnLoadFailed");
+            dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
             dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
         }
         else
         {
-			self.rewardedInterstitialAd = ad;
-			self.rewardedInterstitialAd.fullScreenContentDelegate = self;
+            if([self interreward_count:self.rewardInterstitialAd_ID] < RewardedInterstitial_Max_Instances)
+                [self.loads addObject:ad];
+            
+            ad.fullScreenContentDelegate = self;
+            
+            if(Paid_Event)
+            ad.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+            {
+                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = ad.responseInfo.loadedAdNetworkResponseInfo;
+                [self onPaidEvent_Handler:value adUnitId:ad.adUnitID adType:@"RewardedInterstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:ad.responseInfo.adNetworkClassName];
+            };
 
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnLoaded");
+            dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
         }
         
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
 -(void) AdMob_RewardedInterstitial_Show
 {
-    if(self.rewardedInterstitialAd == nil)
+    if([self interreward_search:self.rewardInterstitialAd_ID] == -1)
         return;
-	
-	[self.rewardedInterstitialAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
-	{
-		//GADAdReward *reward = self.rewardedInterstitialAd.adReward;
+    
+    GADRewardedInterstitialAd *rewardedInterstitialAd = [self.loads objectAtIndex:[self interreward_search:self.rewardInterstitialAd_ID]];
+    
+    const NSString* contextID = rewardedInterstitialAd.adUnitID;
 
-		int dsMapIndex = dsMapCreate();
-		dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnReward");
-		createSocialAsyncEventWithDSMap(dsMapIndex);
-	}];
-	
-	self.rewardedInterstitialAd_keepMe = self.rewardedInterstitialAd;
-	self.rewardedInterstitialAd = nil;
-	showing_ad = true;
+    
+    [rewardedInterstitialAd presentFromRootViewController:g_controller userDidEarnRewardHandler:^
+    {
+        //GADAdReward *reward = self.rewardedInterstitialAd.adReward;
+
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_RewardedInterstitial_OnReward");
+        dsMapAddString(dsMapIndex, (char*)"id", (char*)[contextID UTF8String]);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
+    }];
+    
+    self.rewardedInterstitialAd_keepMe = rewardedInterstitialAd;
+    showing_ad = true;
+    
+    [self.loads removeObjectAtIndex:[self interreward_search: self.rewardInterstitialAd_ID]];
 }
 
 -(double) AdMob_RewardedInterstitial_IsLoaded
 {
-    if(self.rewardedInterstitialAd)
-        return 1.0;
-    else
-        return 0.0;
+    return [self interreward_count:self.rewardInterstitialAd_ID]>0?1.0:0.0;
+}
+
+-(double) AdMob_RewardedInterstitial_Instances_Count
+{
+    return [self interreward_count:self.rewardInterstitialAd_ID];
 }
 
 /////////////////App Open Ad/////////////////////////////////////////////////////////////////////////
--(void) AdMob_AppOpenAd_Init:(NSString*) adUnitId
+-(void) AdMob_AppOpenAd_Target:(NSString*) adUnitId
 {
-	self.appOpenAdID = adUnitId;
+    self.appOpenAdID = adUnitId;
+}
+
+-(void) onResume
+{
+    [self AdMob_AppOpenAd_Show];
+}
+
+-(void) AdMob_AppOpenAd_Enable:(double) orientation
+{
+    AppOpenAd_Enable = true;
+    self.appOpenAd = nil;
+    AppOpenAd_orientation = orientation;
+    [self AdMob_AppOpenAd_Load:AppOpenAd_orientation];
+}
+
+-(void) AdMob_AppOpenAd_Disable
+{
+    AppOpenAd_Enable = false;
+    self.appOpenAd = nil;
+}
+
+-(double) AdMob_AppOpenAd_IsEnabled
+{
+    return AppOpenAd_Enable ? 1.0:0.0;
 }
 
 -(void) AdMob_AppOpenAd_Load:(double) orientation
-{	
-	if ([self.appOpenAdID isEqualToString:@""])
-		return;
-	
-	  self.appOpenAd = nil;
-	  [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:(orientation==0)?UIInterfaceOrientationLandscapeRight:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
-				if (error) {
-					NSLog(@"Failed to load app open ad: %@", error);
+{
+    if(!AppOpenAd_Enable)
+        return;
+        
+    if ([self.appOpenAdID isEqualToString:@""])
+        return;
+    
+      self.appOpenAd = nil;
+      [GADAppOpenAd loadWithAdUnitID: self.appOpenAdID request:[GADRequest request] orientation:(orientation==0)?UIInterfaceOrientationLandscapeRight:UIInterfaceOrientationPortrait completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
+                if (error) {
+                    NSLog(@"Failed to load app open ad: %@", error);
                     
+                    // int dsMapIndex = dsMapCreate();
+                    // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoadFailed");
+                    // dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
+                    // dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
+                    // createSocialAsyncEventWithDSMap(dsMapIndex);
+                    
+                    return;
+                }
+                self.appOpenAd = appOpenAd;
+                self.appOpenAd.fullScreenContentDelegate = self;
+                self.loadTime = [NSDate date];
+                
+                if(Paid_Event)
+                self.appOpenAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
+                {
+                    GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.appOpenAd.responseInfo.loadedAdNetworkResponseInfo;
+
+                    // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
+                    // NSString *mediationGroupName = extras["mediation_group_name"];
+                    // NSString *mediationABTestName = extras["mediation_ab_test_name"];
+                    // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
+
                     int dsMapIndex = dsMapCreate();
-                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoadFailed");
-					dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
-					dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
+                    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
+
+                    dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[self.appOpenAd.responseInfo.adNetworkClassName UTF8String]);
+
+                    dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[/*self.appOpenAd.adUnitID*/ self.appOpenAdID UTF8String]);
+
+                    dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
+                    dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
+                    dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
+
+                    dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
+                    dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
+                    dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
+                    dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
+
                     createSocialAsyncEventWithDSMap(dsMapIndex);
-                    
-					return;
-				}
-				self.appOpenAd = appOpenAd;
-				self.appOpenAd.fullScreenContentDelegate = self;
-				self.loadTime = [NSDate date];
+                };
               
-              int dsMapIndex = dsMapCreate();
-              dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoaded");
-              createSocialAsyncEventWithDSMap(dsMapIndex);
-		   }];
+              // int dsMapIndex = dsMapCreate();
+              // dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_AppOpenAd_OnLoaded");
+              // createSocialAsyncEventWithDSMap(dsMapIndex);
+           }];
 }
 
 -(void) AdMob_AppOpenAd_Show
 {
-	if([self AdMob_AppOpenAd_IsLoaded]<0.5)
-		return;
-	
-	if (self.appOpenAd)
+    if(!AppOpenAd_Enable)
+        return;
+
+    if([self AdMob_AppOpenAd_IsLoaded]<0.5)
+        return;
+    
+    if (self.appOpenAd)
     {
         self.appOpenAd.fullScreenContentDelegate = self;
-		[self.appOpenAd presentFromRootViewController:g_controller];
+        [self.appOpenAd presentFromRootViewController:g_controller];
     }
 }
 
 -(double) AdMob_AppOpenAd_IsLoaded
 {
-	if (self.appOpenAd && [self wasLoadTimeLessThanNHoursAgo:4])
-		return 1.0;
-	else
-		return 0.0;
+    if (self.appOpenAd && [self wasLoadTimeLessThanNHoursAgo:4])
+        return 1.0;
+    else
+        return 0.0;
 }
 
 ///// TARGETING ///////////////////////////////////////////////////////////////////////////////////
@@ -683,13 +931,13 @@ didFailToReceiveAdWithError:(nonnull NSError *)error{
 
 -(void) AdMob_NonPersonalizedAds_Set:(double) value
 {
-	self->NPA = value >= 0.5;
+    self->NPA = value >= 0.5;
 }
 
 BOOL showing_ad = false;
 -(double) AdMob_IsShowingAd
 {
-	return showing_ad ? 1.0 : 0.0;
+    return showing_ad ? 1.0 : 0.0;
 }
 
 ///// CONSENT /////////////////////////////////////////////////////////////////////////////////////
@@ -714,8 +962,8 @@ BOOL showing_ad = false;
         int dsMapIndex = dsMapCreate();
 
         if (error)
-        {	
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnRequestInfoUpdateFailed");
+        {
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnRequestInfoUpdateFailed");
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", error.code);
             dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[error.localizedDescription UTF8String]);
         }
@@ -724,7 +972,7 @@ BOOL showing_ad = false;
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnRequestInfoUpdated");
         }
         
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
@@ -754,7 +1002,7 @@ BOOL showing_ad = false;
     {
         // if (!canShowAds()) return 3.0; // DECLINED
 
-        return canShowPersonalizedAds() ? /* PERSONALIZED */2.0 : /* NON-PERSONALIZED */1.0; 
+        return canShowPersonalizedAds() ? /* PERSONALIZED */2.0 : /* NON-PERSONALIZED */1.0;
     }
     return 0; // UNKNOWN
 }
@@ -774,8 +1022,8 @@ BOOL showing_ad = false;
         int dsMapIndex = dsMapCreate();
 
         if (loadError)
-        {	
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnLoadFailed");
+        {
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnLoadFailed");
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", loadError.code);
             dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[loadError.localizedDescription UTF8String]);
         }
@@ -786,7 +1034,7 @@ BOOL showing_ad = false;
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnLoaded");
         }
         
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
@@ -797,17 +1045,17 @@ BOOL showing_ad = false;
         int dsMapIndex = dsMapCreate();
 
         if (UMPConsentInformation.sharedInstance.consentStatus == UMPConsentStatusObtained and !dismissError)
-        {	
+        {
             dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnShown");
         }
         else
         {
-			dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnShowFailed");
+            dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_Consent_OnShowFailed");
             dsMapAddDouble(dsMapIndex, (char*)"errorCode", dismissError.code);
             dsMapAddString(dsMapIndex, (char*)"errorMessage", (char*)[dismissError.localizedDescription UTF8String]);
         }
         
-		createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
     }];
 }
 
@@ -820,15 +1068,15 @@ BOOL showing_ad = false;
 
 -(void) AdMob_Settings_SetVolume:(double) value
 {
-	GADMobileAds.sharedInstance.applicationVolume = value;
+    GADMobileAds.sharedInstance.applicationVolume = value;
 }
-	
+    
 -(void) AdMob_Settings_SetMuted:(double) value
 {
-	if(value >= 0.5)
-		GADMobileAds.sharedInstance.applicationMuted = YES;
-	else
-		GADMobileAds.sharedInstance.applicationMuted = NO;
+    if(value >= 0.5)
+        GADMobileAds.sharedInstance.applicationMuted = YES;
+    else
+        GADMobileAds.sharedInstance.applicationMuted = NO;
 }
 
 ///// INTERNAL ///////////////////////////////////////////////////////////////////////////////////
@@ -836,11 +1084,11 @@ BOOL showing_ad = false;
 
 double loadTime = 0;
 - (Boolean)wasLoadTimeLessThanNHoursAgo:(int)n {
-	NSDate *now = [NSDate date];
-	NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
-	double secondsPerHour = 3600.0;
-	double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
-	return intervalInHours < n;
+    NSDate *now = [NSDate date];
+    NSTimeInterval timeIntervalBetweenNowAndLoadTime = [now timeIntervalSinceDate:self.loadTime];
+    double secondsPerHour = 3600.0;
+    double intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour;
+    return intervalInHours < n;
 }
 
 -(GADRequest*) AdMob_AdRequest
@@ -848,14 +1096,14 @@ double loadTime = 0;
     GADRequest *request = [GADRequest request];
 
     // As instructed by Google
-    request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion("AdMob")];
+    //request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion("AdMob")];
 
-	if(self->NPA)
-	{
-		GADExtras *extras = [[GADExtras alloc] init];
-		extras.additionalParameters = @{@"npa": @"1"};
-		[request registerAdNetworkExtras: extras];
-	}
+    if(self->NPA)
+    {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras: extras];
+    }
 
     return request;
 }
@@ -880,10 +1128,10 @@ const char * getDeviceId()
 // https://stackoverflow.com/questions/69307205/mandatory-consent-for-admob-user-messaging-platform
 Boolean canShowAds()
 {
-   	NSString *purposeConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeConsents"];
-	NSString *vendorConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorConsents"];
-	NSString *vendorLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorLegitimateInterests"];
-	NSString *purposeLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeLegitimateInterests"];
+       NSString *purposeConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeConsents"];
+    NSString *vendorConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorConsents"];
+    NSString *vendorLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorLegitimateInterests"];
+    NSString *purposeLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeLegitimateInterests"];
 
     int googleId = 755;
     Boolean hasGoogleVendorConsent = hasAttribute(vendorConsent, googleId);
@@ -892,15 +1140,15 @@ Boolean canShowAds()
     int indexes[1] = {1};
     int indexesLI[4] = {2, 7, 9, 10};
 
-	return hasConsentFor(indexes, 1, purposeConsent, hasGoogleVendorConsent) && hasConsentOrLegitimateInterestFor(indexesLI, 4, purposeConsent, purposeLI, hasGoogleVendorConsent, hasGoogleVendorLI);
+    return hasConsentFor(indexes, 1, purposeConsent, hasGoogleVendorConsent) && hasConsentOrLegitimateInterestFor(indexesLI, 4, purposeConsent, purposeLI, hasGoogleVendorConsent, hasGoogleVendorLI);
 }
 
 Boolean canShowPersonalizedAds()
 {
-   	NSString *purposeConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeConsents"];
-	NSString *vendorConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorConsents"];
-	NSString *vendorLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorLegitimateInterests"];
-	NSString *purposeLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeLegitimateInterests"];
+       NSString *purposeConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeConsents"];
+    NSString *vendorConsent = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorConsents"];
+    NSString *vendorLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_VendorLegitimateInterests"];
+    NSString *purposeLI = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABTCF_PurposeLegitimateInterests"];
 
     int googleId = 755;
     Boolean hasGoogleVendorConsent = hasAttribute(vendorConsent, googleId);
@@ -909,7 +1157,7 @@ Boolean canShowPersonalizedAds()
     int indexes[3] = {1, 3, 4};
     int indexesLI[4] = {2, 7, 9, 10};
 
-	return hasConsentFor(indexes, 3, purposeConsent, hasGoogleVendorConsent) && hasConsentOrLegitimateInterestFor(indexesLI, 4, purposeConsent, purposeLI, hasGoogleVendorConsent, hasGoogleVendorLI);
+    return hasConsentFor(indexes, 3, purposeConsent, hasGoogleVendorConsent) && hasConsentOrLegitimateInterestFor(indexesLI, 4, purposeConsent, purposeLI, hasGoogleVendorConsent, hasGoogleVendorLI);
 }
 
 Boolean hasAttribute(NSString* input, int index)
@@ -949,5 +1197,38 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
 
     return true;
 }
+
+-(void) AdMob_Enable_Paid_Event
+{
+    Paid_Event = true;
+}
+
+
+-(void)onPaidEvent_Handler:(GADAdValue*) value adUnitId:(NSString*)adUnitId adType:(NSString*)adType loadedAdNetworkResponseInfo:(GADAdNetworkResponseInfo*)loadedAdNetworkResponseInfo mediationAdapterClassName:(NSString*)mediationAdapterClassName
+{
+    // NSDictionary<NSString *, id> *extras = strongSelf.rewardedAd.responseInfo.extrasDictionary;
+    // NSString *mediationGroupName = extras["mediation_group_name"];
+    // NSString *mediationABTestName = extras["mediation_ab_test_name"];
+    // NSString *mediationABTestVariant = extras["mediation_ab_test_variant"];
+    
+    int dsMapIndex = dsMapCreate();
+    dsMapAddString(dsMapIndex, (char*)"type", (char*)"AdMob_onPaidEvent");
+    
+    dsMapAddString(dsMapIndex, (char*)"mediationAdapterClassName", (char*)[mediationAdapterClassName UTF8String]);
+    
+    dsMapAddString(dsMapIndex, (char*)"adUnitId", (char*)[adUnitId UTF8String]);
+    dsMapAddString(dsMapIndex, (char*)"adType", (char*)[adType UTF8String]);
+    
+    dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
+    dsMapAddString(dsMapIndex, (char*)"currencyCode", (char*)[value.currencyCode UTF8String]);
+    dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
+    
+    dsMapAddString(dsMapIndex, (char*)"adSourceName", (char*)[loadedAdNetworkResponseInfo.adSourceName UTF8String]);
+    dsMapAddString(dsMapIndex, (char*)"adSourceId", (char*)[loadedAdNetworkResponseInfo.adSourceID UTF8String]);
+    dsMapAddString(dsMapIndex, (char*)"adSourceInstanceName", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceName UTF8String]);
+    dsMapAddString(dsMapIndex, (char*)"adSourceInstanceId", (char*)[loadedAdNetworkResponseInfo.adSourceInstanceID UTF8String]);
+    
+    createSocialAsyncEventWithDSMap(dsMapIndex);
+};
 
 @end

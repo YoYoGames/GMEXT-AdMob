@@ -5,26 +5,26 @@ draw_set_font(Font_YoYo_15);
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
 
-draw_text(70, y, "Consent Status: " + status);
-draw_text(70, y + 35, "Consent Type: " + type);
+draw_text(x, y, "Consent Status: " + status);
+draw_text(x, y + 35, "Consent Type: " + type);
 
 // The function 'AdMob_Consent_IsFormAvailable()' will return either true or false depending
 // on whether there is a consent form available or not on this device.
-draw_text(70, y + 70, AdMob_Consent_IsFormAvailable() ? "Consent available" : "Consent unavailable");
+draw_text(x, y + 70, AdMob_Consent_IsFormAvailable() ? "Consent available" : "Consent unavailable");
 
 
 // This function checks if the current interstitial ad is loaded. This function
 // needs to return true before we can correctly show the interstitial ad.
 var interstitial_isLoaded = AdMob_Interstitial_IsLoaded();
-draw_text(70, y + 105, "Interstitial_isLoaded: " + string(interstitial_isLoaded));
+draw_text(x, y + 105, "Interstitial_isLoaded: " + string(interstitial_isLoaded));
 
 // This function checks if the current rewarded video ad is loaded. This function
 // needs to return true before we can correctly show the rewarded video ad.
 var rewardedVideoAd_isLoaded = AdMob_RewardedVideo_IsLoaded();
-draw_text(70, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded));
+draw_text(x, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded) + " Loaded: #" + string(AdMob_RewardedVideo_Instances_Count()));
 
 var rewardedInterstitialAd_isLoaded = AdMob_RewardedInterstitial_IsLoaded();
-draw_text(70, y + 175, "RewardedInterstitialAd_isLoaded: " + string(rewardedInterstitialAd_isLoaded));
+draw_text(x, y + 175, "RewardedInterstitialAd_isLoaded: " + string(rewardedInterstitialAd_isLoaded));
 
 // These set of function also allow to get the dimensions of the banner being displayed.
 // If no banner is being displayed the functions return 0

@@ -18,7 +18,7 @@
   "exportToGame": true,
   "extensionVersion": "0.0.1",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"ext_AppTrackingTransparency.ext","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_NotDetermined","hidden":false,"value":"0",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Authorized","hidden":false,"value":"1",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AppTrackingTransparency_Denied","hidden":false,"value":"2",},
