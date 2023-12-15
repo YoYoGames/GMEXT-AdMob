@@ -119,7 +119,9 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_RewardedInterstitial_Max_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"AdMob_RewardedInterstitial_Max_Instances","help":"AdMob_RewardedInterstitial_Max_Instances(value)","hidden":false,"kind":4,"returnType":2,},
-        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Enable_Paid_Event","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Enable_Paid_Event","help":"AdMob_Enable_Paid_Event()","hidden":false,"kind":4,"returnType":1,},
+        {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Enable_PaidEvent_Callback","argCount":0,"args":[
+            2,
+          ],"documentation":"","externalName":"AdMob_Enable_PaidEvent_Callback","help":"AdMob_Enable_PaidEvent_Callback(enable)","hidden":false,"kind":4,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"Admob_Interstitial_Free_Loaded_Instances","argCount":0,"args":[
             2,
           ],"documentation":"","externalName":"Admob_Interstitial_Free_Loaded_Instances","help":"Admob_Interstitial_Free_Loaded_Instances(num)","hidden":false,"kind":4,"returnType":1,},
@@ -176,7 +178,7 @@
         {"name":"Admob_Interstitial_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedVideo_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_Max_Instances","path":"extensions/AdMob/AdMob.yy",},
-        {"name":"AdMob_Enable_Paid_Event","path":"extensions/AdMob/AdMob.yy",},
+        {"name":"AdMob_Enable_PaidEvent_Callback","path":"extensions/AdMob/AdMob.yy",},
         {"name":"Admob_Interstitial_Free_Loaded_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedVideo_Free_Loaded_Instances","path":"extensions/AdMob/AdMob.yy",},
         {"name":"AdMob_RewardedInterstitial_Free_Loaded_Instances","path":"extensions/AdMob/AdMob.yy",},

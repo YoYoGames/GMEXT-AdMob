@@ -198,6 +198,25 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		isTestDevice = true;
 	}
 
+	private RequestConfiguration requestConfigurationBuilder() {
+		RequestConfiguration.Builder mRequestConfiguration = new RequestConfiguration.Builder();
+
+		if (isTestDevice) {
+			List<String> testDeviceIds = Arrays.asList(getDeviceID());
+			mRequestConfiguration = mRequestConfiguration.setTestDeviceIds(testDeviceIds);
+		}
+
+		if (targetCOPPA)
+			mRequestConfiguration = mRequestConfiguration
+					.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
+
+		if (targetUnderAge)
+			mRequestConfiguration = mRequestConfiguration
+					.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE);
+
+		return mRequestConfiguration.build();
+	}
+
 	// #endregion
 
 	///// BANNER
@@ -469,7 +488,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	// #region INTERSTITIAL
 
 	private int interstitialMaxLoadedInstances = 1;
-	private ConcurrentLinkedQueue<InterstitialAd> loadedInsterstitialsQueue = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<InterstitialAd> loadedInsterstitialQueue = new ConcurrentLinkedQueue<>();
 
 	private String interstitialAdUnitId = "";
 
@@ -478,18 +497,23 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void Admob_Interstitial_Free_Loaded_Instances(double count) {
-		if (count == -1) {
-			count = loadedInsterstitialsQueue.size();
+		if (count < 0) {
+			count = loadedInsterstitialQueue.size();
 		}
 
-		while (loadedInsterstitialsQueue.size() > count) {
-			loadedInsterstitialsQueue.poll();
+		while (count > 0 && loadedInsterstitialQueue.size()) {
+			loadedInsterstitialQueue.poll();
+			count--;
 		}
 	}
 
 	public void Admob_Interstitial_Max_Instances(double value) {
 		interstitialMaxLoadedInstances = (int) value;
-		Admob_Interstitial_Free_Loaded_Instances(value);
+
+		int size = loadedInsterstitialQueue.size();
+		if (size <= value) return;
+		
+		Admob_Interstitial_Free_Loaded_Instances(size - value);
 	}
 
 	public double AdMob_Interstitial_Load() {
@@ -502,7 +526,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateAdId(interstitialAdUnitId, callingMethod))
 			return ADMOB_ERROR_INVALID_AD_ID;
 
-		if (!validateLoadedAdsLimit(loadedInsterstitialsQueue, interstitialMaxLoadedInstances, callingMethod))
+		if (!validateLoadedAdsLimit(loadedInsterstitialQueue, interstitialMaxLoadedInstances, callingMethod))
 			return ADMOB_ERROR_AD_LIMIT_REACHED;
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
@@ -515,11 +539,11 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 					@Override
 					public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
 
-						if (!validateLoadedAdsLimit(loadedInsterstitialsQueue, interstitialMaxLoadedInstances,
+						if (!validateLoadedAdsLimit(loadedInsterstitialQueue, interstitialMaxLoadedInstances,
 								callingMethod))
 							return;
 
-						loadedInsterstitialsQueue.add(interstitialAd);
+						loadedInsterstitialQueue.add(interstitialAd);
 
 						if (triggerPaidEventCallback) {
 							final InterstitialAd interstitialAdRef = interstitialAd;
@@ -563,10 +587,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
 
-		if (!validateAdLoaded(loadedInsterstitialsQueue, callingMethod))
+		if (!validateAdLoaded(loadedInsterstitialQueue, callingMethod))
 			return ADMOB_ERROR_NO_ADS_LOADED;
 
-		final InterstitialAd interstitialAdRef = loadedInsterstitialsQueue.poll();
+		final InterstitialAd interstitialAdRef = loadedInsterstitialQueue.poll();
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
 				interstitialAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
@@ -609,15 +633,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public double AdMob_Interstitial_Instances_Count() {
-		return loadedInsterstitialsQueue.size();
+		return loadedInsterstitialQueue.size();
 	}
 
 	// #endregion
 
 	// #region REWARDED VIDEO
 
-	private int rewardedVideosMaxLoadedInstances = 1;
-	private ConcurrentLinkedQueue<RewardedAd> loadedRewardedVideosQueue = new ConcurrentLinkedQueue<>();
+	private int rewardedVideoMaxLoadedInstances = 1;
+	private ConcurrentLinkedQueue<RewardedAd> loadedRewardedVideoQueue = new ConcurrentLinkedQueue<>();
 
 	private String rewardedVideoAdUnitId = "";
 
@@ -626,18 +650,23 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_RewardedVideo_Free_Loaded_Instances(double count) {
-		if (count == -1) {
-			count = loadedRewardedVideosQueue.size();
+		if (count < 0) {
+			count = loadedRewardedVideoQueue.size();
 		}
 
-		while (loadedRewardedVideosQueue.size() > count) {
-			loadedRewardedVideosQueue.poll();
+		while (count > 0 && loadedRewardedVideoQueue.size()) {
+			loadedRewardedVideoQueue.poll();
+			count--;
 		}
 	}
 
 	public void AdMob_RewardedVideo_Max_Instances(double value) {
-		rewardedVideosMaxLoadedInstances = (int) value;
-		AdMob_RewardedVideo_Free_Loaded_Instances(value);
+		rewardedVideoMaxLoadedInstances = (int) value;
+
+		int size = loadedRewardedVideoQueue.size();
+		if (size <= value) return;
+		
+		AdMob_RewardedVideo_Free_Loaded_Instances(size - value);
 	}
 
 	public double AdMob_RewardedVideo_Load() {
@@ -650,7 +679,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateAdId(rewardedVideoAdUnitId, callingMethod))
 			return ADMOB_ERROR_INVALID_AD_ID;
 
-		if (!validateLoadedAdsLimit(loadedRewardedVideosQueue, rewardedVideosMaxLoadedInstances, callingMethod))
+		if (!validateLoadedAdsLimit(loadedRewardedVideoQueue, rewardedVideoMaxLoadedInstances, callingMethod))
 			return ADMOB_ERROR_AD_LIMIT_REACHED;
 
 		RunnerActivity.ViewHandler.post(new Runnable() {
@@ -663,11 +692,11 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 					@Override
 					public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
 
-						if (!validateLoadedAdsLimit(loadedRewardedVideosQueue, rewardedVideosMaxLoadedInstances,
+						if (!validateLoadedAdsLimit(loadedRewardedVideoQueue, rewardedVideoMaxLoadedInstances,
 								callingMethod))
 							return;
 
-						loadedRewardedVideosQueue.add(rewardedAd);
+						loadedRewardedVideoQueue.add(rewardedAd);
 
 						if (triggerPaidEventCallback) {
 							final RewardedAd rewardedAdRef = rewardedAd;
@@ -712,10 +741,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
 
-		if (!validateAdLoaded(loadedRewardedVideosQueue, callingMethod))
+		if (!validateAdLoaded(loadedRewardedVideoQueue, callingMethod))
 			return ADMOB_ERROR_NO_ADS_LOADED;
 
-		final RewardedAd rewardedAd = loadedRewardedVideosQueue.poll();
+		final RewardedAd rewardedAd = loadedRewardedVideoQueue.poll();
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
 
@@ -774,15 +803,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public double AdMob_RewardedVideo_Instances_Count() {
-		return loadedRewardedVideosQueue.size();
+		return loadedRewardedVideoQueue.size();
 	}
 
 	// #endregion
 
 	// #region REWARDED INTERSTITIAL
 
-	private int rewardedInterstitialsMaxLoadedInstances = 1;
-	private ConcurrentLinkedQueue<RewardedInterstitialAd> loadedRewardedInterstitialsQueue = new ConcurrentLinkedQueue<>();
+	private int rewardedInterstitialMaxLoadedInstances = 1;
+	private ConcurrentLinkedQueue<RewardedInterstitialAd> loadedRewardedInterstitialQueue = new ConcurrentLinkedQueue<>();
 
 	private String rewardedInterstitialAdUnitId = "";
 
@@ -791,18 +820,23 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public void AdMob_RewardedInterstitial_Free_Loaded_Instances(double count) {
-		if (count == -1) {
-			count = loadedRewardedInterstitialsQueue.size();
+		if (count < 0) {
+			count = loadedRewardedInterstitialQueue.size();
 		}
 
-		while (loadedRewardedInterstitialsQueue.size() > count) {
-			loadedRewardedInterstitialsQueue.poll();
+		while (count > 0 && loadedRewardedInterstitialQueue.size()) {
+			loadedRewardedInterstitialQueue.poll();
+			count--;
 		}
 	}
 
 	public void AdMob_RewardedInterstitial_Max_Instances(double value) {
-		rewardedInterstitialsMaxLoadedInstances = (int) value;
-		AdMob_RewardedInterstitial_Free_Loaded_Instances(value);
+		rewardedInterstitialMaxLoadedInstances = (int) value;
+
+		int size = loadedRewardedInterstitialQueue.size();
+		if (size <= value) return;
+		
+		AdMob_RewardedInterstitial_Free_Loaded_Instances(size - value);
 	}
 
 	public double AdMob_RewardedInterstitial_Load() {
@@ -815,7 +849,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateAdId(rewardedInterstitialAdUnitId, callingMethod))
 			return ADMOB_ERROR_INVALID_AD_ID;
 
-		if (!validateLoadedAdsLimit(loadedRewardedInterstitialsQueue, rewardedInterstitialsMaxLoadedInstances,
+		if (!validateLoadedAdsLimit(loadedRewardedInterstitialQueue, rewardedInterstitialMaxLoadedInstances,
 				callingMethod))
 			return ADMOB_ERROR_AD_LIMIT_REACHED;
 
@@ -829,11 +863,11 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 							@Override
 							public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd) {
 
-								if (!validateLoadedAdsLimit(loadedRewardedInterstitialsQueue,
-										rewardedInterstitialsMaxLoadedInstances, callingMethod))
+								if (!validateLoadedAdsLimit(loadedRewardedInterstitialQueue,
+										rewardedInterstitialMaxLoadedInstances, callingMethod))
 									return;
 
-								loadedRewardedInterstitialsQueue.add(rewardedInterstitialAd);
+								loadedRewardedInterstitialQueue.add(rewardedInterstitialAd);
 
 								if (triggerPaidEventCallback) {
 									final RewardedInterstitialAd rewardedInterstitialAdRef = rewardedInterstitialAd;
@@ -880,10 +914,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
 
-		if (!validateAdLoaded(loadedRewardedInterstitialsQueue, callingMethod))
+		if (!validateAdLoaded(loadedRewardedInterstitialQueue, callingMethod))
 			return ADMOB_ERROR_NO_ADS_LOADED;
 
-		final RewardedInterstitialAd rewardedInterstitialAd = loadedRewardedInterstitialsQueue.poll();
+		final RewardedInterstitialAd rewardedInterstitialAd = loadedRewardedInterstitialQueue.poll();
 		RunnerActivity.ViewHandler.post(new Runnable() {
 			public void run() {
 
@@ -942,7 +976,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	public double AdMob_RewardedInterstitial_Instances_Count() {
-		return loadedRewardedInterstitialsQueue.size();
+		return loadedRewardedInterstitialQueue.size();
 	}
 
 	// #endregion
@@ -1174,25 +1208,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	private boolean targetUnderAge = false;
 	private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
-	private RequestConfiguration requestConfigurationBuilder() {
-		RequestConfiguration.Builder mRequestConfiguration = new RequestConfiguration.Builder();
-
-		if (isTestDevice) {
-			List<String> testDeviceIds = Arrays.asList(getDeviceID());
-			mRequestConfiguration = mRequestConfiguration.setTestDeviceIds(testDeviceIds);
-		}
-
-		if (targetCOPPA)
-			mRequestConfiguration = mRequestConfiguration
-					.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
-
-		if (targetUnderAge)
-			mRequestConfiguration = mRequestConfiguration
-					.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE);
-
-		return mRequestConfiguration.build();
-	}
-
 	///// UTILS
 	///// ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -1361,7 +1376,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		long numMilliSecondsPerHour = 3600000;
 		return (dateDifference < (numMilliSecondsPerHour * numHours));
 	}
-
 	public boolean NPA = false;
 
 	private AdRequest buildAdRequest() {
@@ -1490,8 +1504,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	boolean triggerPaidEventCallback = false;
 
-	public void AdMob_Enable_triggerPaidEventCallback() {
-		triggerPaidEventCallback = true;
+	public void AdMob_Enable_PaidEvent_Callback(double enabled) {
+		triggerPaidEventCallback = enabled >= 0.5;
 	}
 
 	public void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
