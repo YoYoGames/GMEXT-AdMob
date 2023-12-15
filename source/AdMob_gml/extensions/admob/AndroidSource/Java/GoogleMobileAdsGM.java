@@ -208,10 +208,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		return 0;
 	}
 
-	boolean triggerPaidEvent = false;
+	boolean triggerOnPaidEvent = false;
 
-	public void AdMob_Enable_PaidEvent(double enabled) {
-		triggerPaidEvent = enabled >= 0.5;
+	public void AdMob_Events_OnPaidEvent(double enabled) {
+		triggerOnPaidEvent = enabled >= 0.5;
 	}
 
 	private RequestConfiguration requestConfigurationBuilder() {
@@ -238,7 +238,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 
 		int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
+		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_OnPaidEvent");
 
 		RunnerJNILib.DsMapAddString(dsMapIndex, "mediation_adapter_class_name", mediationAdapterClassName);
 
@@ -293,7 +293,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 				final AdView bannerAdRef = bannerAdView;
 
-				if (triggerPaidEvent)
+				if (triggerOnPaidEvent)
 					bannerAdView.setOnPaidEventListener(new OnPaidEventListener() {
 
 						@Override
@@ -585,7 +585,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 						loadedInsterstitialQueue.add(interstitialAd);
 
-						if (triggerPaidEvent) {
+						if (triggerOnPaidEvent) {
 							final InterstitialAd interstitialAdRef = interstitialAd;
 							interstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
 								@Override
@@ -738,7 +738,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 						loadedRewardedVideoQueue.add(rewardedAd);
 
-						if (triggerPaidEvent) {
+						if (triggerOnPaidEvent) {
 							final RewardedAd rewardedAdRef = rewardedAd;
 							rewardedAd.setOnPaidEventListener(new OnPaidEventListener() {
 								@Override
@@ -909,7 +909,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 								loadedRewardedInterstitialQueue.add(rewardedInterstitialAd);
 
-								if (triggerPaidEvent) {
+								if (triggerOnPaidEvent) {
 									final RewardedInterstitialAd rewardedInterstitialAdRef = rewardedInterstitialAd;
 
 									rewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
@@ -1097,7 +1097,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 								appOpenAdLoadTime = (new Date()).getTime();
 								appOpenAdInstance = appOpenAd;
 
-								if (triggerPaidEvent) {
+								if (triggerOnPaidEvent) {
 
 									final AppOpenAd appOpenAdRef = appOpenAd;
 									appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {

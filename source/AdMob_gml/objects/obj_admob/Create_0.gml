@@ -1,6 +1,6 @@
 /// @description Initialize variables
 
-//AdMob_Enable_Paid_Event()
+//AdMob_Events_OnPaidEvent(true)
 
 // Debug variables (used in draw event)
 status = "UNKNOWN";

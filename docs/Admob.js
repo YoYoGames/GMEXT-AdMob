@@ -583,12 +583,12 @@ function AdMob_Settings_SetVolume(value) { }
 function AdMob_Settings_SetMuted(value) { }
 
 /**
- * @func AdMob_Enable_PaidEvent
+ * @func AdMob_Events_OnPaidEvent
  * @desc Enable the paid load callbacks, NOTE: You should enable this feature in your console too https://support.google.com/admob/answer/11322405
- * @param {real} value
+ * @param {real} enable
  * 
  * @event social
- * @member {string} type `"AdMob_onPaidEvent"`
+ * @member {string} type `"AdMob_OnPaidEvent"`
  * @member {string} mediation_adapter_class_name The mediation adapter class name of the ad network that loaded the ad.
  * @member {string} unit_id identifier of the ad
  * @member {string} ad_type 'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"
@@ -603,7 +603,7 @@ function AdMob_Settings_SetMuted(value) { }
  * 
  * @func_end
  */
-function AdMob_Enable_Paid_Event() { }
+function AdMob_Events_OnPaidEvent(enable) { }
 
 /**
  * @const AdMobErrors
@@ -773,6 +773,7 @@ function AdMob_Enable_Paid_Event() { }
  * @ref module.reward_video
  * @ref module.reward_interstitial
  * @ref module.app_open
+ * @ref module.constants
  * @section_end
  * 
  * @module_end
