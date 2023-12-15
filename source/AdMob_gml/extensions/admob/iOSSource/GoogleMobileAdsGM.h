@@ -38,7 +38,7 @@
 @property(nonatomic, strong) ThreadSafeQueue *loadedRewardedInterstitialQueue;
 @property(nonatomic, strong) GADRewardedInterstitialAd *rewardedInterstitialAdKeepMe;
 
-@property(nonatomic, assign) bool triggerPaidEventCallback;
+@property(nonatomic, assign) bool triggerPaidEvent;
 
 @property(nonatomic, strong) NSString *bannerAdUnitId;
 @property(nonatomic, strong) GADBannerView *bannerView;

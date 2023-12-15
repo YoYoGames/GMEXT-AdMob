@@ -1,0 +1,1 @@
+<p align="center">YoYoGames ${time.year}</p>

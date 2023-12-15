@@ -105,7 +105,7 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
         self.rewardedInterstitialMaxLoadedInstances = 1;
         self.loadedRewardedInterstitialQueue = [[ThreadSafeQueue alloc] init];
         
-        self.triggerPaidEventCallback = false;
+        self.triggerPaidEvent = false;
         
         self.isAppOpenAdEnabled = false;
         self.appOpenAdOrientation = UIInterfaceOrientationLandscapeRight;
@@ -189,9 +189,9 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
     return 0;
 }
 
--(void) AdMob_Enable_PaidEvent_Callback:(double) enable
+-(void) AdMob_Enable_PaidEvent:(double) enable
 {
-    self.triggerPaidEventCallback = enable >= 0.5;
+    self.triggerPaidEvent = enable >= 0.5;
 }
 
 -(void)onPaidEventHandler:(GADAdValue*) value adUnitId:(const NSString*)adUnitId adType:(NSString*)adType loadedAdNetworkResponseInfo:(GADAdNetworkResponseInfo*)loadedAdNetworkResponseInfo mediationAdapterClassName:(NSString*)mediationAdapterClassName
@@ -369,7 +369,7 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
     [g_glView addSubview:self.bannerView];
 
     
-    if(self.triggerPaidEventCallback) {
+    if(self.triggerPaidEvent) {
         self.bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
             GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.bannerView.responseInfo.loadedAdNetworkResponseInfo;
@@ -561,7 +561,7 @@ static GADAdSize getBannerSize(double size)
         
         interstitialAd.fullScreenContentDelegate = self;
         
-        if (self.triggerPaidEventCallback) {
+        if (self.triggerPaidEvent) {
             const GADInterstitialAd* interstitialRef = interstitialAd;
             
             interstitialAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
@@ -657,7 +657,7 @@ static GADAdSize getBannerSize(double size)
         
         rewardedAd.fullScreenContentDelegate = self;
         
-        if(self.triggerPaidEventCallback) {
+        if(self.triggerPaidEvent) {
             const GADRewardedAd* rewardedRef = rewardedAd;
             
             rewardedAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
@@ -761,7 +761,7 @@ static GADAdSize getBannerSize(double size)
         
         rewardedInterstitialAd.fullScreenContentDelegate = self;
         
-        if(self.triggerPaidEventCallback) {
+        if(self.triggerPaidEvent) {
             const GADRewardedInterstitialAd* rewardedInterstitialRef = rewardedInterstitialAd;
             
             rewardedInterstitialAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
@@ -878,7 +878,7 @@ static GADAdSize getBannerSize(double size)
         self.appOpenAdInstance.fullScreenContentDelegate = self;
         self.appOpenAdLoadTime = [NSDate date];
         
-        if(self.triggerPaidEventCallback)
+        if(self.triggerPaidEvent)
             self.appOpenAdInstance.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
             GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.appOpenAdInstance.responseInfo.loadedAdNetworkResponseInfo;

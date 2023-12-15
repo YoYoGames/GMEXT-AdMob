@@ -1,13 +1,10 @@
 
-
-
 /**
  * @func AdMob_Initialize
  * @desc This function initializes the Google AdMob API and should be called at the start of your game.
  * @func_end
  */
 function AdMob_Initialize() { }
-
 
 /**
  * @func AdMob_SetTestDeviceId
@@ -17,29 +14,33 @@ function AdMob_Initialize() { }
 function AdMob_SetTestDeviceId() { }
 
 /**
- * @func AdMob_Banner_Target
+ * @func AdMob_Banner_Set_AdUnit
  * @desc Set the target identifier for banner functions, Banner funcitons DOESN'T allow multiple identifiers
  * @param {string} adUnitId
  * @func_end
  */
-function AdMob_Banner_Target(adUnitId) { }
+function AdMob_Banner_Set_AdUnit(adUnitId) { }
 
 /**
  * @func AdMob_Banner_Create
  * @desc
  * @param {real} size The type of the banner to be displayed.
  * @param {bool} bottom Whether the banner should be placed at the bottom of the display.
- * @func_end
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_Banner_OnLoaded"`
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_Banner_OnLoadFailed"`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
+ * 
+ * @func_end
  */
 function AdMob_Banner_Create(size, bottom) { }
 
@@ -64,6 +65,8 @@ function AdMob_Banner_GetHeight() { }
  * @func AdMob_Banner_Move
  * @desc This function can be used to move a banner that has been previously added. You supply a boolean that will determine if the banner should be placed at the bottom or at the top of the display.
  * @param {bool} bottom Whether the banner should be placed at the bottom of the display.
+ * @returns {constant.AdMobErrors}
+ * 
  * @func_end
  */
 function AdMob_Banner_Move(bottom) { }
@@ -71,6 +74,7 @@ function AdMob_Banner_Move(bottom) { }
 /**
  * @func AdMob_Banner_Show
  * @desc This function can be used to show the currently active, but hidden, banner ad block. When called, the banner will be shown to the user again and will be able to receive input. You can hide the banner again at any time using the AdMob_Banner_Hide function.
+ * @returns {constant.AdMobErrors}
  * @func_end
  */
 function AdMob_Banner_Show() { }
@@ -78,6 +82,7 @@ function AdMob_Banner_Show() { }
 /**
  * @func AdMob_Banner_Hide
  * @desc This function can be used to hide the currently active banner ad block. When called, the banner will be removed from the user’s view and will no longer receive input. You can show the banner again at any time using the AdMob_Banner_Show function.
+ * @returns {constant.AdMobErrors}
  * @func_end
  */
 function AdMob_Banner_Hide() { }
@@ -85,21 +90,22 @@ function AdMob_Banner_Hide() { }
 /**
  * @func AdMob_Banner_Remove
  * @desc This function will remove the currently active banner from the app. If you call this function then want to show ads again, you must call the AdMob_Banner_Create function first to add a new banner to the display.
+ * @returns {constant.AdMobErrors}
  * @func_end
  */
 function AdMob_Banner_Remove() { }
 
 /**
- * @func AdMob_Interstitial_Target
+ * @func AdMob_Interstitial_Set_AdUnit
  * @desc Set the target identifier for interstitial functions, Interstitials functions allow multiple identifiers
  * @param {string} adUnitId
  * @func_end
  */
-function AdMob_Interstitial_Target(adUnitId) { }
+function AdMob_Interstitial_Set_AdUnit(adUnitId) { }
 
 /**
  * @func Admob_Interstitial_Free_Load_Instances
- * @desc Release Interstitial load instancez.
+ * @desc Release Interstitial load instances (passing -1 will free all the loaded instances).
  * @param {double} count
  * @func_end
  */
@@ -117,15 +123,18 @@ function Admob_Interstitial_Max_Instances(value) { }
 /**
  * @func AdMob_Interstitial_Load
  * @desc This function should be called when you want to load an interstitial ad. Calling it will send a request to the ad server to provide an interstitial ad, which will then be loaded into the app for display. This function does not show the ad, just stores it in memory ready for being shown. If you do not call this function before trying to show an ad, nothing will be shown. Note that you can check whether an interstitial is loaded or not using the function AdMob_Interstitial_IsLoaded.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_Interstitial_OnLoaded"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_Interstitial_OnLoadFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -138,22 +147,26 @@ function AdMob_Interstitial_Load() { }
 /**
  * @func AdMob_Interstitial_Show
  * @desc This function will show the interstitial ad, if one is available and loaded. You can check whether an ad is available using the function AdMob_Interstitial_IsLoaded. Note that while an interstitial is being shown, your app will be put into the background and will effectively be “paused”.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered is the ad view is closed by the user.
  * @member {string} type `"AdMob_Interstitial_OnDismissed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_Interstitial_OnShowFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_Interstitial_OnFullyShown"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * @func_end
  */
@@ -177,16 +190,16 @@ function AdMob_Interstitial_IsLoaded() { }
 function AdMob_Interstitial_Instances_Count() { }
 
 /**
- * @func AdMob_RewardedVideo_Target
+ * @func AdMob_RewardedVideo_Set_AdUnit
  * @desc Set the target identifier for rewarded video functions, Rewarded video funcitons allow multiple identifiers
  * @param {string} adUnitId
  * @func_end
  */
-function AdMob_RewardedVideo_Target(adUnitId) { }
+function AdMob_RewardedVideo_Set_AdUnit(adUnitId) { }
 
 /**
  * @func AdMob_RewardedVideo_Free_Load_Instances
- * @desc Release Rewarded Video load instancez.
+ * @desc Release Rewarded Video load instances (passing -1 will free all the loaded instances).
  * @param {double} count
  * @func_end
  */
@@ -204,17 +217,20 @@ function AdMob_RewardedVideo_Max_Instances(count) { }
 /**
  * @func AdMob_RewardedVideo_Load
  * @desc This function should be called when you want to load a rewarded video ad. Calling it will send a request to the ad server to provide a rewarded ad, which will then be loaded into the app for display. This function does not show the ad, just stores it in memory ready for showing. If you do not call this function before trying to show an ad, nothing will be shown. Note that you can check whether a rewarded video is loaded or not using the function AdMob_RewardedVideo_IsLoaded.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_RewardedVideo_OnLoadFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_RewardedVideo_OnLoaded"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * 
  * @event_end
  * @func_end
@@ -225,27 +241,32 @@ function AdMob_RewardedVideo_Load() { }
 /**
  * @func AdMob_RewardedVideo_Show
  * @desc This function will show the rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function AdMob_RewardedVideo_IsLoaded. Note that while a rewarded video ad is being shown, your app will be put into the background and will effectively be “paused”.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered when the ad view is closed by the user.
  * @member {string} type `"AdMob_RewardedVideo_OnDismissed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_RewardedVideo_OnShowFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_RewardedVideo_OnFullyShown"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered if the user should be rewarded.
  * @member {string} type `"AdMob_RewardedVideo_OnReward"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @func_end
@@ -275,16 +296,16 @@ function AdMob_RewardedVideo_Instances_Count() { }
 
 
 /**
- * @func AdMob_RewardedInterstitial_Target
+ * @func AdMob_RewardedInterstitial_Set_AdUnit
  * @desc Set the target identifier for rewarded interstitial functions, Rewarded interstitial funcitons allow multiple identifiers
  * @param {string} adUnitId
  * @func_end
  */
-function AdMob_RewardedInterstitial_Target(adUnitId) { }
+function AdMob_RewardedInterstitial_Set_AdUnit(adUnitId) { }
 
 /**
  * @func AdMob_RewardedInterstitial_Free_Load_Instances
- * @desc Release Rewarded Interstitial load instancez.
+ * @desc Release Rewarded Interstitial load instances (passing -1 will free all the loaded instances).
  * @param {double} count
  * @func_end
  */
@@ -302,17 +323,20 @@ function AdMob_RewardedInterstitial_Max_Instances(count) { }
 /**
  * @func AdMob_RewardedInterstitial_Load
  * @desc This function should be called when you want to load a rewarded interstitial ad. Calling it will send a request to the ad server to provide a rewarded ad, which will then be loaded into the app for display. This function does not show the ad, just stores it in memory ready for showing. If you do not call this function before trying to show an ad, nothing will be shown. Note that you can check whether a rewarded interstitial is loaded or not using the function AdMob_RewardedInterstitial_IsLoaded.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_RewardedInterstitial_OnLoadFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_RewardedInterstitial_OnLoaded"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @func_end
@@ -323,27 +347,32 @@ function AdMob_RewardedInterstitial_Load() { }
 /**
  * @func AdMob_RewardedInterstitial_Show
  * @desc This function will show the rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function AdMob_RewardedInterstitial_IsLoaded. Note that while a rewarded interstitial ad is being shown, your app will be put into the background and will effectively be “paused”.
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered when the ad view is closed by the user.
  * @member {string} type `"AdMob_RewardedInterstitial_OnDismissed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_RewardedInterstitial_OnShowFailed"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_RewardedInterstitial_OnFullyShown"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered if the user should be rewarded.
  * @member {string} type `"AdMob_RewardedInterstitial_OnReward"`
- * @member {string} id Identifier of the advertisment
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @func_end
@@ -370,30 +399,37 @@ function AdMob_RewardedInterstitial_Instances_Count() { }
 
 
 /**
- * @func AdMob_AppOpenAd_Target
+ * @func AdMob_AppOpenAd_Set_AdUnit
  * @desc Set the target identifier for app open ads functions, app open ads funcitons DOESN'T allow multiple identifiers.
  * @param {string} adUnitId
  * @func_end
  */
-function AdMob_AppOpenAd_Target(adUnitId) { }
+function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
 
 /**
  * @func AdMob_AppOpenAd_Enable
  * @desc Enable show App Open Ads when game resumes from background.
  * @param {double} orientation
+ * @returns {constant.AdMobErrors}
  * 
  * @event social
+ * @desc This event is triggered when the ad view is closed by the user.
  * @member {string} type `"AdMob_AppOpenAd_OnDismissed"`
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task fails.
  * @member {string} type `"AdMob_AppOpenAd_OnShowFailed"`
+ * @member {string} unit_id Unit identifier of the advertisment
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
+ * @desc This event is triggered is the awaited task succeeds.
  * @member {string} type `"AdMob_AppOpenAd_OnFullyShown"`
+ * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
  * @func_end
@@ -403,12 +439,14 @@ function AdMob_AppOpenAd_Enable(orientation) { }
 /**
  * @func AdMob_AppOpenAd_Disable
  * @desc Disable show App Open Ads when game resume
+ * @returns {constant.AdMobErrors}
  * @func_end
  */
 function AdMob_AppOpenAd_Disable() { }
 
 /**
  * @func AdMob_AppOpenAd_IsEnabled
+ * @returns {constant.AdMobErrors}
  * @desc Return the true if app open ads are enabled. Otherwise return false.
  * @returns {bool}
  * 
@@ -445,14 +483,6 @@ function AdMob_Targeting_UnderAge(underAge) { }
 function AdMob_Targeting_MaxAdContentRating(contentRating) { }
 
 /**
- * @func AdMob_NonPersonalizedAds_Set
- * @desc 
- * @param {real} value
- * @func_end
- */
-function AdMob_NonPersonalizedAds_Set(value) { }
-
-/**
  * @func AdMob_Consent_RequestInfoUpdate
  * @desc
  * @param {real} mode
@@ -470,7 +500,6 @@ function AdMob_NonPersonalizedAds_Set(value) { }
  * @func_end
  */
 function AdMob_Consent_RequestInfoUpdate(mode) { }
-
 
 /**
  * @func AdMob_Consent_GetStatus
@@ -494,7 +523,6 @@ function AdMob_Consent_GetType() { }
  */
 function AdMob_Consent_IsFormAvailable() { }
 
-
 /**
  * @func AdMob_Consent_Load
  * @desc Loads the consent form into memory so it can be displayed to the user. If you do not call this function before trying to show the GDPR consent, nothing will be shown.
@@ -514,7 +542,6 @@ function AdMob_Consent_IsFormAvailable() { }
 function AdMob_Consent_Load() { }
 
 
-
 /**
  * @func AdMob_Consent_Show
  * @desc Shows the consent form to the user. If you do not call the AdMob_Consent_Load function before trying to show the GDPR consent, nothing will be shown.
@@ -532,14 +559,12 @@ function AdMob_Consent_Load() { }
  */
 function AdMob_Consent_Show() { }
 
-
 /**
  * @func AdMob_Consent_Reset
  * @desc This function resets the consent status flag.
  * @func_end
  */
 function AdMob_Consent_Reset() { }
-
 
 /**
  * @func AdMob_Settings_SetVolume
@@ -558,24 +583,197 @@ function AdMob_Settings_SetVolume(value) { }
 function AdMob_Settings_SetMuted(value) { }
 
 /**
- * @func AdMob_Enable_Paid_Event
+ * @func AdMob_Enable_PaidEvent
  * @desc Enable the paid load callbacks, NOTE: You should enable this feature in your console too https://support.google.com/admob/answer/11322405
  * @param {real} value
  * 
  * @event social
  * @member {string} type `"AdMob_onPaidEvent"`
- * @member {string} mediationAdapterClassName The mediation adapter class name of the ad network that loaded the ad.
- * @member {string} adUnitId identifier of the ad
- * @member {string} adType 'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"
+ * @member {string} mediation_adapter_class_name The mediation adapter class name of the ad network that loaded the ad.
+ * @member {string} unit_id identifier of the ad
+ * @member {string} ad_type 'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"
  * @member {real} micros The ad's value in micro-units, where 1,000,000 micro-units equal one unit of the currency.
- * @member {string} currencyCode The value's ISO 4217 currency code.
+ * @member {string} currency_code The value's ISO 4217 currency code.
  * @member {real} precision The precision type of the reported ad value.
- * @member {string} adSourceName Gets the ad source representing the specific ad network that serves the impression. For campaigns, Mediated House Ads is returned for a mediated ads campaign goal type, and Reservation Campaign is returned for impression and click goal types. See Ad sources for the list of possible ad source names when an ad network serves the ad.
- * @member {string} adSourceId Gets the ad source ID associated with this adapter response. For campaigns, 6060308706800320801 is returned for a mediated ads campaign goal type, and 7068401028668408324 is returned for impression and click goal types. See Ad sources for the list of possible ad source IDs when an ad network serves the ad.
- * @member {string} adSourceInstanceName Gets the ad source instance name associated with this adapter response.
- * @member {string} adSourceInstanceId Gets the ad source instance ID associated with this adapter response.
+ * @member {string} ad_source_name Gets the ad source representing the specific ad network that serves the impression. For campaigns, Mediated House Ads is returned for a mediated ads campaign goal type, and Reservation Campaign is returned for impression and click goal types. See Ad sources for the list of possible ad source names when an ad network serves the ad.
+ * @member {string} ad_source_id Gets the ad source ID associated with this adapter response. For campaigns, 6060308706800320801 is returned for a mediated ads campaign goal type, and 7068401028668408324 is returned for impression and click goal types. See Ad sources for the list of possible ad source IDs when an ad network serves the ad.
+ * @member {string} ad_source_instance_name Gets the ad source instance name associated with this adapter response.
+ * @member {string} ad_source_instance_id Gets the ad source instance ID associated with this adapter response.
  * @event_end
  * 
  * @func_end
  */
 function AdMob_Enable_Paid_Event() { }
+
+/**
+ * @const AdMobErrors
+ * @desc These set of constants represent the values errors values that can return from the AdMob function calls.
+ * @member ADMOB_OK There were no errors.
+ * @member ADMOB_ERROR_NOT_INITIALIZED The AdMob extension needs to be initialized prior to this call
+ * @member ADMOB_ERROR_INVALID_AD_ID The provided ad unit id is not valid.
+ * @member ADMOB_ERROR_AD_LIMIT_REACHED The limit of loaded ads for this specific type was reached.
+ * @member ADMOB_ERROR_NO_ADS_LOADED There are no loaded ads to be shown for this specific type.
+ * @member ADMOB_ERROR_NO_ACTIVE_BANNER_AD There is no active banner ad.
+ * @member ADMOB_ERROR_ILLEGAL_CALL The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).
+ * @const_end
+ */
+
+
+/**
+ * @module general
+ * @title General
+ * 
+ * @section_func
+ * @ref AdMob_Initialize
+ * @ref AdMob_SetTestDeviceId
+ * @ref AdMob_Enable_PaidEvent
+ * @section_end
+ * 
+ * @module_end
+ */
+ 
+/**
+ * @module consent
+ * @title Consent
+ * 
+ * @section_func
+ * @ref AdMob_Consent_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module targeting
+ * @title Targeting
+ * 
+ * @section_func
+ * @ref AdMob_Targeting_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module banner
+ * @title Banner
+ * 
+ * @section_func
+ * @ref AdMob_Banner_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module interstitial
+ * @title Interstitial
+ * 
+ * @section_func
+ * @ref AdMob_Interstitial_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module reward_video
+ * @title Rewarded Video
+ * 
+ * @section_func
+ * @ref AdMob_RewardedVideo_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module reward_interstitial
+ * @title Rewarded Interstitial
+ * 
+ * @section_func
+ * @ref AdMob_RewardedInterstitial_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module app_open
+ * @title App Open
+ * 
+ * @section_func
+ * @ref AdMob_AppOpenAd_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module settings
+ * @title Settings
+ * 
+ * @section_func
+ * @ref AdMob_Settings_*
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module constants
+ * @title Constants
+ * @desc The following are the available constanst to use with the AdMob API.
+ * 
+ * @section_const
+ * @ref AdMobErrors
+ * @section_end
+ * 
+ * @module_end
+ */
+
+/**
+ * @module home 
+ * @title AdMob
+ * @desc This is the AdMob extension which provides functionality to developers to add Google Ads to their game. In this wiki you can find the full available API documentation and guides necessary to get started.
+ * 
+ * ## Extension’s Features
+ * 
+ * * Enable test mode (development)
+ * * Request GDPR Consent
+ * * Target ads to your specific audience
+ *   * Under-age
+ *   * Children
+ *   * Max Rating system
+ * * Use 5 distinct types of ads:
+ *   * Banners (7 different banner types)
+ *   * Interstitial
+ *   * RewardedVideos
+ *   * RewardedInterstitial
+ *   * AppOpenAd
+ * * Allows ad volume control (including mute toggle)
+ * 
+ * @section Guides
+ * @desc 
+ * Before you start using this extension make sure to follow our [Setup](Setup) guide. Which will get you up and running.
+ *
+ * To get started using this extension, follow the [Quick Start Guide](quick_start_guide).
+ * 
+ * For the recommended workflow see the [Workflow](Workflow) page.
+ * @section_end
+ * 
+ * @section Modules
+ * @desc The following are the available modules from the AdMob API:
+ * @ref module.general
+ * @ref module.settings
+ * @ref module.consent
+ * @ref module.targeting
+ * @ref module.banner
+ * @ref module.interstitial
+ * @ref module.reward_video
+ * @ref module.reward_interstitial
+ * @ref module.app_open
+ * @section_end
+ * 
+ * @module_end
+ */

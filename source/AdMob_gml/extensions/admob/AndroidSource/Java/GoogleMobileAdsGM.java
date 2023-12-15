@@ -140,9 +140,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	Boolean isInitialized = false;
 
-	public void AdMob_Initialize() {
+	public double AdMob_Initialize() {
 
-		if (!validateNotInitialized("AdMob_Initialize")) retrun ADMOB_ERROR_ILLEGAL_CALL;
+		if (!validateNotInitialized("AdMob_Initialize")) return ADMOB_ERROR_ILLEGAL_CALL;
 
 		// ThreadPoolExecutor
 		executorService.execute(new Runnable() {
@@ -195,20 +195,23 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 				}
 			}
 		});
+
+		return 0;
 	}
 
 	private boolean isTestDevice = false;
 
-	public void AdMob_SetTestDeviceId() {
-		if (!validateNotInitialized("AdMob_Initialize")) retrun ADMOB_ERROR_ILLEGAL_CALL;
+	public double AdMob_SetTestDeviceId() {
+		if (!validateNotInitialized("AdMob_Initialize")) return ADMOB_ERROR_ILLEGAL_CALL;
 
 		isTestDevice = true;
+		return 0;
 	}
 
-	boolean triggerPaidEventCallback = false;
+	boolean triggerPaidEvent = false;
 
-	public void AdMob_Enable_PaidEvent_Callback(double enabled) {
-		triggerPaidEventCallback = enabled >= 0.5;
+	public void AdMob_Enable_PaidEvent(double enabled) {
+		triggerPaidEvent = enabled >= 0.5;
 	}
 
 	private RequestConfiguration requestConfigurationBuilder() {
@@ -290,7 +293,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 				final AdView bannerAdRef = bannerAdView;
 
-				if (triggerPaidEventCallback)
+				if (triggerPaidEvent)
 					bannerAdView.setOnPaidEventListener(new OnPaidEventListener() {
 
 						@Override
@@ -582,7 +585,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 						loadedInsterstitialQueue.add(interstitialAd);
 
-						if (triggerPaidEventCallback) {
+						if (triggerPaidEvent) {
 							final InterstitialAd interstitialAdRef = interstitialAd;
 							interstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
 								@Override
@@ -735,7 +738,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 						loadedRewardedVideoQueue.add(rewardedAd);
 
-						if (triggerPaidEventCallback) {
+						if (triggerPaidEvent) {
 							final RewardedAd rewardedAdRef = rewardedAd;
 							rewardedAd.setOnPaidEventListener(new OnPaidEventListener() {
 								@Override
@@ -906,7 +909,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 								loadedRewardedInterstitialQueue.add(rewardedInterstitialAd);
 
-								if (triggerPaidEventCallback) {
+								if (triggerPaidEvent) {
 									final RewardedInterstitialAd rewardedInterstitialAdRef = rewardedInterstitialAd;
 
 									rewardedInterstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
@@ -1094,7 +1097,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 								appOpenAdLoadTime = (new Date()).getTime();
 								appOpenAdInstance = appOpenAd;
 
-								if (triggerPaidEventCallback) {
+								if (triggerPaidEvent) {
 
 									final AppOpenAd appOpenAdRef = appOpenAd;
 									appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {
