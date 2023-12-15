@@ -88,6 +88,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	private static final int ADMOB_ERROR_AD_LIMIT_REACHED = -3;
 	private static final int ADMOB_ERROR_NO_ADS_LOADED = -4;
 	private static final int ADMOB_ERROR_NO_ACTIVE_BANNER_AD = -5;
+	private static final int ADMOB_ERROR_ILLEGAL_CALL = -6;
 
 	private static final String LOG_TAG = "AdMob";
 
@@ -99,7 +100,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		rootView = activity.findViewById(android.R.id.content);
 	}
 
-	// #region SETUP
+	// #region Setup
 
 	private ExecutorService executorService = createExecutorService(500);
 
@@ -140,6 +141,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	Boolean isInitialized = false;
 
 	public void AdMob_Initialize() {
+
+		if (!validateNotInitialized("AdMob_Initialize")) retrun ADMOB_ERROR_ILLEGAL_CALL;
 
 		// ThreadPoolExecutor
 		executorService.execute(new Runnable() {
@@ -194,8 +197,18 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		});
 	}
 
+	private boolean isTestDevice = false;
+
 	public void AdMob_SetTestDeviceId() {
+		if (!validateNotInitialized("AdMob_Initialize")) retrun ADMOB_ERROR_ILLEGAL_CALL;
+
 		isTestDevice = true;
+	}
+
+	boolean triggerPaidEventCallback = false;
+
+	public void AdMob_Enable_PaidEvent_Callback(double enabled) {
+		triggerPaidEventCallback = enabled >= 0.5;
 	}
 
 	private RequestConfiguration requestConfigurationBuilder() {
@@ -217,10 +230,34 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		return mRequestConfiguration.build();
 	}
 
+	public void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
+			AdapterResponseInfo loadedAdapterResponseInfo, String mediationAdapterClassName) {
+
+
+		int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
+
+		RunnerJNILib.DsMapAddString(dsMapIndex, "mediation_adapter_class_name", mediationAdapterClassName);
+
+		RunnerJNILib.DsMapAddString(dsMapIndex, "unit_id", adUnitId);
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_type", adType);
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "currency_code", adValue.getCurrencyCode());
+		RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
+
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_source_name", loadedAdapterResponseInfo.getAdSourceName());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_source_id", loadedAdapterResponseInfo.getAdSourceId());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_source_instance_name",
+				loadedAdapterResponseInfo.getAdSourceInstanceName());
+		RunnerJNILib.DsMapAddString(dsMapIndex, "ad_source_instance_id",
+				loadedAdapterResponseInfo.getAdSourceInstanceId());
+
+		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+	}
+
 	// #endregion
 
-	///// BANNER
-	///// //////////////////////////////////////////////////////////////////////////////////////
+	//#region Banner
 
 	private AdView bannerAdView = null;
 	private AdSize bannerSize = null;
@@ -324,8 +361,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public double AdMob_Banner_GetWidth() {
 		// If there is no active banner ad, return 0
-		if (!validateActiveBannerAd("AdMob_Banner_GetWidth"))
-			return 0;
+		if (bannerAdView = null) return 0;
 
 		// Get the width of the banner in pixels
 		int w = bannerSize.getWidthInPixels(RunnerJNILib.ms_context);
@@ -334,8 +370,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public double AdMob_Banner_GetHeight() {
 		// If there is no active banner ad, return 0
-		if (!validateActiveBannerAd("AdMob_Banner_GetHeight"))
-			return 0;
+		if (bannerAdView == null) return 0;
 
 		// Get the height of the banner in pixels
 		int h = bannerSize.getHeightInPixels(RunnerJNILib.ms_context);
@@ -485,7 +520,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		return null;
 	}
 
-	// #region INTERSTITIAL
+	//#endregion
+
+	// #region Interstitial
 
 	private int interstitialMaxLoadedInstances = 1;
 	private ConcurrentLinkedQueue<InterstitialAd> loadedInsterstitialQueue = new ConcurrentLinkedQueue<>();
@@ -638,7 +675,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #endregion
 
-	// #region REWARDED VIDEO
+	// #region Rewarded Video
 
 	private int rewardedVideoMaxLoadedInstances = 1;
 	private ConcurrentLinkedQueue<RewardedAd> loadedRewardedVideoQueue = new ConcurrentLinkedQueue<>();
@@ -808,7 +845,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #endregion
 
-	// #region REWARDED INTERSTITIAL
+	// #region Rewarded Interstitial
 
 	private int rewardedInterstitialMaxLoadedInstances = 1;
 	private ConcurrentLinkedQueue<RewardedInterstitialAd> loadedRewardedInterstitialQueue = new ConcurrentLinkedQueue<>();
@@ -981,7 +1018,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #endregion
 
-	// #region APP OPEN
+	// #region App Open
 
 	private Boolean isShowingAd = false;
 	private Boolean isAppOpenAdEnabled = false;
@@ -1175,8 +1212,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #endregion
 
-	///// TARGETING
-	///// ///////////////////////////////////////////////////////////////////////////////////
+	//#region Targeting
 
 	public void AdMob_Targeting_COPPA(double COPPA) {
 		targetCOPPA = COPPA > 0.5;
@@ -1203,20 +1239,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		}
 	}
 
-	private boolean isTestDevice = false;
 	private boolean targetCOPPA = false;
 	private boolean targetUnderAge = false;
 	private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
-	///// UTILS
-	///// ///////////////////////////////////////////////////////////////////////////////////////
+	//#endregion
 
-	public void AdMob_NonPersonalizedAds_Set(double value) {
-		NPA = value >= 0.5;
-	}
-
-	///// CONSENT
-	///// /////////////////////////////////////////////////////////////////////////////////////
+	//#region Consent
 
 	// EU Consent: https://developers.google.com/admob/android/eu-consent
 	public ConsentInformation consentInformation;
@@ -1340,8 +1369,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			consentInformation.reset();
 	}
 
-	///// SETTINGS
-	///// ////////////////////////////////////////////////////////////////////////////////////
+	//#endregion
+
+	//#region Settings
 
 	public void AdMob_Settings_SetVolume(double value) {
 		MobileAds.setAppVolume((float) value);
@@ -1351,22 +1381,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		MobileAds.setAppMuted(value >= 0.5);
 	}
 
-	///// INTERNAL
-	///// //////////////////////////////////////////////////////////////////////////////
+	//#endregion
 
-	public boolean NPA = false;
+	//#region Internals
 
 	private AdRequest buildAdRequest() {
 		AdRequest.Builder builder = new AdRequest.Builder();
 
 		// As per Google's request
 		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
-
-		if (NPA) {
-			Bundle extras = new Bundle();
-			extras.putString("npa", "1");
-			builder.addNetworkExtrasBundle(AdMobAdapter.class, extras);
-		}
 
 		return builder.build();
 	}
@@ -1479,42 +1502,16 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		return true;
 	}
 
-	boolean triggerPaidEventCallback = false;
+	//#endregion
 
-	public void AdMob_Enable_PaidEvent_Callback(double enabled) {
-		triggerPaidEventCallback = enabled >= 0.5;
+	// #region Validations
+
+	private Boolean validateNotInitialized(String callingMethod) {
+		if (isInitialized) {
+			Log.i(LOG_TAG, callingMethod + " :: Method cannot be called after initialization.");
+		}
+		return !isInitialized;
 	}
-
-	public void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
-			AdapterResponseInfo loadedAdapterResponseInfo, String mediationAdapterClassName) {
-		// Bundle extras = rewardedAd.getResponseInfo().getResponseExtras();
-		// String mediationGroupName = extras.getString("mediation_group_name");
-		// String mediationABTestName = extras.getString("mediation_ab_test_name");
-		// String mediationABTestVariant =
-		// extras.getString("mediation_ab_test_variant");
-
-		int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-		RunnerJNILib.DsMapAddString(dsMapIndex, "type", "AdMob_onPaidEvent");
-
-		RunnerJNILib.DsMapAddString(dsMapIndex, "mediationAdapterClassName", mediationAdapterClassName);
-
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adUnitId", adUnitId);
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adType", adType);
-		RunnerJNILib.DsMapAddDouble(dsMapIndex, "micros", adValue.getValueMicros());
-		RunnerJNILib.DsMapAddString(dsMapIndex, "currencyCode", adValue.getCurrencyCode());
-		RunnerJNILib.DsMapAddDouble(dsMapIndex, "precision", adValue.getPrecisionType());
-
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceName", loadedAdapterResponseInfo.getAdSourceName());
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceId", loadedAdapterResponseInfo.getAdSourceId());
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceName",
-				loadedAdapterResponseInfo.getAdSourceInstanceName());
-		RunnerJNILib.DsMapAddString(dsMapIndex, "adSourceInstanceId",
-				loadedAdapterResponseInfo.getAdSourceInstanceId());
-
-		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
-	}
-
-	// #region VALIDATIONS
 
 	private Boolean validateInitialized(String callingMethod) {
 		if (!isInitialized) {

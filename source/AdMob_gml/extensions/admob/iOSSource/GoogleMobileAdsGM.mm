@@ -1,6 +1,5 @@
 #import "GoogleMobileAdsGM.h"
 
-const int EVENT_OTHER_SOCIAL = 70;
 extern int CreateDsMap( int _num, ... );
 extern void CreateAsynEventWithDSMap(int dsmapindex, int event_index);
 extern UIViewController *g_controller;
@@ -25,15 +24,6 @@ extern "C" const char* extOptGetString(char* _ext, char* _opt);
 extern "C" const char* extGetVersion(char* _ext);
 
 extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
-
-
-const int ADMOB_ERROR_NOT_INITIALIZED = -1;
-const int ADMOB_ERROR_INVALID_AD_ID = -2;
-const int ADMOB_ERROR_AD_LIMIT_REACHED = -3;
-const int ADMOB_ERROR_NO_ADS_LOADED = -4;
-const int ADMOB_ERROR_NO_ACTIVE_BANNER_AD = -5;
-const int ADMOB_ERROR_ILLEGAL_CALL = -6;
-
 
 @implementation ThreadSafeQueue
 
@@ -85,6 +75,13 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
 @end
 
 @implementation GoogleMobileAdsGM
+
+const int ADMOB_ERROR_NOT_INITIALIZED = -1;
+const int ADMOB_ERROR_INVALID_AD_ID = -2;
+const int ADMOB_ERROR_AD_LIMIT_REACHED = -3;
+const int ADMOB_ERROR_NO_ADS_LOADED = -4;
+const int ADMOB_ERROR_NO_ACTIVE_BANNER_AD = -5;
+const int ADMOB_ERROR_ILLEGAL_CALL = -6;
 
 -(id)init {
     if ( self = [super init] ) {
@@ -410,10 +407,8 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
 }
 
 -(double) AdMob_Banner_GetWidth
-{
-    if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
-    
-    if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__]) return 0;
+{    
+    if (!self.bannerView) return 0;
     
     CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
     int adW = size.width;
@@ -423,10 +418,8 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
 }
 
 -(double) AdMob_Banner_GetHeight
-{
-    if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
-    
-    if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__]) return 0;
+{    
+    if (!self.bannerView) return 0;
     
     CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
     int adH = size.height;
@@ -964,13 +957,6 @@ static GADAdSize getBannerSize(double size)
     }
 }
 
-#pragma mark - Util Methods
-
--(void) AdMob_NonPersonalizedAds_Set:(double) value
-{
-    self.nonPersonalizedAds = value >= 0.5;
-}
-
 #pragma mark - Consent Methods
 
 -(void) AdMob_Consent_RequestInfoUpdate:(double) testing
@@ -1098,10 +1084,7 @@ static GADAdSize getBannerSize(double size)
     
 -(void) AdMob_Settings_SetMuted:(double) value
 {
-    if(value >= 0.5)
-        GADMobileAds.sharedInstance.applicationMuted = YES;
-    else
-        GADMobileAds.sharedInstance.applicationMuted = NO;
+    GADMobileAds.sharedInstance.applicationMuted = (value >= 0.5) ? YES : NO;
 }
 
 ///// INTERNAL ///////////////////////////////////////////////////////////////////////////////////
@@ -1112,13 +1095,6 @@ static GADAdSize getBannerSize(double size)
 
     // As per Google's request
     request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion((char*)"AdMob")];
-
-    if(self.nonPersonalizedAds)
-    {
-        GADExtras *extras = [[GADExtras alloc] init];
-        extras.additionalParameters = @{@"npa": @"1"};
-        [request registerAdNetworkExtras: extras];
-    }
 
     return request;
 }

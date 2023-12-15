@@ -22,9 +22,6 @@
 
 @property(nonatomic, assign) Boolean isInitialized;
 @property(nonatomic, assign) Boolean isTestDevice;
-@property(nonatomic, assign) Boolean nonPersonalizedAds;
-
-@property (strong, nonatomic) id retainedObject;
 
 @property(nonatomic, strong) NSString *interstitialAdUnitId;
 @property(nonatomic, assign) int interstitialMaxLoadedInstances;
