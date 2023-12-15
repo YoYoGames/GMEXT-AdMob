@@ -1345,45 +1345,22 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public void AdMob_Settings_SetVolume(double value) {
 		MobileAds.setAppVolume((float) value);
-		AdsSoundReLoad();
 	}
 
 	public void AdMob_Settings_SetMuted(double value) {
 		MobileAds.setAppMuted(value >= 0.5);
-		AdsSoundReLoad();
-	}
-
-	private void AdsSoundReLoad() {
-		// Now this should be munual from GML
-		// if (mInterstitialID != null) {
-		// mInterstitialAd = null;
-		// AdMob_Interstitial_Load();
-		// }
-
-		// if (mRewardedAdID != null) {
-		// mRewardedAd = null;
-		// AdMob_RewardedVideo_Load();
-		// }
 	}
 
 	///// INTERNAL
 	///// //////////////////////////////////////////////////////////////////////////////
 
-	private long loadTime = 0;
-
-	private boolean wasLoadTimeLessThanNHoursAgo(long numHours) {
-		long dateDifference = (new Date()).getTime() - this.loadTime;
-		long numMilliSecondsPerHour = 3600000;
-		return (dateDifference < (numMilliSecondsPerHour * numHours));
-	}
 	public boolean NPA = false;
 
 	private AdRequest buildAdRequest() {
 		AdRequest.Builder builder = new AdRequest.Builder();
 
-		// As instructed by Google
-		// builder.setRequestAgent("gmext-admob-" +
-		// RunnerJNILib.extGetVersion("AdMob"));
+		// As per Google's request
+		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
 
 		if (NPA) {
 			Bundle extras = new Bundle();
