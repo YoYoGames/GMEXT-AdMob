@@ -626,7 +626,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @section_func
  * @ref AdMob_Initialize
  * @ref AdMob_SetTestDeviceId
- * @ref AdMob_Enable_PaidEvent
+ * @ref AdMob_Events_OnPaidEvent
  * @section_end
  * 
  * @module_end
