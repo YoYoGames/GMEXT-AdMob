@@ -364,7 +364,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	public double AdMob_Banner_GetWidth() {
 		// If there is no active banner ad, return 0
-		if (bannerAdView = null) return 0;
+		if (bannerAdView == null) return 0;
 
 		// Get the width of the banner in pixels
 		int w = bannerSize.getWidthInPixels(RunnerJNILib.ms_context);
@@ -541,7 +541,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			count = loadedInsterstitialQueue.size();
 		}
 
-		while (count > 0 && loadedInsterstitialQueue.size()) {
+		while (count > 0 && loadedInsterstitialQueue.size() > 0) {
 			loadedInsterstitialQueue.poll();
 			count--;
 		}
@@ -694,7 +694,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			count = loadedRewardedVideoQueue.size();
 		}
 
-		while (count > 0 && loadedRewardedVideoQueue.size()) {
+		while (count > 0 && loadedRewardedVideoQueue.size() > 0) {
 			loadedRewardedVideoQueue.poll();
 			count--;
 		}
@@ -864,7 +864,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			count = loadedRewardedInterstitialQueue.size();
 		}
 
-		while (count > 0 && loadedRewardedInterstitialQueue.size()) {
+		while (count > 0 && loadedRewardedInterstitialQueue.size() > 0) {
 			loadedRewardedInterstitialQueue.poll();
 			count--;
 		}
