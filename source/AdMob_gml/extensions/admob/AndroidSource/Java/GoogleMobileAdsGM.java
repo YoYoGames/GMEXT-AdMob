@@ -130,7 +130,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		// ThreadPoolExecutor
 		executorService.execute(new Runnable() {
 			public void run() {
-				MobileAds.setRequestConfiguration(requestConfigurationBuilder());
+				MobileAds.setRequestConfiguration(buildRequestConfiguration());
 
 				try {
 					MobileAds.initialize(activity, initializationStatus -> {
@@ -195,23 +195,24 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		triggerOnPaidEvent = enabled >= 0.5;
 	}
 
-	private RequestConfiguration requestConfigurationBuilder() {
-		RequestConfiguration.Builder mRequestConfiguration = new RequestConfiguration.Builder();
+	private RequestConfiguration buildRequestConfiguration() {
+
+		RequestConfiguration.Builder requestConfigurationBuilder = MobileAds.getRequestConfiguration().toBuilder();
 
 		if (isTestDevice) {
 			List<String> testDeviceIds = Collections.singletonList(getDeviceID());
-			mRequestConfiguration = mRequestConfiguration.setTestDeviceIds(testDeviceIds);
+			requestConfigurationBuilder.setTestDeviceIds(testDeviceIds);
 		}
 
 		if (targetCOPPA)
-			mRequestConfiguration = mRequestConfiguration
-					.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
+			requestConfigurationBuilder.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
 
 		if (targetUnderAge)
-			mRequestConfiguration = mRequestConfiguration
-					.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE);
+			requestConfigurationBuilder.setTagForUnderAgeOfConsent(RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE);
 
-		return mRequestConfiguration.build();
+		requestConfigurationBuilder.setMaxAdContentRating(maxAdContentRating);
+
+		return requestConfigurationBuilder.build();
 	}
 
 	public void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
@@ -1179,15 +1180,29 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	//#region Targeting
 
-	public void AdMob_Targeting_COPPA(double COPPA) {
+	private boolean targetCOPPA = false;
+	public double AdMob_Targeting_COPPA(double COPPA) {
+
+		if (!validateNotInitialized("AdMob_Targeting_COPPA")) return ADMOB_ERROR_ILLEGAL_CALL;
+
 		targetCOPPA = COPPA > 0.5;
+		return 0;
 	}
 
-	public void AdMob_Targeting_UnderAge(double underAge) {
+	private boolean targetUnderAge = false;
+	public double AdMob_Targeting_UnderAge(double underAge) {
+
+		if (!validateNotInitialized("AdMob_Targeting_UnderAge")) return ADMOB_ERROR_ILLEGAL_CALL;
+
 		targetUnderAge = underAge >= 0.5;
+		return 0;
 	}
 
-	public void AdMob_Targeting_MaxAdContentRating(double contentRating) {
+	private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
+	public double AdMob_Targeting_MaxAdContentRating(double contentRating) {
+		
+		if (!validateNotInitialized("AdMob_Targeting_MaxAdContentRating")) return ADMOB_ERROR_ILLEGAL_CALL;
+
 		switch ((int) contentRating) {
 			case 0:
 				maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
@@ -1202,11 +1217,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 				maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_MA;
 				break;
 		}
+		return 0;
 	}
-
-	private boolean targetCOPPA = false;
-	private boolean targetUnderAge = false;
-	private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
 	//#endregion
 

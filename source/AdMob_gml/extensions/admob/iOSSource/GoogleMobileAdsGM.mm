@@ -924,20 +924,30 @@ static GADAdSize getBannerSize(double size)
 #pragma mark - Targeting Methods
 
 //https://developers.google.com/admob/ios/targeting#child-directed_setting
--(void) AdMob_Targeting_COPPA:(double) COPPA
+-(double) AdMob_Targeting_COPPA:(double) COPPA
 {
+    if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
+
     [GADMobileAds.sharedInstance.requestConfiguration tagForChildDirectedTreatment: COPPA > 0.5 ? YES : NO];
+    
+    return 0;
 }
 
 //https://developers.google.com/admob/ios/targeting#users_under_the_age_of_consent
--(void) AdMob_Targeting_UnderAge:(double) underAge
+-(double) AdMob_Targeting_UnderAge:(double) underAge
 {
+    if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
+
     [GADMobileAds.sharedInstance.requestConfiguration tagForUnderAgeOfConsent: underAge > 0.5 ? YES : NO];
+
+    return 0;
 }
 
 //https://developers.google.com/admob/ios/targeting#ad_content_filtering
--(void) AdMob_Targeting_MaxAdContentRating:(double) maxAdContentRating
+-(double) AdMob_Targeting_MaxAdContentRating:(double) maxAdContentRating
 {
+    if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
+
     switch((int) maxAdContentRating)
     {
         case 0:
@@ -955,6 +965,8 @@ static GADAdSize getBannerSize(double size)
             [GADMobileAds.sharedInstance.requestConfiguration setMaxAdContentRating:GADMaxAdContentRatingMatureAudience];
             break;
     }
+
+    return 0;
 }
 
 #pragma mark - Consent Methods
@@ -993,7 +1005,7 @@ static GADAdSize getBannerSize(double size)
 
 -(double) AdMob_Consent_GetStatus
 {
-    https://developers.google.com/admob/ump/android/api/reference/com/google/android/ump/ConsentInformation.ConsentStatus.html#REQUIRED
+    // https://developers.google.com/admob/ump/android/api/reference/com/google/android/ump/ConsentInformation.ConsentStatus.html#REQUIRED
     switch(UMPConsentInformation.sharedInstance.consentStatus)
     {
         case 0: //UNKNOWN

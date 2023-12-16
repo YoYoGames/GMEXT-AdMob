@@ -83,13 +83,13 @@
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Consent_GetStatus","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Consent_GetStatus","help":"AdMob_Consent_GetStatus()","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Targeting_COPPA","argCount":0,"args":[
             2,
-          ],"documentation":"","externalName":"AdMob_Targeting_COPPA","help":"AdMob_Targeting_COPPA(bool)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_Targeting_COPPA","help":"AdMob_Targeting_COPPA(bool)","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Targeting_UnderAge","argCount":0,"args":[
             2,
-          ],"documentation":"","externalName":"AdMob_Targeting_UnderAge","help":"AdMob_Targeting_UnderAge(bool)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_Targeting_UnderAge","help":"AdMob_Targeting_UnderAge(bool)","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Targeting_MaxAdContentRating","argCount":0,"args":[
             2,
-          ],"documentation":"","externalName":"AdMob_Targeting_MaxAdContentRating","help":"AdMob_Targeting_MaxAdContentRating(maxRanking)","hidden":false,"kind":4,"returnType":1,},
+          ],"documentation":"","externalName":"AdMob_Targeting_MaxAdContentRating","help":"AdMob_Targeting_MaxAdContentRating(maxRanking)","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_GetWidth","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Banner_GetWidth","help":"AdMob_Banner_GetWidth()","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Banner_GetHeight","argCount":0,"args":[],"documentation":"","externalName":"AdMob_Banner_GetHeight","help":"AdMob_Banner_GetHeight()","hidden":false,"kind":4,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Settings_SetVolume","argCount":0,"args":[
