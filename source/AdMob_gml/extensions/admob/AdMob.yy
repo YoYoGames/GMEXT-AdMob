@@ -18,7 +18,7 @@
   "date": "2020-06-14T00:54:26",
   "description": "",
   "exportToGame": true,
-  "extensionVersion": "1.2.3",
+  "extensionVersion": "1.3.0",
   "files": [
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"AdMob.ext","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Banner_NORMAL","hidden":false,"value":"0",},
@@ -44,6 +44,13 @@
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA","hidden":false,"value":"1",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Consent_Mode_DEBUG_GEOGRAPHY_NOT_EEA","hidden":false,"value":"2",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"AdMob_Consent_Mode_PRODUCTION","hidden":false,"value":"3",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_OK","hidden":false,"value":"0",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_NOT_INITIALIZED","hidden":false,"value":"-1",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_INVALID_AD_ID","hidden":false,"value":"-2",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_AD_LIMIT_REACHED","hidden":false,"value":"-3",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_NO_ADS_LOADED","hidden":false,"value":"-4",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_NO_ACTIVE_BANNER_AD","hidden":false,"value":"-5",},
+        {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ADMOB_ERROR_ILLEGAL_CALL","hidden":false,"value":"-6",},
       ],"copyToTargets":-1,"filename":"AdMob.ext","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Initialize","argCount":1,"args":[],"documentation":"","externalName":"AdMob_Initialize","help":"AdMob_Initialize()","hidden":false,"kind":11,"returnType":2,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"AdMob_Interstitial_Set_AdUnit","argCount":1,"args":[

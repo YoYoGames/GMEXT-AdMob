@@ -25,6 +25,18 @@ extern "C" const char* extGetVersion(char* _ext);
 
 extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
+@interface ThreadSafeQueue : NSObject
+
+@property (nonatomic, strong) NSMutableArray *array;
+@property (strong, nonatomic) id retainedObject;
+
+- (void)enqueue:(id)object;
+- (id)dequeue;
+- (void)dequeueMultiple:(int) count;
+- (NSUInteger)size;
+
+@end
+
 @implementation ThreadSafeQueue
 
 - (instancetype)init {

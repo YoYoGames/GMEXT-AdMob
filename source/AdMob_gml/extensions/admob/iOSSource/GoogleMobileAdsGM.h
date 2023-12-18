@@ -6,18 +6,6 @@
 #import <AppTrackingTransparency/AppTrackingTransparency.h>
 #import <AdSupport/AdSupport.h>
 
-@interface ThreadSafeQueue : NSObject
-
-@property (nonatomic, strong) NSMutableArray *array;
-@property (strong, nonatomic) id retainedObject;
-
-- (void)enqueue:(id)object;
-- (id)dequeue;
-- (void)dequeueMultiple:(int) count;
-- (NSUInteger)size;
-
-@end
-
 @interface GoogleMobileAdsGM : NSObject <GADBannerViewDelegate, GADFullScreenContentDelegate>
 
 @property(nonatomic, assign) Boolean isInitialized;

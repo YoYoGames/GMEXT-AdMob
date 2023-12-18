@@ -461,7 +461,11 @@ function AdMob_AppOpenAd_IsEnabled() { }
 /**
  * @func AdMob_Targeting_COPPA
  * @desc Toggles on/off ads for children. This function should be called BEFORE calling AdMob_Initialize.
- * @param {real} COPPA
+ * 
+ * > [!WARNING]
+ * > Should be called before ${function.AdMob_Initialize}.
+ * 
+ * @param {bool} COPPA
  * @func_end
  */
 function AdMob_Targeting_COPPA(COPPA) { }
@@ -469,7 +473,11 @@ function AdMob_Targeting_COPPA(COPPA) { }
 /**
  * @func AdMob_Targeting_UnderAge
  * @desc Toggles on/off ads for under aged users. This function should be called BEFORE calling AdMob_Initialize.
- * @param {real} underAge
+ * 
+ * > [!WARNING]
+ * > Should be called before ${function.AdMob_Initialize}.
+ * 
+ * @param {bool} underAge
  * @func_end
  */
 function AdMob_Targeting_UnderAge(underAge) { }
@@ -477,15 +485,19 @@ function AdMob_Targeting_UnderAge(underAge) { }
 /**
  * @func AdMob_Targeting_MaxAdContentRating
  * @desc Allows for setting the maximum content rating of the ads to be displayed. This function should be called BEFORE calling AdMob_Initialize.
- * @param {real} contentRating
+ * 
+ * > [!WARNING]
+ * > Should be called before ${function.AdMob_Initialize}.
+ * 
+ * @param {constant.AdMobContentRating} contentRating
  * @func_end
  */
 function AdMob_Targeting_MaxAdContentRating(contentRating) { }
 
 /**
  * @func AdMob_Consent_RequestInfoUpdate
- * @desc
- * @param {real} mode
+ * @desc Requests a consent information update (this needs to be called prior to ${function.AdMob_Consent_Load})
+ * @param {constant.AdMobConsentMode} mode
  * 
  * @event social
  * @member {string} type `"AdMob_Consent_OnRequestInfoUpdated"`
@@ -504,6 +516,11 @@ function AdMob_Consent_RequestInfoUpdate(mode) { }
 /**
  * @func AdMob_Consent_GetStatus
  * @desc Allows to set the mode of the consent request being used. This function allows you to debug different regions and EEA and NON-EEA and should be passed in as a 'AdMob_Consent_Mode_*' constant. This function should be called before AdMob_Consent_GetStatus and AdMob_Consent_GetType in order to get the correct output from both functions.
+ * 
+ * > [!INFO]
+ * > Requires a previous call to ${function.AdMob_Consent_RequestInfoUpdate}
+ * 
+ * @returns {constant.AdMobConsentStatus}
  * @func_end
  */
 function AdMob_Consent_GetStatus() { }
@@ -511,6 +528,7 @@ function AdMob_Consent_GetStatus() { }
 /**
  * @func AdMob_Consent_GetType
  * @desc Returns the answer given by the user to a previous GDPR consent request.
+ * @returns {constant.AdMobConsentType}
  * @func_end
  */
 function AdMob_Consent_GetType() { }
@@ -526,6 +544,9 @@ function AdMob_Consent_IsFormAvailable() { }
 /**
  * @func AdMob_Consent_Load
  * @desc Loads the consent form into memory so it can be displayed to the user. If you do not call this function before trying to show the GDPR consent, nothing will be shown.
+ * 
+ * > [!INFO]
+ * > Requires a previous call to ${function.AdMob_Consent_RequestInfoUpdate}
  * 
  * @event social
  * @member {string} type `"AdMob_Consent_OnLoaded"`
@@ -545,6 +566,10 @@ function AdMob_Consent_Load() { }
 /**
  * @func AdMob_Consent_Show
  * @desc Shows the consent form to the user. If you do not call the AdMob_Consent_Load function before trying to show the GDPR consent, nothing will be shown.
+ * 
+ * > [!INFO]
+ * > Requires a previous call to ${function.AdMob_Consent_Load}
+ * 
  * @event social
  * @member {string} type `"AdMob_Consent_OnShown"`
  * @event_end
@@ -615,6 +640,59 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member ADMOB_ERROR_NO_ADS_LOADED There are no loaded ads to be shown for this specific type.
  * @member ADMOB_ERROR_NO_ACTIVE_BANNER_AD There is no active banner ad.
  * @member ADMOB_ERROR_ILLEGAL_CALL The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).
+ * @const_end
+ */
+
+/**
+ * @const AdMobBanner
+ * @desc These set of constants represent the various types of available banners.
+ * @member AdMob_Banner_NORMAL Normal sized banner (320x50 dp)
+ * @member AdMob_Banner_LARGE Large sized banner (320x100 dp)
+ * @member AdMob_Banner_MEDIUM IAB medium rectangle (300x250 dp)
+ * @member AdMob_Banner_FULL IAB full-size banner (468x60 dp - tablets only)
+ * @member AdMob_Banner_LEADERBOARD IAB leaderboard (728x90 dp - tablets only)
+ * @member AdMob_Banner_SMART A dynamic size banner (deprecated, see `AdMob_Banner_ADAPTIVE`)
+ * @member AdMob_Banner_ADAPTIVE A dynamically sized banner
+ * @const_end
+ */
+
+/**
+ * @const AdMobContentRating
+ * @desc These set of constants represent the various types of possible content ratings for ads.
+ * @member AdMob_ContentRating_GENERAL Content suitable for general audiences.
+ * @member AdMob_ContentRating_PARENTAL_GUIDANCE Content suitable for most audiences with parental guidance.
+ * @member AdMob_ContentRating_TEEN Content suitable for teen and older audiences.
+ * @member AdMob_ContentRating_MATURE_AUDIENCE Content suitable only for mature audiences.
+ * @const_end
+ */
+
+/**
+ * @const AdMobConsentStatus
+ * @desc These set of constants represent the various consent status.
+ * @member AdMob_Consent_Status_UNKNOWN Consent status is unknown.
+ * @member AdMob_Consent_Status_NOT_REQUIRED User consent not required.
+ * @member AdMob_Consent_Status_REQUIRED User consent required but not yet obtained.
+ * @member AdMob_Consent_Status_OBTAINED User consent obtained. Personalized vs non-personalized undefined.
+ * @const_end
+ */
+
+/**
+ * @const AdMobConsentType
+ * @desc These set of constants represent the given consent type.
+ * @member AdMob_Consent_Type_UNKNOWN Consent type is unknown (before consent was requested).
+ * @member AdMob_Consent_Type_NON_PERSONALIZED Consent was given for non-personalized ads.
+ * @member AdMob_Consent_Type_PERSONALIZED Consent was given for personalized ads.
+ * @member AdMob_Consent_Type_DECLINED Consent was declined for any kind of ads.
+ * @const_end
+ */
+
+/**
+ * @const AdMobConsentMode
+ * @desc These set of constants represent the consent mode (these are used for testing porpuses).
+ * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED Debug geography disabled.
+ * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA Geography appears as in EEA for debug devices.
+ * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_NOT_EEA Geography appears as not in EEA for debug devices.
+ * @member AdMob_Consent_Mode_PRODUCTION Same as `AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED`, used for production.
  * @const_end
  */
 
@@ -727,6 +805,11 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * 
  * @section_const
  * @ref AdMobErrors
+ * @ref AdMobBanner
+ * @ref AdMobContentRating
+ * @ref AdMobConsentStatus
+ * @ref AdMobConsentType
+ * @ref AdMobConsentMode
  * @section_end
  * 
  * @module_end
