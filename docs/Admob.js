@@ -13,10 +13,25 @@ function AdMob_Initialize() { }
  */
 function AdMob_SetTestDeviceId() { }
 
+///// BANNER
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
+ * @func AdMob_Banner_Init
+ * @desc Initializes the target identifier for banner functions.
+ * > [!NOTE]
+ * > Please refer to ${function.AdMob_Banner_Set_AdUnit} for more information.
+ * @param {string} adUnitId
+ * @version 1.3.0 (-)
+ * @func_end
+ */
+function AdMob_Banner_Init(adUnitId) { }
+
 /**
  * @func AdMob_Banner_Set_AdUnit
- * @desc Set the target identifier for banner functions, Banner funcitons DOESN'T allow multiple identifiers
+ * @desc Set the target identifier for banner functions, Banner funcitons DOESN'T allow multiple preloaded identifiers.
  * @param {string} adUnitId
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_Banner_Set_AdUnit(adUnitId) { }
@@ -95,10 +110,25 @@ function AdMob_Banner_Hide() { }
  */
 function AdMob_Banner_Remove() { }
 
+///// INTERSTITIAL
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
+ * @func AdMob_Interstitial_Init
+ * @desc Initializes the target identifier for interstitial ad functions.
+ * > [!NOTE]
+ * > Please refer to ${function.AdMob_Interstitial_Set_AdUnit} for more information.
+ * @param {string} adUnitId
+ * @version 1.3.0 (-)
+ * @func_end
+ */
+function AdMob_Interstitial_Init(adUnitId) { }
+
 /**
  * @func AdMob_Interstitial_Set_AdUnit
  * @desc Set the target identifier for interstitial functions, Interstitials functions allow multiple identifiers
  * @param {string} adUnitId
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_Interstitial_Set_AdUnit(adUnitId) { }
@@ -107,6 +137,7 @@ function AdMob_Interstitial_Set_AdUnit(adUnitId) { }
  * @func Admob_Interstitial_Free_Load_Instances
  * @desc Release Interstitial load instances (passing -1 will free all the loaded instances).
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function Admob_Interstitial_Free_Load_Instances(count) { }
@@ -115,6 +146,7 @@ function Admob_Interstitial_Free_Load_Instances(count) { }
  * @func Admob_Interstitial_Max_Instances
  * @desc Set the max number of Interstitial load instances, this allow present consecutiva ads. Default value is 1.
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function Admob_Interstitial_Max_Instances(value) { }
@@ -172,7 +204,6 @@ function AdMob_Interstitial_Load() { }
  */
 function AdMob_Interstitial_Show() { }
 
-
 /**
  * @func AdMob_Interstitial_IsLoaded
  * @desc This function will return whether or not the interstitial ad is loaded.
@@ -185,14 +216,30 @@ function AdMob_Interstitial_IsLoaded() { }
  * @func AdMob_Interstitial_Instances_Count
  * @desc Return the number of Interstitial load instances are ready.
  * @returns {bool}
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_Interstitial_Instances_Count() { }
+
+///// REWARDED VIDEO
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
+ * @func AdMob_RewardedVideo_Init
+ * @desc Initializes the target identifier for rewarded video ad functions.
+ * > [!NOTE]
+ * > Please refer to ${function.AdMob_RewardedVideo_Set_AdUnit} for more information.
+ * @param {string} adUnitId
+ * @version 1.3.0 (-)
+ * @func_end
+ */
+function AdMob_RewardedVideo_Init(adUnitId) { }
 
 /**
  * @func AdMob_RewardedVideo_Set_AdUnit
  * @desc Set the target identifier for rewarded video functions, Rewarded video funcitons allow multiple identifiers
  * @param {string} adUnitId
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedVideo_Set_AdUnit(adUnitId) { }
@@ -201,6 +248,7 @@ function AdMob_RewardedVideo_Set_AdUnit(adUnitId) { }
  * @func AdMob_RewardedVideo_Free_Load_Instances
  * @desc Release Rewarded Video load instances (passing -1 will free all the loaded instances).
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedVideo_Free_Load_Instances(count) { }
@@ -209,6 +257,7 @@ function AdMob_RewardedVideo_Free_Load_Instances(count) { }
  * @func AdMob_RewardedVideo_Max_Instances
  * @desc Set the max number of Rewarded Video load instances, this allow present consecutiva ads. Default value is 1.
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedVideo_Max_Instances(count) { }
@@ -286,6 +335,7 @@ function AdMob_RewardedVideo_IsLoaded() { }
  * @func AdMob_RewardedVideo_Instances_Count
  * @desc Return the number of Rewarded video load instances are ready.
  * @returns {real}
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedVideo_Instances_Count() { }
@@ -294,11 +344,22 @@ function AdMob_RewardedVideo_Instances_Count() { }
 ///// REWARDED INTESTITIAL
 ///// ////////////////////////////////////////////////////////////////////////
 
+/**
+ * @func AdMob_RewardedInterstitial_Init
+ * @desc Initializes the target identifier for rewarded interstitial ad functions.
+ * > [!NOTE]
+ * > Please refer to ${function.AdMob_RewardedInterstitial_Set_AdUnit} for more information.
+ * @param {string} adUnitId
+ * @version 1.3.0 (-)
+ * @func_end
+ */
+function AdMob_RewardedInterstitialo_Init(adUnitId) { }
 
 /**
  * @func AdMob_RewardedInterstitial_Set_AdUnit
  * @desc Set the target identifier for rewarded interstitial functions, Rewarded interstitial funcitons allow multiple identifiers
  * @param {string} adUnitId
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedInterstitial_Set_AdUnit(adUnitId) { }
@@ -307,6 +368,7 @@ function AdMob_RewardedInterstitial_Set_AdUnit(adUnitId) { }
  * @func AdMob_RewardedInterstitial_Free_Load_Instances
  * @desc Release Rewarded Interstitial load instances (passing -1 will free all the loaded instances).
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedInterstitial_Free_Load_Instances(count) { }
@@ -316,6 +378,7 @@ function AdMob_RewardedInterstitial_Free_Load_Instances(count) { }
  * @func AdMob_RewardedInterstitial_Max_Instances
  * @desc Set the max number of Rewarded Insterstitials load instances, this allow present consecutiva ads. Default value is 1.
  * @param {double} count
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedInterstitial_Max_Instances(count) { }
@@ -393,15 +456,31 @@ function AdMob_RewardedInterstitial_IsLoaded() { }
  * @func AdMob_RewardedInterstitial_Instances_Count
  * @desc Return the number of Rewarded Interstitial load instances are ready.
  * @returns {real}
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_RewardedInterstitial_Instances_Count() { }
 
 
+///// APP OPEN
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
+ * @func AdMob_AppOpenAd_Init
+ * @desc Initializes the target identifier for app open ads functions.
+ * > [!NOTE]
+ * > Please refer to ${function.AdMob_AppOpenAd_Set_AdUnit} for more information.
+ * @param {string} adUnitId
+ * @version 1.3.0 (-)
+ * @func_end
+ */
+function AdMob_AppOpenAd_Init(adUnitId) { }
+
 /**
  * @func AdMob_AppOpenAd_Set_AdUnit
- * @desc Set the target identifier for app open ads functions, app open ads funcitons DOESN'T allow multiple identifiers.
+ * @desc Set the target identifier for app open ads functions, app open ads funcitons doesn't allow multiple pre-loaded identifiers.
  * @param {string} adUnitId
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
@@ -432,6 +511,8 @@ function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
  * @member {string} unit_id Unit identifier of the advertisment
  * @event_end
  * 
+ * @version 1.3.0 (+)
+ * 
  * @func_end
  */
 function AdMob_AppOpenAd_Enable(orientation) { }
@@ -440,6 +521,7 @@ function AdMob_AppOpenAd_Enable(orientation) { }
  * @func AdMob_AppOpenAd_Disable
  * @desc Disable show App Open Ads when game resume
  * @returns {constant.AdMobErrors}
+ * @version 1.3.0 (+)
  * @func_end
  */
 function AdMob_AppOpenAd_Disable() { }
@@ -619,7 +701,7 @@ function AdMob_Settings_SetMuted(value) { }
  * @member {string} ad_type 'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"
  * @member {real} micros The ad's value in micro-units, where 1,000,000 micro-units equal one unit of the currency.
  * @member {string} currency_code The value's ISO 4217 currency code.
- * @member {real} precision The precision type of the reported ad value.
+ * @member {constant.AdMobAdValuePrecision} precision The precision type of the reported ad value.
  * @member {string} ad_source_name Gets the ad source representing the specific ad network that serves the impression. For campaigns, Mediated House Ads is returned for a mediated ads campaign goal type, and Reservation Campaign is returned for impression and click goal types. See Ad sources for the list of possible ad source names when an ad network serves the ad.
  * @member {string} ad_source_id Gets the ad source ID associated with this adapter response. For campaigns, 6060308706800320801 is returned for a mediated ads campaign goal type, and 7068401028668408324 is returned for impression and click goal types. See Ad sources for the list of possible ad source IDs when an ad network serves the ad.
  * @member {string} ad_source_instance_name Gets the ad source instance name associated with this adapter response.
@@ -640,6 +722,16 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member ADMOB_ERROR_NO_ADS_LOADED There are no loaded ads to be shown for this specific type.
  * @member ADMOB_ERROR_NO_ACTIVE_BANNER_AD There is no active banner ad.
  * @member ADMOB_ERROR_ILLEGAL_CALL The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).
+ * @const_end
+ */
+
+/**
+ * @const AdMobAdValuePrecision
+ * @desc These set of constants represent precision type of the reported ad value.
+ * @member ADMOB_ADVALUE_PRECISION_UNKNOWN An unknown precision type.
+ * @member ADMOB_ADVALUE_PRECISION_ESTIMATED An ad value estimated from aggregated data.
+ * @member ADMOB_ADVALUE_PRECISION_PRECISE The precise value paid for this ad.
+ * @member ADMOB_ADVALUE_PRECISION_PUBLISHER_PROVIDED A publisher-provided ad value, such as manual CPMs in a mediation group.
  * @const_end
  */
 
@@ -810,6 +902,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @ref AdMobConsentStatus
  * @ref AdMobConsentType
  * @ref AdMobConsentMode
+ * @ref AdMobAdValuePrecision
  * @section_end
  * 
  * @module_end
