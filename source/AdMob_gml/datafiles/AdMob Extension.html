@@ -2770,7 +2770,7 @@ AdMob_Events_OnPaidEvent(enable)</code></p>
 </tr>
 <tr>
 <td>precision</td>
-<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td><a class="content-link" href="#admobadvalueprecision">AdMobAdValuePrecision</a></td>
 <td>The precision type of the reported ad value.</td>
 </tr>
 <tr>
@@ -3241,6 +3241,7 @@ AdMob_Targeting_MaxAdContentRating(contentRating)</code></p>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
+<li><a class="content-link" href="#admob_banner_init">~~AdMob_Banner_Init~~ <span>⛔</span></a></li>
 <li><a class="content-link" href="#admob_banner_set_adunit">AdMob_Banner_Set_AdUnit</a></li>
 <li><a class="content-link" href="#admob_banner_create">AdMob_Banner_Create</a></li>
 <li><a class="content-link" href="#admob_banner_getwidth">AdMob_Banner_GetWidth</a></li>
@@ -3254,8 +3255,54 @@ AdMob_Targeting_MaxAdContentRating(contentRating)</code></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
 
+<h1 id="admob_banner_init">AdMob_Banner_Init</h1>
+<blockquote>
+<p><span>⛔</span> This function was <strong>deprecated</strong> with version 1.3.0.</p>
+</blockquote>
+<p>Initializes the target identifier for banner functions.</p>
+<blockquote>
+<p><a class="content-link" href="#">!NOTE</a>
+Please refer to <a class="content-link" href="#admob_banner_set_adunit">AdMob_Banner_Set_AdUnit</a> for more information.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p><code>gml
+AdMob_Banner_Init(adUnitId)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adUnitId</td>
+<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - <span>⛔</span> This function was <strong>deprecated</strong>.</li>
+</ul>
+<p><br></p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
 <h1 id="admob_banner_set_adunit">AdMob_Banner_Set_AdUnit</h1>
-<p>Set the target identifier for banner functions, Banner funcitons DOESN'T allow multiple identifiers</p>
+<p>Set the target identifier for banner functions, Banner funcitons DOESN'T allow multiple preloaded identifiers.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -3283,6 +3330,11 @@ AdMob_Banner_Set_AdUnit(adUnitId)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -3503,6 +3555,7 @@ AdMob_Banner_Remove()</code></p>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
+<li><a class="content-link" href="#admob_interstitial_init">~~AdMob_Interstitial_Init~~ <span>⛔</span></a></li>
 <li><a class="content-link" href="#admob_interstitial_set_adunit">AdMob_Interstitial_Set_AdUnit</a></li>
 <li><a class="content-link" href="#admob_interstitial_free_load_instances">Admob_Interstitial_Free_Load_Instances</a></li>
 <li><a class="content-link" href="#admob_interstitial_max_instances">Admob_Interstitial_Max_Instances</a></li>
@@ -3511,6 +3564,52 @@ AdMob_Banner_Remove()</code></p>
 <li><a class="content-link" href="#admob_interstitial_isloaded">AdMob_Interstitial_IsLoaded</a></li>
 <li><a class="content-link" href="#admob_interstitial_instances_count">AdMob_Interstitial_Instances_Count</a></li>
 </ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_interstitial_init">AdMob_Interstitial_Init</h1>
+<blockquote>
+<p><span>⛔</span> This function was <strong>deprecated</strong> with version 1.3.0.</p>
+</blockquote>
+<p>Initializes the target identifier for interstitial ad functions.</p>
+<blockquote>
+<p><a class="content-link" href="#">!NOTE</a>
+Please refer to <a class="content-link" href="#admob_interstitial_set_adunit">AdMob_Interstitial_Set_AdUnit</a> for more information.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p><code>gml
+AdMob_Interstitial_Init(adUnitId)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adUnitId</td>
+<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - <span>⛔</span> This function was <strong>deprecated</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -3544,6 +3643,11 @@ AdMob_Interstitial_Set_AdUnit(adUnitId)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -3579,6 +3683,11 @@ Admob_Interstitial_Free_Load_Instances(count)</code></p>
 <p>N/A</p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -3612,6 +3721,11 @@ Admob_Interstitial_Max_Instances(count)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -3830,12 +3944,18 @@ AdMob_Interstitial_Instances_Count()</code></p>
 <p><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p><p class="page" id="reward_video"></p>
 <p><a id="top"></a></p>
 <h1 id="rewarded-video"><strong>Rewarded Video</strong></h1>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
+<li><a class="content-link" href="#admob_rewardedvideo_init">~~AdMob_RewardedVideo_Init~~ <span>⛔</span></a></li>
 <li><a class="content-link" href="#admob_rewardedvideo_set_adunit">AdMob_RewardedVideo_Set_AdUnit</a></li>
 <li><a class="content-link" href="#admob_rewardedvideo_free_load_instances">AdMob_RewardedVideo_Free_Load_Instances</a></li>
 <li><a class="content-link" href="#admob_rewardedvideo_max_instances">AdMob_RewardedVideo_Max_Instances</a></li>
@@ -3844,6 +3964,52 @@ AdMob_Interstitial_Instances_Count()</code></p>
 <li><a class="content-link" href="#admob_rewardedvideo_isloaded">AdMob_RewardedVideo_IsLoaded</a></li>
 <li><a class="content-link" href="#admob_rewardedvideo_instances_count">AdMob_RewardedVideo_Instances_Count</a></li>
 </ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewardedvideo_init">AdMob_RewardedVideo_Init</h1>
+<blockquote>
+<p><span>⛔</span> This function was <strong>deprecated</strong> with version 1.3.0.</p>
+</blockquote>
+<p>Initializes the target identifier for rewarded video ad functions.</p>
+<blockquote>
+<p><a class="content-link" href="#">!NOTE</a>
+Please refer to <a class="content-link" href="#admob_rewardedvideo_set_adunit">AdMob_RewardedVideo_Set_AdUnit</a> for more information.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p><code>gml
+AdMob_RewardedVideo_Init(adUnitId)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adUnitId</td>
+<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - <span>⛔</span> This function was <strong>deprecated</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -3877,6 +4043,11 @@ AdMob_RewardedVideo_Set_AdUnit(adUnitId)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -3912,6 +4083,11 @@ AdMob_RewardedVideo_Free_Load_Instances(count)</code></p>
 <p>N/A</p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -3945,6 +4121,11 @@ AdMob_RewardedVideo_Max_Instances(count)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -4186,12 +4367,18 @@ AdMob_RewardedVideo_Instances_Count()</code></p>
 <p><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p><p class="page" id="reward_interstitial"></p>
 <p><a id="top"></a></p>
 <h1 id="rewarded-interstitial"><strong>Rewarded Interstitial</strong></h1>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
+<li><a class="content-link" href="#admob_rewardedinterstitial_init">~~AdMob_RewardedInterstitial_Init~~ <span>⛔</span></a></li>
 <li><a class="content-link" href="#admob_rewardedinterstitial_set_adunit">AdMob_RewardedInterstitial_Set_AdUnit</a></li>
 <li><a class="content-link" href="#admob_rewardedinterstitial_free_load_instances">AdMob_RewardedInterstitial_Free_Load_Instances</a></li>
 <li><a class="content-link" href="#admob_rewardedinterstitial_max_instances">AdMob_RewardedInterstitial_Max_Instances</a></li>
@@ -4200,6 +4387,52 @@ AdMob_RewardedVideo_Instances_Count()</code></p>
 <li><a class="content-link" href="#admob_rewardedinterstitial_isloaded">AdMob_RewardedInterstitial_IsLoaded</a></li>
 <li><a class="content-link" href="#admob_rewardedinterstitial_instances_count">AdMob_RewardedInterstitial_Instances_Count</a></li>
 </ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewardedinterstitial_init">AdMob_RewardedInterstitial_Init</h1>
+<blockquote>
+<p><span>⛔</span> This function was <strong>deprecated</strong> with version 1.3.0.</p>
+</blockquote>
+<p>Initializes the target identifier for rewarded interstitial ad functions.</p>
+<blockquote>
+<p><a class="content-link" href="#">!NOTE</a>
+Please refer to <a class="content-link" href="#admob_rewardedinterstitial_set_adunit">AdMob_RewardedInterstitial_Set_AdUnit</a> for more information.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p><code>gml
+AdMob_RewardedInterstitial_Init(adUnitId)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adUnitId</td>
+<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - <span>⛔</span> This function was <strong>deprecated</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -4233,6 +4466,11 @@ AdMob_RewardedInterstitial_Set_AdUnit(adUnitId)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -4268,6 +4506,11 @@ AdMob_RewardedInterstitial_Free_Load_Instances(count)</code></p>
 <p>N/A</p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -4301,6 +4544,11 @@ AdMob_RewardedInterstitial_Max_Instances(count)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -4542,12 +4790,18 @@ AdMob_RewardedInterstitial_Instances_Count()</code></p>
 <p><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></p>
 </blockquote>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p><p class="page" id="app_open"></p>
 <p><a id="top"></a></p>
 <h1 id="app-open"><strong>App Open</strong></h1>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
+<li><a class="content-link" href="#admob_appopenad_init">~~AdMob_AppOpenAd_Init~~ <span>⛔</span></a></li>
 <li><a class="content-link" href="#admob_appopenad_set_adunit">AdMob_AppOpenAd_Set_AdUnit</a></li>
 <li><a class="content-link" href="#admob_appopenad_enable">AdMob_AppOpenAd_Enable</a></li>
 <li><a class="content-link" href="#admob_appopenad_disable">AdMob_AppOpenAd_Disable</a></li>
@@ -4557,8 +4811,54 @@ AdMob_RewardedInterstitial_Instances_Count()</code></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
 
+<h1 id="admob_appopenad_init">AdMob_AppOpenAd_Init</h1>
+<blockquote>
+<p><span>⛔</span> This function was <strong>deprecated</strong> with version 1.3.0.</p>
+</blockquote>
+<p>Initializes the target identifier for app open ads functions.</p>
+<blockquote>
+<p><a class="content-link" href="#">!NOTE</a>
+Please refer to <a class="content-link" href="#admob_appopenad_set_adunit">AdMob_AppOpenAd_Set_AdUnit</a> for more information.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p><code>gml
+AdMob_AppOpenAd_Init(adUnitId)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adUnitId</td>
+<td><a href="https://manual.yoyogames.com/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - <span>⛔</span> This function was <strong>deprecated</strong>.</li>
+</ul>
+<p><br></p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
 <h1 id="admob_appopenad_set_adunit">AdMob_AppOpenAd_Set_AdUnit</h1>
-<p>Set the target identifier for app open ads functions, app open ads funcitons DOESN'T allow multiple identifiers.</p>
+<p>Set the target identifier for app open ads functions, app open ads funcitons doesn't allow multiple pre-loaded identifiers.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -4586,6 +4886,11 @@ AdMob_AppOpenAd_Set_AdUnit(adUnitId)</code></p>
 <blockquote>
 <p>N/A</p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -4705,6 +5010,11 @@ AdMob_AppOpenAd_Enable(orientation)</code></p>
 </tbody>
 </table>
 <p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
 <p><br></p>
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
@@ -4722,6 +5032,11 @@ AdMob_AppOpenAd_Disable()</code></p>
 <blockquote>
 <p><a class="content-link" href="#admoberrors">AdMobErrors</a></p>
 </blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.3.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
@@ -4831,6 +5146,7 @@ AdMob_Settings_SetMuted(value)</code></p>
 <li><a class="content-link" href="#admobconsentstatus">AdMobConsentStatus</a></li>
 <li><a class="content-link" href="#admobconsenttype">AdMobConsentType</a></li>
 <li><a class="content-link" href="#admobconsentmode">AdMobConsentMode</a></li>
+<li><a class="content-link" href="#admobadvalueprecision">AdMobAdValuePrecision</a></li>
 </ul>
 <p><br></p>
 <hr />
@@ -4890,6 +5206,43 @@ AdMob_Settings_SetMuted(value)</code></p>
 <tr>
 <td><code>ADMOB_ERROR_ILLEGAL_CALL</code></td>
 <td>The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobadvalueprecision">AdMobAdValuePrecision</h1>
+<p>These set of constants represent precision type of the reported ad value.</p>
+<p>These constants are referenced by the following functions:</p>
+<ul>
+<li><a class="content-link" href="#admob_events_onpaidevent">AdMob_Events_OnPaidEvent</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADMOB_ADVALUE_PRECISION_UNKNOWN</code></td>
+<td>An unknown precision type.</td>
+</tr>
+<tr>
+<td><code>ADMOB_ADVALUE_PRECISION_ESTIMATED</code></td>
+<td>An ad value estimated from aggregated data.</td>
+</tr>
+<tr>
+<td><code>ADMOB_ADVALUE_PRECISION_PRECISE</code></td>
+<td>The precise value paid for this ad.</td>
+</tr>
+<tr>
+<td><code>ADMOB_ADVALUE_PRECISION_PUBLISHER_PROVIDED</code></td>
+<td>A publisher-provided ad value, such as manual CPMs in a mediation group.</td>
 </tr>
 </tbody>
 </table>
