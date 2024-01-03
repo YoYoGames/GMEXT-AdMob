@@ -40,6 +40,7 @@
     {"id":{"name":"Obj_AdMob_Consent_Reset","path":"objects/Obj_AdMob_Consent_Reset/Obj_AdMob_Consent_Reset.yy",},},
     {"id":{"name":"oAppTracking","path":"objects/oAppTracking/oAppTracking.yy",},},
     {"id":{"name":"Obj_AdMob","path":"objects/Obj_AdMob/Obj_AdMob.yy",},},
+    {"id":{"name":"AdMobAdColony","path":"extensions/AdMobAdColony/AdMobAdColony.yy",},},
     {"id":{"name":"ext_AppTrackingTransparency","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},},
     {"id":{"name":"rmInit","path":"rooms/rmInit/rmInit.yy",},},
     {"id":{"name":"Obj_AdMob_Rewarded_Free","path":"objects/Obj_AdMob_Rewarded_Free/Obj_AdMob_Rewarded_Free.yy",},},

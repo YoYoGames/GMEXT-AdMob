@@ -7,6 +7,7 @@
     {"name":"Obj_AdMob_Consent_Reset","order":7,"path":"objects/Obj_AdMob_Consent_Reset/Obj_AdMob_Consent_Reset.yy",},
     {"name":"oAppTracking","order":1,"path":"objects/oAppTracking/oAppTracking.yy",},
     {"name":"Obj_AdMob","order":1,"path":"objects/Obj_AdMob/Obj_AdMob.yy",},
+    {"name":"AdMobAdColony","order":5,"path":"extensions/AdMobAdColony/AdMobAdColony.yy",},
     {"name":"rmInit","order":2,"path":"rooms/rmInit/rmInit.yy",},
     {"name":"Obj_AdMob_Rewarded_Free","order":11,"path":"objects/Obj_AdMob_Rewarded_Free/Obj_AdMob_Rewarded_Free.yy",},
     {"name":"AdMobAppLovin","order":1,"path":"extensions/AdMobAppLovin/AdMobAppLovin.yy",},
