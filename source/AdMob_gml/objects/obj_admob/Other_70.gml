@@ -243,5 +243,25 @@ switch(async_load[?"type"])
 	case "AdMob_AppOpenAd_OnFullyShown":
 		// At this point the app open ad succeeded to show.
 		break;
+		
+		
+case "AdMob_OnPaidEvent":
+
+    var unit_id = async_load[?"unit_id"]
+    var ad_type = async_load[?"ad_type"]
+    var micros = async_load[?"micros"]
+    var currency_code = async_load[?"currency_code"]
+    var precision = async_load[?"precision"]
+    var ad_source_name = async_load[?"ad_source_name"]
+    var ad_source_id = async_load[?"ad_source_id"]
+    var ad_source_instance_name = async_load[?"ad_source_instance_name"]
+    var ad_source_instance_id = async_load[?"ad_source_instance_id"]
+    var mediation_adapter_class_name = async_load[?"mediation_adapter_class_name"]
+
+	//Do something with this data...
+	//...
+	//...
+
+    break;
 }
 
