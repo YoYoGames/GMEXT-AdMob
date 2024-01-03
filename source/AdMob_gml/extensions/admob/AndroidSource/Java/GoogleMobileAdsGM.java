@@ -240,9 +240,14 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 	}
 
+	bool nonPersonalizedAds = false;
+	public void AdMob_NonPersonalizedAds_Set(double value) {
+		nonPersonalizedAds = value >= 0.5;
+	}
+
 	// #endregion
 
-	//#region Banner
+	// #region Banner
 
 	private AdView bannerAdView = null;
 	private AdSize bannerSize = null;
@@ -1178,7 +1183,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #endregion
 
-	//#region Targeting
+	// #region Targeting
 
 	private boolean targetCOPPA = false;
 	public double AdMob_Targeting_COPPA(double COPPA) {
@@ -1222,7 +1227,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	//#endregion
 
-	//#region Consent
+	// #region Consent
 
 	// EU Consent: https://developers.google.com/admob/android/eu-consent
 	public ConsentInformation consentInformation;
@@ -1323,7 +1328,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	//#endregion
 
-	//#region Settings
+	// #region Settings
 
 	public void AdMob_Settings_SetVolume(double value) {
 		MobileAds.setAppVolume((float) value);
@@ -1335,13 +1340,20 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	//#endregion
 
-	//#region Internals
+	// #region Internals
 
 	private AdRequest buildAdRequest() {
 		AdRequest.Builder builder = new AdRequest.Builder();
 
 		// As per Google's request
 		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
+
+		// This is deprectated and shouldn't be used keeping it for the sake of compatibility
+		if (nonPersonalizedAds) {
+			Bundle extras = new Bundle();
+			extras.putString("npa", "1");
+			builder.addNetworkExtrasBundle(AdMobAdapter.class, extras);
+		}
 
 		return builder.build();
 	}
