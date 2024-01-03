@@ -6,10 +6,13 @@
 #import <AppTrackingTransparency/AppTrackingTransparency.h>
 #import <AdSupport/AdSupport.h>
 
+@class ThreadSafeQueue;
+
 @interface GoogleMobileAdsGM : NSObject <GADBannerViewDelegate, GADFullScreenContentDelegate>
 
 @property(nonatomic, assign) Boolean isInitialized;
 @property(nonatomic, assign) Boolean isTestDevice;
+@property(nonatomic, assign) Boolean nonPersonalizedAds;
 
 @property(nonatomic, strong) NSString *interstitialAdUnitId;
 @property(nonatomic, assign) int interstitialMaxLoadedInstances;

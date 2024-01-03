@@ -228,6 +228,11 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
     createSocialAsyncEventWithDSMap(dsMapIndex);
 };
 
+-(void) AdMob_NonPersonalizedAds_Set:(double) value
+{
+    self.nonPersonalizedAds = value >= 0.5;
+}
+
 #pragma mark - Delegate Methods
 
 -(void)bannerView:(nonnull GADBannerView *)bannerView didFailToReceiveAdWithError:(nonnull NSError *)error
@@ -1119,6 +1124,14 @@ static GADAdSize getBannerSize(double size)
 
     // As per Google's request
     request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion((char*)"AdMob")];
+
+    // This is deprectated and shouldn't be used keeping it for the sake of compatibility
+    if (self.nonPersonalizedAds)
+    {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras: extras];
+    }
 
     return request;
 }
