@@ -69,6 +69,9 @@ import com.google.android.gms.ads.OnPaidEventListener;
 import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdapterResponseInfo;
 
+import android.os.Bundle;
+import com.google.ads.mediation.admob.AdMobAdapter;
+
 public class GoogleMobileAdsGM extends RunnerSocial {
 	private static final int EVENT_OTHER_SOCIAL = 70;
 	private static final int ADMOB_ERROR_NOT_INITIALIZED = -1;
@@ -240,7 +243,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
 	}
 
-	bool nonPersonalizedAds = false;
+	boolean nonPersonalizedAds = false;
 	public void AdMob_NonPersonalizedAds_Set(double value) {
 		nonPersonalizedAds = value >= 0.5;
 	}
