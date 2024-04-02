@@ -402,22 +402,66 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
     return 0;
 }
 
+- (void)addBannerViewToTopView:(UIView *)bannerView
+{
+    bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [g_glView addSubview:bannerView];
+    [g_glView addConstraints:@[
+                               [NSLayoutConstraint constraintWithItem:bannerView
+                                                            attribute:NSLayoutAttributeTop
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:g_controller.topLayoutGuide
+                                                            attribute:NSLayoutAttributeBottom
+                                                           multiplier:1
+                                                             constant:0],
+                               [NSLayoutConstraint constraintWithItem:bannerView
+                                                            attribute:NSLayoutAttributeCenterX
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:g_controller.view
+                                                            attribute:NSLayoutAttributeCenterX
+                                                           multiplier:1
+                                                             constant:0]
+                               ]];
+}
+
+-(void)addBannerViewToBottomView:(UIView *)bannerView
+{
+    bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [g_glView addSubview:bannerView];
+    [g_glView addConstraints:@[
+                               [NSLayoutConstraint constraintWithItem:bannerView
+                                                            attribute:NSLayoutAttributeBottom
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:g_controller.bottomLayoutGuide
+                                                            attribute:NSLayoutAttributeTop
+                                                           multiplier:1
+                                                             constant:0],
+                               [NSLayoutConstraint constraintWithItem:bannerView
+                                                            attribute:NSLayoutAttributeCenterX
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:g_controller.view
+                                                            attribute:NSLayoutAttributeCenterX
+                                                           multiplier:1
+                                                             constant:0]
+                               ]];
+}
+
 -(double)AdMob_Banner_Move:(double)bottom
 {
+
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
     if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
     
     if(self.bannerView != nil) {
-        CGSize size = CGSizeFromGADAdSize(self.bannerView.adSize);
-        CGFloat adWidth = size.width;
-        CGFloat adHeight = size.height;
+        
+        [self.bannerView removeFromSuperview];
+        
+        if(bottom<0.5)
+            [self addBannerViewToBottomView:self.bannerView];
+        else
+            [self addBannerViewToTopView:self.bannerView];
 
-        CGFloat x = (g_glView.bounds.size.width - adWidth) / 2; // Center horizontally (ALWAYS)
-        CGFloat y = bottom ? (g_glView.bounds.size.height - adHeight) : 0; // Position at bottom or top
-
-        CGRect frame = CGRectMake(x, y, adWidth, adHeight);
-        self.bannerView.frame = frame;
     }
     
     return 0;
