@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Quick Start Guide - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quick Start Guide";
+        var mkdocs_page_input_path = "quick_start_guide.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="home.html">AdMob Extension</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="quick_start_guide.html">Quick Start Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#old-version">[Old Version]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#consent-gdpr">Consent (GDPR)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#old-version_1">[Old Version]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version_1">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#targeting">Targeting</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#old-version_2">[Old Version]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version_2">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#banner-ads">Banner Ads</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#function-mappings">[Function Mappings]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version_3">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interstitial-ads">Interstitial Ads</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#function-mappings_1">[Function Mappings]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version_4">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rewarded-video-ads">Rewarded Video Ads</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#function-mappings_2">[Function Mappings]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-version_5">[New Version]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rewarded-interstitial-ads">Rewarded Interstitial Ads</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#function-mappings_3">[Function Mappings]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#code-sample">[Code Sample]</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="workflow.html">Workflow</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="general.html">General</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="reward_interstitial.html">Rewarded Interstitial</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Quick Start Guide</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/quick_start_guide.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="quick-start-guide">Quick Start Guide</h1>
+<p>This section aims to deliver an easy and simple set of examples that should help you migrate your project from a previous version of the AdMob extension into this new, updated version. The first thing to notice is that all previously named “<strong>GoogleMobileAds_*</strong>” functions have been renamed to “<strong>AdMob_*</strong>” providing a more compact naming convention which is consistent with the Google API function names outside the GameMaker environment.</p>
+<h2 id="initialization">Initialization</h2>
+<p>The first thing to look for when creating an AdMob GameMaker project is initializing your API.</p>
+<h3 id="old-version">[Old Version]</h3>
+<pre class="highlight"><code class="language-gml">// On the previous version you would need to provide application id and
+// an interstitial id to the API initialization function.
+GoogleMobileAds_Init(interstitialId, applicationId);
+
+// Optionally you could set your device to test mode to use test ads instead
+// of ‘live’ ones. You would provide the enable flag and the device id.
+GoogleMobileAds_UseTestAds(enable, deviceId); // &lt;----- this is OPTIONAL</code></pre>
+<h3 id="new-version">[New Version]</h3>
+<pre class="highlight"><code class="language-gml">// If you are using Test Ads the ‘AdMob_SetTestDeviceId’ function needs to be
+// called BEFORE initialization (no arguments are required).
+AdMob_SetTestDeviceId(); // &lt;----- this is OPTIONAL (development only)
+
+// In the new version you just need to call the initialization method without
+// any arguments, as the extension now gets the application id from the
+// “extension options” automatically (Setup, 2.), and the ad ids are setup on
+// a per ad-type basis.
+AdMob_Initialize();</code></pre>
+<h2 id="consent-gdpr">Consent (GDPR)</h2>
+<p>One of the first concepts requiring your attention when setting up a project using AdMob is that, depending on the user's geographic location, you might need to ask for permission to use their personal information to personalize the ads that are shown.</p>
+<h3 id="old-version_1">[Old Version]</h3>
+<p>In previous versions you could ask the user for their consent to collect data for personalized ads using one of the following setups:</p>
+<pre class="highlight"><code class="language-gml">// You could forcefully show the consent form providing a privacy URL and
+// options for personalized ads, non-personalized ads and ad-free version of
+// your game.
+GoogleMobileAds_ConsentFormShow(privacyPolicy, personalized, nonPersonalized, adFree);</code></pre>
+<p>OR</p>
+<pre class="highlight"><code class="language-gml">// You could show the consent form ONLY if the user hasn’t yet answered it.
+GoogleMobileAds_ConsentUpdate(publisherId, privacyPolicy, personalized, nonPersonalized, adFree);</code></pre>
+<h3 id="new-version_1">[New Version]</h3>
+<p>The new version has added functionality that requires you to:</p>
+<ol>
+<li>check the consent <strong>status</strong>;</li>
+<li><strong>load</strong> the consent form before showing it to the user;</li>
+<li><strong>show</strong> the form (this replaces the old ’GoogleMobileAds_ConsentFormShow’)</li>
+</ol>
+<p>The first steps towards requesting user consent are the following:</p>
+<pre class="highlight"><code class="language-gml">// First of all we need to set the Consent Mode, which can be used for
+// debugging purposes to run tests as a  user in a different geographic area;
+// more info: Consent Mode. This function will generate an ASYNC SOCIAL EVENT.
+AdMob_Consent_RequestInfoUpdate(AdMob_Consent_Mode_PRODUCTION);</code></pre>
+<p>After setting the consent mode we need to add some code to the ASYNC SOCIAL EVENT, to check for the events generated by the <a href="consent.html#admob_consent_requestinfoupdate">AdMob_Consent_RequestInfoUpdate</a> function call.
+Here is what each event allows us to do:</p>
+<ol>
+<li><strong>“AdMob_Consent_OnRequestInfoUpdated”</strong> → we check status &amp; load form;</li>
+<li><strong>“AdMob_Consent_OnLoaded”</strong> → we show the consent form;</li>
+<li><strong>“AdMob_Consent_OnShown”</strong> → we get the user’s consent type;</li>
+</ol>
+<p>Given below is the fully documented template code that you can use in your ASYNC SOCIAL EVENT:</p>
+<pre class="highlight"><code class="language-gml">// Early exit if there is no 'type' key defined
+if (!ds_map_exists(async_load, "type")) exit;
+
+// All the events triggered by the AdMob extension have a “type” key
+// containing a string that starts with “AdMob_”.
+switch(async_load[? "type"])
+{
+    // AdMob_Consent_RequestInfoUpdate() succeeded
+    case "AdMob_Consent_OnRequestInfoUpdated":
+
+        // Now we need to get the consent Status, this will tell us if we
+        // are required to ask the user for GDPR consent.
+        if (AdMob_Consent_GetStatus() == AdMob_Consent_Status_REQUIRED)
+
+            // Since we are REQUIRED, we now need to load the consent
+            // form before we can show it. For this we use the function
+            // below (more info: AdMob_Consent_Load). This function call
+            // will also generate an ASYNC SOCIAL EVENT.
+            AdMob_Consent_Load();
+        break;
+
+    // AdMob_Consent_RequestInfoUpdate() failed
+    case "AdMob_Consent_OnRequestInfoUpdateFailed":
+
+        // This means there was a problem while setting the consent
+        // mode. Here we can add some code to deal with it.
+        break;
+
+    // AdMob_Consent_Load() succeeded
+    case "AdMob_Consent_OnLoaded":
+
+        // We have successfully loaded the consent form and we are now
+        // ready to show it to the user (more info: AdMob_Consent_Show)
+        AdMob_Consent_Show();
+        break;
+
+    // AdMob_Consent_Load() failed
+    case "AdMob_Consent_OnLoadFailed":
+
+        // This means there was a problem while loading the consent
+        // form. Here we can add some code to deal with it.
+        break;
+
+    // AdMob_Consent_Show() succeeded and the user already answered it
+    case "AdMob_Consent_OnShown":
+
+        // At this point we now have the consent information from the
+        // user. We can use both the GetStatus and GetType functions to
+        // get the obtained information (more info:
+        // AdMob_Consent_GetStatus and AdMob_Consent_GetType)
+        global.ConsentStatus = AdMob_Consent_GetStatus();
+        global.ConsentType = AdMob_Consent_GetType();
+        break;
+}</code></pre>
+<h2 id="targeting">Targeting</h2>
+<p>This new version of the AdMob extension allows the developer to target ads to a specific audience. This could already be done in previous versions but the new version now has more features specifically for targeting.</p>
+<h3 id="old-version_2">[Old Version]</h3>
+<p>In previous versions the developer could mark a user as underage ads using the following function:</p>
+<pre class="highlight"><code class="language-gml">// The function below classifies users as under age and only non-personalised
+// ads can be shown, regardless of any other setting, and the consent form
+// will not be shown.
+GoogleMobileAds_ConsentSetUserUnderAge(true);</code></pre>
+<h3 id="new-version_2">[New Version]</h3>
+<p>In the new version of the extension the developer is presented with more features that will help target the right kind of ads to the right kind of audience:</p>
+<pre class="highlight"><code class="language-gml">// The function below allows the developer to enable or disable ads for
+// under-age users (much like the old version). Note that it is up to the
+// developer to identify the age of the consumer.
+AdMob_Targeting_UnderAge(true);
+
+// The function below allows the developer to enable or disable ads for
+// children. Note that it is up to the developer to identify the age of the
+// consumer.
+AdMob_Targeting_COPPA(true);
+
+// The new version of the AdMob extension allows for even further control
+// over the filtering of the ads being displayed to the user. The function
+// below allows the developer to set a maximum content rating of the ads to be
+// displayed (info: AdMob_Targeting_MaxAdContentRating and Content Rating constant.
+AdMob_Targeting_MaxAdContentRating(AdMob_ContentRating_GENERAL);</code></pre>
+<h2 id="banner-ads">Banner Ads</h2>
+<p>There have been a lot of API changes since the previous version, that said let’s jump in on a quick set up for adding banner ads to your application.</p>
+<h3 id="function-mappings">[Function Mappings]</h3>
+<p>Even though not all old functions map perfectly into the new API the following list should get you started with some of the changes (check the section below for more details):</p>
+<ul>
+<li><strong>AdMob_Banner_Init(...)</strong> initializes the banner ads with a unique id.</li>
+<li><strong>AdMob_Banner_Create(...)</strong> replaces GoogleMobileAds_AddBanner(...)</li>
+<li>triggers the Social event “AdMob_Banner_OnLoaded” if creation succeeds</li>
+<li>triggers the Social event “AdMob_Banner_OnLoadFailed” if creation failed</li>
+<li><strong>AdMob_Banner_Move(...)</strong> replaces GoogleMobileAds_MoveBanner(...)</li>
+<li><strong>AdMob_Banner_Remove()</strong> replaces GoogleMobileAds_RemoveBanner()</li>
+<li><strong>AdMob_Banner_Show()</strong> replaces GoogleMobileAds_ShowBanner()</li>
+<li><strong>AdMob_Banner_Hide()</strong> replaces GoogleMobileAds_HideBanner()</li>
+</ul>
+<h3 id="new-version_3">[New Version]</h3>
+<p>The first step we should take towards adding banners is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="quick_start_guide.html#initialization">Initialization</a>)</p>
+<pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the banner options.
+// This function requires a unique ad block id string that can be obtained
+// from the google developer console (more info: AdMob_Banner_Init).
+// This function will generate an ASYNC SOCIAL EVENT.
+var banner_id = "ca-app-pub-3940256099942544/6300978111"
+AdMob_Banner_Init(banner_id);</code></pre>
+<p>The second step requires us to make sure the API was initialized, so for this example we will use the ASYNC SOCIAL EVENT to check for the events generated by the <a href="general.html#admob_initialize">AdMob_Initialize</a> function call.</p>
+<pre class="highlight"><code class="language-gml">// Early exit if there is no 'type' key defined
+if (!ds_map_exists(async_load, "type")) exit;
+
+// All the events triggered by the AdMob extension have a “type” key
+// containing a string that starts with “AdMob_”.
+switch(async_load[? "type"])
+{
+    // AdMob_Initialize() finished initializing the API
+    case "AdMob_OnInitialized":
+
+        // Now that we are sure that the API was initialized we can create
+        // our new banner on the device display.
+
+        // The function below will create a new banner of a given type,
+        // allowing the developer to also select the position of the
+        // banner (this can be either at the top or the bottom of the
+        // screen (more info: AdMob_Banner_Create and Banner Type).
+        var banner_type = AdMob_Banner_ADAPTIVE;
+        var bottom = true;
+        AdMob_Banner_Create(banner_type, bottom)
+        break;
+
+    // AdMob_Banner_Create() succeeded
+    case "AdMob_Banner_OnLoaded":
+
+        // At this point we should now have a banner on the screen.
+        break;
+
+    // AdMob_Banner_Create() failed
+    case "AdMob_Banner_OnLoadFailed":
+
+        // At this point there was a problem while creating the banner.
+        // Here we can add some code to deal with it.
+
+        // NOTE: Don’t try to create a banner here because it can lead to
+        // an infinite loop if the banner creation fails constantly.
+        break;
+}</code></pre>
+<h2 id="interstitial-ads">Interstitial Ads</h2>
+<p>Interstitial ads are ads that will fill up the entire screen and need to be dismissed in order for the application to continue execution. Initial setup for interstitials is very similar to Banner ads (more info: <a href="#banner-ads.md">Banner Ads</a>). Let’s look at some code to quickly set up interstitial ads for your application.</p>
+<h3 id="function-mappings_1">[Function Mappings]</h3>
+<p>Even though not all old functions map perfectly into the new API, the following list should get you started with some of the changes (check the section below for more details):</p>
+<ul>
+<li><strong>AdMob_Interstitial_Init(...)</strong> initializes the interstitial ads with a unique id.</li>
+<li><strong>AdMob_Interstitial_Load()</strong> replaces GoogleMobileAds_LoadInterstitial()</li>
+<li>triggers the Social event “AdMob_Interstitial_OnLoaded” if load succeeds</li>
+<li>triggers the Social event “AdMob_Interstitial_OnLoadFailed” if load fails</li>
+<li><strong>AdMob_Interstitial_IsLoaded()</strong> replaces GoogleMobileAds_InterstitialStatus()</li>
+<li><strong>AdMob_Interstitial_Show()</strong> replaces GoogleMobileAds_ShowInterstitial(...)</li>
+<li>triggers the Social event “AdMob_Interstitial_OnFullyShown” if show succeeds</li>
+<li>triggers the Social event “AdMob_Interstitial_OnShowFailed” if show fails</li>
+<li>triggers the Social event “AdMob_Interstitial_OnDismissed” upon dismissing</li>
+</ul>
+<h3 id="new-version_4">[New Version]</h3>
+<p>The first step we should take towards adding interstitials is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the interstitial
+// options. This requires a unique ad block id string that can be obtained
+// from the google developer console. (more info: AdMob_Interstitial_Init).
+// This function will generate a SOCIAL ASYNC EVENT.
+var interstitial_id = "ca-app-pub-3940256099942544/1033173712"
+AdMob_Interstitial_Init(interstitial_id);</code></pre>
+<p>The second step requires us to make sure the API was initialized so for this example we will use the ASYNC SOCIAL EVENT, to check for the events generated by the <a href="general.html#admob_initialize">AdMob_Initialize</a> function call.</p>
+<pre class="highlight"><code class="language-gml">// Early exit if there is no 'type' key defined
+if (!ds_map_exists(async_load, "type")) exit;
+
+// All the events triggered by the AdMob extension have a “type” key
+// containing a string that starts with “AdMob_”.
+switch(async_load[? "type"])
+{
+    // AdMob_Initialize() finished initializing the API
+    case "AdMob_OnInitialized":
+
+        // Now that we are sure that the API got initialized we can load
+        // a new interstitial ad.(more info: AdMob_Interstitial_Load).
+        // This function will generate an ASYNC SOCIAL EVENT.
+        AdMob_Interstitial_Load();
+        break;
+
+    // AdMob_Interstitial_Load() succeeded
+    case "AdMob_Interstitial_OnLoaded":
+
+        // At this point we should now have the interstitial ad loaded and
+        // and we can check that using the ´AdMob_Interstitial_IsLoaded´
+        // function. We are now ready to show the interstitial ad to the
+        // user (more info: AdMob_Interstitial_Show). This function will
+        // generate an ASYNC SOCIAL EVENT.
+        AdMob_Interstitial_Show();
+        break;
+
+    // AdMob_Interstitial_Load() failed
+    case "AdMob_Interstitial_OnLoadFailed":
+
+        // At this point there was a problem while loading the
+        // interstitial ad. Here we can add some code to deal with it.
+
+        // NOTE: Don’t try to reload the interstitial ad here because
+        // it can lead to an infinite loop.
+        break;
+
+    // AdMob_Interstitial_Show() succeeded
+    case "AdMob_Interstitial_OnFullyShown":
+
+        // At this point the interstitial ad is on screen and the user is
+        // looking at it. Note that at this point in time your game is
+        // paused and will remain paused until the interstitial gets
+        // dismissed.
+        break;
+
+    // AdMob_Interstitial_Show() failed
+    case "AdMob_Interstitial_OnShowFailed":
+
+        // At this point the interstitial ad failed to get shown to the
+        // user. You can add code to deal with the problem here.
+
+        // NOTE: Don’t try to reload/show the interstitial ad here
+        // because it can lead to an infinite loop.
+        break;
+
+    // Interstitial got dismissed
+    case "AdMob_Interstitial_OnDismissed":
+
+        // At this point the interstitial ad got dismissed by the user and
+        // the game logic is running again.
+        break;
+
+}</code></pre>
+<h2 id="rewarded-video-ads">Rewarded Video Ads</h2>
+<p>Rewarded video ads are ads that will fill up the entire screen and play a video, at the end of which the user can be rewarded in some way, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded Video ads setup is very similar to other previous ads (more info: <a href="#banner-ads.md">Banner Ads</a> and <a href="#interstitial-ads.md">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded video ads on your application.</p>
+<h3 id="function-mappings_2">[Function Mappings]</h3>
+<p>Even though not all old functions map perfectly into the new API the following list should get you started with some of the changes (check the section below for more details):</p>
+<ul>
+<li><strong>AdMob_RewardedVideo_Init(...)</strong> initializes the interstitial ads with a unique id.</li>
+<li><strong>AdMob_RewardedVideo_Load()</strong> replaces GoogleMobileAds_LoadRewardedVideo()</li>
+<li>triggers the event “AdMob_RewardedVideo_OnLoaded” if load succeeds</li>
+<li>triggers the event “AdMob_RewardedVideo_OnLoadFailed” if load fails</li>
+<li><strong>AdMob_RewardedVideo_IsLoaded()</strong> replaces GoogleMobileAds_RewardedVideoStatus()</li>
+<li><strong>AdMob_RewardedVideo_Show()</strong> replaces GoogleMobileAds_ShowRewardedVideo(...)</li>
+<li>triggers the event “AdMob_RewardedVideo_OnFullyShown” if show succeeds</li>
+<li>triggers the event “AdMob_RewardedVideo_OnShowFailed” if show fails</li>
+<li>triggers the event “AdMob_RewardedVideo_OnDismissed” upon dismissing</li>
+<li>triggers the event “AdMob_RewardedVideo_OnReward” when reward conditions are met.</li>
+</ul>
+<h3 id="new-version_5">[New Version]</h3>
+<p>The first step we should take towards adding rewarded videos is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the rewarded video
+// options. This requires an unique ad block id string that can be obtained
+// from the google developer console. (more info: AdMob_RewardedVideo_Init).
+// This function will generate an ASYNC SOCIAL EVENT.
+var rewarded_id = "ca-app-pub-3940256099942544/1033173712"
+AdMob_RewardedVideo_Init(rewarded_id);</code></pre>
+<p>The second step requires us to make sure the API was initialized. For this example we will use the ASYNC SOCIAL EVENT, to check for the events generated by the <a href="general.html#admob_initialize">AdMob_Initialize</a> function call.</p>
+<pre class="highlight"><code class="language-gml">// Early exit if there is no 'type' key defined
+if (!ds_map_exists(async_load, "type")) exit;
+
+// All the events triggered by the AdMob extension have a “type” key
+// containing a string that starts with “AdMob_”.
+switch(async_load[? "type"])
+{
+    // AdMob_Initialize() finished initializing the API
+    case "AdMob_OnInitialized":
+
+        // Now that we are sure that the API got initialized we can load
+        // a new rewarded video ad.(more info: AdMob_RewardedVideo_Load).
+        // This function will generate an ASYNC SOCIAL EVENT.
+        AdMob_RewardedVideo_Load();
+        break;
+
+    // AdMob_RewardedVideo_Load() succeeded
+    case "AdMob_RewardedVideo_OnLoaded":
+
+        // At this point we should now have the rewarded ad loaded and
+        // and we can check that using the ´AdMob_RewardedVideo_IsLoaded´
+        // function. We are now ready to show the rewarded video ad to the
+        // user (more info: AdMob_RewardedVideo_Show). This function will
+        // generate an ASYNC SOCIAL EVENT.
+        AdMob_RewardedVideo_Show();
+        break;
+
+    // AdMob_RewardedVideo_Load() failed
+    case "AdMob_RewardedVideo_OnLoadFailed":
+
+        // At this point there was a problem while loading the
+        // interstitial ad. Here we can add some code to deal with it.
+
+        // NOTE: Don’t try to reload the interstitial ad here because
+        // it can lead to an infinite loop.
+        break;
+
+    // AdMob_RewardedVideo_Show() succeeded
+    case "AdMob_RewardedVideo_OnFullyShown":
+
+        // At this point the rewarded video ad is playing and the user is
+        // looking at it. Note that at this point in time your game is
+        // paused and will remain paused until the rewarded video ad gets
+        // dismissed.
+        break;
+
+    // AdMob_RewardedVideo_Show() failed
+    case "AdMob_RewardedVideo_OnShowFailed":
+
+        // At this point the rewarded video ad failed to get shown to the
+        // user. You can add code to deal with the problem here.
+
+        // NOTE: Don’t try to reload/show the rewarded video here
+        // because it can lead to an infinite loop.
+        break;
+
+    // RewardedVideo got dismissed
+    case "AdMob_RewardedVideo_OnDismissed":
+
+        // At this point the rewarded video ad got dismissed by the user
+        // and the game logic is running again.
+        break;
+
+    // RewardedVideo triggered the reward event
+    case "AdMob_RewardedVideo_OnReward":
+
+        // At this point the user watched enough of the rewarded video and
+        // can be rewarded for it. Here we can add the reward code.
+        show_debug_message("You got 1000 points");
+        break;
+
+}</code></pre>
+<h2 id="rewarded-interstitial-ads">Rewarded Interstitial Ads</h2>
+<p>Rewarded interstitial is a type of incentivized ad format that allows you offer rewards for ads that appear automatically during natural app transitions. Unlike rewarded ads, users aren't required to opt-in to view a rewarded interstitial, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded interstitial ads setup is very similar to other previous ads (more info: <a href="#banner-ads.md">Banner Ads</a> and <a href="#interstitial-ads.md">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded interstitial ads on your application.</p>
+<h3 id="function-mappings_3">[Function Mappings]</h3>
+<p>Even though not all old functions map perfectly into the new API the following list should get you started with some of the changes (check the section below for more details):</p>
+<ul>
+<li><strong>AdMob_RewardedInterstitial_Init(...)</strong> initializes the interstitial ads with a unique id.</li>
+<li><strong>AdMob_RewardedInterstitial_Load()</strong></li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnLoaded” if load succeeds</li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnLoadFailed” if load fails</li>
+<li><strong>AdMob_RewardedInterstitial_IsLoaded()</strong></li>
+<li><strong>AdMob_RewardedInterstitial_Show()</strong></li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnFullyShown” if show succeeds</li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnShowFailed” if show fails</li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnDismissed” upon dismissing</li>
+<li>triggers the event “AdMob_RewardedInsterstitial_OnReward” when reward conditions are met.</li>
+</ul>
+<h3 id="code-sample">[Code Sample]</h3>
+<p>The first step we should take towards adding rewarded interstitial is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the rewarded
+// interstitial options. This requires an unique ad block id string that can
+// be obtained from the google developer console. (more info:
+// AdMob_RewardedInterstitial_Init).
+// This function will generate an ASYNC SOCIAL EVENT.
+var rewarded_interstitial_id = "ca-app-pub-3940256099942544/5354046379"
+AdMob_RewardedVideo_Init(rewarded_interstitial_id);</code></pre>
+<p>The second step requires us to make sure the API was initialized. For this example we will use the ASYNC SOCIAL EVENT, to check for the events generated by the <a href="general.html#admob_initialize">AdMob_Initialize</a> function call.</p>
+<pre class="highlight"><code class="language-gml">// Early exit if there is no 'type' key defined
+if (!ds_map_exists(async_load, "type")) exit;
+
+// All the events triggered by the AdMob extension have a “type” key
+// containing a string that starts with “AdMob_”.
+switch(async_load[? "type"])
+{
+    // AdMob_Initialize() finished initializing the API
+    case "AdMob_OnInitialized":
+
+        // Now that we are sure that the API got initialized we can load
+        // a new rewarded interstitial ad.
+        // (more info: AdMob_RewardedInterstitial_Load).
+        // This function will generate an ASYNC SOCIAL EVENT.
+        AdMob_RewardedInterstitial_Load();
+        break;
+
+    // AdMob_RewardedInterstitial_Load() succeeded
+    case "AdMob_RewardedInterstitial_OnLoaded":
+
+        // At this point we should now have the rewarded ad loaded and
+        // and we can check that using the
+        // ´AdMob_RewardedInterstitial_IsLoaded´ function. We are now
+        // ready to show the rewarded interstitial ad to the user
+        // (more info: AdMob_RewardedInterstitial_Show).
+        // This function will generate an ASYNC SOCIAL EVENT.
+        AdMob_RewardedInterstitial_Show();
+        break;
+
+    // AdMob_RewardedInterstitial_Load() failed
+    case "AdMob_RewardedInterstitial_OnLoadFailed":
+
+        // At this point there was a problem while loading the
+        // interstitial ad. Here we can add some code to deal with it.
+
+        // NOTE: Don’t try to reload the interstitial ad here because
+        // it can lead to an infinite loop.
+        break;
+
+    // AdMob_RewardedInterstitial_Show() succeeded
+    case "AdMob_RewardedInterstitial_OnFullyShown":
+
+        // At this point the rewarded video ad is playing and the user is
+        // looking at it. Note that at this point in time your game is
+        // paused and will remain paused until the rewarded video ad gets
+        // dismissed.
+        break;
+
+    // AdMob_RewardedInterstitial_Show() failed
+    case "AdMob_RewardedInterstitial_OnShowFailed":
+
+        // At this point the rewarded video ad failed to get shown to the
+        // user. You can add code to deal with the problem here.
+
+        // NOTE: Don’t try to reload/show the rewarded video here
+        // because it can lead to an infinite loop.
+        break;
+
+    // RewardedInterstitial got dismissed
+    case "AdMob_RewardedInterstitial_OnDismissed":
+
+        // At this point the rewarded interstitial ad got dismissed by the
+        // user and the game logic is running again.
+        break;
+
+    // RewardedInterstitial triggered the reward event
+    case "AdMob_RewardedInterstitial_OnReward":
+
+        // At this point the user watched enough of the rewarded video and
+        // can be rewarded for it. Here we can add the reward code.
+        show_debug_message("You got 1000 points");
+        break;
+
+}</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="setup.html" class="btn btn-neutral float-left" title="Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="workflow.html" class="btn btn-neutral float-right" title="Workflow">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2024</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="setup.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="workflow.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

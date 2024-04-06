@@ -1,3 +1,5 @@
+@title Setup
+
 # Setup [NEW]
 
 The AdMob extension is to be used alongside your Google AdMob account ([web page](https://admob.google.com/home/)). All the required personal ad ids and consent messages should be handled through there.

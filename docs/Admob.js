@@ -931,11 +931,11 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * 
  * @section Guides
  * @desc 
- * Before you start using this extension make sure to follow our [Setup](Setup) guide. Which will get you up and running.
+ * Before you start using this extension make sure to follow our [Setup](setup) guide. Which will get you up and running.
  *
  * To get started using this extension, follow the [Quick Start Guide](quick_start_guide).
  * 
- * For the recommended workflow see the [Workflow](Workflow) page.
+ * For the recommended workflow see the [Workflow](workflow) page.
  * @section_end
  * 
  * @section Modules
