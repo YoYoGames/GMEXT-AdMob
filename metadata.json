@@ -1,18 +1,1 @@
-{
-    "gitHubUrl": "https://github.com/YoYoGames/GMEXT-AdMob",
-    "projectFile": "source/AdMob_gml/AdMob.yyp",
-    "projectVersion": "LTS22",
-    "releaseTemplate": "templates/release_body.md",
-    "extensionMetaData": [
-        {
-            "extensionFile": "source/AdMob_gml/extensions/AdMob/AdMob.yy",
-            "packageId": "com.yoyogames.googleadmob",
-            "packageName": "AdMob Ext",
-            "packageVersion": "1.3.3",
-            "packageFormat": "LTS22",
-            "includeFolders": "AdMob,AdMob Demo,YoYo Extensions Assets",
-            "includeResources": "AdMob Extension.html",
-            "excludeResources": null
-        }
-    ]
-}
+{"gitHubUrl":"https://github.com/YoYoGames/GMEXT-AdMob","projectFile":"source/AdMob_gml/AdMob.yyp","projectVersion":"LTS22","releaseTemplate":"templates/release_body.md","extensionMetaData":[{"extensionFile":"source/AdMob_gml/extensions/AdMob/AdMob.yy","packageId":"com.yoyogames.googleadmob","packageName":"AdMob Ext","packageVersion":"1.3.4","packageFormat":"LTS22","includeFolders":"AdMob,AdMob Demo,YoYo Extensions Assets","includeResources":"AdMob Extension.html","excludeFolders":null,"excludeResources":null}]}
