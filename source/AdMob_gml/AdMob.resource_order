@@ -1,8 +1,8 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Mediations","order":1,"path":"folders/AdMob/Extensions/Mediations.yy",},
   ],
-  "ResourceOrderSettings": [
+  "ResourceOrderSettings":[
     {"name":"Font_YoYo_20","order":1,"path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},
     {"name":"AdMobIronSource","order":2,"path":"extensions/AdMobIronSource/AdMobIronSource.yy",},
     {"name":"Obj_YoYo_text","order":1,"path":"objects/Obj_YoYo_text/Obj_YoYo_text.yy",},

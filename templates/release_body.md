@@ -1,34 +1,32 @@
 ## IMPORTANT
 
-- This extension version will be compatible with the GM 2022.0.1 LTSr1 (upon release)
-- This extension is to be used with GM 2023.1 and future releases.
-- Requires Steamworks SDK version 1.55 (or recent)
-- Works with **Windows**, **macOS** and **Ubuntu**.
-- macOS (VM) not supported
-
-## CHANGES SINCE ${releaseOldVersion}
-
-https://github.com/YoYoGames/GMEXT-Steamworks/compare/${releaseOldVersion}...${releaseNewVersion}
+- This extension is to be used with GM 2023.11 and future releases (compatible with LTSr2)
+- Requires CocoaPods when used on iOS platforms (is not required on newer versions of IDE)
+- Requires the [App Tracking Transparency](https://github.com/YoYoGames/GMEXT-AppTrackingTransparency) extension on iOS platforms.
+- Works with Android and iOS
 
 ## DESCRIPTION
 
-Steamworks is a set of tools and services that help game developers and publishers build their games and get the most out of distributing on Steam.
+This extension allows users to add and control Ads inside their application/game (AKA AdMob) it also includes General Data Protection (GDPR) consent dialog.
 
-## FEATURES 
+## FEATURES
 
-- General API
-- Achievements
-- Statistics
-- Leaderboards
-- Cloud Storage
-- DLC
-- UGC
-- Network
-- Matchmaking
-- Lobby
-- Inventory
-- Input
+- Creating, removing, moving, hiding and showing Banner ads.
+- Loading, showing and checking load state for both Interstitial and RewardedVideo ads.
+- Requesting info update, get type and status, load, show and reset GDPR consent options.
+- Targeting ads content to a specific audience.
+- Controlling mute and volume settings.
+- Allows for AdUnitId switching mid run
+- Allows for loading multiple ads head of time.
+
+## CHANGES SINCE ${releaseOldVersion}
+
+https://github.com/YoYoGames/GMEXT-AdMob/compare/${releaseOldVersion}...${releaseNewVersion}
 
 ## DOCUMENTATION
 
 The full documentation of the API is included in the extension asset (included files).
+
+## NOTES
+
+For testing you just need to compile and run the project (it uses default Google Dummy AppID)

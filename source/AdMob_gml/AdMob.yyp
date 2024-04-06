@@ -1,38 +1,38 @@
 {
-  "resourceType": "GMProject",
-  "resourceVersion": "1.7",
-  "name": "AdMob",
-  "AudioGroups": [
-    {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
+  "$GMProject":"",
+  "%Name":"AdMob",
+  "AudioGroups":[
+    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
-  "configs": {
-    "children": [],
-    "name": "Default",
+  "configs":{
+    "children":[],
+    "name":"Default",
   },
-  "defaultScriptType": 1,
-  "Folders": [
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob Demo","folderPath":"folders/AdMob Demo.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Objects","folderPath":"folders/AdMob Demo/Objects.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Rooms","folderPath":"folders/AdMob Demo/Rooms.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AdMob","folderPath":"folders/AdMob.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/AdMob/Extensions.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Mediations","folderPath":"folders/AdMob/Extensions/Mediations.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Font","folderPath":"folders/YoYo Extensions Assets/Font.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Objects","folderPath":"folders/YoYo Extensions Assets/Objects.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Sprites","folderPath":"folders/YoYo Extensions Assets/Sprites.yy",},
+  "defaultScriptType":1,
+  "Folders":[
+    {"$GMFolder":"","%Name":"AdMob Demo","folderPath":"folders/AdMob Demo.yy","name":"AdMob Demo","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Objects","folderPath":"folders/AdMob Demo/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/AdMob Demo/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"AdMob","folderPath":"folders/AdMob.yy","name":"AdMob","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/AdMob/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Mediations","folderPath":"folders/AdMob/Extensions/Mediations.yy","name":"Mediations","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy","name":"App Tracking Transparency [EXCLUDE]","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy","name":"YoYo Extensions Assets","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Font","folderPath":"folders/YoYo Extensions Assets/Font.yy","name":"Font","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Objects","folderPath":"folders/YoYo Extensions Assets/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Sprites","folderPath":"folders/YoYo Extensions Assets/Sprites.yy","name":"Sprites","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
-  "IncludedFiles": [
-    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"AdMob Extension.html","CopyToMask":-1,"filePath":"datafiles",},
+  "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"AdMob Extension.html","CopyToMask":-1,"filePath":"datafiles","name":"AdMob Extension.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
-  "isEcma": false,
-  "LibraryEmitters": [],
-  "MetaData": {
-    "IDEVersion": "2023.11.1.129",
+  "isEcma":false,
+  "LibraryEmitters":[],
+  "MetaData":{
+    "IDEVersion":"2023.11.1.129",
   },
-  "resources": [
+  "name":"AdMob",
+  "resources":[
     {"id":{"name":"Font_YoYo_20","path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},},
     {"id":{"name":"AdMobIronSource","path":"extensions/AdMobIronSource/AdMobIronSource.yy",},},
     {"id":{"name":"Obj_YoYo_text","path":"objects/Obj_YoYo_text/Obj_YoYo_text.yy",},},
@@ -66,12 +66,14 @@
     {"id":{"name":"Obj_AdMob_Volume","path":"objects/Obj_AdMob_Volume/Obj_AdMob_Volume.yy",},},
     {"id":{"name":"AdMob","path":"extensions/AdMob/AdMob.yy",},},
   ],
-  "RoomOrderNodes": [
+  "resourceType":"GMProject",
+  "resourceVersion":"2.0",
+  "RoomOrderNodes":[
     {"roomId":{"name":"rmInit","path":"rooms/rmInit/rmInit.yy",},},
     {"roomId":{"name":"Room_AdMob","path":"rooms/Room_AdMob/Room_AdMob.yy",},},
   ],
-  "templateType": null,
-  "TextureGroups": [
-    {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},
+  "templateType":null,
+  "TextureGroups":[
+    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
   ],
 }
