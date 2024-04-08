@@ -457,7 +457,7 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
         
         [self.bannerView removeFromSuperview];
         
-        if(bottom<0.5)
+        if(bottom>0.5)
             [self addBannerViewToBottomView:self.bannerView];
         else
             [self addBannerViewToTopView:self.bannerView];
