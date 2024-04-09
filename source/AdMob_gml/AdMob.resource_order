@@ -10,7 +10,6 @@
     {"name":"AdMobUnityAds","order":5,"path":"extensions/AdMobUnityAds/AdMobUnityAds.yy",},
     {"name":"Font_YoYo_20","order":1,"path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},
     {"name":"Font_YoYo_30","order":2,"path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},
-    {"name":"changelog","order":5,"path":"notes/changelog/changelog.yy",},
     {"name":"oAppTracking","order":1,"path":"objects/oAppTracking/oAppTracking.yy",},
     {"name":"Obj_AdMob_AppOpenAd","order":12,"path":"objects/Obj_AdMob_AppOpenAd/Obj_AdMob_AppOpenAd.yy",},
     {"name":"Obj_AdMob_Banner","order":2,"path":"objects/Obj_AdMob_Banner/Obj_AdMob_Banner.yy",},
