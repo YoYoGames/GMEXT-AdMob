@@ -16,8 +16,8 @@
     {"$GMFolder":"","%Name":"AdMob","folderPath":"folders/AdMob.yy","name":"AdMob","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/AdMob/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Mediations","folderPath":"folders/AdMob/Extensions/Mediations.yy","name":"Mediations","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"App Tracking Transparency [EXCLUDE]","folderPath":"folders/App Tracking Transparency [EXCLUDE].yy","name":"App Tracking Transparency [EXCLUDE]","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"App Tracking Transparency","folderPath":"folders/App Tracking Transparency.yy","name":"App Tracking Transparency","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/App Tracking Transparency/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy","name":"YoYo Extensions Assets","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Font","folderPath":"folders/YoYo Extensions Assets/Font.yy","name":"Font","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Objects","folderPath":"folders/YoYo Extensions Assets/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -30,7 +30,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"9.9.1.637",
+    "IDEVersion":"2024.400.0.532",
   },
   "name":"AdMob",
   "resources":[

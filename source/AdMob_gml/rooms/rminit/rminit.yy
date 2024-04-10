@@ -17,8 +17,8 @@
   ],
   "name":"rmInit",
   "parent":{
-    "name":"App Tracking Transparency [EXCLUDE]",
-    "path":"folders/App Tracking Transparency [EXCLUDE].yy",
+    "name":"App Tracking Transparency",
+    "path":"folders/App Tracking Transparency.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

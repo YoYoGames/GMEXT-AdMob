@@ -58,7 +58,7 @@
   "packageId":"",
   "parent":{
     "name":"Extensions",
-    "path":"folders/App Tracking Transparency [EXCLUDE]/Extensions.yy",
+    "path":"folders/App Tracking Transparency/Extensions.yy",
   },
   "productId":"",
   "resourceType":"GMExtension",

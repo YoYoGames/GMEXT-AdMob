@@ -958,8 +958,10 @@ static GADAdSize getBannerSize(double size)
     if(!self.isAppOpenAdEnabled)
         return;
 
-    if([self appOpenAdIsValid:4 callingMethod:"__AdMob_AppOpenAd_Show"])
+    if(![self appOpenAdIsValid:4 callingMethod:"__AdMob_AppOpenAd_Show"]) {
+        [self loadAppOpenAd];
         return;
+    }
     
     self.appOpenAdInstance.fullScreenContentDelegate = self;
     [self.appOpenAdInstance presentFromRootViewController:g_controller];
