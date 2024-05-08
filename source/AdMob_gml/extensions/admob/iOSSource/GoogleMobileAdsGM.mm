@@ -390,7 +390,8 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
         self.bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
             GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.bannerView.responseInfo.loadedAdNetworkResponseInfo;
-            [self onPaidEventHandler:value adUnitId: self.bannerView.adUnitID adType:@"Banner" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:self.bannerView.responseInfo.adNetworkClassName];
+            [self onPaidEventHandler:value adUnitId: self.bannerView.adUnitID adType:@"Banner" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo
+           mediationAdapterClassName:self.bannerView.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
         };
     }
     
@@ -628,7 +629,7 @@ static GADAdSize getBannerSize(double size)
             interstitialAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
                 GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = interstitialRef.responseInfo.loadedAdNetworkResponseInfo;
-                [self onPaidEventHandler:value adUnitId:interstitialRef.adUnitID adType:@"Interstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:interstitialRef.responseInfo.adNetworkClassName];
+                [self onPaidEventHandler:value adUnitId:interstitialRef.adUnitID adType:@"Interstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:interstitialRef.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
             };
         }
         
@@ -724,7 +725,7 @@ static GADAdSize getBannerSize(double size)
             rewardedAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
                 GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = rewardedRef.responseInfo.loadedAdNetworkResponseInfo;
-                [self onPaidEventHandler:value adUnitId:rewardedRef.adUnitID adType:@"Rewarded" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:rewardedRef.responseInfo.adNetworkClassName];
+                [self onPaidEventHandler:value adUnitId:rewardedRef.adUnitID adType:@"Rewarded" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:rewardedRef.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
             };
         }
 
@@ -828,7 +829,7 @@ static GADAdSize getBannerSize(double size)
             rewardedInterstitialAd.paidEventHandler = ^void(GADAdValue *_Nonnull value)
             {
                 GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = rewardedInterstitialRef.responseInfo.loadedAdNetworkResponseInfo;
-                [self onPaidEventHandler:value adUnitId:rewardedInterstitialRef.adUnitID adType:@"RewardedInterstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:rewardedInterstitialRef.responseInfo.adNetworkClassName];
+                [self onPaidEventHandler:value adUnitId:rewardedInterstitialRef.adUnitID adType:@"RewardedInterstitial" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:rewardedInterstitialRef.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
             };
         }
 
@@ -923,7 +924,8 @@ static GADAdSize getBannerSize(double size)
     self.appOpenAdInstance = nil;
     
     GADRequest* request = [self buildAdRequest];
-    [GADAppOpenAd loadWithAdUnitID: self.appOpenAdUnitId request:request orientation:self.appOpenAdOrientation completionHandler:^(GADAppOpenAd *_Nullable appOpenAdInstance, NSError *_Nullable error) {
+    
+    [GADAppOpenAd loadWithAdUnitID: self.appOpenAdUnitId request:request /*orientation:self.appOpenAdOrientation*/ completionHandler:^(GADAppOpenAd *_Nullable appOpenAdInstance, NSError *_Nullable error) {
         if (error) {
             
             int dsMapIndex = dsMapCreate();
@@ -943,7 +945,7 @@ static GADAdSize getBannerSize(double size)
             self.appOpenAdInstance.paidEventHandler = ^void(GADAdValue *_Nonnull value)
         {
             GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = self.appOpenAdInstance.responseInfo.loadedAdNetworkResponseInfo;
-            [self onPaidEventHandler:value adUnitId:adUnitId adType:@"AppOpen" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:self.appOpenAdInstance.responseInfo.adNetworkClassName];
+            [self onPaidEventHandler:value adUnitId:adUnitId adType:@"AppOpen" loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo mediationAdapterClassName:self.appOpenAdInstance.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
         };
         
         int dsMapIndex = dsMapCreate();
@@ -990,8 +992,9 @@ static GADAdSize getBannerSize(double size)
 -(double) AdMob_Targeting_COPPA:(double) COPPA
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
-
-    [GADMobileAds.sharedInstance.requestConfiguration tagForChildDirectedTreatment: COPPA > 0.5 ? YES : NO];
+	
+	if(COPPA>0.5)
+    [GADMobileAds.sharedInstance.requestConfiguration tagForChildDirectedTreatment];
     
     return 0;
 }
@@ -1001,7 +1004,8 @@ static GADAdSize getBannerSize(double size)
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
 
-    [GADMobileAds.sharedInstance.requestConfiguration tagForUnderAgeOfConsent: underAge > 0.5 ? YES : NO];
+	if(underAge>0.5)
+    [GADMobileAds.sharedInstance.requestConfiguration tagForUnderAgeOfConsent];
 
     return 0;
 }
