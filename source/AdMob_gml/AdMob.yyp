@@ -24,7 +24,7 @@
   ],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"GMEXT-AdMob Unix Docs.html","CopyToMask":0,"filePath":"datafiles","name":"GMEXT-AdMob Unix Docs.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"GMEXT-AdMob Windows Docs.html","CopyToMask":-1,"filePath":"datafiles","name":"GMEXT-AdMob Windows Docs.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"GMEXT-AdMob Win Docs.html","CopyToMask":-1,"filePath":"datafiles","name":"GMEXT-AdMob Win Docs.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
   "LibraryEmitters":[],
