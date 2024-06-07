@@ -1,6 +1,13 @@
 {
-  "FolderOrderSettings":[],
+  "FolderOrderSettings":[
+    {"name":"Mediations","order":1,"path":"folders/AdMob/Extensions/Mediations.yy",},
+  ],
   "ResourceOrderSettings":[
+    {"name":"AdMobAppLovin","order":1,"path":"extensions/AdMobAppLovin/AdMobAppLovin.yy",},
+    {"name":"AdMobIronSource","order":2,"path":"extensions/AdMobIronSource/AdMobIronSource.yy",},
+    {"name":"AdMobMeta","order":3,"path":"extensions/AdMobMeta/AdMobMeta.yy",},
+    {"name":"AdMobPangle","order":4,"path":"extensions/AdMobPangle/AdMobPangle.yy",},
+    {"name":"AdMobUnityAds","order":5,"path":"extensions/AdMobUnityAds/AdMobUnityAds.yy",},
     {"name":"Font_YoYo_20","order":1,"path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},
     {"name":"Font_YoYo_30","order":2,"path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},
     {"name":"oAppTracking","order":1,"path":"objects/oAppTracking/oAppTracking.yy",},
