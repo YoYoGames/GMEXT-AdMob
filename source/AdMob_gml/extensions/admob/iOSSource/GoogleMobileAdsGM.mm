@@ -216,7 +216,7 @@ const int ADMOB_ERROR_ILLEGAL_CALL = -6;
     dsMapAddString(dsMapIndex, (char*)"unit_id", (char*)[adUnitId UTF8String]);
     dsMapAddString(dsMapIndex, (char*)"ad_type", (char*)[adType UTF8String]);
     
-    dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue);
+    dsMapAddDouble(dsMapIndex, (char*)"micros", value.value.doubleValue* 1000000.0);
     dsMapAddString(dsMapIndex, (char*)"currency_code", (char*)[value.currencyCode UTF8String]);
     dsMapAddDouble(dsMapIndex, (char*)"precision", (double)value.precision);
     
