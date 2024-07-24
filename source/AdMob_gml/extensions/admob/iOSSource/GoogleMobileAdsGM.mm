@@ -773,7 +773,7 @@ static GADAdSize getBannerSize(double size)
 
 #pragma mark - Rewarded Interstitial Methods
 
--(void) AdMob_RewardedInterstitial_Set_UnitId:(NSString*) adUnitId
+-(void) AdMob_RewardedInterstitial_Set_AdUnit:(NSString*) adUnitId
 {
     self.rewardedInterstitialAdUnitId = adUnitId;
 }
@@ -876,7 +876,7 @@ static GADAdSize getBannerSize(double size)
 
 #pragma mark - App Open Methods
 
--(void) AdMob_AppOpenAd_Set_UnitId:(NSString*) adUnitId
+-(void) AdMob_AppOpenAd_Set_AdUnit:(NSString*) adUnitId
 {
     self.appOpenAdUnitId = adUnitId;
 }
