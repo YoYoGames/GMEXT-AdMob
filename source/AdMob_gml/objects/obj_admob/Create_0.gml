@@ -1,5 +1,15 @@
 /// @description Initialize variables
 
+//Enable display orientation correction
+#macro AdMob_Handle_Orientation_Changes false
+
+
+if(AdMob_Handle_Orientation_Changes)
+{
+	orientation = display_get_orientation()
+	alarm[0] = room_speed
+}
+
 //AdMob_Events_OnPaidEvent(true)
 
 // Debug variables (used in draw event)
