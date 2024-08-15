@@ -47,7 +47,7 @@
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="quick_start_guide.html">Quick Start Guide</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Quick Start Guide</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a>
         <ul>
@@ -370,7 +370,7 @@ switch(async_load[? "type"])
         break;
 }</code></pre>
 <h2 id="interstitial-ads">Interstitial Ads</h2>
-<p>Interstitial ads are ads that will fill up the entire screen and need to be dismissed in order for the application to continue execution. Initial setup for interstitials is very similar to Banner ads (more info: <a href="#banner-ads.md">Banner Ads</a>). Let’s look at some code to quickly set up interstitial ads for your application.</p>
+<p>Interstitial ads are ads that will fill up the entire screen and need to be dismissed in order for the application to continue execution. Initial setup for interstitials is very similar to Banner ads (more info: <a href="#banner-ads">Banner Ads</a>). Let’s look at some code to quickly set up interstitial ads for your application.</p>
 <h3 id="function-mappings_1">[Function Mappings]</h3>
 <p>Even though not all old functions map perfectly into the new API, the following list should get you started with some of the changes (check the section below for more details):</p>
 <ul>
@@ -385,7 +385,7 @@ switch(async_load[? "type"])
 <li>triggers the Social event “AdMob_Interstitial_OnDismissed” upon dismissing</li>
 </ul>
 <h3 id="new-version_4">[New Version]</h3>
-<p>The first step we should take towards adding interstitials is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<p>The first step we should take towards adding interstitials is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization">Initialization</a>)</p>
 <pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the interstitial
 // options. This requires a unique ad block id string that can be obtained
 // from the google developer console. (more info: AdMob_Interstitial_Init).
@@ -458,7 +458,7 @@ switch(async_load[? "type"])
 
 }</code></pre>
 <h2 id="rewarded-video-ads">Rewarded Video Ads</h2>
-<p>Rewarded video ads are ads that will fill up the entire screen and play a video, at the end of which the user can be rewarded in some way, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded Video ads setup is very similar to other previous ads (more info: <a href="#banner-ads.md">Banner Ads</a> and <a href="#interstitial-ads.md">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded video ads on your application.</p>
+<p>Rewarded video ads are ads that will fill up the entire screen and play a video, at the end of which the user can be rewarded in some way, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded Video ads setup is very similar to other previous ads (more info: <a href="#banner-ads">Banner Ads</a> and <a href="#interstitial-ads">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded video ads on your application.</p>
 <h3 id="function-mappings_2">[Function Mappings]</h3>
 <p>Even though not all old functions map perfectly into the new API the following list should get you started with some of the changes (check the section below for more details):</p>
 <ul>
@@ -474,7 +474,7 @@ switch(async_load[? "type"])
 <li>triggers the event “AdMob_RewardedVideo_OnReward” when reward conditions are met.</li>
 </ul>
 <h3 id="new-version_5">[New Version]</h3>
-<p>The first step we should take towards adding rewarded videos is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<p>The first step we should take towards adding rewarded videos is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization">Initialization</a>)</p>
 <pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the rewarded video
 // options. This requires an unique ad block id string that can be obtained
 // from the google developer console. (more info: AdMob_RewardedVideo_Init).
@@ -555,7 +555,7 @@ switch(async_load[? "type"])
 
 }</code></pre>
 <h2 id="rewarded-interstitial-ads">Rewarded Interstitial Ads</h2>
-<p>Rewarded interstitial is a type of incentivized ad format that allows you offer rewards for ads that appear automatically during natural app transitions. Unlike rewarded ads, users aren't required to opt-in to view a rewarded interstitial, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded interstitial ads setup is very similar to other previous ads (more info: <a href="#banner-ads.md">Banner Ads</a> and <a href="#interstitial-ads.md">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded interstitial ads on your application.</p>
+<p>Rewarded interstitial is a type of incentivized ad format that allows you offer rewards for ads that appear automatically during natural app transitions. Unlike rewarded ads, users aren't required to opt-in to view a rewarded interstitial, and similar to interstitial ads they also need to be dismissed in order for the application to continue execution. Rewarded interstitial ads setup is very similar to other previous ads (more info: <a href="#banner-ads">Banner Ads</a> and <a href="#interstitial-ads">Interstitial Ads</a>). Let’s look at some code to quickly set up rewarded interstitial ads on your application.</p>
 <h3 id="function-mappings_3">[Function Mappings]</h3>
 <p>Even though not all old functions map perfectly into the new API the following list should get you started with some of the changes (check the section below for more details):</p>
 <ul>
@@ -571,7 +571,7 @@ switch(async_load[? "type"])
 <li>triggers the event “AdMob_RewardedInsterstitial_OnReward” when reward conditions are met.</li>
 </ul>
 <h3 id="code-sample">[Code Sample]</h3>
-<p>The first step we should take towards adding rewarded interstitial is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization.md">Initialization</a>)</p>
+<p>The first step we should take towards adding rewarded interstitial is to use a manager object with the following CREATE EVENT (remember that you need to initialize the API first - <a href="#initialization">Initialization</a>)</p>
 <pre class="highlight"><code class="language-gml">// After API initialization we can proceed to initialize the rewarded
 // interstitial options. This requires an unique ad block id string that can
 // be obtained from the google developer console. (more info:

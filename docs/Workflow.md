@@ -21,6 +21,6 @@ This is the recommended workflow for using AdMob extension functions calls both 
 * Now you can finally init and load your ads using the function pairs:
   * [AdMob_Banner_Init](banner#admob_banner_init) / [AdMob_Banner_Create](banner#admob_banner_create)
   * [AdMob_Interstitial_Init](interstitial#admob_interstitial_init) / [AdMob_Interstitial_Load](interstitial#admob_interstitial_load)
-  * [AdMob_RewardedVideo_Init](reward_video#AdMob_RewardedVideo_Init) / [AdMob_RewardedVideo_Load](reward_video#AdMob_RewardedVideo_Load)
-  * [AdMob_RewardedInterstitial_Init](reward_interstitial#AdMob_RewardedInterstitial_Init) / [AdMob_RewardedInterstitial_Load](reward_interstitial#AdMob_RewardedInterstitial_Load)
+  * [AdMob_RewardedVideo_Init](reward_video#admob_rewardedvideo_init) / [AdMob_RewardedVideo_Load](reward_video#admob_rewardedvideo_load)
+  * [AdMob_RewardedInterstitial_Init](reward_interstitial#admob_rewardedinterstitial_init) / [AdMob_RewardedInterstitial_Load](reward_interstitial#admob_rewardedinterstitial_load)
 * After loading is successful you can show your ads with the corresponding show function.
