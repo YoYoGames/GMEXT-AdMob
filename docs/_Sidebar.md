@@ -20,4 +20,4 @@
 
 ### Extras
 
- * [Constants](constants)
+ * ${module.constants}
