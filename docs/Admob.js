@@ -26,7 +26,7 @@ function AdMob_SetTestDeviceId() { }
  * 
  * [[Note: Please refer to ${function.AdMob_Banner_Set_AdUnit} for more information.]]
  * 
- * @param {string} adUnitId
+ * @param {string} adUnitId The ad unit ID
  * @version 1.3.0 (-)
  * @func_end
  */
@@ -467,7 +467,7 @@ function AdMob_RewardedInterstitial_Load() { }
 
 /**
  * @func AdMob_RewardedInterstitial_Show
- * @desc This function will show the rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function ${function.AdMob_RewardedInterstitial_IsLoaded}.
+ * @desc This function will show the next rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function ${function.AdMob_RewardedInterstitial_IsLoaded}.
  * 
  * [[Note: While a rewarded interstitial ad is being shown, your app will be put into the background and will effectively be "paused".]]
  * 
@@ -622,7 +622,7 @@ function AdMob_Targeting_COPPA(COPPA) { }
  * @func AdMob_Targeting_UnderAge
  * @desc This function toggles on/off ads for under aged users.
  * 
- * [[This function should be called before ${function.AdMob_Initialize}.]]
+ * [[Warning: This function should be called before ${function.AdMob_Initialize}.]]
  * 
  * @param {bool} underAge Whether under-age ads should be enabled
  * @func_end
