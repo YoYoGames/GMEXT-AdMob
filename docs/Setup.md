@@ -46,7 +46,7 @@ Once you click the **Create Ad Unit** button, the unit will be created and you c
 
 ## Setting Up GameMaker
 
-You can get the latest release of this extension from [GitHub](https://github.com/YoYoGames/GMEXT-AdMob/releases/tag/1.3.11) or alternatively get it [from the **Marketplace**](https://marketplace.gamemaker.io/assets/10078/google-admob) and add it to your account.
+You can get the latest release of this extension from [GitHub](https://github.com/YoYoGames/GMEXT-AdMob/releases/latest) or alternatively get it [from the **Marketplace**](https://marketplace.gamemaker.io/assets/10078/google-admob) and add it to your account.
 
 Once added to your account, open your library (from the Marketplace menu in GameMaker) and then search for "admob" for it to show up in the list of purchased assets and click the "**Download**" button.
 
