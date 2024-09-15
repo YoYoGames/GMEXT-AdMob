@@ -58,7 +58,6 @@ switch(async_load[?"type"])
 		// At this point the extension failed to obtain a consent update
 		// Since we don't know the user consent response we need to assume
 		// that the ads MUST be non-personalized
-		AdMob_NonPersonalizedAds_Set(true);
 		
 		// We can also now load the ads
 		// NOTE: Ads should only be loaded after the consent is answered
@@ -77,7 +76,6 @@ switch(async_load[?"type"])
 		// At this point there was a problem loading the consent form.
 		// Since we don't know the user consent response we need to assume
 		// that the ads MUST be non-personalized
-		AdMob_NonPersonalizedAds_Set(true);
 		
 		// We can also now load the ads
 		// NOTE: Ads should only be loaded after the consent is answered
@@ -245,23 +243,23 @@ switch(async_load[?"type"])
 		break;
 		
 		
-case "AdMob_OnPaidEvent":
+	case "AdMob_OnPaidEvent":
 
-    var unit_id = async_load[?"unit_id"]
-    var ad_type = async_load[?"ad_type"]
-    var micros = async_load[?"micros"]
-    var currency_code = async_load[?"currency_code"]
-    var precision = async_load[?"precision"]
-    var ad_source_name = async_load[?"ad_source_name"]
-    var ad_source_id = async_load[?"ad_source_id"]
-    var ad_source_instance_name = async_load[?"ad_source_instance_name"]
-    var ad_source_instance_id = async_load[?"ad_source_instance_id"]
-    var mediation_adapter_class_name = async_load[?"mediation_adapter_class_name"]
+	    var _unit_id = async_load[?"unit_id"]
+	    var _ad_type = async_load[?"ad_type"]
+	    var _micros = async_load[?"micros"]
+	    var _currency_code = async_load[?"currency_code"]
+	    var _precision = async_load[?"precision"]
+	    var _ad_source_name = async_load[?"ad_source_name"]
+	    var _ad_source_id = async_load[?"ad_source_id"]
+	    var _ad_source_instance_name = async_load[?"ad_source_instance_name"]
+	    var _ad_source_instance_id = async_load[?"ad_source_instance_id"]
+	    var _mediation_adapter_class_name = async_load[?"mediation_adapter_class_name"]
 
-	//Do something with this data...
-	//...
-	//...
+		//Do something with this data...
+		//...
+		//...
 
-    break;
+	    break;
 }
 

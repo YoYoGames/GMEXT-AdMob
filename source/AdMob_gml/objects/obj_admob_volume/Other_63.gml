@@ -17,8 +17,5 @@ if(request_id == async_load[?"id"])
 	
 		// Apply the new volume
 		AdMob_Settings_SetVolume(volume);
-		
-		// NOTE: these two method calls will trigger the reload of the interstitial
-		// and rewarded video ads so that the new changes are applied.
 	}
 }

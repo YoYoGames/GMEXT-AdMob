@@ -139,8 +139,8 @@ AdMob_Initialize();
 // Note that after a call to AbMod_*_Init to change the ad unit id you will need to reload
 // the respective ad using AdMob_*_Load (or AdMob_Banner_Create() for ads of banner type).
 //
-// AdMob_Banner_Init(BANNER_ID);
-// AdMob_Interstitial_Init(INTERSTITIAL_ID);
-// AdMob_RewardedVideo_Init(REWANTED_ID);
-// AdMob_RewardedInterstitial_Init(REWANTED_INTERSTITIAL_ID);
+// AdMob_Banner_Set_AdUnit(BANNER_ID);
+// AdMob_Interstitial_Set_AdUnit(INTERSTITIAL_ID);
+// AdMob_RewardedVideo_Set_AdUnit(REWANTED_ID);
+// AdMob_RewardedInterstitial_Set_AdUnit(REWANTED_INTERSTITIAL_ID);
 //
