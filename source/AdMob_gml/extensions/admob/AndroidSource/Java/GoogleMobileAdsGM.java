@@ -78,6 +78,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     // Constants
     private static final int EVENT_OTHER_SOCIAL = 70;
 
+    private static final int ADMOB_OK = 0;
     private static final int ADMOB_ERROR_NOT_INITIALIZED = -1;
     private static final int ADMOB_ERROR_INVALID_AD_ID = -2;
     private static final int ADMOB_ERROR_AD_LIMIT_REACHED = -3;
@@ -98,52 +99,51 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     // Root view to attach banner ads
     private final ViewGroup rootView;
 
-    // Initialization flag
-    private boolean isInitialized = false;
-
     // AdMob settings
+    private boolean isInitialized = false;
     private boolean isTestDevice = false;
-    private boolean triggerOnPaidEvent = false;
-	private boolean enableRDP = false;
+    private boolean isRdpEnabled = false;
+    private boolean isShowingAd = false;
 
     // Targeting options
     private boolean targetCOPPA = false;
     private boolean targetUnderAge = false;
     private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
-    // Ad units
-    private String bannerAdUnitId = "";
-    private String interstitialAdUnitId = "";
-    private String rewardedVideoAdUnitId = "";
-    private String rewardedInterstitialAdUnitId = "";
-    private String appOpenAdUnitId = "";
-
     // Banner ad variables
+    private String bannerAdUnitId = "";
     private AdView bannerAdView = null;
     private AdSize bannerSize = null;
     private RelativeLayout bannerLayout = null;
 
     // Interstitial ad variables
-    private int interstitialMaxLoadedInstances = 1;
-    private final ConcurrentLinkedQueue<InterstitialAd> loadedInterstitialQueue = new ConcurrentLinkedQueue<>();
+    private String interstitialAdUnitId = "";
+    private int interstitialAdQueueCapacity = 1;
+    private final ConcurrentLinkedQueue<InterstitialAd> interstitialAdQueue = new ConcurrentLinkedQueue<>();
+
+    // Server side verification variables
+	private String serverSideVerificationUserId = null;
+	private String serverSideVerificationCustomData = null;
 
     // Rewarded video ad variables
-    private int rewardedVideoMaxLoadedInstances = 1;
-    private final ConcurrentLinkedQueue<RewardedAd> loadedRewardedVideoQueue = new ConcurrentLinkedQueue<>();
-
-	private String ssvUserId = null;
-	private String ssvCustomData = null;
+    private String rewardedUnitId = "";
+    private int rewardedAdQueueCapacity = 1;
+    private final ConcurrentLinkedQueue<RewardedAd> rewardedAdQueue = new ConcurrentLinkedQueue<>();
 
     // Rewarded interstitial ad variables
-    private int rewardedInterstitialMaxLoadedInstances = 1;
-    private final ConcurrentLinkedQueue<RewardedInterstitialAd> loadedRewardedInterstitialQueue = new ConcurrentLinkedQueue<>();
+    private String rewardedInterstitialAdUnitId = "";
+    private int rewardedAdInterstitialQueueCapacity = 1;
+    private final ConcurrentLinkedQueue<RewardedInterstitialAd> rewardedInterstitialAdQueue = new ConcurrentLinkedQueue<>();
 
     // App Open ad variables
-    private boolean isShowingAd = false;
-    private boolean isAppOpenAdEnabled = false;
-    private AppOpenAd appOpenAdInstance = null;
+    private String appOpenAdUnitId = "";
+    private int appOpenAdOrientation = Configuration.ORIENTATION_UNDEFINED;
     private long appOpenAdLoadTime = 0;
-    private int appOpenAdOrientation = AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE;
+    private int appOpenAdExpirationTime = 4;
+    private AppOpenAd appOpenAd = null;
+
+    private boolean triggerOnPaidEvent = false;
+    private boolean triggerAppOpenAd = false;
 
     // Consent variables
     private ConsentInformation consentInformation;
@@ -204,13 +204,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             }
         });
 
-        return 0;
+        return ADMOB_OK;
     }
 
     private void initializeAdUnits() {
         bannerAdUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_BANNER");
         interstitialAdUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_INTERSTITIAL");
-        rewardedVideoAdUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED");
+        rewardedUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED");
         rewardedInterstitialAdUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_REWARDED_INTERSTITIAL");
         appOpenAdUnitId = RunnerJNILib.extOptGetString("AdMob", "Android_OPENAPPAD");
     }
@@ -219,7 +219,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateNotInitialized("AdMob_SetTestDeviceId")) return ADMOB_ERROR_ILLEGAL_CALL;
 
         isTestDevice = true;
-        return 0;
+        return ADMOB_OK;
     }
 
     public void AdMob_Events_OnPaidEvent(double enabled) {
@@ -272,7 +272,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		// Call the helper method with default horizontal alignment ("center")
 		createBannerAdView(size, isBottom, ADMOB_BANNER_ALIGNMENT_CENTER, callingMethod);
 
-		return 0;
+		return ADMOB_OK;
     }
 
 	public double AdMob_Banner_Create_Ext(final double size, final double bottom, final double horizontalAlignment) {
@@ -303,7 +303,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		// Call the helper method with the specified horizontal alignment
 		createBannerAdView(size, isBottom, alignment, callingMethod);
 	
-		return 0;
+		return ADMOB_OK;
 	}
 
     public double AdMob_Banner_GetWidth() {
@@ -314,13 +314,11 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     public double AdMob_Banner_GetHeight() {
         if (bannerAdView == null) return 0;
         int height = bannerSize.getHeightInPixels(RunnerJNILib.ms_context);
-
-        if (bannerSize == AdSize.SMART_BANNER) {
+            if (bannerSize == AdSize.SMART_BANNER) {
             DisplayMetrics displayMetrics = RunnerJNILib.ms_context.getResources().getDisplayMetrics();
             int screenHeightInDP = Math.round(displayMetrics.heightPixels / displayMetrics.density);
             int density = Math.round(displayMetrics.density);
-
-            if (screenHeightInDP < 400)
+                if (screenHeightInDP < 400)
                 height = 32 * density;
             else if (screenHeightInDP <= 720)
                 height = 50 * density;
@@ -333,6 +331,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     public double AdMob_Banner_Move(final double bottom) {
 
         final String callingMethod = "AdMob_Banner_Move";
+
+		if (!validateInitialized(callingMethod))
+			return ADMOB_ERROR_NOT_INITIALIZED;
 
         if (!validateActiveBannerAd(callingMethod))
             return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
@@ -351,12 +352,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             params.addRule(bottom > 0.5 ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
             bannerAdView.setLayoutParams(params);
         });
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_Banner_Show() {
 
         final String callingMethod = "AdMob_Banner_Show";
+
+		if (!validateInitialized(callingMethod))
+			return ADMOB_ERROR_NOT_INITIALIZED;
 
         if (!validateActiveBannerAd(callingMethod))
             return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
@@ -371,7 +375,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
             bannerAdView.setVisibility(View.VISIBLE);
         });
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_Banner_Hide() {
@@ -423,7 +427,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			Activity activity = getActivity(callingMethod);
 			if (activity == null) return;
 	
-			AdSize bannerSize = getAdSize(size, callingMethod);
+			bannerSize = getAdSize(size, callingMethod);
 			if (bannerSize == null) return;
 
 			bannerLayout = new RelativeLayout(activity);
@@ -499,7 +503,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
     private AdSize getAdSize(double size, final String callingMethod) {
         Activity activity = getActivity(callingMethod);
-            if (activity == null) return null;
+        if (activity == null) return null;
 		
 		switch ((int) size) {
             case 0:
@@ -540,12 +544,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public void Admob_Interstitial_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(loadedInterstitialQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(interstitialAdQueue, count, ad -> cleanUpAd(ad));
     }
 
     public void Admob_Interstitial_Max_Instances(double value) {
-        interstitialMaxLoadedInstances = (int) value;
-		trimLoadedAdsQueue(loadedInterstitialQueue, interstitialMaxLoadedInstances, ad -> cleanUpAd(ad));
+        interstitialAdQueueCapacity = (int) value;
+		trimLoadedAdsQueue(interstitialAdQueue, interstitialAdQueueCapacity, ad -> cleanUpAd(ad));
     }
 
     public double AdMob_Interstitial_Load() {
@@ -558,15 +562,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateAdId(interstitialAdUnitId, callingMethod))
             return ADMOB_ERROR_INVALID_AD_ID;
 
-        if (!validateLoadedAdsLimit(loadedInterstitialQueue, interstitialMaxLoadedInstances, callingMethod))
+        if (!validateLoadedAdsLimit(interstitialAdQueue, interstitialAdQueueCapacity, callingMethod))
             return ADMOB_ERROR_AD_LIMIT_REACHED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        loadInterstitialAd(interstitialAdUnitId, loadedInterstitialQueue, interstitialMaxLoadedInstances, callingMethod);
+        loadInterstitialAd(interstitialAdUnitId, interstitialAdQueue, interstitialAdQueueCapacity, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_Interstitial_Show() {
@@ -576,15 +580,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
 
-        if (!validateAdLoaded(loadedInterstitialQueue, callingMethod))
+        if (!validateAdLoaded(interstitialAdQueue, callingMethod))
             return ADMOB_ERROR_NO_ADS_LOADED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        showInterstitialAd(loadedInterstitialQueue, callingMethod);
+        showInterstitialAd(interstitialAdQueue, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_Interstitial_IsLoaded() {
@@ -592,7 +596,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public double AdMob_Interstitial_Instances_Count() {
-        return loadedInterstitialQueue.size();
+        return interstitialAdQueue.size();
     }
 
     private void loadInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<InterstitialAd> adQueue, final int maxInstances, final String callingMethod) {
@@ -614,7 +618,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                         return;
                     }
 
-                    adQueue.add(interstitialAd);
+                    adQueue.offer(interstitialAd);
 
                     if (triggerOnPaidEvent) {
                         interstitialAd.setOnPaidEventListener(adValue -> {
@@ -656,6 +660,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             interstitialAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
@@ -692,35 +697,72 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
     // #endregion
 
-    // #region Rewarded Video
+    // #region Server Side Verification
 
-    public void AdMob_RewardedVideo_Set_AdUnit(String adUnitId) {
-        rewardedVideoAdUnitId = adUnitId;
-    }
-
-	public void AdMob_RewardedVideo_Set_SSV_Options(final String userId, final String customData) {
-        final String callingMethod = "AdMob_RewardedVideo_Set_SSV_Options";
+    public void AdMob_ServerSideVerification_Set(final String userId, final String customData) {
+        final String callingMethod = "AdMob_ServerSideVerification_Set";
     
 		if (!validateInitialized(callingMethod))
 			return;
 
-		if (!validateViewHandler(callingMethod))
+        serverSideVerificationUserId = userId;
+        serverSideVerificationCustomData = customData;
+    }
+
+    public void AdMob_ServerSideVerification_Clear() {
+        final String callingMethod = "AdMob_ServerSideVerification_Clear";
+    
+		if (!validateInitialized(callingMethod))
 			return;
-		
-		RunnerActivity.ViewHandler.post(() -> {
-			// Store the SSV options for later use when loading the ad
-			ssvUserId = userId;
-			ssvCustomData = customData;
-		});
+
+        serverSideVerificationUserId = null;
+        serverSideVerificationCustomData = null;
+    }
+
+    private void configureServerSideVerification(Object ad, String userId, String customData) {
+        if (ad == null) {
+            Log.e(LOG_TAG, "Ad instance is null. Cannot configure server-side verification.");
+            return;
+        }
+    
+        if (userId != null && !userId.isEmpty() || customData != null && !customData.isEmpty()) {
+            ServerSideVerificationOptions.Builder ssvBuilder = new ServerSideVerificationOptions.Builder();
+    
+            if (userId != null && !userId.isEmpty()) {
+                ssvBuilder.setUserId(userId);
+            }
+    
+            if (customData != null && !customData.isEmpty()) {
+                ssvBuilder.setCustomData(customData);
+            }
+    
+            ServerSideVerificationOptions ssvOptions = ssvBuilder.build();
+    
+            if (ad instanceof RewardedAd) {
+                ((RewardedAd) ad).setServerSideVerificationOptions(ssvOptions);
+            } else if (ad instanceof RewardedInterstitialAd) {
+                ((RewardedInterstitialAd) ad).setServerSideVerificationOptions(ssvOptions);
+            } else {
+                Log.e(LOG_TAG, "Unsupported ad type for server-side verification.");
+            }
+        }
+    }
+
+    // #endregion
+
+    // #region Rewarded
+
+    public void AdMob_RewardedVideo_Set_AdUnit(String adUnitId) {
+        rewardedUnitId = adUnitId;
     }
 
     public void AdMob_RewardedVideo_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(loadedRewardedVideoQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(rewardedAdQueue, count, ad -> cleanUpAd(ad));
     }
 
     public void AdMob_RewardedVideo_Max_Instances(double value) {
-        rewardedVideoMaxLoadedInstances = (int) value;
-        trimLoadedAdsQueue(loadedRewardedVideoQueue, rewardedVideoMaxLoadedInstances, ad -> cleanUpAd(ad));
+        rewardedAdQueueCapacity = (int) value;
+        trimLoadedAdsQueue(rewardedAdQueue, rewardedAdQueueCapacity, ad -> cleanUpAd(ad));
     }
 
     public double AdMob_RewardedVideo_Load() {
@@ -730,18 +772,18 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
 
-        if (!validateAdId(rewardedVideoAdUnitId, callingMethod))
+        if (!validateAdId(rewardedUnitId, callingMethod))
             return ADMOB_ERROR_INVALID_AD_ID;
 
-        if (!validateLoadedAdsLimit(loadedRewardedVideoQueue, rewardedVideoMaxLoadedInstances, callingMethod))
+        if (!validateLoadedAdsLimit(rewardedAdQueue, rewardedAdQueueCapacity, callingMethod))
             return ADMOB_ERROR_AD_LIMIT_REACHED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        loadRewardedAd(rewardedVideoAdUnitId, loadedRewardedVideoQueue, rewardedVideoMaxLoadedInstances, callingMethod);
+        loadRewardedAd(rewardedUnitId, rewardedAdQueue, rewardedAdQueueCapacity, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_RewardedVideo_Show() {
@@ -751,15 +793,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
 
-        if (!validateAdLoaded(loadedRewardedVideoQueue, callingMethod))
+        if (!validateAdLoaded(rewardedAdQueue, callingMethod))
             return ADMOB_ERROR_NO_ADS_LOADED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        showRewardedAd(loadedRewardedVideoQueue, callingMethod);
+        showRewardedAd(rewardedAdQueue, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_RewardedVideo_IsLoaded() {
@@ -767,7 +809,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public double AdMob_RewardedVideo_Instances_Count() {
-        return loadedRewardedVideoQueue.size();
+        return rewardedAdQueue.size();
     }
 
     private void loadRewardedAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedAd> adQueue, final int maxInstances, final String callingMethod) {
@@ -789,23 +831,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                         return;
                     }
 
-					// Set ServerSideVerificationOptions if available
-					if (ssvUserId != null || ssvCustomData != null) {
-						ServerSideVerificationOptions.Builder ssvBuilder = new ServerSideVerificationOptions.Builder();
-						if (ssvUserId != null) {
-							ssvBuilder.setUserId(ssvUserId);
-						}
-						if (ssvCustomData != null) {
-							ssvBuilder.setCustomData(ssvCustomData);
-						}
-						rewardedAd.setServerSideVerificationOptions(ssvBuilder.build());
-					}
+                    final String userId = serverSideVerificationUserId;
+                    final String customData = serverSideVerificationCustomData;
+
+					// Configure server-side verification using the helper method
+                    configureServerSideVerification(rewardedAd, userId, customData);
 
                     adQueue.offer(rewardedAd);
-
-					// Reset SSV variables
-					ssvUserId = null;
-					ssvCustomData = null;
 
                     if (triggerOnPaidEvent) {
                         rewardedAd.setOnPaidEventListener(adValue -> {
@@ -850,6 +882,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             rewardedAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
@@ -902,12 +935,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public void AdMob_RewardedInterstitial_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(loadedRewardedInterstitialQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(rewardedInterstitialAdQueue, count, ad -> cleanUpAd(ad));
     }
 
     public void AdMob_RewardedInterstitial_Max_Instances(double value) {
-        rewardedInterstitialMaxLoadedInstances = (int) value;
-        trimLoadedAdsQueue(loadedRewardedInterstitialQueue, rewardedInterstitialMaxLoadedInstances, ad -> cleanUpAd(ad));
+        rewardedAdInterstitialQueueCapacity = (int) value;
+        trimLoadedAdsQueue(rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, ad -> cleanUpAd(ad));
     }
 
     public double AdMob_RewardedInterstitial_Load() {
@@ -920,15 +953,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateAdId(rewardedInterstitialAdUnitId, callingMethod))
             return ADMOB_ERROR_INVALID_AD_ID;
 
-        if (!validateLoadedAdsLimit(loadedRewardedInterstitialQueue, rewardedInterstitialMaxLoadedInstances, callingMethod))
+        if (!validateLoadedAdsLimit(rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, callingMethod))
             return ADMOB_ERROR_AD_LIMIT_REACHED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        loadRewardedInterstitialAd(rewardedInterstitialAdUnitId, loadedRewardedInterstitialQueue, rewardedInterstitialMaxLoadedInstances, callingMethod);
+        loadRewardedInterstitialAd(rewardedInterstitialAdUnitId, rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_RewardedInterstitial_Show() {
@@ -938,15 +971,15 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
 
-        if (!validateAdLoaded(loadedRewardedInterstitialQueue, callingMethod))
+        if (!validateAdLoaded(rewardedInterstitialAdQueue, callingMethod))
             return ADMOB_ERROR_NO_ADS_LOADED;
 
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        showRewardedInterstitialAd(loadedRewardedInterstitialQueue, callingMethod);
+        showRewardedInterstitialAd(rewardedInterstitialAdQueue, callingMethod);
 
-        return 0;
+        return ADMOB_OK;
     }
 
     public double AdMob_RewardedInterstitial_IsLoaded() {
@@ -954,7 +987,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public double AdMob_RewardedInterstitial_Instances_Count() {
-        return loadedRewardedInterstitialQueue.size();
+        return rewardedInterstitialAdQueue.size();
     }
 
     private void loadRewardedInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedInterstitialAd> adQueue, final int maxInstances, final String callingMethod) {
@@ -975,7 +1008,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                         return;
                     }
 
-                    adQueue.add(rewardedInterstitialAd);
+                    final String userId = serverSideVerificationUserId;
+                    final String customData = serverSideVerificationCustomData;
+
+					// Configure server-side verification using the helper method
+                    configureServerSideVerification(rewardedInterstitialAd, userId, customData);
+
+                    adQueue.offer(rewardedInterstitialAd);
 
                     if (triggerOnPaidEvent) {
                         rewardedInterstitialAd.setOnPaidEventListener(adValue -> {
@@ -1080,79 +1119,81 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!validateAdId(appOpenAdUnitId, callingMethod))
             return ADMOB_ERROR_INVALID_AD_ID;
 
-        appOpenAdInstance = null;
-        isAppOpenAdEnabled = true;
-        appOpenAdOrientation = (orientation == 0) ? AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE
-                : AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT;
-        loadAppOpenAd();
+        triggerAppOpenAd = true;
 
-        return 0;
+        if (!appOpenAdIsValid(callingMethod)) {
+            AdMob_AppOpenAd_Load();
+        }
+
+        return ADMOB_OK;
     }
 
     public void AdMob_AppOpenAd_Disable() {
-        appOpenAdInstance = null;
-        isAppOpenAdEnabled = false;
+        triggerAppOpenAd = false;
     }
 
     public double AdMob_AppOpenAd_IsEnabled() {
-        return isAppOpenAdEnabled ? 1.0 : 0.0;
+        return triggerAppOpenAd ? 1.0 : 0.0;
     }
 
-	private boolean appOpenAdIsValid(int expirationTimeHours, String callingMethod) {
-		if (appOpenAdInstance == null) {
-			Log.w(LOG_TAG, callingMethod + " :: There is no app open ad loaded.");
-			return false;
-		}
-	
-		if (appOpenAdInstance.getResponseInfo() == null) {
-			Log.w(LOG_TAG, callingMethod + " :: Ad's ResponseInfo is null.");
-			return false;
-		}
-	
-		long dateDifference = (new Date()).getTime() - appOpenAdLoadTime;
-		boolean expired = dateDifference >= (3600000L * expirationTimeHours);
-	
-		if (expired) {
-			Log.w(LOG_TAG, callingMethod + " :: The loaded app open ad expired, reloading...");
-			return false;
-		}
-	
-		return true;
-	}
+    public double AdMob_AppOpenAd_IsLoaded() {
+        return appOpenAdIsValid("AdMob_AppOpenAd_IsLoaded") ? 1.0 : 0.0;
+    }
 
-    private void loadAppOpenAd() {
+    private double AdMob_AppOpenAd_Load() {
 
-        final String callingMethod = "loadAppOpenAd";
-
-        if (!isAppOpenAdEnabled)
-            return;
+        final String callingMethod = "AdMob_AppOpenAd_Load";
 
         if (!validateInitialized(callingMethod))
-            return;
+            return ADMOB_ERROR_NOT_INITIALIZED;
 
         if (!validateAdId(appOpenAdUnitId, callingMethod))
-            return;
+            return ADMOB_ERROR_INVALID_AD_ID;
 
 		if (!validateViewHandler(callingMethod))
-			return;
+			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        if (appOpenAdIsValid(callingMethod))
+            return ADMOB_OK;
+
+        loadAppOpenAd(appOpenAdUnitId, callingMethod);
+
+        return ADMOB_OK;
+    }
+
+	private double AdMob_AppOpenAd_Show() {
+
+		final String callingMethod = "AdMob_AppOpenAd_Show";
+	
+        if (!validateInitialized(callingMethod))
+            return ADMOB_ERROR_NOT_INITIALIZED;
+
+		if (!validateViewHandler(callingMethod))
+			return ADMOB_ERROR_NULL_VIEW_HANDLER;
+	
+        if (!appOpenAdIsValid(callingMethod))
+            return ADMOB_ERROR_NO_ADS_LOADED;
+
+        return ADMOB_OK;
+	}
+
+    private void loadAppOpenAd(final String adUnitId, final String callingMethod) {
         RunnerActivity.ViewHandler.post(() -> {
-
-            final String adUnitId = appOpenAdUnitId;
-
             Activity activity = getActivity(callingMethod);
             if (activity == null) return;
 
             // Use application context
             Context appContext = activity.getApplicationContext();
 
-            AppOpenAd.load(appContext, appOpenAdUnitId, buildAdRequest(), appOpenAdOrientation,
+            Configuration config = activity.getResources().getConfiguration();
+            appOpenAdOrientation = config.orientation;
+            AppOpenAd.load(appContext, appOpenAdUnitId, buildAdRequest(),
                     new AppOpenAdLoadCallback() {
                         @Override
-                        public void onAdLoaded(@NonNull AppOpenAd appOpenAd) {
+                        public void onAdLoaded(@NonNull AppOpenAd loadedAd) {
 
                             appOpenAdLoadTime = (new Date()).getTime();
-                            appOpenAdInstance = appOpenAd;
+                            appOpenAd = loadedAd;
 
                             if (triggerOnPaidEvent) {
 
@@ -1173,7 +1214,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
                         @Override
                         public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            appOpenAdInstance = null;
+                            appOpenAd = null;
 
                             Map<String, Object> data = new HashMap<>();
                             data.put("unit_id", adUnitId);
@@ -1185,27 +1226,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         });
     }
 
-	private void showAppOpenAd() {
-		if (!isAppOpenAdEnabled)
-			return;
-	
-		final String callingMethod = "showAppOpenAd";
-	
-		if (!validateInitialized(callingMethod))
-			return;
-	
-		if (!appOpenAdIsValid(4, callingMethod)) {
-			appOpenAdInstance = null;
-			loadAppOpenAd();
-			return;
-		}
-	
-		if (!validateViewHandler(callingMethod))
-			return;
-	
-		RunnerActivity.ViewHandler.post(() -> {
+    private void showAppOpenAd(final String callingMethod) {
+        RunnerActivity.ViewHandler.post(() -> {
 			// Check if the App Open ad instance is still valid
-			if (appOpenAdInstance == null)
+			if (appOpenAd == null)
 				return;
 	
 			// Get the Activity reference inside the Runnable
@@ -1213,39 +1237,84 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			if (activity == null) return;
 	
 			// Set the full-screen content callback
-			appOpenAdInstance.setFullScreenContentCallback(new FullScreenContentCallback() {
+			appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 				@Override
 				public void onAdDismissedFullScreenContent() {
-					appOpenAdInstance = null;
+					appOpenAd = null;
 					sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", null);
-					loadAppOpenAd();
+
+                    // If AppOpenAd is being automatically managed
+                    if (triggerAppOpenAd) {
+                        // Load the App Open Ad again
+					    AdMob_AppOpenAd_Load();
+                    }
 				}
 	
 				@Override
 				public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
 					isShowingAd = false;
 	
-					appOpenAdInstance = null;
+					appOpenAd = null;
 					Map<String, Object> data = new HashMap<>();
 					data.put("errorMessage", adError.getMessage());
 					data.put("errorCode", (double) adError.getCode());
 					sendAsyncEvent("AdMob_AppOpenAd_OnShowFailed", data);
-					loadAppOpenAd();
+					
+                    // If AppOpenAd is being automatically managed
+                    if (triggerAppOpenAd) {
+                        // Reload the App Open Ad after failure
+					    AdMob_AppOpenAd_Load();
+                    }
 				}
 	
 				@Override
 				public void onAdShowedFullScreenContent() {
-					appOpenAdInstance = null;
+					appOpenAd = null;
 					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", null);
-					loadAppOpenAd();
 				}
 			});
 	
 			// Update the isShowingAd flag and show the ad
 			isShowingAd = true;
-			appOpenAdInstance.show(activity);
-			appOpenAdInstance = null;
+			appOpenAd.show(activity);
+			appOpenAd = null;
 		});
+    }
+
+	private boolean appOpenAdIsValid(String callingMethod) {
+		// Check if is loaded
+        if (appOpenAd == null) {
+			Log.w(LOG_TAG, callingMethod + " :: There is no app open ad loaded.");
+			return false;
+		}
+	
+		if (appOpenAd.getResponseInfo() == null) {
+			Log.w(LOG_TAG, callingMethod + " :: Ad's ResponseInfo is null.");
+			return false;
+		}
+	
+        // Check if is expired
+		long dateDifference = (new Date()).getTime() - appOpenAdLoadTime;
+		boolean expired = dateDifference >= (3600000L * appOpenAdExpirationTime);
+		if (expired) {
+			Log.w(LOG_TAG, callingMethod + " :: The loaded app open ad expired.");
+			return false;
+		}
+
+        // Check if is correct orientation
+        int currentOrientation = Configuration.ORIENTATION_UNDEFINED;
+        Activity activity = getActivity(callingMethod);
+        if (activity != null) {
+            Configuration config = activity.getResources().getConfiguration();
+            currentOrientation = config.orientation;
+        }
+
+        if (currentOrientation != appOpenAdOrientation) {
+            Log.w(LOG_TAG, callingMethod + " :: The loaded app open ad has incorrect orientation.");
+			return false;
+        }
+	
+		return true;
 	}
 
     // #endregion
@@ -1257,7 +1326,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateNotInitialized("AdMob_Targeting_COPPA")) return ADMOB_ERROR_ILLEGAL_CALL;
 
 		targetCOPPA = COPPA > 0.5;
-		return 0;
+		return ADMOB_OK;
 	}
 
 	public double AdMob_Targeting_UnderAge(double underAge) {
@@ -1265,7 +1334,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		if (!validateNotInitialized("AdMob_Targeting_UnderAge")) return ADMOB_ERROR_ILLEGAL_CALL;
 
 		targetUnderAge = underAge >= 0.5;
-		return 0;
+		return ADMOB_OK;
 	}
 
 	public double AdMob_Targeting_MaxAdContentRating(double contentRating) {
@@ -1415,8 +1484,13 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			consentInformation.reset();
 	}
 
+	public void AdMob_Consent_Set_RDP(double enabled) {
+		isRdpEnabled = enabled > 0.5;
+	}
+
+    // https://stackoverflow.com/questions/69307205/mandatory-consent-for-admob-user-messaging-platform
 	private boolean canShowAds(Context context) {
-		// https://stackoverflow.com/questions/69307205/mandatory-consent-for-admob-user-messaging-platform
+	
 		SharedPreferences prefs = context.getSharedPreferences(context.getPackageName() + "_preferences",
 				Context.MODE_PRIVATE);
 		String purposeConsent = prefs.getString("IABTCF_PurposeConsents", "");
@@ -1506,10 +1580,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 	// #region Settings
 
-	public void AdMob_Settings_RDP(double enabled) {
-		enableRDP = enabled > 0.5;
-	}
-
 	public void AdMob_Settings_SetVolume(double value) {
 		MobileAds.setAppVolume((float) value);
 	}
@@ -1533,10 +1603,16 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	@Override
     public void onResume() {
 		super.onResume();
-        if (isAppOpenAdEnabled && !isShowingAd) {
-            showAppOpenAd();
+        if (triggerAppOpenAd) {
+            if (!appOpenAdIsValid("onResume")) {
+                AdMob_AppOpenAd_Load();
+                return;
+            }
+
+            if (!isShowingAd) {
+                AdMob_AppOpenAd_Show();
+            }
         }
-        isShowingAd = false;
     }
 
 	@Override
@@ -1548,21 +1624,21 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		}
 
 		// Clear Interstitial Ads
-		freeLoadedInstances(loadedInterstitialQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
-		loadedInterstitialQueue.clear();
+		freeLoadedInstances(interstitialAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		interstitialAdQueue.clear();
 
 		// Clear Rewarded Ads
-		freeLoadedInstances(loadedRewardedVideoQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
-		loadedRewardedVideoQueue.clear();
+		freeLoadedInstances(rewardedAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		rewardedAdQueue.clear();
 
 		// Clear Rewarded Interstitial Ads
-		freeLoadedInstances(loadedRewardedInterstitialQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
-		loadedRewardedInterstitialQueue.clear();
+		freeLoadedInstances(rewardedInterstitialAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		rewardedInterstitialAdQueue.clear();
 
 		// Nullify App Open Ad
-		if (appOpenAdInstance != null) {
-			cleanAd(appOpenAdInstance, ad -> cleanUpAd(ad));
-			appOpenAdInstance = null;
+		if (appOpenAd != null) {
+			cleanAd(appOpenAd, ad -> cleanUpAd(ad));
+			appOpenAd = null;
 		}
 
 		// Nullify Consent Form
@@ -1701,7 +1777,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
 	
 		// Handle CCPA compliance by adding the "rdp" parameter if the user has opted out
-		if (enableRDP) {
+		if (isRdpEnabled) {
 			Bundle extras = new Bundle();
 			extras.putInt("rdp", 1);
 			builder.addNetworkExtrasBundle(AdMobAdapter.class, extras);

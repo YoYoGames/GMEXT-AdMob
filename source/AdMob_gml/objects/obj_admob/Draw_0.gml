@@ -30,6 +30,6 @@ draw_text(x, y + 175, "RewardedInterstitialAd_isLoaded: " + string(rewardedInter
 // If no banner is being displayed the functions return 0
 // Note that the returned value is in display pixels and needs to be converted by the user
 // according to the rendering target.
-var room_pixels_w = AdMob_Banner_GetWidth()*room_width/display_get_width();
-var room_pixels_h = AdMob_Banner_GetHeight()*room_height/display_get_height();
+var room_pixels_w = AdMob_Banner_GetWidth() *room_width/display_get_width();
+var room_pixels_h = AdMob_Banner_GetHeight() *room_height/display_get_height();
 draw_text(70, y + 210, "Banner size: W=" + string(room_pixels_w) + ", H=" + string(room_pixels_h));
