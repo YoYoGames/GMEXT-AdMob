@@ -66,6 +66,33 @@ function AdMob_Banner_Set_AdUnit(adUnitId) { }
  */
 function AdMob_Banner_Create(size, bottom) { }
 
+/**
+ * @func AdMob_Banner_Create_Ext
+ * @desc This function creates a banner ad with extended alignment options.
+ * 
+ * @param {real} size The type of the banner to be displayed.
+ * @param {bool} bottom Whether the banner should be placed at the bottom of the display.
+ * @param {constant.AdMobBannerAlignment} alignment The horizontal alignment to be used by the banner.
+ * @returns {constant.AdMobErrors}
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task succeeds.
+ * @member {string} type The string `"AdMob_Banner_OnLoaded"`
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task fails.
+ * @member {string} type `"AdMob_Banner_OnLoadFailed"`
+ * @member {string} errorMessage the error code responsible for the failure
+ * @member {real} errorCode the error message of the error code
+ * @event_end
+ * 
+ * @version 1.4.0 (+)
+ * 
+ * @func_end
+ */
+function AdMob_Banner_Create_Ext(size, bottom, alignment) { }
+
 
 /**
  * @func AdMob_Banner_GetWidth
@@ -256,6 +283,36 @@ function AdMob_Interstitial_IsLoaded() { }
  */
 function AdMob_Interstitial_Instances_Count() { }
 
+///// SERVER SIDE VERIFICATION
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
+ * @func AdMob_ServerSideVerification_Set
+ * @desc This function sets the values to be used for server side verification of rewarded ads.
+ * 
+ * [[Tip: Please refer to [Server-Side Verification](https://support.google.com/admob/answer/9603226) for more information.]]
+ * 
+ * [[Note: Once set the values are used for future loaded reward video and reward interstitial ads, to clear the data use ${function.AdMob_ServerSideVerification_Clear}]]
+ * 
+ * @param {string} userId The user ID is a unique identifier given to each user, which lets you know who to reward upon successful ad completion. 
+ * @param {string} customData Custom data is received in the callback after a user’s successful ad completion. For example, you can include a parameter to know which level the user is on.
+ * @version 1.4.0 (+)
+ * @func_end
+ */
+function AdMob_ServerSideVerification_Set(userId, customData) { }
+
+/**
+ * @func AdMob_ServerSideVerification_Clear
+ * @desc This function clears the previously set values to be used for server side verification of rewarded ads.
+ * 
+ * [[Note: Please refer to ${function.AdMob_RewardedVideo_Set_AdUnit} for more information.]]
+ * 
+ * @version 1.4.0 (+)
+ * @func_end
+ */
+function AdMob_ServerSideVerification_Clear() { }
+
+
 ///// REWARDED VIDEO
 ///// ////////////////////////////////////////////////////////////////////////
 
@@ -301,7 +358,6 @@ function AdMob_RewardedVideo_Free_Load_Instances(count) { }
  */
 function AdMob_RewardedVideo_Max_Instances(count) { }
 
-
 /**
  * @func AdMob_RewardedVideo_Load
  * @desc This function should be called when you want to load a rewarded video ad. Calling it will send a request to the ad server to provide a rewarded ad, which will then be loaded into the app for display.
@@ -329,7 +385,6 @@ function AdMob_RewardedVideo_Max_Instances(count) { }
  * @func_end
  */
 function AdMob_RewardedVideo_Load() { }
-
 
 /**
  * @func AdMob_RewardedVideo_Show
@@ -553,9 +608,11 @@ function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
 /**
  * @func AdMob_AppOpenAd_Enable
  * 
- * @desc This function enables show App Open Ads when the game resumes from background.
+ * @desc This function enables show App Open Ads when the game resumes from background. 
  * 
- * @param {double} orientation The orientation to use (1 for portrait, 2 for landscape)
+ * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.
+ * 
+ * @param {double} orientation [DEPRECATED] Required but not used.
  * @returns {constant.AdMobErrors}
  * 
  * @event social
@@ -587,6 +644,9 @@ function AdMob_AppOpenAd_Enable(orientation) { }
 /**
  * @func AdMob_AppOpenAd_Disable
  * @desc This function disables showing of App Open Ads when the game resumes.
+ * 
+ * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.
+ * 
  * @returns {constant.AdMobErrors}
  * @version 1.3.0 (+)
  * @func_end
@@ -595,13 +655,86 @@ function AdMob_AppOpenAd_Disable() { }
 
 /**
  * @func AdMob_AppOpenAd_IsEnabled
- * @desc This function returns `true` if app open ads are enabled, `false` otherwise.
+ * @desc This function returns `true` if the automatic management of the App Open Ad lifecycle is enabled, `false` otherwise.
  * 
  * @returns {bool}
- * 
+ * @version 1.4.0 (+)
  * @func_end
  */
 function AdMob_AppOpenAd_IsEnabled() { }
+
+/**
+ * @func AdMob_AppOpenAd_Load
+ * @desc This function should be called when you want to load an app open ad. Calling it will send a request to the ad server to provide an app open ad, which will then be loaded into the app for display.
+ * 
+ * This function does not show the ad, just stores it in memory ready to be shown. If you do not call this function before trying to show an ad, nothing will be shown.
+ * 
+ * [[Note: You can check whether the app open ad is loaded or not using the function ${function.AdMob_AppOpenAd_IsLoaded}.]]
+ * 
+ * @returns {constant.AdMobErrors}
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task succeeds.
+ * @member {string} type `"AdMob_AppOpenAd_OnLoaded"`
+ * @member {string} unit_id Unit identifier of the advertisement
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task fails.
+ * @member {string} type `"AdMob_AppOpenAd_OnLoadFailed"`
+ * @member {string} unit_id Unit identifier of the advertisement
+ * @member {string} errorMessage the error code responsible for the failure
+ * @member {real} errorCode the error message of the error code
+ * @event_end
+ * 
+ * @version 1.4.0 (+)
+ * 
+ * @func_end
+ */
+function AdMob_AppOpenAd_Load() { }
+
+/**
+ * @func AdMob_AppOpenAd_Show
+ * @desc This function will show the app open ad, if one is available and loaded. You can check whether an ad is available using the function ${function.AdMob_AppOpenAd_IsLoaded}.
+ * 
+ * [[Note: While an app open ad is being shown, your app will be put into the background and will effectively be "paused".]]
+ * 
+ * @returns {constant.AdMobErrors}
+ * 
+ * @event social
+ * @desc This event is triggered is the ad view is closed by the user.
+ * @member {string} type `"AdMob_AppOpenAd_OnDismissed"`
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task fails.
+ * @member {string} type `"AdMob_AppOpenAd_OnShowFailed"`
+ * @member {string} errorMessage the error code responsible for the failure
+ * @member {real} errorCode the error message of the error code
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if the awaited task succeeds.
+ * @member {string} type `"AdMob_AppOpenAd_OnFullyShown"`
+ * @event_end
+ * 
+ * @version 1.4.0 (+)
+ * 
+ * @func_end
+ */
+function AdMob_AppOpenAd_Show() { }
+
+/**
+ * @func AdMob_AppOpenAd_IsLoaded
+ * @desc This function returns whether an app open ad is loaded.
+ * 
+ * @returns {bool}
+ * 
+ * @version 1.4.0 (+)
+ * 
+ * @func_end
+ */
+function AdMob_AppOpenAd_IsLoaded() { }
 
 
 ///// TARGETING
@@ -639,6 +772,9 @@ function AdMob_Targeting_UnderAge(underAge) { }
  * @func_end
  */
 function AdMob_Targeting_MaxAdContentRating(contentRating) { }
+
+///// CONSENT
+///// ////////////////////////////////////////////////////////////////////////
 
 /**
  * @func AdMob_Consent_RequestInfoUpdate
@@ -741,6 +877,19 @@ function AdMob_Consent_Show() { }
 function AdMob_Consent_Reset() { }
 
 /**
+ * @func AdMob_Consent_Set_RDP
+ * @desc Enables or disables Restricted Data Processing (RDP) to comply with privacy regulations in specific U.S. states.
+ * 
+ * [[Note: Developers must determine the appropriate timing to activate RDP based on their application's compliance requirements.]]
+ *  
+ * @func_end
+ */
+function AdMob_Consent_Set_RDP() { }
+
+///// SETTINGS
+///// ////////////////////////////////////////////////////////////////////////
+
+/**
  * @func AdMob_Settings_SetVolume
  * @desc This method provides control over the sound's loudness when playing rewarded video ads. This method will trigger a reload of the current Interstitial and RewardedVideo ads.
  * 
@@ -794,6 +943,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member ADMOB_ERROR_NO_ADS_LOADED There are no loaded ads to be shown for this specific type.
  * @member ADMOB_ERROR_NO_ACTIVE_BANNER_AD There is no active banner ad.
  * @member ADMOB_ERROR_ILLEGAL_CALL The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).
+ * @member ADMOB_ERROR_NULL_VIEW_HANDLER The view handler responsible for rendering the ads is not available (only available on Android).
  * @const_end
  */
 
@@ -817,6 +967,15 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member AdMob_Banner_LEADERBOARD IAB leaderboard (728x90 dp - tablets only)
  * @member AdMob_Banner_SMART A dynamic size banner (deprecated, see `AdMob_Banner_ADAPTIVE`)
  * @member AdMob_Banner_ADAPTIVE A dynamically sized banner
+ * @const_end
+ */
+
+/**
+ * @const AdMobBannerAlignment
+ * @desc This set of constants represents the banner alignment style.
+ * @member ADMOB_BANNER_ALIGNMENT_LEFT Left aligns the banner being created.
+ * @member ADMOB_BANNER_ALIGNMENT_CENTER Center aligns the banner being created
+ * @member ADMOB_BANNER_ALIGNMENT_RIGHT Right aligns the banner being created
  * @const_end
  */
 
@@ -859,7 +1018,6 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member AdMob_Consent_Mode_PRODUCTION Same as `AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED`, used for production.
  * @const_end
  */
-
 
 /**
  * @module general
@@ -981,6 +1139,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @section_const
  * @ref AdMobErrors
  * @ref AdMobBanner
+ * @ref AdMobBannerAlignment
  * @ref AdMobContentRating
  * @ref AdMobConsentStatus
  * @ref AdMobConsentType
