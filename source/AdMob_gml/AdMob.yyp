@@ -47,7 +47,6 @@
     {"id":{"name":"Obj_AdMob_AppOpenAd","path":"objects/Obj_AdMob_AppOpenAd/Obj_AdMob_AppOpenAd.yy",},},
     {"id":{"name":"Obj_AdMob_Banner","path":"objects/Obj_AdMob_Banner/Obj_AdMob_Banner.yy",},},
     {"id":{"name":"Obj_AdMob_Consent_Reset","path":"objects/Obj_AdMob_Consent_Reset/Obj_AdMob_Consent_Reset.yy",},},
-    {"id":{"name":"Obj_AdMob_GoTo_Test","path":"objects/Obj_AdMob_GoTo_Test/Obj_AdMob_GoTo_Test.yy",},},
     {"id":{"name":"Obj_AdMob_Interstitial","path":"objects/Obj_AdMob_Interstitial/Obj_AdMob_Interstitial.yy",},},
     {"id":{"name":"Obj_AdMob_Rewarded_Free","path":"objects/Obj_AdMob_Rewarded_Free/Obj_AdMob_Rewarded_Free.yy",},},
     {"id":{"name":"Obj_AdMob_Rewarded_Multi_Load","path":"objects/Obj_AdMob_Rewarded_Multi_Load/Obj_AdMob_Rewarded_Multi_Load.yy",},},

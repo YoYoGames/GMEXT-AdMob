@@ -14,7 +14,6 @@
     {"name":"Obj_AdMob_AppOpenAd","order":12,"path":"objects/Obj_AdMob_AppOpenAd/Obj_AdMob_AppOpenAd.yy",},
     {"name":"Obj_AdMob_Banner","order":2,"path":"objects/Obj_AdMob_Banner/Obj_AdMob_Banner.yy",},
     {"name":"Obj_AdMob_Consent_Reset","order":7,"path":"objects/Obj_AdMob_Consent_Reset/Obj_AdMob_Consent_Reset.yy",},
-    {"name":"Obj_AdMob_GoTo_Test","order":9,"path":"objects/Obj_AdMob_GoTo_Test/Obj_AdMob_GoTo_Test.yy",},
     {"name":"Obj_AdMob_Interstitial","order":3,"path":"objects/Obj_AdMob_Interstitial/Obj_AdMob_Interstitial.yy",},
     {"name":"Obj_AdMob_Rewarded_Free","order":11,"path":"objects/Obj_AdMob_Rewarded_Free/Obj_AdMob_Rewarded_Free.yy",},
     {"name":"Obj_AdMob_Rewarded_Multi_Load","order":10,"path":"objects/Obj_AdMob_Rewarded_Multi_Load/Obj_AdMob_Rewarded_Multi_Load.yy",},
