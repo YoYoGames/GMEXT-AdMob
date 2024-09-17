@@ -87,7 +87,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open</a>
+                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
                 </li>
               </ul>
               <ul>
@@ -124,6 +124,7 @@
               
                 <p><a id="top"></a></p>
 <h1 id="rewarded-video"><strong>Rewarded Video</strong></h1>
+<p>This module contains functions for rewarded video ads.</p>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
@@ -144,7 +145,7 @@
 <blockquote>
 <p><img alt="⛔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/26d4.png" title=":no_entry:" /> This function was <strong>deprecated</strong> with version 1.3.0.</p>
 </blockquote>
-<p>Initializes the target identifier for rewarded video ad functions.</p>
+<p>This function initialises the target identifier for rewarded video ad functions.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Please refer to <a href="reward_video.html#admob_rewardedvideo_set_adunit">AdMob_RewardedVideo_Set_AdUnit</a> for more information.</p>
@@ -188,7 +189,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_set_adunit">AdMob_RewardedVideo_Set_AdUnit</h1>
-<p>Set the target identifier for rewarded video functions, Rewarded video funcitons allow multiple identifiers</p>
+<p>This function sets the target identifier for rewarded video functions. Rewarded video functions allow multiple identifiers.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -228,7 +229,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_free_load_instances">AdMob_RewardedVideo_Free_Load_Instances</h1>
-<p>Release Rewarded Video load instances (passing -1 will free all the loaded instances).</p>
+<p>This function releases the requested number of Rewarded Video load instances.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -246,7 +247,7 @@
 <tr>
 <td>count</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
-<td></td>
+<td>The number of instances to release (-1 will free all the loaded instances)</td>
 </tr>
 </tbody>
 </table>
@@ -268,7 +269,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_max_instances">AdMob_RewardedVideo_Max_Instances</h1>
-<p>Set the max number of Rewarded Video load instances, this allow present consecutiva ads. Default value is 1.</p>
+<p>This function sets the max number of Rewarded Video load instances, this allows you to present consecutive ads. Default value is 1.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -286,7 +287,7 @@
 <tr>
 <td>count</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
-<td></td>
+<td>The maximum number of instances</td>
 </tr>
 </tbody>
 </table>
@@ -308,7 +309,12 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_load">AdMob_RewardedVideo_Load</h1>
-<p>This function should be called when you want to load a rewarded video ad. Calling it will send a request to the ad server to provide a rewarded ad, which will then be loaded into the app for display. This function does not show the ad, just stores it in memory ready for showing. If you do not call this function before trying to show an ad, nothing will be shown. Note that you can check whether a rewarded video is loaded or not using the function AdMob_RewardedVideo_IsLoaded.</p>
+<p>This function should be called when you want to load a rewarded video ad. Calling it will send a request to the ad server to provide a rewarded ad, which will then be loaded into the app for display.</p>
+<p>This function does not show the ad, just stores it in memory ready for showing. If you do not call this function before trying to show an ad, nothing will be shown.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can check whether a rewarded video is loaded or not using the function <a href="reward_video.html#admob_rewardedvideo_isloaded">AdMob_RewardedVideo_IsLoaded</a>.</p>
+</div>
 <p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/The_Asset_Editors/Object_Properties/Async_Events/Social.htm">Social Async Event</a>.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
@@ -327,7 +333,7 @@
 <blockquote>
 <p><a href="https://manual.gamemaker.io/monthly/en/The_Asset_Editors/Object_Properties/Async_Events/Social.htm">Social Async Event</a></p>
 </blockquote>
-<p>This event is triggered is the awaited task fails.</p>
+<p>This event is triggered if the awaited task fails.</p>
 <table>
 <thead>
 <tr>
@@ -345,7 +351,7 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 <tr>
 <td>errorMessage</td>
@@ -360,7 +366,7 @@
 </tbody>
 </table>
 <p><br></p>
-<p>This event is triggered is the awaited task succeeds.</p>
+<p>This event is triggered if the awaited task succeeds.</p>
 <table>
 <thead>
 <tr>
@@ -378,7 +384,7 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 </tbody>
 </table>
@@ -388,7 +394,11 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_show">AdMob_RewardedVideo_Show</h1>
-<p>This function will show the rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function AdMob_RewardedVideo_IsLoaded. Note that while a rewarded video ad is being shown, your app will be put into the background and will effectively be “paused”.</p>
+<p>This function will show the next rewarded video ad, if one is available and loaded. You can check whether an ad has previously been loaded using the function <a href="reward_video.html#admob_rewardedvideo_isloaded">AdMob_RewardedVideo_IsLoaded</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While a rewarded video ad is being shown, your app will be put into the background and will effectively be "paused".</p>
+</div>
 <p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/The_Asset_Editors/Object_Properties/Async_Events/Social.htm">Social Async Event</a>.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
@@ -425,12 +435,12 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<p>This event is triggered is the awaited task fails.</p>
+<p>This event is triggered if the awaited task fails.</p>
 <table>
 <thead>
 <tr>
@@ -448,7 +458,7 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 <tr>
 <td>errorMessage</td>
@@ -463,7 +473,7 @@
 </tbody>
 </table>
 <p><br></p>
-<p>This event is triggered is the awaited task succeeds.</p>
+<p>This event is triggered if the awaited task succeeds.</p>
 <table>
 <thead>
 <tr>
@@ -481,7 +491,7 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 </tbody>
 </table>
@@ -504,7 +514,7 @@
 <tr>
 <td>unit_id</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>Unit identifier of the advertisment</td>
+<td>Unit identifier of the advertisement</td>
 </tr>
 </tbody>
 </table>
@@ -514,7 +524,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_isloaded">AdMob_RewardedVideo_IsLoaded</h1>
-<p>This function will return whether the rewarded video ad has been loaded or not.</p>
+<p>This function returns whether a rewarded video ad has been loaded or not.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -533,7 +543,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_rewardedvideo_instances_count">AdMob_RewardedVideo_Instances_Count</h1>
-<p>Return the number of Rewarded video load instances are ready.</p>
+<p>This function returns the number of Rewarded video load instances that are ready.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>

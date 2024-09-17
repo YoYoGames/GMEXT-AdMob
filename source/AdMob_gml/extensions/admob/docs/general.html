@@ -87,7 +87,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open</a>
+                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
                 </li>
               </ul>
               <ul>
@@ -124,6 +124,7 @@
               
                 <p><a id="top"></a></p>
 <h1 id="general"><strong>General</strong></h1>
+<p>This module contains general functions for working with AdMob.</p>
 <h2 id="functions">Functions</h2>
 <p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
 <ul>
@@ -136,7 +137,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_initialize">AdMob_Initialize</h1>
-<p>This function initializes the Google AdMob API and should be called at the start of your game.</p>
+<p>This function initialises the Google AdMob API and should be called at the start of your game.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -155,7 +156,11 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_settestdeviceid">AdMob_SetTestDeviceId</h1>
-<p>This function tells the app to use test ads instead of “live” ads, essential for testing whether your ads work without generating potentially fraudulent click-throughs. This function should be called BEFORE calling AdMob_Initialize.</p>
+<p>This function tells the app to use test ads instead of "live" ads, essential for testing whether your ads work without generating potentially fraudulent click-throughs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function should be called BEFORE calling <a href="general.html#admob_initialize">AdMob_Initialize</a>.</p>
+</div>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
 <blockquote>
@@ -166,7 +171,7 @@
 <p><br></p>
 <p><strong>Returns:</strong></p>
 <blockquote>
-<p>N/A</p>
+<p><a href="constants.html#admoberrors">AdMobErrors</a></p>
 </blockquote>
 <p><br></p>
 <p><br></p>
@@ -174,7 +179,11 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admob_events_onpaidevent">AdMob_Events_OnPaidEvent</h1>
-<p>Enable the paid load callbacks, NOTE: You should enable this feature in your console too https://support.google.com/admob/answer/11322405</p>
+<p>This function enables the paid load callbacks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You should enable this feature in your console too https://support.google.com/admob/answer/11322405.</p>
+</div>
 <p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/The_Asset_Editors/Object_Properties/Async_Events/Social.htm">Social Async Event</a>.</p>
 <p><br></p>
 <p><strong>Syntax:</strong></p>
@@ -192,8 +201,8 @@
 <tbody>
 <tr>
 <td>enable</td>
-<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
-<td></td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></td>
+<td>Whether to enable paid load callbacks.</td>
 </tr>
 </tbody>
 </table>
@@ -221,7 +230,7 @@
 <tr>
 <td>type</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td><code>"AdMob_OnPaidEvent"</code></td>
+<td>The string <code>"AdMob_OnPaidEvent"</code></td>
 </tr>
 <tr>
 <td>mediation_adapter_class_name</td>
@@ -236,7 +245,7 @@
 <tr>
 <td>ad_type</td>
 <td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
-<td>'Banner","Interstitial","Rewarded","RewardedInterstitial" or "AppOpen"</td>
+<td><code>'Banner"</code>, <code>"Interstitial"</code>, <code>"Rewarded"</code>, <code>"RewardedInterstitial"</code> or <code>"AppOpen"</code></td>
 </tr>
 <tr>
 <td>micros</td>

@@ -83,7 +83,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open</a>
+                <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
                 </li>
               </ul>
               <ul>
@@ -124,12 +124,13 @@
               
                 <p><a id="top"></a></p>
 <h1 id="constants"><strong>Constants</strong></h1>
-<p>The following are the available constanst to use with the AdMob API.</p>
+<p>The following are the available constants to use with the AdMob API.</p>
 <h2 id="constants_1">Constants</h2>
 <p>This module includes a set of predefined constants that can be utilized for various purposes. Browse through the available constants to find values relevant to your needs and enhance the efficiency of your code.</p>
 <ul>
 <li><a href="constants.html#admoberrors">AdMobErrors</a></li>
 <li><a href="constants.html#admobbanner">AdMobBanner</a></li>
+<li><a href="constants.html#admobbanneralignment">AdMobBannerAlignment</a></li>
 <li><a href="constants.html#admobcontentrating">AdMobContentRating</a></li>
 <li><a href="constants.html#admobconsentstatus">AdMobConsentStatus</a></li>
 <li><a href="constants.html#admobconsenttype">AdMobConsentType</a></li>
@@ -141,10 +142,12 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admoberrors">AdMobErrors</h1>
-<p>These set of constants represent the values errors values that can return from the AdMob function calls.</p>
+<p>This set of constants represents the error values that can be returned from the AdMob function calls.</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
+<li><a href="general.html#admob_settestdeviceid">AdMob_SetTestDeviceId</a></li>
 <li><a href="banner.html#admob_banner_create">AdMob_Banner_Create</a></li>
+<li><a href="banner.html#admob_banner_create_ext">AdMob_Banner_Create_Ext</a></li>
 <li><a href="banner.html#admob_banner_move">AdMob_Banner_Move</a></li>
 <li><a href="banner.html#admob_banner_show">AdMob_Banner_Show</a></li>
 <li><a href="banner.html#admob_banner_hide">AdMob_Banner_Hide</a></li>
@@ -157,6 +160,8 @@
 <li><a href="reward_interstitial.html#admob_rewardedinterstitial_show">AdMob_RewardedInterstitial_Show</a></li>
 <li><a href="app_open.html#admob_appopenad_enable">AdMob_AppOpenAd_Enable</a></li>
 <li><a href="app_open.html#admob_appopenad_disable">AdMob_AppOpenAd_Disable</a></li>
+<li><a href="app_open.html#admob_appopenad_load">AdMob_AppOpenAd_Load</a></li>
+<li><a href="app_open.html#admob_appopenad_show">AdMob_AppOpenAd_Show</a></li>
 </ul>
 <p><br></p>
 <table>
@@ -177,7 +182,7 @@
 </tr>
 <tr>
 <td><code>ADMOB_ERROR_INVALID_AD_ID</code></td>
-<td>The provided ad unit id is not valid.</td>
+<td>The provided ad unit ID is not valid.</td>
 </tr>
 <tr>
 <td><code>ADMOB_ERROR_AD_LIMIT_REACHED</code></td>
@@ -195,6 +200,10 @@
 <td><code>ADMOB_ERROR_ILLEGAL_CALL</code></td>
 <td>The call you are trying to execute is illegal (used for functions that need to be called prior to initialization).</td>
 </tr>
+<tr>
+<td><code>ADMOB_ERROR_NULL_VIEW_HANDLER</code></td>
+<td>The view handler responsible for rendering the ads is not available (only available on Android).</td>
+</tr>
 </tbody>
 </table>
 <p><br></p>
@@ -202,7 +211,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admobadvalueprecision">AdMobAdValuePrecision</h1>
-<p>These set of constants represent precision type of the reported ad value.</p>
+<p>This set of constants represents the precision type of the reported ad value.</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
 <li><a href="general.html#admob_events_onpaidevent">AdMob_Events_OnPaidEvent</a></li>
@@ -239,7 +248,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admobbanner">AdMobBanner</h1>
-<p>These set of constants represent the various types of available banners.</p>
+<p>This set of constants represents the various types of available banner.</p>
 <p><br></p>
 <table>
 <thead>
@@ -283,8 +292,41 @@
 <hr />
 <p align="right"><a href="#top">Back To Top</a></p>
 
+<h1 id="admobbanneralignment">AdMobBannerAlignment</h1>
+<p>This set of constants represents the banner alignment style.</p>
+<p>These constants are referenced by the following functions:</p>
+<ul>
+<li><a href="banner.html#admob_banner_create_ext">AdMob_Banner_Create_Ext</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADMOB_BANNER_ALIGNMENT_LEFT</code></td>
+<td>Left aligns the banner being created.</td>
+</tr>
+<tr>
+<td><code>ADMOB_BANNER_ALIGNMENT_CENTER</code></td>
+<td>Center aligns the banner being created</td>
+</tr>
+<tr>
+<td><code>ADMOB_BANNER_ALIGNMENT_RIGHT</code></td>
+<td>Right aligns the banner being created</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
 <h1 id="admobcontentrating">AdMobContentRating</h1>
-<p>These set of constants represent the various types of possible content ratings for ads.</p>
+<p>This set of constants represents the various types of possible content ratings for ads.</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
 <li><a href="targeting.html#admob_targeting_maxadcontentrating">AdMob_Targeting_MaxAdContentRating</a></li>
@@ -321,7 +363,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admobconsentstatus">AdMobConsentStatus</h1>
-<p>These set of constants represent the various consent status.</p>
+<p>This set of constants represents the various consent status.</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
 <li><a href="consent.html#admob_consent_getstatus">AdMob_Consent_GetStatus</a></li>
@@ -358,7 +400,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admobconsenttype">AdMobConsentType</h1>
-<p>These set of constants represent the given consent type.</p>
+<p>This set of constants represents the given consent type.</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
 <li><a href="consent.html#admob_consent_gettype">AdMob_Consent_GetType</a></li>
@@ -395,7 +437,7 @@
 <p align="right"><a href="#top">Back To Top</a></p>
 
 <h1 id="admobconsentmode">AdMobConsentMode</h1>
-<p>These set of constants represent the consent mode (these are used for testing porpuses).</p>
+<p>This set of constants represents the consent mode (these are used for testing porpuses).</p>
 <p>These constants are referenced by the following functions:</p>
 <ul>
 <li><a href="consent.html#admob_consent_requestinfoupdate">AdMob_Consent_RequestInfoUpdate</a></li>

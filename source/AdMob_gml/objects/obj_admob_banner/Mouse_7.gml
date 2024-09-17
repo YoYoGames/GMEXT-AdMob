@@ -9,7 +9,7 @@ if(pressed)
 	// We change the position to the bottom flag
 	// 1: places banner at bottom
 	// 0: places banner at top
-	AdMob_Banner_Move(real(bottom));
+	AdMob_Banner_Move(bottom);
 }
 else
 {
@@ -17,5 +17,5 @@ else
 	pressed = true;
 
 	// Create banner with selected type at the button of the screen
-	AdMob_Banner_Create(banner_type, real(true));
+	AdMob_Banner_Create_Ext(banner_type, bottom, alignment);
 }
