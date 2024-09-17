@@ -58,7 +58,6 @@ import android.widget.RelativeLayout;
 import android.view.ViewGroup.LayoutParams;
 
 import androidx.annotation.NonNull;
-
 import android.util.Log;
 
 import android.util.DisplayMetrics;
@@ -114,6 +113,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     private String bannerAdUnitId = "";
     private AdView bannerAdView = null;
     private AdSize bannerSize = null;
+    private int currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
     private RelativeLayout bannerLayout = null;
 
     // Interstitial ad variables
@@ -268,9 +268,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
 		boolean isBottom = bottom > 0.5;
+        currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
 
 		// Call the helper method with default horizontal alignment ("center")
-		createBannerAdView(size, isBottom, ADMOB_BANNER_ALIGNMENT_CENTER, callingMethod);
+		createBannerAdView(size, isBottom, currentBannerAlignment, callingMethod);
 
 		return ADMOB_OK;
     }
@@ -291,17 +292,23 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		boolean isBottom = bottom > 0.5;
 	
 		// Validate horizontalAlignment parameter
-		int alignment = (int)horizontalAlignment;
-	
-		if (alignment != ADMOB_BANNER_ALIGNMENT_LEFT &&
-			alignment != ADMOB_BANNER_ALIGNMENT_CENTER &&
-			alignment != ADMOB_BANNER_ALIGNMENT_RIGHT) {
-			Log.w(LOG_TAG, callingMethod + " :: Invalid horizontal alignment parameter. Defaulting to CENTER.");
-			alignment = ADMOB_BANNER_ALIGNMENT_CENTER;
-		}
+		switch ((int) horizontalAlignment) {
+            case ADMOB_BANNER_ALIGNMENT_LEFT:
+                currentBannerAlignment = RelativeLayout.ALIGN_PARENT_LEFT;
+                break;
+            case ADMOB_BANNER_ALIGNMENT_CENTER:
+                currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
+                break;
+            case ADMOB_BANNER_ALIGNMENT_RIGHT:
+                currentBannerAlignment = RelativeLayout.ALIGN_PARENT_RIGHT;
+                break;
+            default:
+                Log.w(LOG_TAG, callingMethod + " :: Invalid horizontal alignment parameter. Defaulting to CENTER.");
+                currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
+        }
 	
 		// Call the helper method with the specified horizontal alignment
-		createBannerAdView(size, isBottom, alignment, callingMethod);
+		createBannerAdView(size, isBottom, currentBannerAlignment, callingMethod);
 	
 		return ADMOB_OK;
 	}
@@ -331,27 +338,34 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     public double AdMob_Banner_Move(final double bottom) {
 
         final String callingMethod = "AdMob_Banner_Move";
-
-		if (!validateInitialized(callingMethod))
-			return ADMOB_ERROR_NOT_INITIALIZED;
-
+    
+        if (!validateInitialized(callingMethod))
+            return ADMOB_ERROR_NOT_INITIALIZED;
+    
         if (!validateActiveBannerAd(callingMethod))
             return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
-
-		if (!validateViewHandler(callingMethod))
-			return ADMOB_ERROR_NULL_VIEW_HANDLER;
-
+    
+        if (!validateViewHandler(callingMethod))
+            return ADMOB_ERROR_NULL_VIEW_HANDLER;
+    
         RunnerActivity.ViewHandler.post(() -> {
-
+    
             if (!validateActiveBannerAd(callingMethod))
                 return;
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+    
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+    
+            // Reuse the stored horizontal alignment from banner creation
+            params.addRule(currentBannerAlignment);
+            // Update the vertical alignment based on the 'bottom' parameter
             params.addRule(bottom > 0.5 ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
+    
             bannerAdView.setLayoutParams(params);
         });
+    
         return ADMOB_OK;
     }
 
@@ -443,28 +457,31 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 							bannerAdView.getResponseInfo().getMediationAdapterClassName());
 				});
 			}
-	
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT
-			);
-	
-			// Set horizontal alignment based on the double value
-			if (horizontalAlignment == ADMOB_BANNER_ALIGNMENT_LEFT) {
-				params.addRule(RelativeLayout.ALIGN_PARENT_START);
-			} else if (horizontalAlignment == ADMOB_BANNER_ALIGNMENT_RIGHT) {
-				params.addRule(RelativeLayout.ALIGN_PARENT_END);
-			} else {
-				// Default to center if not specified or unrecognized
-				params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-			}
-	
-			// Set vertical alignment
-			params.addRule(isBottom ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
-	
-			bannerLayout.addView(bannerAdView, params);
-			rootView.addView(bannerLayout);
-	
+
+            // Define layout parameters for bannerAdView
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, // Width set to WRAP_CONTENT
+                RelativeLayout.LayoutParams.WRAP_CONTENT  // Height set to WRAP_CONTENT
+            ); 
+
+            // Set horizontal alignment based on the provided parameter
+            params.addRule(currentBannerAlignment);
+
+            // Set vertical alignment
+            params.addRule(isBottom ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
+
+            // Add the AdView to bannerLayout with the defined layout parameters
+            bannerLayout.addView(bannerAdView, params);
+
+			// Define layout parameters for bannerLayout to span the parent width
+            RelativeLayout.LayoutParams bannerLayoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+            );
+
+            // Add bannerLayout to rootView with the defined layout parameters
+            rootView.addView(bannerLayout, bannerLayoutParams);
+
 			bannerAdView.setAdListener(new AdListener() {
 	
 				@Override
@@ -480,7 +497,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 					sendAsyncEvent("AdMob_Banner_OnLoadFailed", data);
 				}
 			});
-	
+
 			bannerAdView.setAdSize(bannerSize);
 			bannerAdView.setAdUnitId(bannerAdUnitId);
 			bannerAdView.requestLayout();
@@ -491,7 +508,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
     private void deleteBannerAdView() {
-		cleanAd(bannerAdView, ad -> cleanUpAd(ad));
+		cleanAd(bannerAdView, this::cleanUpAd);
 
         bannerLayout.removeView(bannerAdView);
         bannerAdView.destroy();
@@ -544,12 +561,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public void Admob_Interstitial_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(interstitialAdQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(interstitialAdQueue, count, this::cleanUpAd);
     }
 
     public void Admob_Interstitial_Max_Instances(double value) {
         interstitialAdQueueCapacity = (int) value;
-		trimLoadedAdsQueue(interstitialAdQueue, interstitialAdQueueCapacity, ad -> cleanUpAd(ad));
+		trimLoadedAdsQueue(interstitialAdQueue, interstitialAdQueueCapacity, this::cleanUpAd);
     }
 
     public double AdMob_Interstitial_Load() {
@@ -660,7 +677,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             interstitialAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
-                    isShowingAd = false; // Reset the flag
 
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
@@ -673,6 +689,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     isShowingAd = false; // Reset the flag
+
+                    // Use the generic cleanAd method with cleanUpAd as the cleaner
+                	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
 
                     Map<String, Object> data = new HashMap<>();
                     data.put("unit_id", interstitialAdRef.getAdUnitId());
@@ -757,12 +776,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public void AdMob_RewardedVideo_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(rewardedAdQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(rewardedAdQueue, count, this::cleanUpAd);
     }
 
     public void AdMob_RewardedVideo_Max_Instances(double value) {
         rewardedAdQueueCapacity = (int) value;
-        trimLoadedAdsQueue(rewardedAdQueue, rewardedAdQueueCapacity, ad -> cleanUpAd(ad));
+        trimLoadedAdsQueue(rewardedAdQueue, rewardedAdQueueCapacity, this::cleanUpAd);
     }
 
     public double AdMob_RewardedVideo_Load() {
@@ -882,7 +901,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
             rewardedAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
-                    isShowingAd = false; // Reset the flag
 
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
@@ -895,6 +913,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     isShowingAd = false; // Reset the flag
+
+                    // Use the generic cleanAd method with cleanUpAd as the cleaner
+					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
 
                     Map<String, Object> data = new HashMap<>();
                     data.put("unit_id", rewardedAdRef.getAdUnitId());
@@ -935,12 +956,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     public void AdMob_RewardedInterstitial_Free_Loaded_Instances(double count) {
-		freeLoadedInstances(rewardedInterstitialAdQueue, count, ad -> cleanUpAd(ad));
+		freeLoadedInstances(rewardedInterstitialAdQueue, count, this::cleanUpAd);
     }
 
     public void AdMob_RewardedInterstitial_Max_Instances(double value) {
         rewardedAdInterstitialQueueCapacity = (int) value;
-        trimLoadedAdsQueue(rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, ad -> cleanUpAd(ad));
+        trimLoadedAdsQueue(rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, this::cleanUpAd);
     }
 
     public double AdMob_RewardedInterstitial_Load() {
@@ -1071,6 +1092,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     isShowingAd = false; // Reset the flag
 
+                    // Use the generic cleanAd method with cleanUpAd as the cleaner
+					cleanAd(rewardedInterstitialAdRef, ad -> cleanUpAd(ad));
+
                     Map<String, Object> data = new HashMap<>();
                     data.put("unit_id", rewardedInterstitialAdRef.getAdUnitId());
                     data.put("errorMessage", adError.getMessage());
@@ -1174,6 +1198,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (!appOpenAdIsValid(callingMethod))
             return ADMOB_ERROR_NO_ADS_LOADED;
 
+        showAppOpenAd(callingMethod);
+
         return ADMOB_OK;
 	}
 
@@ -1240,8 +1266,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 				@Override
 				public void onAdDismissedFullScreenContent() {
-					appOpenAd = null;
-					sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", null);
+
+                    // Use the generic cleanAd method with cleanUpAd as the cleaner
+                	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
+                    appOpenAd = null;
+					
+                    sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", null);
 
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
@@ -1252,9 +1282,12 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 				@Override
 				public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-					isShowingAd = false;
-	
-					appOpenAd = null;
+					isShowingAd = false; // Reset the flag
+
+                    // Use the generic cleanAd method with cleanUpAd as the cleaner
+                	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
+                    appOpenAd = null;
+
 					Map<String, Object> data = new HashMap<>();
 					data.put("errorMessage", adError.getMessage());
 					data.put("errorCode", (double) adError.getCode());
@@ -1269,7 +1302,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	
 				@Override
 				public void onAdShowedFullScreenContent() {
-					appOpenAd = null;
 					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", null);
 				}
 			});
@@ -1277,7 +1309,6 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			// Update the isShowingAd flag and show the ad
 			isShowingAd = true;
 			appOpenAd.show(activity);
-			appOpenAd = null;
 		});
     }
 
@@ -1606,13 +1637,16 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         if (triggerAppOpenAd) {
             if (!appOpenAdIsValid("onResume")) {
                 AdMob_AppOpenAd_Load();
+                isShowingAd = false;
                 return;
             }
 
             if (!isShowingAd) {
                 AdMob_AppOpenAd_Show();
+                return;
             }
         }
+        isShowingAd = false;
     }
 
 	@Override
@@ -1624,20 +1658,20 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 		}
 
 		// Clear Interstitial Ads
-		freeLoadedInstances(interstitialAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		freeLoadedInstances(interstitialAdQueue, -1, this::cleanUpAd); // Free all instances
 		interstitialAdQueue.clear();
 
 		// Clear Rewarded Ads
-		freeLoadedInstances(rewardedAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		freeLoadedInstances(rewardedAdQueue, -1, this::cleanUpAd); // Free all instances
 		rewardedAdQueue.clear();
 
 		// Clear Rewarded Interstitial Ads
-		freeLoadedInstances(rewardedInterstitialAdQueue, -1, ad -> cleanUpAd(ad)); // Free all instances
+		freeLoadedInstances(rewardedInterstitialAdQueue, -1, this::cleanUpAd); // Free all instances
 		rewardedInterstitialAdQueue.clear();
 
 		// Nullify App Open Ad
 		if (appOpenAd != null) {
-			cleanAd(appOpenAd, ad -> cleanUpAd(ad));
+			cleanAd(appOpenAd, this::cleanUpAd);
 			appOpenAd = null;
 		}
 

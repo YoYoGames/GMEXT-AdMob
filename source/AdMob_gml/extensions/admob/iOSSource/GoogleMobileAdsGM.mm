@@ -296,9 +296,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 }
 
 -(void)adDidDismissFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)presentingAd
-{
-    self.isShowingAd = NO;
-    
+{    
     NSString *eventType = nil;
     NSString *adUnitID = nil;
     
@@ -340,7 +338,8 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         [self cleanAd:(GADAppOpenAd *)presentingAd withCleaner:^(id ad){
             [self cleanUpAppOpenAd:(GADAppOpenAd *)ad];
         }];
-        
+        self.appOpenAd = nil;
+
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Load the App Open Ad again
@@ -1427,6 +1426,7 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
     if (self.triggerAppOpenAd) {
         if(![self appOpenAdIsValid:"onResume"]) {
             [self AdMob_AppOpenAd_Load];
+            self.isShowingAd = NO;
             return;
         }
         
@@ -1434,6 +1434,7 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
             [self AdMob_AppOpenAd_Show];
         }
     }
+    self.isShowingAd = NO;
 }
 
 -(void) onStop

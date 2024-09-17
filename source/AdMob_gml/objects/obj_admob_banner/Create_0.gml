@@ -13,6 +13,7 @@ event_inherited();
 text = "Banner";
 
 displayHeight = display_get_height();
+alignment = ADMOB_BANNER_ALIGNMENT_CENTER;
 pressed = false;
 bottom = false;
 

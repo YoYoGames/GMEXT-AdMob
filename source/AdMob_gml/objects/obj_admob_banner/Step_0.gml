@@ -16,7 +16,7 @@ if (pressed && displayHeight != display_get_height())
 	AdMob_Banner_Remove();
 	
 	// And create a new one (this one will have right dimensions)
-	AdMob_Banner_Create(banner_type, bottom);
+	AdMob_Banner_Create_Ext(banner_type, bottom, alignment);
 	
 	// We refresh the display size
 	displayHeight = display_get_height();
