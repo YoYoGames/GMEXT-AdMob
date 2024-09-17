@@ -881,12 +881,14 @@ function AdMob_Consent_Reset() { }
  * @desc Enables or disables Restricted Data Processing (RDP) to comply with privacy regulations in specific U.S. states.
  * 
  * [[Note: Developers must determine the appropriate timing to activate RDP based on their application's compliance requirements.]]
+ * 
+ * @param {bool} enable Set to `true` to enable RDP, or `false` to disable it.
  *  
  * @version 1.4.0 (+)
  * 
  * @func_end
  */
-function AdMob_Consent_Set_RDP() { }
+function AdMob_Consent_Set_RDP(enable) { }
 
 ///// SETTINGS
 ///// ////////////////////////////////////////////////////////////////////////
