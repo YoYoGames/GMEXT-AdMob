@@ -610,7 +610,7 @@ function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
  * 
  * @desc This function enables show App Open Ads when the game resumes from background. 
  * 
- * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.
+ * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.]]
  * 
  * @param {double} orientation [DEPRECATED] Required but not used.
  * @returns {constant.AdMobErrors}
@@ -645,7 +645,7 @@ function AdMob_AppOpenAd_Enable(orientation) { }
  * @func AdMob_AppOpenAd_Disable
  * @desc This function disables showing of App Open Ads when the game resumes.
  * 
- * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.
+ * [[Note: This is part of the automatic management of the App Open Ad lifecycle, if you with to manually handle it you can turn it of and use the functions ${function.AdMob_AppOpenAd_Load} and ${function.AdMob_AppOpenAd_Show}.]]
  * 
  * @returns {constant.AdMobErrors}
  * @version 1.3.0 (+)
@@ -882,6 +882,8 @@ function AdMob_Consent_Reset() { }
  * 
  * [[Note: Developers must determine the appropriate timing to activate RDP based on their application's compliance requirements.]]
  *  
+ * @version 1.4.0 (+)
+ * 
  * @func_end
  */
 function AdMob_Consent_Set_RDP() { }
