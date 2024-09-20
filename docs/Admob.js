@@ -52,12 +52,12 @@ function AdMob_Banner_Set_AdUnit(adUnitId) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type The string `"AdMob_Banner_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_LOADED`
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_Banner_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_LOAD_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -77,12 +77,12 @@ function AdMob_Banner_Create(size, bottom) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type The string `"AdMob_Banner_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_LOADED`
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_Banner_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_LOAD_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -216,13 +216,13 @@ function Admob_Interstitial_Max_Instances(count) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_Interstitial_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_INTERSTITIAL_LOADED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_Interstitial_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_INTERSTITIAL_LOAD_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -243,13 +243,13 @@ function AdMob_Interstitial_Load() { }
  * 
  * @event social
  * @desc This event is triggered is the ad view is closed by the user.
- * @member {string} type `"AdMob_Interstitial_OnDismissed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_INTERSTITIAL_DISMISSED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_Interstitial_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_INTERSTITIAL_SHOW_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -257,7 +257,7 @@ function AdMob_Interstitial_Load() { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_Interstitial_OnFullyShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_INTERSTITIAL_SHOWED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * @func_end
@@ -370,7 +370,7 @@ function AdMob_RewardedVideo_Max_Instances(count) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_RewardedVideo_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_LOAD_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -378,7 +378,7 @@ function AdMob_RewardedVideo_Max_Instances(count) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_RewardedVideo_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_LOADED`
  * @member {string} unit_id Unit identifier of the advertisement
  * 
  * @event_end
@@ -396,13 +396,13 @@ function AdMob_RewardedVideo_Load() { }
  * 
  * @event social
  * @desc This event is triggered when the ad view is closed by the user.
- * @member {string} type `"AdMob_RewardedVideo_OnDismissed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_DISMISSED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_RewardedVideo_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_SHOW_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -410,13 +410,13 @@ function AdMob_RewardedVideo_Load() { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_RewardedVideo_OnFullyShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_SHOWED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the user should be rewarded.
- * @member {string} type `"AdMob_RewardedVideo_OnReward"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_REWARD`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
@@ -503,7 +503,7 @@ function AdMob_RewardedInterstitial_Max_Instances(count) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_RewardedInterstitial_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_LOAD_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -511,7 +511,7 @@ function AdMob_RewardedInterstitial_Max_Instances(count) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_RewardedInterstitial_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_LOADED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
@@ -530,13 +530,13 @@ function AdMob_RewardedInterstitial_Load() { }
  * 
  * @event social
  * @desc This event is triggered when the ad view is closed by the user.
- * @member {string} type `"AdMob_RewardedInterstitial_OnDismissed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_DISMISSED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_RewardedInterstitial_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_SHOW_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -544,13 +544,13 @@ function AdMob_RewardedInterstitial_Load() { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_RewardedInterstitial_OnFullyShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_SHOWED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the user should be rewarded.
- * @member {string} type `"AdMob_RewardedInterstitial_OnReward"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_REWARDED_INTERSTITIAL_REWARD`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
@@ -617,13 +617,13 @@ function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
  * 
  * @event social
  * @desc This event is triggered when the ad view is closed by the user.
- * @member {string} type `"AdMob_AppOpenAd_OnDismissed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_DISMISSED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_AppOpenAd_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_SHOW_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -631,7 +631,7 @@ function AdMob_AppOpenAd_Set_AdUnit(adUnitId) { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_AppOpenAd_OnFullyShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_SHOWED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
@@ -675,13 +675,13 @@ function AdMob_AppOpenAd_IsEnabled() { }
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_AppOpenAd_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_LOADED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_AppOpenAd_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_LOAD_FAILED`
  * @member {string} unit_id Unit identifier of the advertisement
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
@@ -703,19 +703,19 @@ function AdMob_AppOpenAd_Load() { }
  * 
  * @event social
  * @desc This event is triggered is the ad view is closed by the user.
- * @member {string} type `"AdMob_AppOpenAd_OnDismissed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_DISMISSED`
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task fails.
- * @member {string} type `"AdMob_AppOpenAd_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_SHOW_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
  * @event social
  * @desc This event is triggered if the awaited task succeeds.
- * @member {string} type `"AdMob_AppOpenAd_OnFullyShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_APP_OPEN_SHOWED`
  * @event_end
  * 
  * @version 1.4.0 (+)
@@ -783,11 +783,11 @@ function AdMob_Targeting_MaxAdContentRating(contentRating) { }
  * @param {constant.AdMobConsentMode} mode The consent mode
  * 
  * @event social
- * @member {string} type The string `"AdMob_Consent_OnRequestInfoUpdated"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_INFO_UPDATED`
  * @event_end
  * 
  * @event social
- * @member {string} type The string `"AdMob_Consent_OnRequestInfoUpdateFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_INFO_UPDATE_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -835,11 +835,11 @@ function AdMob_Consent_IsFormAvailable() { }
  * [[Note: This function requires a previous call to ${function.AdMob_Consent_RequestInfoUpdate}.]]
  * 
  * @event social
- * @member {string} type The string `"AdMob_Consent_OnLoaded"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_LOADED`
  * @event_end
  * 
  * @event social
- * @member {string} type The string `"AdMob_Consent_OnLoadFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_LOAD_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -856,11 +856,11 @@ function AdMob_Consent_Load() { }
  * [[Note: This function requires a previous call to ${function.AdMob_Consent_Load}.]]
  * 
  * @event social
- * @member {string} type The string `"AdMob_Consent_OnShown"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_SHOWED`
  * @event_end
  * 
  * @event social
- * @member {string} type `"AdMob_Consent_OnShowFailed"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_CONSENT_SHOW_FAILED`
  * @member {string} errorMessage the error code responsible for the failure
  * @member {real} errorCode the error message of the error code
  * @event_end
@@ -920,7 +920,7 @@ function AdMob_Settings_SetMuted(value) { }
  * @param {bool} enable Whether to enable paid load callbacks.
  * 
  * @event social
- * @member {string} type The string `"AdMob_OnPaidEvent"`
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_PAID`
  * @member {string} mediation_adapter_class_name The mediation adapter class name of the ad network that loaded the ad.
  * @member {string} unit_id identifier of the ad
  * @member {string} ad_type `'Banner"`, `"Interstitial"`, `"Rewarded"`, `"RewardedInterstitial"` or `"AppOpen"`
@@ -1020,6 +1020,45 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA Geography appears as in EEA for debug devices.
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_NOT_EEA Geography appears as not in EEA for debug devices.
  * @member AdMob_Consent_Mode_PRODUCTION Same as `AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED`, used for production.
+ * @const_end
+ */
+
+/**
+ * @const AdMobEvent
+ * @desc This set of constants represents all the available event types that can be created by the AdMob extension.
+ * They are the value assigned to the `type` member of the ${var.async_load} when an ${event.social} is triggered.
+ * @member ADMOB_EV_INITIALIZED The extension was successfuly initialized.
+ * @member ADMOB_EV_CONSENT_INFO_UPDATED The consent information was updated.
+ * @member ADMOB_EV_CONSENT_INFO_UPDATE_FAILED The consent information failed to update.
+ * @member ADMOB_EV_CONSENT_LOADED The consent form loaded successfuly.
+ * @member ADMOB_EV_CONSENT_LOAD_FAILED The consent form failed to load.
+ * @member ADMOB_EV_CONSENT_SHOWED The consent form was properly showed.
+ * @member ADMOB_EV_CONSENT_SHOW_FAILED The consent form failed to show.
+ * @member ADMOB_EV_BANNER_LOADED The banner ad loaded successfuly.
+ * @member ADMOB_EV_BANNER_LOAD_FAILED The banner ad failed to load.
+ * @member ADMOB_EV_INTERSTITIAL_LOADED The insterstitial ad loaded successfuly.
+ * @member ADMOB_EV_INTERSTITIAL_LOAD_FAILED The insterstitial ad failed to load.
+ * @member ADMOB_EV_INTERSTITIAL_SHOWED The insterstitial ad was properly showed.
+ * @member ADMOB_EV_INTERSTITIAL_SHOW_FAILED The insterstitial ad failed to show.
+ * @member ADMOB_EV_INTERSTITIAL_DISMISSED The insterstitial ad was dismissed.
+ * @member ADMOB_EV_REWARDED_LOADED The rewarded ad loaded successfuly.
+ * @member ADMOB_EV_REWARDED_LOAD_FAILED The rewarded ad failed to load.
+ * @member ADMOB_EV_REWARDED_SHOWED The rewarded ad was properly showed.
+ * @member ADMOB_EV_REWARDED_SHOW_FAILED The rewarded ad failed to show.
+ * @member ADMOB_EV_REWARDED_DISMISSED The rewarded ad was dismissed.
+ * @member ADMOB_EV_REWARDED_REWARD The rewarded ad was fully watched and the user should be rewarded.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_LOADED The rewarded interstitial ad loaded successfuly.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_LOAD_FAILED The rewarded interstitial ad failed to load.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_SHOWED The rewarded interstitial ad was properly showed.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_SHOW_FAILED The rewarded interstitial ad failed to show.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_DISMISSED The rewarded interstitial ad was dismissed.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_REWARD The rewarded interstitial ad was fully watched and the user should be rewarded.
+ * @member ADMOB_EV_APP_OPEN_LOADED The app open ad ad failed to load.
+ * @member ADMOB_EV_APP_OPEN_LOAD_FAILED The app open ad ad failed to load.
+ * @member ADMOB_EV_APP_OPEN_SHOWED The app open ad was properly showed.
+ * @member ADMOB_EV_APP_OPEN_SHOW_FAILED The app open ad was dismissed.
+ * @member ADMOB_EV_APP_OPEN_DISMISSED The app open ad was dismissed.
+ * @member ADMOB_EV_PAID The displayed ad was estimated to have earned money.
  * @const_end
  */
 
@@ -1149,6 +1188,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @ref AdMobConsentType
  * @ref AdMobConsentMode
  * @ref AdMobAdValuePrecision
+ * @ref AdMobEvent
  * @section_end
  * 
  * @module_end
