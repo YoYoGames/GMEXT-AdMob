@@ -10,7 +10,7 @@ switch(async_load[?"type"])
 {
 
 	// AdMob_Initialize finished
-	case "AdMob_OnInitialized":
+	case ADMOB_EV_INITIALIZED:
 		// At this point the AdMob API succeeded to initialize.
 		// We will now request a consent information update.	
 
@@ -25,13 +25,12 @@ switch(async_load[?"type"])
 		AdMob_Consent_RequestInfoUpdate(AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA);
 		break;
 
-
 	// ###############################################
 	//                   CONSENT
 	// ###############################################
 
 	// AdMob_Consent_RequestInfoUpdate succeeded
-	case "AdMob_Consent_OnRequestInfoUpdated":
+	case ADMOB_EV_CONSENT_INFO_UPDATED:
 		// At this point the extension succeeded on selecting consent mode.
 		
 		// We wil update the debug strings (used in draw event)
@@ -50,7 +49,7 @@ switch(async_load[?"type"])
 		break
 	
 	// AdMob_Consent_RequestInfoUpdate failed
-	case "AdMob_Consent_OnRequestInfoUpdateFailed":
+	case ADMOB_EV_CONSENT_INFO_UPDATE_FAILED:
 	
 		// We wil update the debug strings (used in draw event)
 		updateConsentStrings();
@@ -65,14 +64,14 @@ switch(async_load[?"type"])
 		break
 	
 	// AdMob_Consent_Load succeeded
-	case "AdMob_Consent_OnLoaded":
+	case ADMOB_EV_CONSENT_LOADED:
 		// At this point the consent form loaded successfully.
 		// We uses this event to show the consent to the user.
 		AdMob_Consent_Show()
 		break
 	
 	// AdMob_Consent_Load failed
-	case "AdMob_Consent_OnLoadFailed":
+	case ADMOB_EV_CONSENT_LOAD_FAILED:
 		// At this point there was a problem loading the consent form.
 		// Since we don't know the user consent response we need to assume
 		// that the ads MUST be non-personalized
@@ -83,7 +82,7 @@ switch(async_load[?"type"])
 		break
 	
 	// AdMob_Consent_Show succeeded & user answered
-	case "AdMob_Consent_OnShown":
+	case ADMOB_EV_CONSENT_SHOWED:
 		// At this point the user already saw and answered the
 		// consent request so we can process the results.
 		showDebugInfo();
@@ -94,7 +93,7 @@ switch(async_load[?"type"])
 		loadAllAds();
 		break
 	
-	case "AdMob_Consent_OnShowFailed":
+	case ADMOB_EV_CONSENT_SHOW_FAILED:
 		// At this point there was a problem showing the consent form.
 		// Since we don't know the user consent response we need to assume
 		// that the ads MUST be non-personalized
@@ -110,42 +109,42 @@ switch(async_load[?"type"])
 	// ###############################################
 
 	// AdMob_Banner_Create succeeded
-	case "AdMob_Banner_OnLoaded": 
+	case ADMOB_EV_BANNER_LOADED: 
 		// At this point the banner ad succeeded to be created.
 		break;
 	
 	// AdMob_Banner_Create failed
-	case "AdMob_Banner_OnLoadFailed":
+	case ADMOB_EV_BANNER_LOAD_FAILED:
 		// At this point the banner ad failed to be created.
 		break;
 	
 	// ########### INTERSTITIAL  ###########
 	
 	// AdMob_Interstitial_Load succeeded
-	case "AdMob_Interstitial_OnLoaded":
+	case ADMOB_EV_INTERSTITIAL_LOADED:
 		// At this point the interstitial ad succeeded to load.
 		break;
 	
 	// AdMob_Interstitial_Load failed
-	case "AdMob_Interstitial_OnLoadFailed":
+	case ADMOB_EV_INTERSTITIAL_LOAD_FAILED:
 		// At this point the interstitial ad failed to load.
 		//AdMob_Interstitial_load() // This can create an infinite loop if load always fails!!
 		break;
 	
 	// AdMob_Interstitial_Show succeeded
-	case "AdMob_Interstitial_OnFullyShown":
+	case ADMOB_EV_INTERSTITIAL_SHOWED:
 		// At this point the interstitial ad succeeded to show.
 		break;
 
 	// AdMob_Interstitial_Show failed
-	case "AdMob_Interstitial_OnShowFailed":
+	case ADMOB_EV_INTERSTITIAL_SHOW_FAILED:
 		// At this point the interstitial ad failed to show.
 		// Here we use this event to load the interstitial ad again (it could be a load problem).
 		AdMob_Interstitial_Load();
 		break;
 	
 	// AdMob_Interstitial got dismissed
-	case "AdMob_Interstitial_OnDismissed":
+	case ADMOB_EV_INTERSTITIAL_DISMISSED:
 		// At this point the interstitial just got dismissed.
 		// Here we use this event to load the next interstitial ad.
 		AdMob_Interstitial_Load();
@@ -154,37 +153,37 @@ switch(async_load[?"type"])
 	// ########### REWARDED VIDEO ###########
 
 	// AdMob_RewardedVideo_Load succeeded
-	case "AdMob_RewardedVideo_OnLoaded":
+	case ADMOB_EV_REWARDED_LOADED:
 		// At this point the rewarded video succeeded to load.
 		break;
 
 	// AdMob_RewardedVideo_Load failed
-	case "AdMob_RewardedVideo_OnLoadFailed":
+	case ADMOB_EV_REWARDED_LOAD_FAILED:
 		// At this point the rewarded video failed to load.
 		//AdMob_RewardedVideo_Load() // This can create an infinite loop if load always fails!!
 		break;
 	
 	// AdMob_RewardedVideo_Show succeeded
-	case "AdMob_RewardedVideo_OnFullyShown":
+	case ADMOB_EV_REWARDED_SHOWED:
 		// At this point the rewarded video succeeded to show.
 		break;
 	
 	// AdMob_RewardedVideo_Show failed
-	case "AdMob_RewardedVideo_OnShowFailed":
+	case ADMOB_EV_REWARDED_SHOW_FAILED:
 		// At this point the rewarded video failed to show.
 		// Here we use this event to load the rewarded video again (it could be a load problem).
 		//AdMob_RewardedVideo_Load();
 		break;
 	
 	// AdMob_RewardedVideo got dismissed
-	case "AdMob_RewardedVideo_OnDismissed":
+	case ADMOB_EV_REWARDED_DISMISSED:
 		// At this point the rewarded video just got dismissed.
 		// Here we use this event to load the next rewarded video.
 		//AdMob_RewardedVideo_Load();
 		break;
 	
 	// AdMob_RewardedVideo triggered reward event
-	case "AdMob_RewardedVideo_OnReward":
+	case ADMOB_EV_REWARDED_REWARD:
 		// At this point you can reward the user.
 		show_message_async("User Earned Reward");
 		break;
@@ -193,35 +192,35 @@ switch(async_load[?"type"])
 	// ########### REWARDED INTERSTITIAL ###########
 	
 	// AdMob_RewardedInterstitial_Load succeeded
-	case "AdMob_RewardedInterstitial_OnLoaded": 
+	case ADMOB_EV_REWARDED_INTERSTITIAL_LOADED: 
 		// At this point the rewarded interstitial ad succeeded to load.
 		break;
 	
-	case "AdMob_RewardedInterstitial_OnLoadFailed":
+	case ADMOB_EV_REWARDED_INTERSTITIAL_LOAD_FAILED:
 		// At this point the rewarded interstitial ad failed to load.
 		// AdMob_RewardedInterstitial__load() // This can create an infinite loop if load always fails!!
 		break;
 	
-	case "AdMob_RewardedInterstitial_OnFullyShown":
+	case ADMOB_EV_REWARDED_INTERSTITIAL_SHOWED:
 		// At this point the rewarded interstitial ad succeeded to show.
 		break;	
 	
 	// AdMob_RewardedInterstitial_Show failed
-	case "AdMob_RewardedInterstitial_OnShowFailed":
+	case ADMOB_EV_REWARDED_INTERSTITIAL_SHOW_FAILED:
 		// At this point the rewarded interstitial ad failed to show.
 		// Here we use this event to load the rewarded interstitial ad again (it could be a load problem).
 		AdMob_RewardedInterstitial_Load();
 		break;
 	
 	// AdMob_RewardedInterstitial got dismissed
-	case "AdMob_RewardedInterstitial_OnDismissed":
+	case ADMOB_EV_REWARDED_INTERSTITIAL_DISMISSED:
 		// At this point the rewarded interstitial just got dismissed.
 		// Here we use this event to load the next rewarded interstitial ad.
 		AdMob_RewardedInterstitial_Load();
 		break;
 	
 	// AdMob_RewardedInsterstitial triggered reward event
-	case "AdMob_RewardedInterstitial_OnReward":
+	case ADMOB_EV_REWARDED_INTERSTITIAL_REWARD:
 		// At this point you can reward the user.
 		show_message_async("User Earned Reward");
 		break;
@@ -229,21 +228,30 @@ switch(async_load[?"type"])
 		
 	// ########### APP OPEN ###########
 	
-	// AdMob_AppOpenAd got dismissed
-	case "AdMob_AppOpenAd_OnDismissed":
+	// AdMob AppOpenAd got loaded
+	case ADMOB_EV_APP_OPEN_LOADED:
+		break;
+
+	// AdMob AppOpenAd failed to load
+	case ADMOB_EV_APP_OPEN_LOAD_FAILED:
+		break;
+	
+	// AdMob AppOpenAd showed
+	case ADMOB_EV_APP_OPEN_SHOWED:
+		// At this point the app open ad succeeded to show.
 		break;
 	
 	// AdMob_AppOpenAd_Show failed
-	case "AdMob_AppOpenAd_OnShowFailed":
+	case ADMOB_EV_APP_OPEN_SHOW_FAILED:
 		// At this point the app open ad failed to show.
 		break;
 	
-	case "AdMob_AppOpenAd_OnFullyShown":
-		// At this point the app open ad succeeded to show.
+	// AdMob_AppOpenAd got dismissed
+	case ADMOB_EV_APP_OPEN_DISMISSED:
 		break;
 		
 		
-	case "AdMob_OnPaidEvent":
+	case ADMOB_EV_PAID:
 
 	    var _unit_id = async_load[?"unit_id"]
 	    var _ad_type = async_load[?"ad_type"]
