@@ -95,9 +95,8 @@ switch(async_load[?"type"])
 	
 	case ADMOB_EV_CONSENT_SHOW_FAILED:
 		// At this point there was a problem showing the consent form.
-		// Since we don't know the user consent response we need to assume
-		// that the ads MUST be non-personalized
-		AdMob_NonPersonalizedAds_Set(true);
+		// Since we don't know the user consent response ads will be 
+		// non-personalized (this is handled internally by AdMob).
 		
 		// We can also now load the ads
 		// NOTE: Ads should only be loaded after the consent is answered
