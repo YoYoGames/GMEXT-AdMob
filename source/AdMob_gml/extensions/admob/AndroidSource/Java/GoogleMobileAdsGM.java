@@ -1785,7 +1785,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
         data.put("mediation_adapter_class_name", mediationAdapterClassName);
         data.put("unit_id", adUnitId);
         data.put("ad_type", adType);
-        data.put("micros", adValue.getValueMicros());
+
+        Long adMicros = adValue.getValueMicros();
+        data.put("micros", (double) adMicros);
+        
         data.put("currency_code", adValue.getCurrencyCode());
         data.put("precision", (double) adValue.getPrecisionType());
 
