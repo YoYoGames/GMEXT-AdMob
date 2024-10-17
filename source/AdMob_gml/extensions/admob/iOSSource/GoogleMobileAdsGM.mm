@@ -1543,10 +1543,10 @@ typedef void (^AdCleanerBlock)(id ad);
 - (void)sendAsyncEvent:(const char *)eventType eventData:(NSDictionary *)eventData {
     dispatch_async(dispatch_get_main_queue(), ^{
         int dsMapIndex = dsMapCreate();
-        dsMapAddString(dsMapIndex, (char *)"type", (char *)[eventType UTF8String]);
+        dsMapAddString(dsMapIndex, (char *)"type", (char *)eventType);
 
-        for (NSString *key in data) {
-            id value = data[key];
+        for (NSString *key in eventData) {
+            id value = eventData[key];
             const char *cKey = [key UTF8String];
 
             // Check if value is NSDictionary or NSArray and serialize to JSON string
