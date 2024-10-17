@@ -1541,53 +1541,97 @@ typedef void (^AdCleanerBlock)(id ad);
 }
 
 - (void)sendAsyncEvent:(const char *)eventType eventData:(NSDictionary *)eventData {
-    int dsMapIndex = dsMapCreate();
-    
-    // Add the event type to the dsMap
-    dsMapAddString(dsMapIndex, (char *)"type", (char *)eventType);
-    
-    // If eventData is not nil, add key-value pairs to the dsMap
-    if (eventData != nil) {
-        for (NSString *key in eventData) {
-            id value = eventData[key];
-            
-            if ([value isKindOfClass:[NSString class]]) {
-                dsMapAddString(dsMapIndex, (char *)[key UTF8String], (char *)[(NSString *)value UTF8String]);
-            }
-            else if ([value isKindOfClass:[NSNumber class]]) {
-                NSNumber *number = (NSNumber *)value;
-                
-                // Handle booleans (NSNumber with BOOL type)
-                if (strcmp([number objCType], @encode(BOOL)) == 0) {
-                    // Convert boolean to double (YES -> 1.0, NO -> 0.0)
-                    double boolAsDouble = [number boolValue] ? 1.0 : 0.0;
-                    dsMapAddDouble(dsMapIndex, (char *)[key UTF8String], boolAsDouble);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        int dsMapIndex = dsMapCreate();
+        dsMapAddString(dsMapIndex, (char *)"type", (char *)[eventType UTF8String]);
+
+        for (NSString *key in data) {
+            id value = data[key];
+            const char *cKey = [key UTF8String];
+
+            // Check if value is NSDictionary or NSArray and serialize to JSON string
+            if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
+                NSError *error = nil;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                                   options:0 // NSJSONWritingPrettyPrinted can be used if formatting is desired
+                                                                     error:&error];
+                NSString *jsonString;
+                if (error == nil && jsonData) {
+                    jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                } else {
+                    NSLog(@"FirebaseUtils: JSON serialization failed for key '%@' with error: %@", key, error.localizedDescription);
+                    jsonString = [value isKindOfClass:[NSDictionary class]] ? @"{}" : @"[]"; // Default to empty JSON container on failure
                 }
-                // Handle integers
-                else if (strcmp([number objCType], @encode(int)) == 0 ||
-                         strcmp([number objCType], @encode(long)) == 0 ||
-                         strcmp([number objCType], @encode(short)) == 0) {
-                    dsMapAddInt(dsMapIndex, (char *)[key UTF8String], [number intValue]);
+                dsMapAddString(dsMapIndex, (char *)cKey, (char *)[jsonString UTF8String]);
+            } else if ([value isKindOfClass:[NSString class]]) {
+                dsMapAddString(dsMapIndex, (char *)cKey, (char *)[value UTF8String]);
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                NSNumber *numberValue = (NSNumber *)value;
+                const char *type = [numberValue objCType];
+
+                // Handle BOOL
+                if (strcmp(type, @encode(BOOL)) == 0 || strcmp(type, @encode(bool)) == 0 || strcmp(type, @encode(char)) == 0) {
+                    int boolValue = [numberValue boolValue] ? 1 : 0;
+                    dsMapAddInt(dsMapIndex, (char *)cKey, boolValue);
                 }
-                // Handle doubles and floats
-                else if (strcmp([number objCType], @encode(float)) == 0 ||
-                         strcmp([number objCType], @encode(double)) == 0) {
-                    dsMapAddDouble(dsMapIndex, (char *)[key UTF8String], [number doubleValue]);
+                // Handle integer types within int range
+                else if (strcmp(type, @encode(int)) == 0 ||
+                         strcmp(type, @encode(short)) == 0 ||
+                         strcmp(type, @encode(unsigned int)) == 0 ||
+                         strcmp(type, @encode(unsigned short)) == 0) {
+
+                    int intValue = [numberValue intValue];
+                    dsMapAddInt(dsMapIndex, (char *)cKey, intValue);
                 }
-                // For other numeric types, we treat them as double
-                else {
-                    dsMapAddDouble(dsMapIndex, (char *)[key UTF8String], [number doubleValue]);
+                // Handle floating-point numbers
+                else if (strcmp(type, @encode(float)) == 0 ||
+                         strcmp(type, @encode(double)) == 0) {
+
+                    double doubleValue = [numberValue doubleValue];
+                    dsMapAddDouble(dsMapIndex, (char *)cKey, doubleValue);
                 }
-            }
-            else {
-                // Handle other types if necessary, otherwise ignore or log an error.
-                NSLog(@"sendAsyncEvent: Unhandled value type for key '%@'", key);
+                // Handle signed long and long long
+                else if (strcmp(type, @encode(long)) == 0 ||
+                         strcmp(type, @encode(long long)) == 0) {
+
+                    long long longValue = [numberValue longLongValue];
+                    if (longValue >= INT_MIN && longValue <= INT_MAX) {
+                        dsMapAddInt(dsMapIndex, (char *)cKey, (int)longValue);
+                    } else if (llabs(longValue) <= (1LL << 53)) {
+                        dsMapAddDouble(dsMapIndex, (char *)cKey, (double)longValue);
+                    } else {
+                        // Represent as special string format
+                        NSString *formattedString = [NSString stringWithFormat:@"@i64@%llx$i64$", longValue];
+                        dsMapAddString(dsMapIndex, (char *)cKey, (char *)[formattedString UTF8String]);
+                    }
+                }
+                // Handle unsigned long and unsigned long long
+                else if (strcmp(type, @encode(unsigned long)) == 0 ||
+                         strcmp(type, @encode(unsigned long long)) == 0) {
+
+                    unsigned long long ulongValue = [numberValue unsignedLongLongValue];
+                    if (ulongValue <= (unsigned long long)INT_MAX) {
+                        dsMapAddInt(dsMapIndex, (char *)cKey, (int)ulongValue);
+                    } else if (ulongValue <= (1ULL << 53)) {
+                        dsMapAddDouble(dsMapIndex, (char *)cKey, (double)ulongValue);
+                    } else {
+                        // Represent as special string format
+                        NSString *formattedString = [NSString stringWithFormat:@"@i64@%llx$i64$", ulongValue];
+                        dsMapAddString(dsMapIndex, (char *)cKey, (char *)[formattedString UTF8String]);
+                    }
+                } else {
+                    // For other numeric types, default to adding as double
+                    double doubleValue = [numberValue doubleValue];
+                    dsMapAddDouble(dsMapIndex, (char *)cKey, doubleValue);
+                }
+            } else {
+                // For other types, convert to string
+                NSString *stringValue = [value description];
+                dsMapAddString(dsMapIndex, (char *)cKey, (char *)[stringValue UTF8String]);
             }
         }
-    }
-    
-    // Trigger the event
-    createSocialAsyncEventWithDSMap(dsMapIndex);
+        createSocialAsyncEventWithDSMap(dsMapIndex);
+    });
 }
 
 -(void)onPaidEventHandler:(GADAdValue*) value adUnitId:(NSString*)adUnitId adType:(NSString*)adType loadedAdNetworkResponseInfo:(GADAdNetworkResponseInfo*)loadedAdNetworkResponseInfo mediationAdapterClassName:(NSString*)mediationAdapterClassName
