@@ -1758,24 +1758,50 @@ public class GoogleMobileAdsGM extends RunnerSocial {
     }
 
     private void sendAsyncEvent(String eventType, Map<String, Object> data) {
-        int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
-        RunnerJNILib.DsMapAddString(dsMapIndex, "type", eventType);
-        if (data != null) {
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (value instanceof String) {
-                    RunnerJNILib.DsMapAddString(dsMapIndex, key, (String) value);
-                } else if (value instanceof Double) {
-                    RunnerJNILib.DsMapAddDouble(dsMapIndex, key, (Double) value);
-                } else if (value instanceof Integer) {
-                    RunnerJNILib.DsMapAddDouble(dsMapIndex, key, ((Integer) value).doubleValue());
-                } else if (value instanceof Boolean) {
-                    RunnerJNILib.DsMapAddDouble(dsMapIndex, key, (Boolean) value ? 1.0 : 0.0);
+        RunnerActivity.CurrentActivity.runOnUiThread(() -> {
+            int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+            RunnerJNILib.DsMapAddString(dsMapIndex, "type", eventType);
+            if (data != null) {
+                for (Map.Entry<String, Object> entry : data.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if (value instanceof String) {
+                        RunnerJNILib.DsMapAddString(dsMapIndex, key, (String) value);
+                    } else if (value instanceof Double || value instanceof Integer || value instanceof Float || value instanceof Boolean) {
+                        // Convert Boolean to double (1.0 or 0.0)
+                        double doubleValue;
+                        if (value instanceof Boolean) {
+                            doubleValue = (Boolean) value ? 1.0 : 0.0;
+                        } else if (value instanceof Integer) {
+                            doubleValue = ((Integer) value).doubleValue();
+                        } else if (value instanceof Float) {
+                            doubleValue = ((Float) value).doubleValue();
+                        } else { // Double
+                            doubleValue = (Double) value;
+                        }
+                        RunnerJNILib.DsMapAddDouble(dsMapIndex, key, doubleValue);
+                    } else if (value instanceof Long) {
+                        long longValue = (Long) value;
+                        if (Math.abs(longValue) <= MAX_DOUBLE_SAFE) {
+                            RunnerJNILib.DsMapAddDouble(dsMapIndex, key, (double) longValue);
+                        } else {
+                            String formattedLong = String.format("@i64@%016x$i64$", longValue);
+                            RunnerJNILib.DsMapAddString(dsMapIndex, key, formattedLong);
+                        }
+                    } else if (value instanceof Map) {
+                        String jsonString = new JSONObject((Map) value).toString();
+                        RunnerJNILib.DsMapAddString(dsMapIndex, key, jsonString);
+                    } else if (value instanceof List) {
+                        String jsonString = new JSONArray((List) value).toString();
+                        RunnerJNILib.DsMapAddString(dsMapIndex, key, jsonString);
+                    } else {
+                        // Convert other types to String
+                        RunnerJNILib.DsMapAddString(dsMapIndex, key, value.toString());
+                    }
                 }
             }
-        }
-        RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+            RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+        });
     }
 
     private void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
