@@ -72,9 +72,14 @@ import com.google.android.gms.ads.AdapterResponseInfo;
 import android.os.Bundle;
 import com.google.ads.mediation.admob.AdMobAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
 public class GoogleMobileAdsGM extends RunnerSocial {
 
     // Constants
+    private static final long MAX_DOUBLE_SAFE = 9007199254740992L; // 2^53
     private static final int EVENT_OTHER_SOCIAL = 70;
 
     private static final int ADMOB_OK = 0;
