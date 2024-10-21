@@ -16,7 +16,7 @@
   "copyToTargets":12,
   "description":"",
   "exportToGame":true,
-  "extensionVersion":"1.4.2",
+  "extensionVersion":"1.4.3",
   "files":[
     {"$GMExtensionFile":"","%Name":"AdMob.ext","constants":[
         {"$GMExtensionConstant":"","%Name":"AdMob_Banner_NORMAL","hidden":false,"name":"AdMob_Banner_NORMAL","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"0",},
@@ -161,8 +161,8 @@
   "IncludedResources":[],
   "installdir":"",
   "iosCocoaPodDependencies":"",
-  "iosCocoaPods":"\r\npod 'Google-Mobile-Ads-SDK', '11.10.0'\r\n",
-  "ioscodeinjection":"<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n    <key>SKAdNetworkIdentifier</key>\r\n    <string>cstr6suwn9.skadnetwork</string>\r\n  </dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\npod 'Google-Mobile-Ads-SDK', '11.10.0'\r\n</YYIosCocoaPods>\r\n\r\n",
+  "iosCocoaPods":"\r\npod 'Google-Mobile-Ads-SDK', '11.3.0'\r\n",
+  "ioscodeinjection":"<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n    <key>SKAdNetworkIdentifier</key>\r\n    <string>cstr6suwn9.skadnetwork</string>\r\n  </dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\npod 'Google-Mobile-Ads-SDK', '11.3.0'\r\n</YYIosCocoaPods>\r\n\r\n",
   "iosdelegatename":"",
   "iosplistinject":"\r\n<key>GADIsAdManagerApp</key>\r\n    <true></true>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n    <key>SKAdNetworkIdentifier</key>\r\n    <string>cstr6suwn9.skadnetwork</string>\r\n  </dict>\r\n</array>\r\n",
   "iosProps":true,
