@@ -176,9 +176,8 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 		if (!validateViewHandler(callingMethod)) return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-        // Ensure running from main thread
-        RunnerActivity.ViewHandler.post(() -> {
-
+        // Run initialization in a background thread
+        new Thread(() -> {
             MobileAds.setRequestConfiguration(buildRequestConfiguration(callingMethod));
 
             try {
@@ -207,7 +206,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
                 Log.i(LOG_TAG, "GoogleMobileAds Init Error: " + e.toString());
                 Log.i(LOG_TAG, e.toString());
             }
-        });
+        }).start();
 
         return ADMOB_OK;
     }
