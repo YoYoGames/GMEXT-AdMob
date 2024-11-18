@@ -1,2 +1,6 @@
 source/AdMob_gml/options/extensions/*
 output/
+
+source/AdMob_gml/extensions/admob/scriptUtils.bat.bak
+
+source/AdMob_gml/extensions/admob/scriptUtils.sh.bak
