@@ -126,13 +126,16 @@ exit /b 0
     call :pathResolve "%cd%" "%~2" destination
 
     if not exist "%~1" (
+        echo 1
         call :logError "Failed to copy "%~1" to "%destination%" (source doesn't exist)."
         exit /b 1
     )
 
     if exist "%~1\*" (
+        echo 2
         xcopy "%~1" "%destination%" /E /I /H /Y
     ) else (
+        echo 3
         for %%I in ("%destination%") do set "destDir=%%~dpI"
 
         if not exist "%destDir%" (
@@ -144,11 +147,12 @@ exit /b 0
             )
         )
 
-        echo Copying file "%source%" to "%destination%"
-        copy /Y "%source%" "%destination%"
+        call :logInformation "Copying file "%~1" to "%destination%""
+        copy /Y "%~1" "%destination%"
     )
 
     if %errorlevel% neq 0 (
+        echo 4
         call :logError "Failed to copy "%~1" to "%destination%"."
         exit /b 1
     )

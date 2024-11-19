@@ -1071,6 +1071,8 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @ref AdMob_Initialize
  * @ref AdMob_SetTestDeviceId
  * @ref AdMob_Events_OnPaidEvent
+ * @ref AdMob_ServerSideVerification_Set
+ * @ref AdMob_ServerSideVerification_Clear
  * @section_end
  * 
  * @module_end

@@ -131,6 +131,8 @@
 <li><a href="general.html#admob_initialize">AdMob_Initialize</a></li>
 <li><a href="general.html#admob_settestdeviceid">AdMob_SetTestDeviceId</a></li>
 <li><a href="general.html#admob_events_onpaidevent">AdMob_Events_OnPaidEvent</a></li>
+<li><a href="general.html#admob_serversideverification_set">AdMob_ServerSideVerification_Set</a></li>
+<li><a href="general.html#admob_serversideverification_clear">AdMob_ServerSideVerification_Clear</a></li>
 </ul>
 <p><br></p>
 <hr />
@@ -173,6 +175,87 @@
 <blockquote>
 <p><a href="constants.html#admoberrors">AdMobErrors</a></p>
 </blockquote>
+<p><br></p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_serversideverification_set">AdMob_ServerSideVerification_Set</h1>
+<p>This function sets the values to be used for server side verification of rewarded ads.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Please refer to <a href="https://support.google.com/admob/answer/9603226">Server-Side Verification</a> for more information.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once set the values are used for future loaded reward video and reward interstitial ads, to clear the data use <a href="general.html#admob_serversideverification_clear">AdMob_ServerSideVerification_Clear</a></p>
+</div>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<pre class="highlight"><code class="language-gml">AdMob_ServerSideVerification_Set(userId, customData)</code></pre>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>userId</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The user ID is a unique identifier given to each user, which lets you know who to reward upon successful ad completion.</td>
+</tr>
+<tr>
+<td>customData</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>Custom data is received in the callback after a user’s successful ad completion. For example, you can include a parameter to know which level the user is on.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.4.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
+<p><br></p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_serversideverification_clear">AdMob_ServerSideVerification_Clear</h1>
+<p>This function clears the previously set values to be used for server side verification of rewarded ads.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to <a href="reward_video.html#admob_rewardedvideo_set_adunit">AdMob_RewardedVideo_Set_AdUnit</a> for more information.</p>
+</div>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<pre class="highlight"><code class="language-gml">AdMob_ServerSideVerification_Clear()</code></pre>
+</blockquote>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Versioning:</strong></p>
+<ul>
+<li><code>1.4.0</code> - This function was <strong>introduced</strong>.</li>
+</ul>
 <p><br></p>
 <p><br></p>
 <hr />
