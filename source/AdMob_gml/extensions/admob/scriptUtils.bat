@@ -126,33 +126,33 @@ exit /b 0
     call :pathResolve "%cd%" "%~2" destination
 
     if not exist "%~1" (
-        echo 1
         call :logError "Failed to copy "%~1" to "%destination%" (source doesn't exist)."
         exit /b 1
     )
 
     if exist "%~1\*" (
-        echo 2
         xcopy "%~1" "%destination%" /E /I /H /Y
     ) else (
-        echo 3
+
+        setlocal enabledelayedexpansion
         for %%I in ("%destination%") do set "destDir=%%~dpI"
 
-        if not exist "%destDir%" (
-            call :logInformation "Destination directory "%destDir%" does not exist. Creating it."
-            mkdir "%destDir%"
+        if not exist "!destDir!" (
+            call :logInformation "Destination directory "!destDir!" does not exist. Creating it."
+            mkdir "!destDir!"
             if %errorlevel% neq 0 (
-                call :logError "Failed to create destination directory ""%destDir%""."
+                call :logError "Failed to create destination directory ""!destDir!""."
                 exit /b 1
             )
         )
+        endlocal
 
         call :logInformation "Copying file "%~1" to "%destination%""
+
         copy /Y "%~1" "%destination%"
     )
 
     if %errorlevel% neq 0 (
-        echo 4
         call :logError "Failed to copy "%~1" to "%destination%"."
         exit /b 1
     )
