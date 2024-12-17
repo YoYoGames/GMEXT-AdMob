@@ -16,7 +16,7 @@
   "copyToTargets":12,
   "description":"",
   "exportToGame":true,
-  "extensionVersion":"1.4.4",
+  "extensionVersion":"1.4.5",
   "files":[
     {"$GMExtensionFile":"","%Name":"AdMob.ext","constants":[
         {"$GMExtensionConstant":"","%Name":"AdMob_Banner_NORMAL","hidden":false,"name":"AdMob_Banner_NORMAL","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"0",},
