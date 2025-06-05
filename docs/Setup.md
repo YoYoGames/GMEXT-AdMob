@@ -83,3 +83,13 @@ All IDs should go in the Extension Options:
 ![Android iOS Config Options!](assets/admob_android_ios_config.png)
 
 Just replace the **Application ID** with your Google Application ID and use your personal Ad Unit IDs (for **Banners**, **Interstitial**, **Rewarded** and **Rewarded Interstitial**)
+
+## Mediation
+
+AdMob Mediation is a feature lets you serve ads to your apps from multiple sources, including the AdMob Network and third-party ad sources, in one place. AdMob Mediation helps maximize your fill rate and increase your monetization by sending ad requests to multiple networks to ensure you find the best available network to serve ads.
+
+The AdMob extension comes with a few additional extensions that each add support for a mediation adapter. By default, all of these are disabled and don't copy to any platform. To enable an adapter extension, check Android and iOS in the **Copies To** section of the extension options. A mediation network that you don't use in your project can have its adapter extension removed.
+
+The above is all that is needed in your project to allow mediation. Further setup takes place in the AdMob Console, see the [Guide to AdMob Mediation](https://support.google.com/admob/answer/13420272).
+
+> See the [Mediation Get Started](https://developers.google.com/admob/android/mediation)
