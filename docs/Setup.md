@@ -39,6 +39,16 @@ To create an ad unit in the AdMob Dashboard, see:
 
 Once you click the **Create Ad Unit** button, the unit will be created and you can note the **Unit ID** and then click either *Done*, if you don't wish to make any other ad units, or *Create Another Ad Unit*, if you do.
 
+### Configuring Mediation
+
+AdMob Mediation is a feature that lets you serve ads to your apps from multiple sources, including the AdMob Network and third-party ad sources, in one place. AdMob Mediation helps maximize your fill rate and increase your monetization by sending ad requests to multiple networks to ensure you find the best available network to serve ads.
+
+The AdMob extension package includes a few additional extensions for certain ad networks, which you can enable to use them, or remove entirely if you don't use them in your project. Most of the configuration needs to be done in the AdMob Dashboard.
+
+For more information see the AdMob documentation:
+
+> [Mediation Get Started](https://developers.google.com/admob/android/mediation) and [Guide to AdMob Mediation](https://support.google.com/admob/answer/13420272)
+
 ### GDPR Consent
 
 1. For GDPR consent you should follow the options below:\
@@ -83,3 +93,9 @@ All IDs should go in the Extension Options:
 ![Android iOS Config Options!](assets/admob_android_ios_config.png)
 
 Just replace the **Application ID** with your Google Application ID and use your personal Ad Unit IDs (for **Banners**, **Interstitial**, **Rewarded** and **Rewarded Interstitial**)
+
+## Mediation
+
+The AdMob extension comes with a few additional extensions that each add support for an ad network. By default, all of these are disabled and don't copy to any platform. To enable a mediation adapter extension, check Android and iOS in the **Copies To** section of the extension options. The adapter extensions for ad networks that you don't use in your project can be removed.
+
+The above is what is needed in your project to allow mediation. Further setup takes place in the AdMob Dashboard, as explained above.
