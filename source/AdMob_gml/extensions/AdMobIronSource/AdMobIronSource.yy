@@ -3,7 +3,7 @@
   "%Name":"AdMobIronSource",
   "androidactivityinject":"",
   "androidclassname":"",
-  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:ironsource:8.1.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n        url 'https://android-sdk.is.com/'\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n",
+  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:ironsource:8.10.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n        url 'https://android-sdk.is.com/'\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n",
   "androidinject":"",
   "androidmanifestinject":"",
   "androidPermissions":[],

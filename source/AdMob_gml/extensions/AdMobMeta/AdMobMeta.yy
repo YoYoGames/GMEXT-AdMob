@@ -3,7 +3,7 @@
   "%Name":"AdMobMeta",
   "androidactivityinject":"",
   "androidclassname":"",
-  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:facebook:6.17.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n",
+  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:facebook:6.20.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n",
   "androidinject":"",
   "androidmanifestinject":"",
   "androidPermissions":[],

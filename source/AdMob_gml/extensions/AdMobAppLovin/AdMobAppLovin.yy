@@ -3,7 +3,7 @@
   "%Name":"AdMobAppLovin",
   "androidactivityinject":"",
   "androidclassname":"",
-  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:applovin:12.5.0.0\")\r\n</YYAndroidGradleDependencies>\r\n",
+  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.google.ads.mediation:applovin:13.3.1.1\")\r\n</YYAndroidGradleDependencies>\r\n",
   "androidinject":"",
   "androidmanifestinject":"",
   "androidPermissions":[],
