@@ -3,7 +3,7 @@
   "%Name":"AdMobPangle",
   "androidactivityinject":"",
   "androidclassname":"",
-  "androidcodeinjection":"\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n      url = uri(\"https://artifact.bytedance.com/repository/pangle/\")\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n\r\n\r\n<YYAndroidGradleDependencies>\r\n    // Pangle Mediation Adapter for AdMob\r\n    implementation(\"com.google.ads.mediation:pangle:6.2.0.5.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n<YYAndroidProguard>\r\n-keep class com.bytedance.sdk.** { *; }\r\n</YYAndroidProguard>",
+  "androidcodeinjection":"\r\n<YYAndroidTopLevelGradleAllprojectsRepositories>\r\nrepositories\r\n{\r\n    maven {\r\n      url = uri(\"https://artifact.bytedance.com/repository/pangle/\")\r\n    }\r\n}\r\n</YYAndroidTopLevelGradleAllprojectsRepositories>\r\n\r\n\r\n<YYAndroidGradleDependencies>\r\n    // Pangle Mediation Adapter for AdMob\r\n    implementation(\"com.google.ads.mediation:pangle:7.3.0.4.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n<YYAndroidProguard>\r\n-keep class com.bytedance.sdk.** { *; }\r\n</YYAndroidProguard>",
   "androidinject":"",
   "androidmanifestinject":"",
   "androidPermissions":[],

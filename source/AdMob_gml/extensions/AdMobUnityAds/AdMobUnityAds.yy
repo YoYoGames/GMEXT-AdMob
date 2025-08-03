@@ -3,7 +3,7 @@
   "%Name":"AdMobUnityAds",
   "androidactivityinject":"",
   "androidclassname":"",
-  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.unity3d.ads:unity-ads:4.11.3\")\r\n    implementation(\"com.google.ads.mediation:unity:4.12.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n",
+  "androidcodeinjection":"\r\n<YYAndroidGradleDependencies>\r\n    implementation(\"com.unity3d.ads:unity-ads:4.15.0\")\r\n    implementation(\"com.google.ads.mediation:unity:4.16.0.0\")\r\n</YYAndroidGradleDependencies>\r\n\r\n",
   "androidinject":"",
   "androidmanifestinject":"",
   "androidPermissions":[],
