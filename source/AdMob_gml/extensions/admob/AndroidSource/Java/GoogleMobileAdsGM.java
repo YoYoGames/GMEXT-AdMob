@@ -75,6 +75,9 @@ import com.google.ads.mediation.admob.AdMobAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class GoogleMobileAdsGM extends RunnerSocial {
 
@@ -449,6 +452,14 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			if (bannerSize == null) return;
 
 			bannerLayout = new RelativeLayout(activity);
+            ViewCompat.setOnApplyWindowInsetsListener(bannerLayout, (v, insets) -> {
+                Insets sysBars = insets.getInsets(
+                    WindowInsetsCompat.Type.statusBars() | WindowInsetsCompat.Type.displayCutout()
+                );
+                int topPad = isBottom ? 0 : sysBars.top; // uniquement quand ancrée en haut
+                v.setPadding(0, topPad, 0, 0);
+                return insets; // on ne consomme pas, on laisse propager
+            });
 			bannerAdView = new AdView(activity);
 	
 			if (triggerOnPaidEvent) {
@@ -485,7 +496,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
             // Add bannerLayout to rootView with the defined layout parameters
             rootView.addView(bannerLayout, bannerLayoutParams);
-
+            ViewCompat.requestApplyInsets(bannerLayout);
 			bannerAdView.setAdListener(new AdListener() {
 	
 				@Override
