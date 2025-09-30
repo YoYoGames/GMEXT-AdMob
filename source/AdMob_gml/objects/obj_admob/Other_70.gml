@@ -117,6 +117,16 @@ switch(async_load[?"type"])
 		// At this point the banner ad failed to be created.
 		break;
 	
+	case ADMOB_EV_BANNER_AD_CLICKED:
+		break;
+		
+	case ADMOB_EV_BANNER_AD_CLOSED:
+		break;
+		
+	case ADMOB_EV_BANNER_AD_OPENED:
+		break;
+		
+	
 	// ########### INTERSTITIAL  ###########
 	
 	// AdMob_Interstitial_Load succeeded

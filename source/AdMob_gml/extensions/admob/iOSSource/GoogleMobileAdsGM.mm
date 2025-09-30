@@ -213,6 +213,28 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     [self sendAsyncEvent:"AdMob_Banner_OnLoaded" eventData:eventData];
 }
 
+- (void)bannerViewWillPresentScreen:(GADBannerView *)bannerView {
+    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
+    eventData[@"unit_id"] = bannerView.adUnitID;
+    [self sendAsyncEvent:"AdMob_Banner_OnOpened" eventData:eventData];
+}
+
+- (void)bannerViewWillDismissScreen:(GADBannerView *)bannerView {
+	//This event doesn't exists on Andorid, ignore...
+}
+
+- (void)bannerViewDidDismissScreen:(GADBannerView *)bannerView {
+    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
+    eventData[@"unit_id"] = bannerView.adUnitID;
+    [self sendAsyncEvent:"AdMob_Banner_OnClosed" eventData:eventData];
+}
+
+- (void)bannerViewDidRecordClick:(GADBannerView *)bannerView {
+    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
+    eventData[@"unit_id"] = bannerView.adUnitID;
+    [self sendAsyncEvent:"AdMob_Banner_OnClicked" eventData:eventData];
+}
+
 -(void)ad:(nonnull id<GADFullScreenPresentingAd>)presentingAd didFailToPresentFullScreenContentWithError:(nonnull NSError *)error
 {
     self.isShowingAd = NO;

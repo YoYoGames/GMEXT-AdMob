@@ -500,6 +500,21 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 					data.put("errorCode", (double) loadAdError.getCode());
 					sendAsyncEvent("AdMob_Banner_OnLoadFailed", data);
 				}
+				
+				@Override
+				public void onAdOpened() {
+					sendAsyncEvent("AdMob_Banner_OnOpened", null);
+				}
+
+				@Override
+				public void onAdClicked() {
+					sendAsyncEvent("AdMob_Banner_OnClicked", null);
+				}
+
+				@Override
+				public void onAdClosed() {
+					sendAsyncEvent("AdMob_Banner_OnClosed", null);
+				}
 			});
 
 			bannerAdView.setAdSize(bannerSize);
