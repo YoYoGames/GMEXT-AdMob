@@ -1036,6 +1036,9 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member ADMOB_EV_CONSENT_SHOW_FAILED The consent form failed to show.
  * @member ADMOB_EV_BANNER_LOADED The banner ad loaded successfuly.
  * @member ADMOB_EV_BANNER_LOAD_FAILED The banner ad failed to load.
+ * @member ADMOB_EV_BANNER_AD_CLICKED The banner ad was clicked.
+ * @member ADMOB_EV_BANNER_AD_CLOSED The banner add was closed.
+ * @member ADMOB_EV_BANNER_AD_OPENED The banner add was opened.
  * @member ADMOB_EV_INTERSTITIAL_LOADED The insterstitial ad loaded successfuly.
  * @member ADMOB_EV_INTERSTITIAL_LOAD_FAILED The insterstitial ad failed to load.
  * @member ADMOB_EV_INTERSTITIAL_SHOWED The insterstitial ad was properly showed.
