@@ -941,7 +941,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @const AdMobErrors
  * @desc This set of constants represents the error values that can be returned from the AdMob function calls.
  * @member ADMOB_OK There were no errors.
- * @member ADMOB_ERROR_NOT_INITIALIZED The AdMob extension needs to be initialized prior to this call
+ * @member ADMOB_ERROR_NOT_INITIALIZED The AdMob extension needs to be initialized prior to this call.
  * @member ADMOB_ERROR_INVALID_AD_ID The provided ad unit ID is not valid.
  * @member ADMOB_ERROR_AD_LIMIT_REACHED The limit of loaded ads for this specific type was reached.
  * @member ADMOB_ERROR_NO_ADS_LOADED There are no loaded ads to be shown for this specific type.
@@ -977,9 +977,9 @@ function AdMob_Events_OnPaidEvent(enable) { }
 /**
  * @const AdMobBannerAlignment
  * @desc This set of constants represents the banner alignment style.
- * @member ADMOB_BANNER_ALIGNMENT_LEFT Left aligns the banner being created.
- * @member ADMOB_BANNER_ALIGNMENT_CENTER Center aligns the banner being created
- * @member ADMOB_BANNER_ALIGNMENT_RIGHT Right aligns the banner being created
+ * @member ADMOB_BANNER_ALIGNMENT_LEFT Left-aligns the banner being created
+ * @member ADMOB_BANNER_ALIGNMENT_CENTER Center-aligns the banner being created
+ * @member ADMOB_BANNER_ALIGNMENT_RIGHT Right-aligns the banner being created
  * @const_end
  */
 
@@ -995,7 +995,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
 
 /**
  * @const AdMobConsentStatus
- * @desc This set of constants represents the various consent status.
+ * @desc This set of constants represents the various consent statuses.
  * @member AdMob_Consent_Status_UNKNOWN Consent status is unknown.
  * @member AdMob_Consent_Status_NOT_REQUIRED User consent not required.
  * @member AdMob_Consent_Status_REQUIRED User consent required but not yet obtained.
@@ -1005,7 +1005,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
 
 /**
  * @const AdMobConsentType
- * @desc This set of constants represents the given consent type.
+ * @desc This set of constants represents the given consent types.
  * @member AdMob_Consent_Type_UNKNOWN Consent type is unknown (before consent was requested).
  * @member AdMob_Consent_Type_NON_PERSONALIZED Consent was given for non-personalized ads.
  * @member AdMob_Consent_Type_PERSONALIZED Consent was given for personalized ads.
@@ -1016,7 +1016,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
 /**
  * @const AdMobConsentMode
  * @desc This set of constants represents the consent mode (these are used for testing porpuses).
- * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED Debug geography disabled.
+ * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED Debug Geography disabled.
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA Geography appears as in EEA for debug devices.
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_NOT_EEA Geography appears as not in EEA for debug devices.
  * @member AdMob_Consent_Mode_PRODUCTION Same as `AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED`, used for production.
@@ -1027,39 +1027,39 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @const AdMobEvent
  * @desc This set of constants represents all the available event types that can be created by the AdMob extension.
  * They are the value assigned to the `type` member of the ${var.async_load} when an ${event.social} is triggered.
- * @member ADMOB_EV_INITIALIZED The extension was successfuly initialized.
+ * @member ADMOB_EV_INITIALIZED The extension was successfully initialised.
  * @member ADMOB_EV_CONSENT_INFO_UPDATED The consent information was updated.
  * @member ADMOB_EV_CONSENT_INFO_UPDATE_FAILED The consent information failed to update.
- * @member ADMOB_EV_CONSENT_LOADED The consent form loaded successfuly.
+ * @member ADMOB_EV_CONSENT_LOADED The consent form loaded successfully.
  * @member ADMOB_EV_CONSENT_LOAD_FAILED The consent form failed to load.
- * @member ADMOB_EV_CONSENT_SHOWED The consent form was properly showed.
+ * @member ADMOB_EV_CONSENT_SHOWED The consent form was properly shown.
  * @member ADMOB_EV_CONSENT_SHOW_FAILED The consent form failed to show.
- * @member ADMOB_EV_BANNER_LOADED The banner ad loaded successfuly.
+ * @member ADMOB_EV_BANNER_LOADED The banner ad loaded successfully.
  * @member ADMOB_EV_BANNER_LOAD_FAILED The banner ad failed to load.
  * @member ADMOB_EV_BANNER_AD_CLICKED The banner ad was clicked.
- * @member ADMOB_EV_BANNER_AD_CLOSED The banner add was closed.
- * @member ADMOB_EV_BANNER_AD_OPENED The banner add was opened.
- * @member ADMOB_EV_INTERSTITIAL_LOADED The insterstitial ad loaded successfuly.
+ * @member ADMOB_EV_BANNER_AD_CLOSED The banner ad was closed.
+ * @member ADMOB_EV_BANNER_AD_OPENED The banner ad was opened.
+ * @member ADMOB_EV_INTERSTITIAL_LOADED The insterstitial ad loaded successfully.
  * @member ADMOB_EV_INTERSTITIAL_LOAD_FAILED The insterstitial ad failed to load.
- * @member ADMOB_EV_INTERSTITIAL_SHOWED The insterstitial ad was properly showed.
+ * @member ADMOB_EV_INTERSTITIAL_SHOWED The insterstitial ad was properly shown.
  * @member ADMOB_EV_INTERSTITIAL_SHOW_FAILED The insterstitial ad failed to show.
  * @member ADMOB_EV_INTERSTITIAL_DISMISSED The insterstitial ad was dismissed.
- * @member ADMOB_EV_REWARDED_LOADED The rewarded ad loaded successfuly.
+ * @member ADMOB_EV_REWARDED_LOADED The rewarded ad loaded successfully.
  * @member ADMOB_EV_REWARDED_LOAD_FAILED The rewarded ad failed to load.
- * @member ADMOB_EV_REWARDED_SHOWED The rewarded ad was properly showed.
+ * @member ADMOB_EV_REWARDED_SHOWED The rewarded ad was properly shown.
  * @member ADMOB_EV_REWARDED_SHOW_FAILED The rewarded ad failed to show.
  * @member ADMOB_EV_REWARDED_DISMISSED The rewarded ad was dismissed.
  * @member ADMOB_EV_REWARDED_REWARD The rewarded ad was fully watched and the user should be rewarded.
- * @member ADMOB_EV_REWARDED_INTERSTITIAL_LOADED The rewarded interstitial ad loaded successfuly.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_LOADED The rewarded interstitial ad loaded successfully.
  * @member ADMOB_EV_REWARDED_INTERSTITIAL_LOAD_FAILED The rewarded interstitial ad failed to load.
- * @member ADMOB_EV_REWARDED_INTERSTITIAL_SHOWED The rewarded interstitial ad was properly showed.
+ * @member ADMOB_EV_REWARDED_INTERSTITIAL_SHOWED The rewarded interstitial ad was properly shown.
  * @member ADMOB_EV_REWARDED_INTERSTITIAL_SHOW_FAILED The rewarded interstitial ad failed to show.
  * @member ADMOB_EV_REWARDED_INTERSTITIAL_DISMISSED The rewarded interstitial ad was dismissed.
  * @member ADMOB_EV_REWARDED_INTERSTITIAL_REWARD The rewarded interstitial ad was fully watched and the user should be rewarded.
- * @member ADMOB_EV_APP_OPEN_LOADED The app open ad ad failed to load.
- * @member ADMOB_EV_APP_OPEN_LOAD_FAILED The app open ad ad failed to load.
- * @member ADMOB_EV_APP_OPEN_SHOWED The app open ad was properly showed.
- * @member ADMOB_EV_APP_OPEN_SHOW_FAILED The app open ad was dismissed.
+ * @member ADMOB_EV_APP_OPEN_LOADED The app open ad loaded successfully.
+ * @member ADMOB_EV_APP_OPEN_LOAD_FAILED The app open ad failed to load.
+ * @member ADMOB_EV_APP_OPEN_SHOWED The app open ad was properly shown.
+ * @member ADMOB_EV_APP_OPEN_SHOW_FAILED The app open ad failed to show.
  * @member ADMOB_EV_APP_OPEN_DISMISSED The app open ad was dismissed.
  * @member ADMOB_EV_PAID The displayed ad was estimated to have earned money.
  * @const_end
