@@ -62,6 +62,21 @@ function AdMob_Banner_Set_AdUnit(adUnitId) { }
  * @member {real} errorCode the error message of the error code
  * @event_end
  * 
+ * @event social
+ * @desc This event is triggered if a banner ad was opened.
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_AD_OPENED`
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if a banner ad was closed.
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_AD_CLOSED`
+ * @event_end
+ * 
+ * @event social
+ * @desc This event is triggered if a banner ad was clicked.
+ * @member {constant.AdMobEvent} type The constant `ADMOB_EV_BANNER_AD_CLICKED`
+ * @event_end
+ * 
  * @func_end
  */
 function AdMob_Banner_Create(size, bottom) { }
