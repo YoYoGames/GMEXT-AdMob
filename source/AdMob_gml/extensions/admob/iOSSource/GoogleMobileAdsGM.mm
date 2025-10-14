@@ -1236,7 +1236,7 @@ static GADAdSize getBannerSize(double size)
 {
     UMPRequestParameters *parameters = [[UMPRequestParameters alloc] init];
     
-    if(testing != 3)
+    if(testing >= 0)
     {
         UMPDebugSettings *debugSettings = [[UMPDebugSettings alloc] init];
         
