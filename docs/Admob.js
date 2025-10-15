@@ -1034,6 +1034,7 @@ function AdMob_Events_OnPaidEvent(enable) { }
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED Debug Geography disabled.
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_EEA Geography appears as in EEA for debug devices.
  * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_NOT_EEA Geography appears as not in EEA for debug devices.
+ * @member AdMob_Consent_Mode_DEBUG_GEOGRAPHY_REGULATED_US_STATE Geography appears as in a regulated US State for debug devices.
  * @member AdMob_Consent_Mode_PRODUCTION Same as `AdMob_Consent_Mode_DEBUG_GEOGRAPHY_DISABLED`, used for production.
  * @const_end
  */
