@@ -1438,9 +1438,9 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 			ConsentRequestParameters.Builder builder = new ConsentRequestParameters.Builder();
 			builder.setTagForUnderAgeOfConsent(targetUnderAge);
 
-			if (mode != 3) {
+			if (mode >= 0) {
 				ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
-						.setDebugGeography((int) mode)
+						.setDebugGeography(3)//((int) mode)
 						.addTestDeviceHashedId(getDeviceID(callingMethod))
 						.build();
 
@@ -1451,7 +1451,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 			consentInformation = UserMessagingPlatform.getConsentInformation(activity);
 			consentInformation.requestConsentInfoUpdate(activity, params,
-					() -> sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", null),
+					() -> 
+					{
+						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", null);
+					},
 					formError -> {
 						Map<String, Object> data = new HashMap<>();
 						data.put("errorMessage", formError.getMessage());
