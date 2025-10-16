@@ -1440,7 +1440,7 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 
 			if (mode >= 0) {
 				ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
-						.setDebugGeography(3)//((int) mode)
+						.setDebugGeography((int) mode)
 						.addTestDeviceHashedId(getDeviceID(callingMethod))
 						.build();
 
