@@ -1665,10 +1665,10 @@ public class GoogleMobileAdsGM extends RunnerSocial {
 	}
 
 	@Override
-    public void onResume() {
-		super.onResume();
+    public void onStart() {
+		super.onStart();
         if (triggerAppOpenAd && !isShowingAd) {
-            if (!appOpenAdIsValid("onResume")) {
+            if (!appOpenAdIsValid("onStart")) {
                 AdMob_AppOpenAd_Load();
                 return;
             }
