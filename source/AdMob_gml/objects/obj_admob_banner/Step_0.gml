@@ -1,23 +1,21 @@
-/// @description Handle device flipping
-
-// Inherit the parent event
 event_inherited();
 
-// When flipping the phone the banner doesn't get positioned in the correct place
-// to solve that we need some special handling. The banner needs to be destroyed
-// and created again for the correct dimensions to be applied.
-
-// For handling with flipping vertical/horizontal position we check:
-// 1) if the button was already pressed (means there is a banner on screen)
-// 2) if the display height as changed (this happens when flipping)
 if (pressed && displayHeight != display_get_height())
 {
-	// We remove the previous banner
-	AdMob_Banner_Remove();
-	
-	// And create a new one (this one will have right dimensions)
-	AdMob_Banner_Create_Ext(banner_type, bottom, alignment);
-	
-	// We refresh the display size
-	displayHeight = display_get_height();
+    admob_banner_remove();
+
+    admob_banner_create_ext(
+        banner_type,
+        bottom,
+        alignment,
+        function(_data_json)
+        {
+            var _data = json_parse(_data_json);
+            show_debug_message(
+                "Banner callback: " + json_stringify(_data)
+            );
+        }
+    );
+
+    displayHeight = display_get_height();
 }

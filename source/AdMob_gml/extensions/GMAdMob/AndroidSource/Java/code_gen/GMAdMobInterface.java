@@ -1,0 +1,64 @@
+// ##### extgen :: Auto-generated file do not edit!! #####
+
+package ${YYAndroidPackageName};
+import ${YYAndroidPackageName}.GMExtWire.GMFunction;
+import ${YYAndroidPackageName}.GMExtWire.GMValue;
+import ${YYAndroidPackageName}.enums.*;
+
+public interface GMAdMobInterface {
+    public double admob_initialize(GMFunction callback);
+    public double admob_set_test_device_id();
+    public double admob_events_on_paid_event(boolean enabled, GMFunction callback);
+    public void admob_banner_set_ad_unit(String ad_unit_id);
+    public double admob_banner_create(AdMobBannerSize size, boolean bottom, GMFunction callback);
+    public double admob_banner_create_ext(AdMobBannerSize size, boolean bottom, AdMobBannerAlignment alignment, GMFunction callback);
+    public double admob_banner_get_width();
+    public double admob_banner_get_height();
+    public double admob_banner_move(boolean bottom);
+    public double admob_banner_show();
+    public double admob_banner_hide();
+    public double admob_banner_remove();
+    public void admob_interstitial_set_ad_unit(String ad_unit_id);
+    public void admob_interstitial_free_loaded_instances(double count);
+    public void admob_interstitial_max_instances(double value);
+    public double admob_interstitial_load(GMFunction callback);
+    public double admob_interstitial_show(GMFunction callback);
+    public double admob_interstitial_is_loaded();
+    public double admob_interstitial_instances_count();
+    public double admob_server_side_verification_set(String user_id, String custom_data);
+    public double admob_server_side_verification_clear();
+    public void admob_rewarded_video_set_ad_unit(String ad_unit_id);
+    public void admob_rewarded_video_free_loaded_instances(double count);
+    public void admob_rewarded_video_max_instances(double value);
+    public double admob_rewarded_video_load(GMFunction callback);
+    public double admob_rewarded_video_show(GMFunction callback);
+    public double admob_rewarded_video_is_loaded();
+    public double admob_rewarded_video_instances_count();
+    public void admob_rewarded_interstitial_set_ad_unit(String ad_unit_id);
+    public void admob_rewarded_interstitial_free_loaded_instances(double count);
+    public void admob_rewarded_interstitial_max_instances(double value);
+    public double admob_rewarded_interstitial_load(GMFunction callback);
+    public double admob_rewarded_interstitial_show(GMFunction callback);
+    public double admob_rewarded_interstitial_is_loaded();
+    public double admob_rewarded_interstitial_instances_count();
+    public void admob_app_open_ad_set_ad_unit(String ad_unit_id);
+    public double admob_app_open_ad_enable(double orientation, GMFunction callback);
+    public void admob_app_open_ad_disable();
+    public double admob_app_open_ad_is_enabled();
+    public double admob_app_open_ad_is_loaded();
+    public double admob_app_open_ad_load(GMFunction callback);
+    public double admob_app_open_ad_show(GMFunction callback);
+    public double admob_targeting_coppa(boolean coppa);
+    public double admob_targeting_under_age(boolean under_age);
+    public double admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating content_rating);
+    public double admob_consent_request_info_update(AdMobConsentDebugGeography debug_geography, GMFunction callback);
+    public double admob_consent_get_status();
+    public double admob_consent_get_type();
+    public double admob_consent_is_form_available();
+    public double admob_consent_load(GMFunction callback);
+    public double admob_consent_show(GMFunction callback);
+    public void admob_consent_reset();
+    public void admob_consent_set_rdp(boolean enabled);
+    public void admob_settings_set_volume(double value);
+    public void admob_settings_set_muted(boolean muted);
+}

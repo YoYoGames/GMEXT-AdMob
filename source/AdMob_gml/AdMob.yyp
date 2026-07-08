@@ -2,7 +2,7 @@
   "$GMProject":"v1",
   "%Name":"AdMob",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[],
@@ -18,6 +18,7 @@
     {"$GMFolder":"","%Name":"Mediations","folderPath":"folders/AdMob/Extensions/Mediations.yy","name":"Mediations","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"App Tracking Transparency","folderPath":"folders/App Tracking Transparency.yy","name":"App Tracking Transparency","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/App Tracking Transparency/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"ExtensionCore","folderPath":"folders/ExtensionCore.yy","name":"ExtensionCore","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"YoYo Extensions Assets","folderPath":"folders/YoYo Extensions Assets.yy","name":"YoYo Extensions Assets","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Font","folderPath":"folders/YoYo Extensions Assets/Font.yy","name":"Font","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Objects","folderPath":"folders/YoYo Extensions Assets/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -30,7 +31,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.13.1.193",
+    "IDEVersion":"2024.14.4.222",
   },
   "name":"AdMob",
   "resources":[
@@ -41,6 +42,8 @@
     {"id":{"name":"AdMobPangle","path":"extensions/AdMobPangle/AdMobPangle.yy",},},
     {"id":{"name":"AdMobUnityAds","path":"extensions/AdMobUnityAds/AdMobUnityAds.yy",},},
     {"id":{"name":"ext_AppTrackingTransparency","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},},
+    {"id":{"name":"ExtensionCore","path":"extensions/ExtensionCore/ExtensionCore.yy",},},
+    {"id":{"name":"GMAdMob","path":"extensions/GMAdMob/GMAdMob.yy",},},
     {"id":{"name":"Font_YoYo_15","path":"fonts/Font_YoYo_15/Font_YoYo_15.yy",},},
     {"id":{"name":"Font_YoYo_20","path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},},
     {"id":{"name":"Font_YoYo_30","path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},},
@@ -60,6 +63,8 @@
     {"id":{"name":"Obj_YoYo_textbox","path":"objects/Obj_YoYo_textbox/Obj_YoYo_textbox.yy",},},
     {"id":{"name":"rmInit","path":"rooms/rmInit/rmInit.yy",},},
     {"id":{"name":"Room_AdMob","path":"rooms/Room_AdMob/Room_AdMob.yy",},},
+    {"id":{"name":"ExtensionCore_api","path":"scripts/ExtensionCore_api/ExtensionCore_api.yy",},},
+    {"id":{"name":"GMAdMob_API","path":"scripts/GMAdMob_API/GMAdMob_API.yy",},},
     {"id":{"name":"Spr_YoYo_Background","path":"sprites/Spr_YoYo_Background/Spr_YoYo_Background.yy",},},
     {"id":{"name":"Spr_YoYo_button","path":"sprites/Spr_YoYo_button/Spr_YoYo_button.yy",},},
     {"id":{"name":"Spr_YoYo_textbox","path":"sprites/Spr_YoYo_textbox/Spr_YoYo_textbox.yy",},},

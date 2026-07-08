@@ -1,3 +1,1 @@
-
-AdMob_RewardedVideo_Free_Loaded_Instances(1)
-
+admob_rewarded_video_free_loaded_instances(1);

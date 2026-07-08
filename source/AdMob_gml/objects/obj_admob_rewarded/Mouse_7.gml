@@ -1,14 +1,29 @@
 /// @description Rewarded load/show
 
-// Check if current rewarded video ad is loaded
-if(AdMob_RewardedVideo_IsLoaded())
+if (admob_rewarded_video_is_loaded())
 {
-	// Loaded: show rewarded video ad
-    AdMob_RewardedVideo_Show()
+    admob_rewarded_video_show(
+        function(_data_json)
+        {
+            var _data = json_parse(_data_json);
+
+            show_debug_message(
+                "Rewarded show callback: "
+                + json_stringify(_data)
+            );
+
+            if (_data.event_type == AdMobRewardedVideoCallbackEvent.Reward)
+            {
+                show_message_async("User Earned Reward");
+            }
+        }
+    );
 }
 else
 {
-	// Not Loaded: load rewarded video ad
-    show_message_async("RewardedVideoAd Still loading, try again soon")
-	AdMob_RewardedVideo_Load()
+    show_message_async(
+        "RewardedVideoAd still loading, try again soon"
+    );
+
+    admob_rewarded_video_load(Obj_AdMob.admob_log);
 }

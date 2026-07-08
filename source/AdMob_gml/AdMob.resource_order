@@ -1,6 +1,7 @@
 {
   "FolderOrderSettings":[
     {"name":"Mediations","order":1,"path":"folders/AdMob/Extensions/Mediations.yy",},
+    {"name":"ExtensionCore","order":1,"path":"folders/ExtensionCore.yy",},
   ],
   "ResourceOrderSettings":[
     {"name":"AdMobAppLovin","order":1,"path":"extensions/AdMobAppLovin/AdMobAppLovin.yy",},
@@ -8,6 +9,7 @@
     {"name":"AdMobMeta","order":3,"path":"extensions/AdMobMeta/AdMobMeta.yy",},
     {"name":"AdMobPangle","order":4,"path":"extensions/AdMobPangle/AdMobPangle.yy",},
     {"name":"AdMobUnityAds","order":5,"path":"extensions/AdMobUnityAds/AdMobUnityAds.yy",},
+    {"name":"GMAdMob","order":2,"path":"extensions/GMAdMob/GMAdMob.yy",},
     {"name":"Font_YoYo_20","order":1,"path":"fonts/Font_YoYo_20/Font_YoYo_20.yy",},
     {"name":"Font_YoYo_30","order":2,"path":"fonts/Font_YoYo_30/Font_YoYo_30.yy",},
     {"name":"oAppTracking","order":1,"path":"objects/oAppTracking/oAppTracking.yy",},
@@ -24,6 +26,8 @@
     {"name":"Obj_YoYo_text","order":1,"path":"objects/Obj_YoYo_text/Obj_YoYo_text.yy",},
     {"name":"Obj_YoYo_textbox","order":2,"path":"objects/Obj_YoYo_textbox/Obj_YoYo_textbox.yy",},
     {"name":"rmInit","order":2,"path":"rooms/rmInit/rmInit.yy",},
+    {"name":"ExtensionCore_api","order":1,"path":"scripts/ExtensionCore_api/ExtensionCore_api.yy",},
+    {"name":"GMAdMob_API","order":3,"path":"scripts/GMAdMob_API/GMAdMob_API.yy",},
     {"name":"Spr_YoYo_button","order":1,"path":"sprites/Spr_YoYo_button/Spr_YoYo_button.yy",},
     {"name":"Spr_YoYo_textbox","order":2,"path":"sprites/Spr_YoYo_textbox/Spr_YoYo_textbox.yy",},
   ],

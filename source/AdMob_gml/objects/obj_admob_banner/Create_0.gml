@@ -1,19 +1,17 @@
 /// @description Initialize variables
 
-// Choose your banner type from the list below:
-banner_type = AdMob_Banner_ADAPTIVE;
-// banner_type = AdMob_Banner_NORMAL;
-// banner_type = AdMob_Banner_SMART;
-// banner_type = AdMob_Banner_FULL;
-// banner_type = AdMob_Banner_LARGE;
-// banner_type = AdMob_Banner_MEDIUM;
-// banner_type = AdMob_Banner_LEADERBOARD;
+banner_type = AdMobBannerSize.AnchoredAdaptive;
+// banner_type = AdMobBannerSize.Banner;
+// banner_type = AdMobBannerSize.SmartBanner;
+// banner_type = AdMobBannerSize.FullBanner;
+// banner_type = AdMobBannerSize.LargeBanner;
+// banner_type = AdMobBannerSize.MediumRectangle;
+// banner_type = AdMobBannerSize.Leaderboard;
 
 event_inherited();
 text = "Banner";
 
 displayHeight = display_get_height();
-alignment = ADMOB_BANNER_ALIGNMENT_CENTER;
+alignment = AdMobBannerAlignment.Center;
 pressed = false;
 bottom = false;
-

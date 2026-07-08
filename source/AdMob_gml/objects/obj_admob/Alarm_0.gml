@@ -1,43 +1,59 @@
 /// @description Handle Orientation Changes
 
-//Enable 'AdMob_Handle_Orientation_Changes' in the "Create" event
-//if your game can change of Orientation 
+alarm[0] = room_speed;
 
-alarm[0] = room_speed
-
-if(orientation != display_get_orientation())
+if (orientation != display_get_orientation())
 {
-	show_debug_message("[AdMob] Orientation Changed!!!!")
-	
-	orientation = display_get_orientation()
-	
-	var Interstitial_Instances_Count = AdMob_Interstitial_Instances_Count()
-	Admob_Interstitial_Free_Loaded_Instances(Interstitial_Instances_Count)
-	repeat(Interstitial_Instances_Count)
-		AdMob_Interstitial_Load()
-	
-	var RewardedInterstitial_Instances_Count = AdMob_RewardedInterstitial_Instances_Count()
-	AdMob_RewardedInterstitial_Free_Loaded_Instances(Interstitial_Instances_Count)
-	repeat(Interstitial_Instances_Count)
-		AdMob_RewardedInterstitial_Load()
-	
-	var RewardedVideo_Instances_Count = AdMob_RewardedVideo_Instances_Count()
-	AdMob_RewardedVideo_Free_Loaded_Instances(Interstitial_Instances_Count)
-	repeat(Interstitial_Instances_Count)
-		AdMob_RewardedVideo_Load()
-		
-	AdMob_AppOpenAd_Disable()
-	
-	switch(orientation)
-	{
-		case display_landscape:
-		case display_landscape_flipped:
-			AdMob_AppOpenAd_Enable(display_landscape)
-		break
-		
-		case display_portrait:
-		case display_portrait_flipped:
-			AdMob_AppOpenAd_Enable(display_portrait)
-		break
-	}
+    show_debug_message("[AdMob] Orientation Changed!!!!");
+
+    orientation = display_get_orientation();
+
+    var _interstitial_count =
+        admob_interstitial_instances_count();
+
+    admob_interstitial_free_loaded_instances(_interstitial_count);
+
+    repeat (_interstitial_count)
+        admob_interstitial_load(Obj_AdMob.admob_log);
+
+    var _rewarded_interstitial_count =
+        admob_rewarded_interstitial_instances_count();
+
+    admob_rewarded_interstitial_free_loaded_instances(
+        _rewarded_interstitial_count
+    );
+
+    repeat (_rewarded_interstitial_count)
+        admob_rewarded_interstitial_load(Obj_AdMob.admob_log);
+
+    var _rewarded_video_count =
+        admob_rewarded_video_instances_count();
+
+    admob_rewarded_video_free_loaded_instances(
+        _rewarded_video_count
+    );
+
+    repeat (_rewarded_video_count)
+        admob_rewarded_video_load(Obj_AdMob.admob_log);
+
+    admob_app_open_ad_disable();
+
+    switch (orientation)
+    {
+        case display_landscape:
+        case display_landscape_flipped:
+            admob_app_open_ad_enable(
+                display_landscape,
+                Obj_AdMob.admob_log
+            );
+        break;
+
+        case display_portrait:
+        case display_portrait_flipped:
+            admob_app_open_ad_enable(
+                display_portrait,
+                Obj_AdMob.admob_log
+            );
+        break;
+    }
 }

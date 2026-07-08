@@ -13,12 +13,12 @@
   "androidsourcedir":"",
   "author":"",
   "classname":"GoogleMobileAdsGM",
-  "copyToTargets":12,
+  "copyToTargets":0,
   "description":"",
   "exportToGame":true,
   "extensionVersion":"1.5.1",
   "files":[
-    {"$GMExtensionFile":"","%Name":"AdMob.ext","constants":[
+    {"$GMExtensionFile":"v1","%Name":"AdMob.ext","constants":[
         {"$GMExtensionConstant":"","%Name":"AdMob_Banner_NORMAL","hidden":false,"name":"AdMob_Banner_NORMAL","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"0",},
         {"$GMExtensionConstant":"","%Name":"AdMob_Banner_LARGE","hidden":false,"name":"AdMob_Banner_LARGE","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"1",},
         {"$GMExtensionConstant":"","%Name":"AdMob_Banner_MEDIUM","hidden":false,"name":"AdMob_Banner_MEDIUM","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"2",},
@@ -156,7 +156,7 @@
         {"$GMExtensionFunction":"","%Name":"AdMob_Events_OnPaidEvent","argCount":0,"args":[2,],"documentation":"","externalName":"AdMob_Events_OnPaidEvent","help":"AdMob_Events_OnPaidEvent(enable)","hidden":false,"kind":4,"name":"AdMob_Events_OnPaidEvent","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":1,},
         {"$GMExtensionFunction":"","%Name":"AdMob_ServerSideVerification_Set","argCount":0,"args":[1,1,],"documentation":"","externalName":"AdMob_ServerSideVerification_Set","help":"AdMob_ServerSideVerification_Set","hidden":false,"kind":4,"name":"AdMob_ServerSideVerification_Set","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
         {"$GMExtensionFunction":"","%Name":"AdMob_ServerSideVerification_Clear","argCount":0,"args":[],"documentation":"","externalName":"AdMob_ServerSideVerification_Clear","help":"AdMob_ServerSideVerification_Clear()","hidden":false,"kind":4,"name":"AdMob_ServerSideVerification_Clear","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
-      ],"init":"","kind":4,"name":"AdMob.ext","order":[],"origname":"","ProxyFiles":[],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},
+      ],"init":"","kind":4,"name":"AdMob.ext","origname":"","ProxyFiles":[],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject":"\r\n\r\nimplementation 'com.google.android.gms:play-services-ads:23.3.0'\r\n\r\n",
   "hasConvertedCodeInjection":true,

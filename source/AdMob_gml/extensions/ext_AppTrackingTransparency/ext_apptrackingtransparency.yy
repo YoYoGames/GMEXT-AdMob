@@ -16,7 +16,7 @@
   "exportToGame":true,
   "extensionVersion":"0.0.1",
   "files":[
-    {"$GMExtensionFile":"","%Name":"ext_AppTrackingTransparency.ext","constants":[
+    {"$GMExtensionFile":"v1","%Name":"ext_AppTrackingTransparency.ext","constants":[
         {"$GMExtensionConstant":"","%Name":"AppTrackingTransparency_NotDetermined","hidden":false,"name":"AppTrackingTransparency_NotDetermined","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"0",},
         {"$GMExtensionConstant":"","%Name":"AppTrackingTransparency_Authorized","hidden":false,"name":"AppTrackingTransparency_Authorized","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"1",},
         {"$GMExtensionConstant":"","%Name":"AppTrackingTransparency_Denied","hidden":false,"name":"AppTrackingTransparency_Denied","resourceType":"GMExtensionConstant","resourceVersion":"2.0","value":"2",},
@@ -25,11 +25,7 @@
         {"$GMExtensionFunction":"","%Name":"AppTrackingTransparency_available","argCount":0,"args":[],"documentation":"","externalName":"AppTrackingTransparency_available","help":"AppTrackingTransparency_available()","hidden":false,"kind":4,"name":"AppTrackingTransparency_available","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
         {"$GMExtensionFunction":"","%Name":"AppTrackingTransparency_request","argCount":0,"args":[],"documentation":"","externalName":"AppTrackingTransparency_request","help":"AppTrackingTransparency_request()","hidden":false,"kind":4,"name":"AppTrackingTransparency_request","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":1,},
         {"$GMExtensionFunction":"","%Name":"AppTrackingTransparency_status","argCount":0,"args":[],"documentation":"","externalName":"AppTrackingTransparency_status","help":"AppTrackingTransparency_status()","hidden":false,"kind":4,"name":"AppTrackingTransparency_status","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
-      ],"init":"","kind":4,"name":"ext_AppTrackingTransparency.ext","order":[
-        {"name":"AppTrackingTransparency_available","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
-        {"name":"AppTrackingTransparency_request","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
-        {"name":"AppTrackingTransparency_status","path":"extensions/ext_AppTrackingTransparency/ext_AppTrackingTransparency.yy",},
-      ],"origname":"","ProxyFiles":[],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},
+      ],"init":"","kind":4,"name":"ext_AppTrackingTransparency.ext","origname":"","ProxyFiles":[],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject":"",
   "hasConvertedCodeInjection":true,

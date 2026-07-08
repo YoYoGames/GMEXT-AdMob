@@ -1,0 +1,379 @@
+[gml_api]
+module GMAdMob;
+
+// -----------------------------------------------------------------------------
+// Initialization / setup
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_initialize(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_set_test_device_id(): real;
+
+[global, bind = typed_gml]
+function admob_events_on_paid_event(enabled: bool, callback: func): real;
+
+// -----------------------------------------------------------------------------
+// Banner
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_banner_set_ad_unit(ad_unit_id: string): unit;
+
+[global, bind = typed_gml]
+function admob_banner_create(
+    [type_hint=`AdMobBannerSize`] size,
+    bottom: bool,
+    callback: func
+): real;
+
+[global, bind = typed_gml]
+function admob_banner_create_ext(
+    [type_hint=`AdMobBannerSize`] size,
+    bottom: bool,
+    [type_hint=`AdMobBannerAlignment`] alignment,
+    callback: func
+): real;
+
+[global, bind = typed_gml]
+function admob_banner_get_width(): real;
+
+[global, bind = typed_gml]
+function admob_banner_get_height(): real;
+
+[global, bind = typed_gml]
+function admob_banner_move(bottom: bool): real;
+
+[global, bind = typed_gml]
+function admob_banner_show(): real;
+
+[global, bind = typed_gml]
+function admob_banner_hide(): real;
+
+[global, bind = typed_gml]
+function admob_banner_remove(): real;
+
+// -----------------------------------------------------------------------------
+// Interstitial
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_interstitial_set_ad_unit(ad_unit_id: string): unit;
+
+[global, bind = typed_gml]
+function admob_interstitial_free_loaded_instances(count: real): unit;
+
+[global, bind = typed_gml]
+function admob_interstitial_max_instances(value: real): unit;
+
+[global, bind = typed_gml]
+function admob_interstitial_load(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_interstitial_show(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_interstitial_is_loaded(): real;
+
+[global, bind = typed_gml]
+function admob_interstitial_instances_count(): real;
+
+// -----------------------------------------------------------------------------
+// Server-side verification
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_server_side_verification_set(
+    user_id: string,
+    custom_data: string
+): real;
+
+[global, bind = typed_gml]
+function admob_server_side_verification_clear(): real;
+
+// -----------------------------------------------------------------------------
+// Rewarded video
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_rewarded_video_set_ad_unit(ad_unit_id: string): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_free_loaded_instances(count: real): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_max_instances(value: real): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_load(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_show(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_is_loaded(): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_video_instances_count(): real;
+
+// -----------------------------------------------------------------------------
+// Rewarded interstitial
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_set_ad_unit(ad_unit_id: string): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_free_loaded_instances(count: real): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_max_instances(value: real): unit;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_load(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_show(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_is_loaded(): real;
+
+[global, bind = typed_gml]
+function admob_rewarded_interstitial_instances_count(): real;
+
+// -----------------------------------------------------------------------------
+// App-open ads
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_app_open_ad_set_ad_unit(ad_unit_id: string): unit;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_enable(
+    orientation: real,
+    callback: func
+): real;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_disable(): unit;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_is_enabled(): real;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_is_loaded(): real;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_load(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_app_open_ad_show(callback: func): real;
+
+// -----------------------------------------------------------------------------
+// Targeting
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_targeting_coppa(coppa: bool): real;
+
+[global, bind = typed_gml]
+function admob_targeting_under_age(under_age: bool): real;
+
+[global, bind = typed_gml]
+function admob_targeting_max_ad_content_rating(
+    [type_hint=`AdMobMaxAdContentRating`] content_rating
+): real;
+
+// -----------------------------------------------------------------------------
+// Consent
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_consent_request_info_update(
+    [type_hint=`AdMobConsentDebugGeography`] debug_geography,
+    callback: func
+): real;
+
+[global, bind = typed_gml]
+function admob_consent_get_status(): real;
+
+[global, bind = typed_gml]
+function admob_consent_get_type(): real;
+
+[global, bind = typed_gml]
+function admob_consent_is_form_available(): real;
+
+[global, bind = typed_gml]
+function admob_consent_load(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_consent_show(callback: func): real;
+
+[global, bind = typed_gml]
+function admob_consent_reset(): unit;
+
+[global, bind = typed_gml]
+function admob_consent_set_rdp(enabled: bool): unit;
+
+// -----------------------------------------------------------------------------
+// Settings
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+function admob_settings_set_volume(value: real): unit;
+
+[global, bind = typed_gml]
+function admob_settings_set_muted(muted: bool): unit;
+
+// -----------------------------------------------------------------------------
+// Error/status enums
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+enum AdMobError:int32
+{
+    Ok = 0,
+    NotInitialized = -1,
+    InvalidAdId = -2,
+    AdLimitReached = -3,
+    NoAdsLoaded = -4,
+    NoActiveBannerAd = -5,
+    IllegalCall = -6,
+    NullViewHandler = -7,
+}
+
+[global, bind = typed_gml]
+enum AdMobBannerAlignment:int32
+{
+    Left = 0,
+    Center = 1,
+    Right = 2,
+}
+
+[global, bind = typed_gml]
+enum AdMobBannerSize:int32
+{
+    Banner = 0,
+    LargeBanner = 1,
+    MediumRectangle = 2,
+    FullBanner = 3,
+    Leaderboard = 4,
+    SmartBanner = 5,
+    AnchoredAdaptive = 6,
+}
+
+[global, bind = typed_gml]
+enum AdMobMaxAdContentRating:int32
+{
+    General = 0,
+    ParentalGuidance = 1,
+    Teen = 2,
+    MatureAudience = 3,
+}
+
+[global, bind = typed_gml]
+enum AdMobConsentDebugGeography:int32
+{
+    Disabled = -1,
+    EEA = 1,
+    NotEEA = 2,
+}
+
+[global, bind = typed_gml]
+enum AdMobConsentStatus:int32
+{
+    Unknown = 0,
+    Required = 1,
+    NotRequired = 2,
+    Obtained = 3,
+}
+
+[global, bind = typed_gml]
+enum AdMobConsentType:int32
+{
+    Unknown = 0,
+    NonPersonalized = 1,
+    Personalized = 2,
+    Declined = 3,
+}
+
+// -----------------------------------------------------------------------------
+// Callback event enums
+// -----------------------------------------------------------------------------
+
+[global, bind = typed_gml]
+enum AdMobInitializeCallbackEvent:int32
+{
+    Initialized = 0,
+    Failed = 1,
+}
+
+[global, bind = typed_gml]
+enum AdMobBannerCallbackEvent:int32
+{
+    Loaded = 0,
+    LoadFailed = 1,
+    Opened = 2,
+    Clicked = 3,
+    Closed = 4,
+}
+
+[global, bind = typed_gml]
+enum AdMobInterstitialCallbackEvent:int32
+{
+    Loaded = 0,
+    LoadFailed = 1,
+    FullyShown = 2,
+    ShowFailed = 3,
+    Dismissed = 4,
+}
+
+[global, bind = typed_gml]
+enum AdMobRewardedVideoCallbackEvent:int32
+{
+    Loaded = 0,
+    LoadFailed = 1,
+    FullyShown = 2,
+    ShowFailed = 3,
+    Dismissed = 4,
+    Reward = 5,
+}
+
+[global, bind = typed_gml]
+enum AdMobRewardedInterstitialCallbackEvent:int32
+{
+    Loaded = 0,
+    LoadFailed = 1,
+    FullyShown = 2,
+    ShowFailed = 3,
+    Dismissed = 4,
+    Reward = 5,
+}
+
+[global, bind = typed_gml]
+enum AdMobAppOpenAdCallbackEvent:int32
+{
+    Loaded = 0,
+    LoadFailed = 1,
+    FullyShown = 2,
+    ShowFailed = 3,
+    Dismissed = 4,
+}
+
+[global, bind = typed_gml]
+enum AdMobConsentCallbackEvent:int32
+{
+    RequestInfoUpdated = 0,
+    RequestInfoUpdateFailed = 1,
+    Loaded = 2,
+    LoadFailed = 3,
+    Shown = 4,
+    ShowFailed = 5,
+}
+
+[global, bind = typed_gml]
+enum AdMobPaidEventCallbackEvent:int32
+{
+    Paid = 0,
+}
