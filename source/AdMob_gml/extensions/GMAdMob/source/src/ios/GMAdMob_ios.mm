@@ -1,4 +1,3 @@
-
 #import "GMAdMob_ios.h"
 
 #import <Foundation/Foundation.h>
@@ -394,7 +393,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_initialize_callback = callback;
 
-    double code = [self AdMob_Initialize];
+    double code = [self impl_admob_initialize];
 
     if (code != ADMOB_OK)
     {
@@ -411,7 +410,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_set_test_device_id
 {
-    return [self AdMob_SetTestDeviceId];
+    return [self impl_admob_settestdeviceid];
 }
 
 - (double)admob_events_on_paid_event:(bool)enabled
@@ -420,7 +419,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     self.triggerOnPaidEvent = enabled;
     g_paid_event_callback = enabled ? callback : nil;
 
-    [self AdMob_Events_OnPaidEvent:(enabled ? 1.0 : 0.0)];
+    [self impl_admob_events_onpaidevent:(enabled ? 1.0 : 0.0)];
 
     return ADMOB_OK;
 }
@@ -428,7 +427,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 - (void)admob_banner_set_ad_unit:
     (std::string_view)ad_unit_id
 {
-    [self AdMob_Banner_Set_AdUnit:
+    [self impl_admob_banner_set_adunit:
         AdMobStringFromStringView(ad_unit_id)];
 }
 
@@ -443,7 +442,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
     double code =
         [self
-            AdMob_Banner_Create:(double)(int32_t)size
+            impl_admob_banner_create:(double)(int32_t)size
             bottom:(bottom ? 1.0 : 0.0)];
 
     if (code != ADMOB_OK)
@@ -473,7 +472,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
     double code =
         [self
-            AdMob_Banner_Create_Ext:(double)(int32_t)size
+            impl_admob_banner_create_ext:(double)(int32_t)size
             bottom:(bottom ? 1.0 : 0.0)
             alignment:(double)(int32_t)alignment];
 
@@ -493,32 +492,32 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_banner_get_width
 {
-    return [self AdMob_Banner_GetWidth];
+    return [self impl_admob_banner_getwidth];
 }
 
 - (double)admob_banner_get_height
 {
-    return [self AdMob_Banner_GetHeight];
+    return [self impl_admob_banner_getheight];
 }
 
 - (double)admob_banner_move:(bool)bottom
 {
-    return [self AdMob_Banner_Move:(bottom ? 1.0 : 0.0)];
+    return [self impl_admob_banner_move:(bottom ? 1.0 : 0.0)];
 }
 
 - (double)admob_banner_show
 {
-    return [self AdMob_Banner_Show];
+    return [self impl_admob_banner_show];
 }
 
 - (double)admob_banner_hide
 {
-    return [self AdMob_Banner_Hide];
+    return [self impl_admob_banner_hide];
 }
 
 - (double)admob_banner_remove
 {
-    double code = [self AdMob_Banner_Remove];
+    double code = [self impl_admob_banner_remove];
 
     if (code == ADMOB_OK)
         g_banner_callback = nil;
@@ -529,20 +528,20 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 - (void)admob_interstitial_set_ad_unit:
     (std::string_view)ad_unit_id
 {
-    [self AdMob_Interstitial_Set_AdUnit:
+    [self impl_admob_interstitial_set_adunit:
         AdMobStringFromStringView(ad_unit_id)];
 }
 
 - (void)admob_interstitial_free_loaded_instances:
     (double)count
 {
-    [self Admob_Interstitial_Free_Loaded_Instances:count];
+    [self impl_admob_interstitial_free_loaded_instances:count];
 }
 
 - (void)admob_interstitial_max_instances:
     (double)value
 {
-    [self Admob_Interstitial_Max_Instances:value];
+    [self impl_admob_interstitial_max_instances:value];
 }
 
 - (double)admob_interstitial_load:
@@ -550,7 +549,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     [g_interstitial_load_callbacks addObject:callback];
 
-    double code = [self AdMob_Interstitial_Load];
+    double code = [self impl_admob_interstitial_load];
 
     if (code != ADMOB_OK)
     {
@@ -571,7 +570,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_interstitial_show_callback = callback;
 
-    double code = [self AdMob_Interstitial_Show];
+    double code = [self impl_admob_interstitial_show];
 
     if (code != ADMOB_OK)
     {
@@ -589,12 +588,12 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_interstitial_is_loaded
 {
-    return [self AdMob_Interstitial_IsLoaded];
+    return [self impl_admob_interstitial_isloaded];
 }
 
 - (double)admob_interstitial_instances_count
 {
-    return [self AdMob_Interstitial_Instances_Count];
+    return [self impl_admob_interstitial_instances_count];
 }
 
 - (double)admob_server_side_verification_set:
@@ -603,7 +602,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             (std::string_view)custom_data
 {
     return [self
-        AdMob_ServerSideVerification_Set:
+        impl_admob_serversideverification_set:
             AdMobStringFromStringView(user_id)
         customData:
             AdMobStringFromStringView(custom_data)];
@@ -611,26 +610,26 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_server_side_verification_clear
 {
-    return [self AdMob_ServerSideVerification_Clear];
+    return [self impl_admob_serversideverification_clear];
 }
 
 - (void)admob_rewarded_video_set_ad_unit:
     (std::string_view)ad_unit_id
 {
-    [self AdMob_RewardedVideo_Set_AdUnit:
+    [self impl_admob_rewardedvideo_set_adunit:
         AdMobStringFromStringView(ad_unit_id)];
 }
 
 - (void)admob_rewarded_video_free_loaded_instances:
     (double)count
 {
-    [self AdMob_RewardedVideo_Free_Loaded_Instances:count];
+    [self impl_admob_rewardedvideo_free_loaded_instances:count];
 }
 
 - (void)admob_rewarded_video_max_instances:
     (double)value
 {
-    [self AdMob_RewardedVideo_Max_Instances:value];
+    [self impl_admob_rewardedvideo_max_instances:value];
 }
 
 - (double)admob_rewarded_video_load:
@@ -638,7 +637,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     [g_rewarded_video_load_callbacks addObject:callback];
 
-    double code = [self AdMob_RewardedVideo_Load];
+    double code = [self impl_admob_rewardedvideo_load];
 
     if (code != ADMOB_OK)
     {
@@ -659,7 +658,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_rewarded_video_show_callback = callback;
 
-    double code = [self AdMob_RewardedVideo_Show];
+    double code = [self impl_admob_rewardedvideo_show];
 
     if (code != ADMOB_OK)
     {
@@ -677,31 +676,31 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_rewarded_video_is_loaded
 {
-    return [self AdMob_RewardedVideo_IsLoaded];
+    return [self impl_admob_rewardedvideo_isloaded];
 }
 
 - (double)admob_rewarded_video_instances_count
 {
-    return [self AdMob_RewardedVideo_Instances_Count];
+    return [self impl_admob_rewardedvideo_instances_count];
 }
 
 - (void)admob_rewarded_interstitial_set_ad_unit:
     (std::string_view)ad_unit_id
 {
-    [self AdMob_RewardedInterstitial_Set_AdUnit:
+    [self impl_admob_rewardedinterstitial_set_adunit:
         AdMobStringFromStringView(ad_unit_id)];
 }
 
 - (void)admob_rewarded_interstitial_free_loaded_instances:
     (double)count
 {
-    [self AdMob_RewardedInterstitial_Free_Loaded_Instances:count];
+    [self impl_admob_rewardedinterstitial_free_loaded_instances:count];
 }
 
 - (void)admob_rewarded_interstitial_max_instances:
     (double)value
 {
-    [self AdMob_RewardedInterstitial_Max_Instances:value];
+    [self impl_admob_rewardedinterstitial_max_instances:value];
 }
 
 - (double)admob_rewarded_interstitial_load:
@@ -709,7 +708,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     [g_rewarded_interstitial_load_callbacks addObject:callback];
 
-    double code = [self AdMob_RewardedInterstitial_Load];
+    double code = [self impl_admob_rewardedinterstitial_load];
 
     if (code != ADMOB_OK)
     {
@@ -730,7 +729,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_rewarded_interstitial_show_callback = callback;
 
-    double code = [self AdMob_RewardedInterstitial_Show];
+    double code = [self impl_admob_rewardedinterstitial_show];
 
     if (code != ADMOB_OK)
     {
@@ -748,18 +747,18 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_rewarded_interstitial_is_loaded
 {
-    return [self AdMob_RewardedInterstitial_IsLoaded];
+    return [self impl_admob_rewardedinterstitial_isloaded];
 }
 
 - (double)admob_rewarded_interstitial_instances_count
 {
-    return [self AdMob_RewardedInterstitial_Instances_Count];
+    return [self impl_admob_rewardedinterstitial_instances_count];
 }
 
 - (void)admob_app_open_ad_set_ad_unit:
     (std::string_view)ad_unit_id
 {
-    [self AdMob_AppOpenAd_Set_AdUnit:
+    [self impl_admob_appopenad_set_adunit:
         AdMobStringFromStringView(ad_unit_id)];
 }
 
@@ -770,7 +769,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_app_open_enable_callback = callback;
 
-    double code = [self AdMob_AppOpenAd_Enable:orientation];
+    double code = [self impl_admob_appopenad_enable:orientation];
 
     if (code != ADMOB_OK)
     {
@@ -788,18 +787,18 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (void)admob_app_open_ad_disable
 {
-    [self AdMob_AppOpenAd_Disable];
+    [self impl_admob_appopenad_disable];
     g_app_open_enable_callback = nil;
 }
 
 - (double)admob_app_open_ad_is_enabled
 {
-    return [self AdMob_AppOpenAd_IsEnabled];
+    return [self impl_admob_appopenad_isenabled];
 }
 
 - (double)admob_app_open_ad_is_loaded
 {
-    return [self AdMob_AppOpenAd_IsLoaded];
+    return [self impl_admob_appopenad_isloaded];
 }
 
 - (double)admob_app_open_ad_load:
@@ -807,7 +806,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_app_open_load_callback = callback;
 
-    double code = [self AdMob_AppOpenAd_Load];
+    double code = [self impl_admob_appopenad_load];
 
     if (code != ADMOB_OK)
     {
@@ -828,7 +827,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     g_app_open_show_callback = callback;
 
-    double code = [self AdMob_AppOpenAd_Show];
+    double code = [self impl_admob_appopenad_show];
 
     if (code != ADMOB_OK)
     {
@@ -846,19 +845,19 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_targeting_coppa:(bool)coppa
 {
-    return [self AdMob_Targeting_COPPA:(coppa ? 1.0 : 0.0)];
+    return [self impl_admob_targeting_coppa:(coppa ? 1.0 : 0.0)];
 }
 
 - (double)admob_targeting_under_age:(bool)under_age
 {
-    return [self AdMob_Targeting_UnderAge:(under_age ? 1.0 : 0.0)];
+    return [self impl_admob_targeting_underage:(under_age ? 1.0 : 0.0)];
 }
 
 - (double)admob_targeting_max_ad_content_rating:
     (gm_enums::AdMobMaxAdContentRating)content_rating
 {
     return [self
-        AdMob_Targeting_MaxAdContentRating:
+        impl_admob_targeting_maxadcontentrating:
             (double)(int32_t)content_rating];
 }
 
@@ -870,7 +869,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     g_consent_request_callback = callback;
 
     [self
-        AdMob_Consent_RequestInfoUpdate:
+        impl_admob_consent_requestinfoupdate:
             (double)(int32_t)debug_geography];
 
     return ADMOB_OK;
@@ -878,24 +877,24 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 - (double)admob_consent_get_status
 {
-    return [self AdMob_Consent_GetStatus];
+    return [self impl_admob_consent_getstatus];
 }
 
 - (double)admob_consent_get_type
 {
-    return [self AdMob_Consent_GetType];
+    return [self impl_admob_consent_gettype];
 }
 
 - (double)admob_consent_is_form_available
 {
-    return [self AdMob_Consent_IsFormAvailable];
+    return [self impl_admob_consent_isformavailable];
 }
 
 - (double)admob_consent_load:
     (gm::wire::GMFunction)callback
 {
     g_consent_load_callback = callback;
-    [self AdMob_Consent_Load];
+    [self impl_admob_consent_load];
     return ADMOB_OK;
 }
 
@@ -903,33 +902,33 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     (gm::wire::GMFunction)callback
 {
     g_consent_show_callback = callback;
-    [self AdMob_Consent_Show];
+    [self impl_admob_consent_show];
     return ADMOB_OK;
 }
 
 - (void)admob_consent_reset
 {
-    [self AdMob_Consent_Reset];
+    [self impl_admob_consent_reset];
 }
 
 - (void)admob_consent_set_rdp:(bool)enabled
 {
-    [self AdMob_Consent_Set_RDP:(enabled ? 1.0 : 0.0)];
+    [self impl_admob_consent_set_rdp:(enabled ? 1.0 : 0.0)];
 }
 
 - (void)admob_settings_set_volume:(double)value
 {
-    [self AdMob_Settings_SetVolume:value];
+    [self impl_admob_settings_setvolume:value];
 }
 
 - (void)admob_settings_set_muted:(bool)muted
 {
-    [self AdMob_Settings_SetMuted:(muted ? 1.0 : 0.0)];
+    [self impl_admob_settings_setmuted:(muted ? 1.0 : 0.0)];
 }
 
 #pragma mark - Setup Methods
 
--(double) AdMob_Initialize
+-(double) impl_admob_initialize
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) {
         return ADMOB_ERROR_ILLEGAL_CALL;
@@ -970,7 +969,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
--(double) AdMob_SetTestDeviceId
+-(double) impl_admob_settestdeviceid
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
     
@@ -978,7 +977,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
--(void) AdMob_Events_OnPaidEvent:(double) enable
+-(void) impl_admob_events_onpaidevent:(double) enable
 {
     self.triggerOnPaidEvent = enable >= 0.5;
 }
@@ -1077,7 +1076,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Reload the App Open Ad after failure
-            [self AdMob_AppOpenAd_Load];
+            [self impl_admob_appopenad_load];
         }
     }
     
@@ -1117,7 +1116,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Reload the App Open Ad after failure
-            [self AdMob_AppOpenAd_Load];
+            [self impl_admob_appopenad_load];
         }
     }
     
@@ -1177,7 +1176,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Load the App Open Ad again
-            [self AdMob_AppOpenAd_Load];
+            [self impl_admob_appopenad_load];
         }
     }
     
@@ -1191,12 +1190,12 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 #pragma mark - Banner Methods
 
--(void) AdMob_Banner_Set_AdUnit:(NSString*) adUnitId
+-(void) impl_admob_banner_set_adunit:(NSString*) adUnitId
 {
     self.bannerAdUnitId = adUnitId;
 }
 
--(double) AdMob_Banner_Create:(double)size bottom:(double)bottom
+-(double) impl_admob_banner_create:(double)size bottom:(double)bottom
 {
     // Default alignment is center
     return [self createBannerAdViewWithSize:size
@@ -1205,7 +1204,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                               callingMethod:__FUNCTION__];
 }
 
-- (double)AdMob_Banner_Create_Ext:(double)size bottom:(double)bottom alignment:(double)alignment
+- (double)impl_admob_banner_create_ext:(double)size bottom:(double)bottom alignment:(double)alignment
 {
     return [self createBannerAdViewWithSize:size
                                      bottom:bottom
@@ -1213,7 +1212,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                               callingMethod:__FUNCTION__];
 }
 
--(double) AdMob_Banner_GetWidth
+-(double) impl_admob_banner_getwidth
 {
     if (!self.bannerView) return 0;
     
@@ -1224,7 +1223,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return dispW;
 }
 
--(double) AdMob_Banner_GetHeight
+-(double) impl_admob_banner_getheight
 {
     if (!self.bannerView) return 0;
     
@@ -1235,7 +1234,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return dispH;
 }
 
--(double)AdMob_Banner_Move:(double)bottom
+-(double)impl_admob_banner_move:(double)bottom
 {
     
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1258,7 +1257,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
--(double) AdMob_Banner_Show
+-(double) impl_admob_banner_show
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1271,7 +1270,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
--(double) AdMob_Banner_Hide
+-(double) impl_admob_banner_hide
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1284,7 +1283,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
--(double) AdMob_Banner_Remove
+-(double) impl_admob_banner_remove
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1439,19 +1438,19 @@ static GADAdSize getBannerSize(double size)
 
 #pragma mark - Interstitial Methods
 
--(void) AdMob_Interstitial_Set_AdUnit:(NSString*) adUnitId
+-(void) impl_admob_interstitial_set_adunit:(NSString*) adUnitId
 {
     self.interstitialAdUnitId = adUnitId;
 }
 
--(void) Admob_Interstitial_Free_Loaded_Instances:(double) count
+-(void) impl_admob_interstitial_free_loaded_instances:(double) count
 {
     [self freeLoadedInstances:self.interstitialAdQueue count:count withCleaner:^(id ad){
         [self cleanUpInterstitialAd:(GADInterstitialAd *)ad];
     }];
 }
 
--(void) Admob_Interstitial_Max_Instances:(double) value
+-(void) impl_admob_interstitial_max_instances:(double) value
 {
     self.interstitialAdQueueCapacity = value;
     [self trimLoadedAdsQueue:self.interstitialAdQueue maxSize:value withCleaner:^(id ad){
@@ -1459,7 +1458,7 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(double) AdMob_Interstitial_Load
+-(double) impl_admob_interstitial_load
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1515,7 +1514,7 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_Interstitial_Show
+-(double) impl_admob_interstitial_show
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1539,19 +1538,19 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_Interstitial_IsLoaded
+-(double) impl_admob_interstitial_isloaded
 {
-    return [self AdMob_Interstitial_Instances_Count] > 0 ? 1.0 : 0.0;
+    return [self impl_admob_interstitial_instances_count] > 0 ? 1.0 : 0.0;
 }
 
--(double) AdMob_Interstitial_Instances_Count
+-(double) impl_admob_interstitial_instances_count
 {
     return [self.interstitialAdQueue size];
 }
 
 #pragma mark - Server Side Verification
 
--(double) AdMob_ServerSideVerification_Set:(NSString*)userId customData:(NSString*)customData
+-(double) impl_admob_serversideverification_set:(NSString*)userId customData:(NSString*)customData
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1561,7 +1560,7 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_ServerSideVerification_Clear
+-(double) impl_admob_serversideverification_clear
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1601,19 +1600,19 @@ static GADAdSize getBannerSize(double size)
 
 #pragma mark - Rewarded Video Methods
 
--(void) AdMob_RewardedVideo_Set_AdUnit:(NSString*) adUnitId
+-(void) impl_admob_rewardedvideo_set_adunit:(NSString*) adUnitId
 {
     self.rewardedUnitId = adUnitId;
 }
 
--(void) AdMob_RewardedVideo_Free_Loaded_Instances:(double) count
+-(void) impl_admob_rewardedvideo_free_loaded_instances:(double) count
 {
     [self freeLoadedInstances:self.rewardedAdQueue count:count withCleaner:^(id ad){
         [self cleanUpRewardedAd:(GADRewardedAd *)ad];
     }];
 }
 
--(void) AdMob_RewardedVideo_Max_Instances:(double) value
+-(void) impl_admob_rewardedvideo_max_instances:(double) value
 {
     self.rewardedAdQueueCapacity = value;
     [self trimLoadedAdsQueue:self.rewardedAdQueue maxSize:value withCleaner:^(id ad){
@@ -1621,7 +1620,7 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(double) AdMob_RewardedVideo_Load
+-(double) impl_admob_rewardedvideo_load
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1684,7 +1683,7 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_RewardedVideo_Show
+-(double) impl_admob_rewardedvideo_show
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1719,31 +1718,31 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_RewardedVideo_IsLoaded
+-(double) impl_admob_rewardedvideo_isloaded
 {
-    return [self AdMob_RewardedVideo_Instances_Count] > 0 ? 1.0 : 0.0;
+    return [self impl_admob_rewardedvideo_instances_count] > 0 ? 1.0 : 0.0;
 }
 
--(double) AdMob_RewardedVideo_Instances_Count
+-(double) impl_admob_rewardedvideo_instances_count
 {
     return [self.rewardedAdQueue size];
 }
 
 #pragma mark - Rewarded Interstitial Methods
 
--(void) AdMob_RewardedInterstitial_Set_AdUnit:(NSString*) adUnitId
+-(void) impl_admob_rewardedinterstitial_set_adunit:(NSString*) adUnitId
 {
     self.rewardedInterstitialAdUnitId = adUnitId;
 }
 
--(void) AdMob_RewardedInterstitial_Free_Loaded_Instances:(double) count
+-(void) impl_admob_rewardedinterstitial_free_loaded_instances:(double) count
 {
     [self freeLoadedInstances:self.rewardedInterstitialAdQueue count:count withCleaner:^(id ad){
         [self cleanUpRewardedInterstitialAd:(GADRewardedInterstitialAd *)ad];
     }];
 }
 
--(void) AdMob_RewardedInterstitial_Max_Instances:(double) value
+-(void) impl_admob_rewardedinterstitial_max_instances:(double) value
 {
     self.rewardedAdInterstitialQueueCapacity = value;
     [self trimLoadedAdsQueue:self.rewardedInterstitialAdQueue maxSize:value withCleaner:^(id ad){
@@ -1751,7 +1750,7 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(double) AdMob_RewardedInterstitial_Load
+-(double) impl_admob_rewardedinterstitial_load
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1814,7 +1813,7 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_RewardedInterstitial_Show
+-(double) impl_admob_rewardedinterstitial_show
 {
     // Validate that the SDK is initialized
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1849,24 +1848,24 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_RewardedInterstitial_IsLoaded
+-(double) impl_admob_rewardedinterstitial_isloaded
 {
-    return [self AdMob_RewardedInterstitial_Instances_Count] > 0 ? 1.0 : 0.0;
+    return [self impl_admob_rewardedinterstitial_instances_count] > 0 ? 1.0 : 0.0;
 }
 
--(double) AdMob_RewardedInterstitial_Instances_Count
+-(double) impl_admob_rewardedinterstitial_instances_count
 {
     return [self.rewardedInterstitialAdQueue size];
 }
 
 #pragma mark - App Open Methods
 
--(void) AdMob_AppOpenAd_Set_AdUnit:(NSString*) adUnitId
+-(void) impl_admob_appopenad_set_adunit:(NSString*) adUnitId
 {
     self.appOpenAdUnitId = adUnitId;
 }
 
--(double) AdMob_AppOpenAd_Enable:(double) orientation
+-(double) impl_admob_appopenad_enable:(double) orientation
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1875,28 +1874,28 @@ static GADAdSize getBannerSize(double size)
     self.triggerAppOpenAd = YES;
     
     if(![self appOpenAdIsValid:__FUNCTION__]) {
-        [self AdMob_AppOpenAd_Load];
+        [self impl_admob_appopenad_load];
     }
     
     return ADMOB_OK;
 }
 
--(void) AdMob_AppOpenAd_Disable
+-(void) impl_admob_appopenad_disable
 {
     self.triggerAppOpenAd = NO;
 }
 
--(double) AdMob_AppOpenAd_IsEnabled
+-(double) impl_admob_appopenad_isenabled
 {
     return self.triggerAppOpenAd ? 1.0 : 0.0;
 }
 
--(double) AdMob_AppOpenAd_IsLoaded
+-(double) impl_admob_appopenad_isloaded
 {
     return [self appOpenAdIsValid:__FUNCTION__];
 }
 
--(double) AdMob_AppOpenAd_Load
+-(double) impl_admob_appopenad_load
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1948,7 +1947,7 @@ static GADAdSize getBannerSize(double size)
     return ADMOB_OK;
 }
 
--(double) AdMob_AppOpenAd_Show
+-(double) impl_admob_appopenad_show
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_NOT_INITIALIZED;
     
@@ -1995,7 +1994,7 @@ static GADAdSize getBannerSize(double size)
 #pragma mark - Targeting Methods
 
 //https://developers.google.com/admob/ios/targeting#child-directed_setting
--(double) AdMob_Targeting_COPPA:(double) COPPA
+-(double) impl_admob_targeting_coppa:(double) COPPA
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
     
@@ -2006,7 +2005,7 @@ static GADAdSize getBannerSize(double size)
 }
 
 //https://developers.google.com/admob/ios/targeting#users_under_the_age_of_consent
--(double) AdMob_Targeting_UnderAge:(double) underAge
+-(double) impl_admob_targeting_underage:(double) underAge
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
     
@@ -2017,7 +2016,7 @@ static GADAdSize getBannerSize(double size)
 }
 
 //https://developers.google.com/admob/ios/targeting#ad_content_filtering
--(double) AdMob_Targeting_MaxAdContentRating:(double) maxAdContentRating
+-(double) impl_admob_targeting_maxadcontentrating:(double) maxAdContentRating
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__]) return ADMOB_ERROR_ILLEGAL_CALL;
     
@@ -2044,7 +2043,7 @@ static GADAdSize getBannerSize(double size)
 
 #pragma mark - Consent Management
 
--(void) AdMob_Consent_RequestInfoUpdate:(double) testing
+-(void) impl_admob_consent_requestinfoupdate:(double) testing
 {
     UMPRequestParameters *parameters = [[UMPRequestParameters alloc] init];
     
@@ -2077,7 +2076,7 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(double) AdMob_Consent_GetStatus
+-(double) impl_admob_consent_getstatus
 {
     // https://developers.google.com/admob/ump/android/api/reference/com/google/android/ump/ConsentInformation.ConsentStatus.html#REQUIRED
     switch(UMPConsentInformation.sharedInstance.consentStatus)
@@ -2097,7 +2096,7 @@ static GADAdSize getBannerSize(double size)
     return 0;
 }
 
--(double) AdMob_Consent_GetType
+-(double) impl_admob_consent_gettype
 {
     if (UMPConsentInformation.sharedInstance.consentStatus == UMPConsentStatusObtained)
     {
@@ -2108,12 +2107,12 @@ static GADAdSize getBannerSize(double size)
     return 0; // UNKNOWN
 }
 
--(double) AdMob_Consent_IsFormAvailable
+-(double) impl_admob_consent_isformavailable
 {
     return (UMPConsentInformation.sharedInstance.formStatus == 1) ? 1.0 : 0.0;
 }
 
-- (void)AdMob_Consent_Load
+- (void)impl_admob_consent_load
 {
     [UMPConsentForm loadWithCompletionHandler:^(UMPConsentForm *form, NSError *loadError) {
         if (loadError)
@@ -2138,7 +2137,7 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(void) AdMob_Consent_Show
+-(void) impl_admob_consent_show
 {
     [self.consentForm presentFromViewController:g_controller completionHandler:^(NSError *_Nullable dismissError)
      {
@@ -2156,12 +2155,12 @@ static GADAdSize getBannerSize(double size)
     }];
 }
 
--(void) AdMob_Consent_Reset
+-(void) impl_admob_consent_reset
 {
     [UMPConsentInformation.sharedInstance reset];
 }
 
--(void) AdMob_Consent_Set_RDP:(double)enabled
+-(void) impl_admob_consent_set_rdp:(double)enabled
 {
     self.isRdpEnabled = enabled > 0.5;
 }
@@ -2243,12 +2242,12 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
 
 #pragma mark - Settings Methods
 
--(void) AdMob_Settings_SetVolume:(double) value
+-(void) impl_admob_settings_setvolume:(double) value
 {
     GADMobileAds.sharedInstance.applicationVolume = value;
 }
 
--(void) AdMob_Settings_SetMuted:(double) value
+-(void) impl_admob_settings_setmuted:(double) value
 {
     GADMobileAds.sharedInstance.applicationMuted = (value >= 0.5) ? YES : NO;
 }
@@ -2259,13 +2258,13 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
 {
     if (self.triggerAppOpenAd) {
         if(![self appOpenAdIsValid:"onResume"]) {
-            [self AdMob_AppOpenAd_Load];
+            [self impl_admob_appopenad_load];
             self.isShowingAd = NO;
             return;
         }
         
         if (!self.isShowingAd) {
-            [self AdMob_AppOpenAd_Show];
+            [self impl_admob_appopenad_show];
         }
     }
     self.isShowingAd = NO;

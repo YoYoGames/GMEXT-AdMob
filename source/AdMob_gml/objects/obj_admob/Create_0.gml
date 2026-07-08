@@ -84,14 +84,24 @@ function updateConsentStrings()
 
 function loadAllAds()
 {
-    admob_interstitial_load(Obj_AdMob.admob_log);
-    admob_rewarded_video_load(Obj_AdMob.admob_log);
-    admob_rewarded_interstitial_load(Obj_AdMob.admob_log);
+	show_debug_message("loadAllAds()")
+	
+    admob_interstitial_load(function(data){
+		show_debug_message($"admob_interstitial_load: {data}")
+	});
+	
+    admob_rewarded_video_load(function(data){
+		show_debug_message($"admob_rewarded_video_load: {data}")
+	});
+	
+    admob_rewarded_interstitial_load(function(data){
+		show_debug_message($"admob_rewarded_interstitial_load: {data}")
+	});
 
     admob_app_open_ad_enable(
-        display_landscape,
-        Obj_AdMob.admob_log
-    );
+        display_landscape,function(data){
+		show_debug_message($"admob_app_open_ad_enable: {data}")
+	});
 }
 
 function onConsentShown(_data_json)
