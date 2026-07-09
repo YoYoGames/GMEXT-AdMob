@@ -74,7 +74,7 @@ function admob_interstitial_load(callback: func): real;
 function admob_interstitial_show(callback: func): real;
 
 [global, bind = typed_gml]
-function admob_interstitial_is_loaded(): real;
+function admob_interstitial_is_loaded(): bool;
 
 [global, bind = typed_gml]
 function admob_interstitial_instances_count(): real;
@@ -112,7 +112,7 @@ function admob_rewarded_video_load(callback: func): real;
 function admob_rewarded_video_show(callback: func): real;
 
 [global, bind = typed_gml]
-function admob_rewarded_video_is_loaded(): real;
+function admob_rewarded_video_is_loaded(): bool;
 
 [global, bind = typed_gml]
 function admob_rewarded_video_instances_count(): real;
@@ -137,7 +137,7 @@ function admob_rewarded_interstitial_load(callback: func): real;
 function admob_rewarded_interstitial_show(callback: func): real;
 
 [global, bind = typed_gml]
-function admob_rewarded_interstitial_is_loaded(): real;
+function admob_rewarded_interstitial_is_loaded(): bool;
 
 [global, bind = typed_gml]
 function admob_rewarded_interstitial_instances_count(): real;
@@ -159,10 +159,10 @@ function admob_app_open_ad_enable(
 function admob_app_open_ad_disable(): unit;
 
 [global, bind = typed_gml]
-function admob_app_open_ad_is_enabled(): real;
+function admob_app_open_ad_is_enabled(): bool;
 
 [global, bind = typed_gml]
-function admob_app_open_ad_is_loaded(): real;
+function admob_app_open_ad_is_loaded(): bool;
 
 [global, bind = typed_gml]
 function admob_app_open_ad_load(callback: func): real;
@@ -202,7 +202,7 @@ function admob_consent_get_status(): real;
 function admob_consent_get_type(): real;
 
 [global, bind = typed_gml]
-function admob_consent_is_form_available(): real;
+function admob_consent_is_form_available(): bool;
 
 [global, bind = typed_gml]
 function admob_consent_load(callback: func): real;

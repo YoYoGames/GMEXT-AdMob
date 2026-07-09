@@ -215,352 +215,11 @@ public class GMAdMob extends GMAdMobInternal {
     }
 
 
-    // -------------------------------------------------------------------------
-    // Extension Generator API
-    //
-    // Sync functions return values directly.
-    // Async SDK operations return an immediate AdMobError code and later invoke
-    // their callback with a JSON payload containing numeric event_type enums.
-    // -------------------------------------------------------------------------
-
+    // #region Setup
     public double admob_initialize(final GMFunction callback) {
         initializeCallback = callback;
-        double code = impl_admob_initialize();
-        if (code != ADMOB_OK) {
-            initializeCallback = null;
-            callbackResult(callback, ADMOB_INIT_EVENT_FAILED, code);
-        }
-        return code;
-    }
 
-    public double admob_set_test_device_id() {
-        return impl_admob_settestdeviceid();
-    }
-
-    public double admob_events_on_paid_event(boolean enabled, final GMFunction callback) {
-        triggerOnPaidEvent = enabled;
-        paidEventCallback = enabled ? callback : null;
-        impl_admob_events_onpaidevent(enabled ? 1.0 : 0.0);
-        return ADMOB_OK;
-    }
-
-    public void admob_banner_set_ad_unit(String ad_unit_id) {
-        impl_admob_banner_set_adunit(ad_unit_id);
-    }
-
-    public double admob_banner_create(AdMobBannerSize size, boolean bottom, final GMFunction callback) {
-        bannerCallback = callback;
-        double code = impl_admob_banner_create(size.value(), bottom ? 1.0 : 0.0);
-        if (code != ADMOB_OK) {
-            bannerCallback = null;
-            callbackResult(callback, ADMOB_BANNER_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_banner_create_ext(
-        AdMobBannerSize size,
-        boolean bottom,
-        AdMobBannerAlignment alignment,
-        final GMFunction callback) {
-        bannerCallback = callback;
-        double code = impl_admob_banner_create_ext(
-            size.value(),
-            bottom ? 1.0 : 0.0,
-            alignment.value()
-        );
-        if (code != ADMOB_OK) {
-            bannerCallback = null;
-            callbackResult(callback, ADMOB_BANNER_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_banner_get_width() {
-        return impl_admob_banner_getwidth();
-    }
-
-    public double admob_banner_get_height() {
-        return impl_admob_banner_getheight();
-    }
-
-    public double admob_banner_move(boolean bottom) {
-        return impl_admob_banner_move(bottom ? 1.0 : 0.0);
-    }
-
-    public double admob_banner_show() {
-        return impl_admob_banner_show();
-    }
-
-    public double admob_banner_hide() {
-        return impl_admob_banner_hide();
-    }
-
-    public double admob_banner_remove() {
-        double code = impl_admob_banner_remove();
-        if (code == ADMOB_OK) bannerCallback = null;
-        return code;
-    }
-
-    public void admob_interstitial_set_ad_unit(String ad_unit_id) {
-        impl_admob_interstitial_set_adunit(ad_unit_id);
-    }
-
-    public void admob_interstitial_free_loaded_instances(double count) {
-        impl_admob_interstitial_free_loaded_instances(count);
-    }
-
-    public void admob_interstitial_max_instances(double value) {
-        impl_admob_interstitial_max_instances(value);
-    }
-
-    public double admob_interstitial_load(final GMFunction callback) {
-        interstitialLoadCallbacks.offer(callback);
-        double code = impl_admob_interstitial_load();
-        if (code != ADMOB_OK) {
-            interstitialLoadCallbacks.remove(callback);
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_interstitial_show(final GMFunction callback) {
-        interstitialShowCallback = callback;
-        double code = impl_admob_interstitial_show();
-        if (code != ADMOB_OK) {
-            interstitialShowCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_SHOW_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_interstitial_is_loaded() {
-        return impl_admob_interstitial_isloaded();
-    }
-
-    public double admob_interstitial_instances_count() {
-        return impl_admob_interstitial_instances_count();
-    }
-
-    public double admob_server_side_verification_set(String user_id, String custom_data) {
-        if (!isInitialized) return ADMOB_ERROR_NOT_INITIALIZED;
-        impl_admob_serversideverification_set(user_id, custom_data);
-        return ADMOB_OK;
-    }
-
-    public double admob_server_side_verification_clear() {
-        if (!isInitialized) return ADMOB_ERROR_NOT_INITIALIZED;
-        impl_admob_serversideverification_clear();
-        return ADMOB_OK;
-    }
-
-    public void admob_rewarded_video_set_ad_unit(String ad_unit_id) {
-        impl_admob_rewardedvideo_set_adunit(ad_unit_id);
-    }
-
-    public void admob_rewarded_video_free_loaded_instances(double count) {
-        impl_admob_rewardedvideo_free_loaded_instances(count);
-    }
-
-    public void admob_rewarded_video_max_instances(double value) {
-        impl_admob_rewardedvideo_max_instances(value);
-    }
-
-    public double admob_rewarded_video_load(final GMFunction callback) {
-        rewardedVideoLoadCallbacks.offer(callback);
-        double code = impl_admob_rewardedvideo_load();
-        if (code != ADMOB_OK) {
-            rewardedVideoLoadCallbacks.remove(callback);
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_rewarded_video_show(final GMFunction callback) {
-        rewardedVideoShowCallback = callback;
-        double code = impl_admob_rewardedvideo_show();
-        if (code != ADMOB_OK) {
-            rewardedVideoShowCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_SHOW_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_rewarded_video_is_loaded() {
-        return impl_admob_rewardedvideo_isloaded();
-    }
-
-    public double admob_rewarded_video_instances_count() {
-        return impl_admob_rewardedvideo_instances_count();
-    }
-
-    public void admob_rewarded_interstitial_set_ad_unit(String ad_unit_id) {
-        impl_admob_rewardedinterstitial_set_adunit(ad_unit_id);
-    }
-
-    public void admob_rewarded_interstitial_free_loaded_instances(double count) {
-        impl_admob_rewardedinterstitial_free_loaded_instances(count);
-    }
-
-    public void admob_rewarded_interstitial_max_instances(double value) {
-        impl_admob_rewardedinterstitial_max_instances(value);
-    }
-
-    public double admob_rewarded_interstitial_load(final GMFunction callback) {
-        rewardedInterstitialLoadCallbacks.offer(callback);
-        double code = impl_admob_rewardedinterstitial_load();
-        if (code != ADMOB_OK) {
-            rewardedInterstitialLoadCallbacks.remove(callback);
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_rewarded_interstitial_show(final GMFunction callback) {
-        rewardedInterstitialShowCallback = callback;
-        double code = impl_admob_rewardedinterstitial_show();
-        if (code != ADMOB_OK) {
-            rewardedInterstitialShowCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_SHOW_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_rewarded_interstitial_is_loaded() {
-        return impl_admob_rewardedinterstitial_isloaded();
-    }
-
-    public double admob_rewarded_interstitial_instances_count() {
-        return impl_admob_rewardedinterstitial_instances_count();
-    }
-
-    public void admob_app_open_ad_set_ad_unit(String ad_unit_id) {
-        impl_admob_appopenad_set_adunit(ad_unit_id);
-    }
-
-    public double admob_app_open_ad_enable(double orientation, final GMFunction callback) {
-        appOpenEnableCallback = callback;
-        double code = impl_admob_appopenad_enable(orientation);
-        if (code != ADMOB_OK) {
-            appOpenEnableCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public void admob_app_open_ad_disable() {
-        impl_admob_appopenad_disable();
-        appOpenEnableCallback = null;
-    }
-
-    public double admob_app_open_ad_is_enabled() {
-        return impl_admob_appopenad_isenabled();
-    }
-
-    public double admob_app_open_ad_is_loaded() {
-        return impl_admob_appopenad_isloaded();
-    }
-
-    public double admob_app_open_ad_load(final GMFunction callback) {
-        appOpenLoadCallback = callback;
-        double code = impl_admob_appopenad_load();
-        if (code != ADMOB_OK) {
-            appOpenLoadCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_LOAD_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_app_open_ad_show(final GMFunction callback) {
-        appOpenShowCallback = callback;
-        double code = impl_admob_appopenad_show();
-        if (code != ADMOB_OK) {
-            appOpenShowCallback = null;
-            callbackResult(callback, ADMOB_FULLSCREEN_EVENT_SHOW_FAILED, code);
-        }
-        return code;
-    }
-
-    public double admob_targeting_coppa(boolean coppa) {
-        return impl_admob_targeting_coppa(coppa ? 1.0 : 0.0);
-    }
-
-    public double admob_targeting_under_age(boolean under_age) {
-        return impl_admob_targeting_underage(under_age ? 1.0 : 0.0);
-    }
-
-    public double admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating content_rating) {
-        return impl_admob_targeting_maxadcontentrating(content_rating.value());
-    }
-
-    public double admob_consent_request_info_update(
-        AdMobConsentDebugGeography debug_geography,
-        final GMFunction callback) {
-        if (!validateViewHandler("admob_consent_request_info_update")) {
-            callbackResult(callback, ADMOB_CONSENT_EVENT_REQUEST_INFO_UPDATE_FAILED, ADMOB_ERROR_NULL_VIEW_HANDLER);
-            return ADMOB_ERROR_NULL_VIEW_HANDLER;
-        }
-        consentRequestInfoUpdateCallback = callback;
-        impl_admob_consent_requestinfoupdate(debug_geography.value());
-        return ADMOB_OK;
-    }
-
-    public double admob_consent_get_status() {
-        return impl_admob_consent_getstatus();
-    }
-
-    public double admob_consent_get_type() {
-        return impl_admob_consent_gettype();
-    }
-
-    public double admob_consent_is_form_available() {
-        return impl_admob_consent_isformavailable();
-    }
-
-    public double admob_consent_load(final GMFunction callback) {
-        if (!validateViewHandler("admob_consent_load")) {
-            callbackResult(callback, ADMOB_CONSENT_EVENT_LOAD_FAILED, ADMOB_ERROR_NULL_VIEW_HANDLER);
-            return ADMOB_ERROR_NULL_VIEW_HANDLER;
-        }
-        consentLoadCallback = callback;
-        impl_admob_consent_load();
-        return ADMOB_OK;
-    }
-
-    public double admob_consent_show(final GMFunction callback) {
-        if (!validateViewHandler("admob_consent_show")) {
-            callbackResult(callback, ADMOB_CONSENT_EVENT_SHOW_FAILED, ADMOB_ERROR_NULL_VIEW_HANDLER);
-            return ADMOB_ERROR_NULL_VIEW_HANDLER;
-        }
-        if (consentFormInstance == null) {
-            callbackResult(callback, ADMOB_CONSENT_EVENT_SHOW_FAILED, ADMOB_ERROR_NO_ADS_LOADED);
-            return ADMOB_ERROR_NO_ADS_LOADED;
-        }
-        consentShowCallback = callback;
-        impl_admob_consent_show();
-        return ADMOB_OK;
-    }
-
-    public void admob_consent_reset() {
-        impl_admob_consent_reset();
-    }
-
-    public void admob_consent_set_rdp(boolean enabled) {
-        impl_admob_consent_set_rdp(enabled ? 1.0 : 0.0);
-    }
-
-    public void admob_settings_set_volume(double value) {
-        impl_admob_settings_setvolume(value);
-    }
-
-    public void admob_settings_set_muted(boolean muted) {
-        impl_admob_settings_setmuted(muted ? 1.0 : 0.0);
-    }
-
-    // #region Setup
-    private double impl_admob_initialize() {
-
-		final String callingMethod = "impl_admob_initialize";
+		final String callingMethod = "admob_initialize";
 
         if (!validateNotInitialized(callingMethod)) return ADMOB_ERROR_ILLEGAL_CALL;
 
@@ -585,12 +244,11 @@ public class GMAdMob extends GMAdMobInternal {
                                 adapterClass, status.getDescription(), status.getLatency()));
                     }
 
-                    sendAsyncEvent("AdMob_OnInitialized", null);
-
-                    // Initialize ad units from extension options if available
+                    // Initialize ad units from extension options before firing callback.
                     initializeAdUnits();
-
                     isInitialized = true;
+
+                    sendAsyncEvent("AdMob_OnInitialized", null);
                 });
             } catch (Exception e) {
                 Log.i(LOG_TAG, "GoogleMobileAds Init Error: " + e.toString());
@@ -621,14 +279,16 @@ public class GMAdMob extends GMAdMobInternal {
     private String normalizeAdUnitId(String adUnitId) {
         return adUnitId != null ? adUnitId : "";
     }
-    private double impl_admob_settestdeviceid() {
-        if (!validateNotInitialized("impl_admob_settestdeviceid")) return ADMOB_ERROR_ILLEGAL_CALL;
+    public double admob_set_test_device_id() {
+        if (!validateNotInitialized("admob_set_test_device_id")) return ADMOB_ERROR_ILLEGAL_CALL;
 
         isTestDevice = true;
         return ADMOB_OK;
     }
-    private void impl_admob_events_onpaidevent(double enabled) {
-        triggerOnPaidEvent = enabled >= 0.5;
+    public double admob_events_on_paid_event(boolean enabled, final GMFunction callback) {
+        triggerOnPaidEvent = enabled;
+        paidEventCallback = enabled ? callback : null;
+        return ADMOB_OK;
     }
 
     private RequestConfiguration buildRequestConfiguration(final String callingMethod) {
@@ -654,12 +314,13 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Banner
-    private void impl_admob_banner_set_adunit(String adUnitId) {
+    public void admob_banner_set_ad_unit(String adUnitId) {
         bannerAdUnitId = normalizeAdUnitId(adUnitId);
     }
-    private double impl_admob_banner_create(final double size, final double bottom) {
+    public double admob_banner_create(final AdMobBannerSize size, final boolean bottom, final GMFunction callback) {
+        bannerCallback = callback;
 
-        final String callingMethod = "impl_admob_banner_create";
+        final String callingMethod = "admob_banner_create";
 
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
@@ -670,17 +331,17 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
-		boolean isBottom = bottom > 0.5;
-        currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
+		currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
 
 		// Call the helper method with default horizontal alignment ("center")
-		createBannerAdView(size, isBottom, currentBannerAlignment, callingMethod);
+		createBannerAdView(size.value(), bottom, currentBannerAlignment, callingMethod);
 
 		return ADMOB_OK;
     }
-    private double impl_admob_banner_create_ext(final double size, final double bottom, final double horizontalAlignment) {
+    public double admob_banner_create_ext(final AdMobBannerSize size, final boolean bottom, final AdMobBannerAlignment horizontalAlignment, final GMFunction callback) {
+        bannerCallback = callback;
 
-		final String callingMethod = "impl_admob_banner_create_ext";
+		final String callingMethod = "admob_banner_create_ext";
 	
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
@@ -691,10 +352,9 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 	
-		boolean isBottom = bottom > 0.5;
-	
+		
 		// Validate horizontalAlignment parameter
-		switch ((int) horizontalAlignment) {
+		switch ((int) horizontalAlignment.value()) {
             case ADMOB_BANNER_ALIGNMENT_LEFT:
                 currentBannerAlignment = RelativeLayout.ALIGN_PARENT_LEFT;
                 break;
@@ -710,15 +370,15 @@ public class GMAdMob extends GMAdMobInternal {
         }
 	
 		// Call the helper method with the specified horizontal alignment
-		createBannerAdView(size, isBottom, currentBannerAlignment, callingMethod);
+		createBannerAdView(size.value(), bottom, currentBannerAlignment, callingMethod);
 	
 		return ADMOB_OK;
 	}
-    private double impl_admob_banner_getwidth() {
+    public double admob_banner_get_width() {
         if (bannerAdView == null) return 0;
         return bannerSize.getWidthInPixels(RunnerJNILib.ms_context);
     }
-    private double impl_admob_banner_getheight() {
+    public double admob_banner_get_height() {
         if (bannerAdView == null) return 0;
         int height = bannerSize.getHeightInPixels(RunnerJNILib.ms_context);
             if (bannerSize == AdSize.SMART_BANNER) {
@@ -734,9 +394,9 @@ public class GMAdMob extends GMAdMobInternal {
         }
         return height;
     }
-    private double impl_admob_banner_move(final double bottom) {
+    public double admob_banner_move(final boolean bottom) {
 
-        final String callingMethod = "impl_admob_banner_move";
+        final String callingMethod = "admob_banner_move";
     
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -760,16 +420,16 @@ public class GMAdMob extends GMAdMobInternal {
             // Reuse the stored horizontal alignment from banner creation
             params.addRule(currentBannerAlignment);
             // Update the vertical alignment based on the 'bottom' parameter
-            params.addRule(bottom > 0.5 ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
+            params.addRule(bottom ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_TOP);
     
             bannerAdView.setLayoutParams(params);
         });
     
         return ADMOB_OK;
     }
-    private double impl_admob_banner_show() {
+    public double admob_banner_show() {
 
-        final String callingMethod = "impl_admob_banner_show";
+        final String callingMethod = "admob_banner_show";
 
 		if (!validateInitialized(callingMethod))
 			return ADMOB_ERROR_NOT_INITIALIZED;
@@ -789,9 +449,9 @@ public class GMAdMob extends GMAdMobInternal {
         });
         return ADMOB_OK;
     }
-    private double impl_admob_banner_hide() {
+    public double admob_banner_hide() {
 
-        final String callingMethod = "impl_admob_banner_hide";
+        final String callingMethod = "admob_banner_hide";
 
         if (!validateActiveBannerAd(callingMethod))
             return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
@@ -808,9 +468,9 @@ public class GMAdMob extends GMAdMobInternal {
         });
         return 0;
     }
-    private double impl_admob_banner_remove() {
+    public double admob_banner_remove() {
 
-        final String callingMethod = "impl_admob_banner_remove";
+        final String callingMethod = "admob_banner_remove";
 
         if (!validateActiveBannerAd(callingMethod))
             return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
@@ -974,19 +634,19 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Interstitial
-    private void impl_admob_interstitial_set_adunit(String adUnitId) {
+    public void admob_interstitial_set_ad_unit(String adUnitId) {
         interstitialAdUnitId = normalizeAdUnitId(adUnitId);
     }
-    private void impl_admob_interstitial_free_loaded_instances(double count) {
+    public void admob_interstitial_free_loaded_instances(double count) {
 		freeLoadedInstances(interstitialAdQueue, count, this::cleanUpAd);
     }
-    private void impl_admob_interstitial_max_instances(double value) {
+    public void admob_interstitial_max_instances(double value) {
         interstitialAdQueueCapacity = (int) value;
 		trimLoadedAdsQueue(interstitialAdQueue, interstitialAdQueueCapacity, this::cleanUpAd);
     }
-    private double impl_admob_interstitial_load() {
+    public double admob_interstitial_load(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_interstitial_load";
+        final String callingMethod = "admob_interstitial_load";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1000,13 +660,14 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        interstitialLoadCallbacks.offer(callback);
         loadInterstitialAd(interstitialAdUnitId, interstitialAdQueue, interstitialAdQueueCapacity, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_interstitial_show() {
+    public double admob_interstitial_show(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_interstitial_show";
+        final String callingMethod = "admob_interstitial_show";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1017,14 +678,15 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        interstitialShowCallback = callback;
         showInterstitialAd(interstitialAdQueue, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_interstitial_isloaded() {
-        return impl_admob_interstitial_instances_count() > 0 ? 1.0 : 0.0;
+    public boolean admob_interstitial_is_loaded() {
+        return admob_interstitial_instances_count() > 0;
     }
-    private double impl_admob_interstitial_instances_count() {
+    public double admob_interstitial_instances_count() {
         return interstitialAdQueue.size();
     }
 
@@ -1129,23 +791,25 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Server Side Verification
-    private void impl_admob_serversideverification_set(final String userId, final String customData) {
-        final String callingMethod = "impl_admob_serversideverification_set";
+    public double admob_server_side_verification_set(final String userId, final String customData) {
+        final String callingMethod = "admob_server_side_verification_set";
     
 		if (!validateInitialized(callingMethod))
-			return;
+			return ADMOB_ERROR_NOT_INITIALIZED;
 
         serverSideVerificationUserId = userId;
         serverSideVerificationCustomData = customData;
+        return ADMOB_OK;
     }
-    private void impl_admob_serversideverification_clear() {
-        final String callingMethod = "impl_admob_serversideverification_clear";
+    public double admob_server_side_verification_clear() {
+        final String callingMethod = "admob_server_side_verification_clear";
     
 		if (!validateInitialized(callingMethod))
-			return;
+			return ADMOB_ERROR_NOT_INITIALIZED;
 
         serverSideVerificationUserId = null;
         serverSideVerificationCustomData = null;
+        return ADMOB_OK;
     }
 
     private void configureServerSideVerification(Object ad, String userId, String customData) {
@@ -1180,19 +844,19 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Rewarded
-    private void impl_admob_rewardedvideo_set_adunit(String adUnitId) {
+    public void admob_rewarded_video_set_ad_unit(String adUnitId) {
         rewardedUnitId = normalizeAdUnitId(adUnitId);
     }
-    private void impl_admob_rewardedvideo_free_loaded_instances(double count) {
+    public void admob_rewarded_video_free_loaded_instances(double count) {
 		freeLoadedInstances(rewardedAdQueue, count, this::cleanUpAd);
     }
-    private void impl_admob_rewardedvideo_max_instances(double value) {
+    public void admob_rewarded_video_max_instances(double value) {
         rewardedAdQueueCapacity = (int) value;
         trimLoadedAdsQueue(rewardedAdQueue, rewardedAdQueueCapacity, this::cleanUpAd);
     }
-    private double impl_admob_rewardedvideo_load() {
+    public double admob_rewarded_video_load(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_rewardedvideo_load";
+        final String callingMethod = "admob_rewarded_video_load";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1206,13 +870,14 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        rewardedVideoLoadCallbacks.offer(callback);
         loadRewardedAd(rewardedUnitId, rewardedAdQueue, rewardedAdQueueCapacity, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_rewardedvideo_show() {
+    public double admob_rewarded_video_show(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_rewardedvideo_show";
+        final String callingMethod = "admob_rewarded_video_show";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1223,14 +888,15 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        rewardedVideoShowCallback = callback;
         showRewardedAd(rewardedAdQueue, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_rewardedvideo_isloaded() {
-        return impl_admob_rewardedvideo_instances_count() > 0 ? 1.0 : 0.0;
+    public boolean admob_rewarded_video_is_loaded() {
+        return admob_rewarded_video_instances_count() > 0;
     }
-    private double impl_admob_rewardedvideo_instances_count() {
+    public double admob_rewarded_video_instances_count() {
         return rewardedAdQueue.size();
     }
 
@@ -1353,19 +1019,19 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Rewarded Interstitial
-    private void impl_admob_rewardedinterstitial_set_adunit(String adUnitId) {
+    public void admob_rewarded_interstitial_set_ad_unit(String adUnitId) {
         rewardedInterstitialAdUnitId = normalizeAdUnitId(adUnitId);
     }
-    private void impl_admob_rewardedinterstitial_free_loaded_instances(double count) {
+    public void admob_rewarded_interstitial_free_loaded_instances(double count) {
 		freeLoadedInstances(rewardedInterstitialAdQueue, count, this::cleanUpAd);
     }
-    private void impl_admob_rewardedinterstitial_max_instances(double value) {
+    public void admob_rewarded_interstitial_max_instances(double value) {
         rewardedAdInterstitialQueueCapacity = (int) value;
         trimLoadedAdsQueue(rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, this::cleanUpAd);
     }
-    private double impl_admob_rewardedinterstitial_load() {
+    public double admob_rewarded_interstitial_load(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_rewardedinterstitial_load";
+        final String callingMethod = "admob_rewarded_interstitial_load";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1379,13 +1045,14 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        rewardedInterstitialLoadCallbacks.offer(callback);
         loadRewardedInterstitialAd(rewardedInterstitialAdUnitId, rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_rewardedinterstitial_show() {
+    public double admob_rewarded_interstitial_show(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_rewardedinterstitial_show";
+        final String callingMethod = "admob_rewarded_interstitial_show";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1396,14 +1063,15 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
+        rewardedInterstitialShowCallback = callback;
         showRewardedInterstitialAd(rewardedInterstitialAdQueue, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_rewardedinterstitial_isloaded() {
-        return impl_admob_rewardedinterstitial_instances_count() > 0 ? 1.0 : 0.0;
+    public boolean admob_rewarded_interstitial_is_loaded() {
+        return admob_rewarded_interstitial_instances_count() > 0;
     }
-    private double impl_admob_rewardedinterstitial_instances_count() {
+    public double admob_rewarded_interstitial_instances_count() {
         return rewardedInterstitialAdQueue.size();
     }
 
@@ -1524,12 +1192,12 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region App Open Ad
-    private void impl_admob_appopenad_set_adunit(String adUnitId) {
+    public void admob_app_open_ad_set_ad_unit(String adUnitId) {
         appOpenAdUnitId = normalizeAdUnitId(adUnitId);
     }
-    private double impl_admob_appopenad_enable(double orientation) {
+    public double admob_app_open_ad_enable(double orientation, final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_appopenad_enable";
+        final String callingMethod = "admob_app_open_ad_enable";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1540,23 +1208,23 @@ public class GMAdMob extends GMAdMobInternal {
         triggerAppOpenAd = true;
 
         if (!appOpenAdIsValid(callingMethod)) {
-            impl_admob_appopenad_load();
+            admob_app_open_ad_load(appOpenEnableCallback);
         }
 
         return ADMOB_OK;
     }
-    private void impl_admob_appopenad_disable() {
+    public void admob_app_open_ad_disable() {
         triggerAppOpenAd = false;
     }
-    private double impl_admob_appopenad_isenabled() {
-        return triggerAppOpenAd ? 1.0 : 0.0;
+    public boolean admob_app_open_ad_is_enabled() {
+        return triggerAppOpenAd;
     }
-    private double impl_admob_appopenad_isloaded() {
-        return appOpenAdIsValid("impl_admob_appopenad_isloaded") ? 1.0 : 0.0;
+    public boolean admob_app_open_ad_is_loaded() {
+        return appOpenAdIsValid("admob_app_open_ad_is_loaded");
     }
-    private double impl_admob_appopenad_load() {
+    public double admob_app_open_ad_load(final GMFunction callback) {
 
-        final String callingMethod = "impl_admob_appopenad_load";
+        final String callingMethod = "admob_app_open_ad_load";
 
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1570,13 +1238,14 @@ public class GMAdMob extends GMAdMobInternal {
         if (appOpenAdIsValid(callingMethod))
             return ADMOB_OK;
 
+        appOpenLoadCallback = callback;
         loadAppOpenAd(appOpenAdUnitId, callingMethod);
 
         return ADMOB_OK;
     }
-    private double impl_admob_appopenad_show() {
+    public double admob_app_open_ad_show(final GMFunction callback) {
 
-		final String callingMethod = "impl_admob_appopenad_show";
+		final String callingMethod = "admob_app_open_ad_show";
 	
         if (!validateInitialized(callingMethod))
             return ADMOB_ERROR_NOT_INITIALIZED;
@@ -1587,6 +1256,7 @@ public class GMAdMob extends GMAdMobInternal {
         if (!appOpenAdIsValid(callingMethod))
             return ADMOB_ERROR_NO_ADS_LOADED;
 
+        appOpenShowCallback = callback;
         showAppOpenAd(callingMethod);
 
         return ADMOB_OK;
@@ -1665,7 +1335,7 @@ public class GMAdMob extends GMAdMobInternal {
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
                         // Load the App Open Ad again
-					    impl_admob_appopenad_load();
+					    admob_app_open_ad_load(appOpenEnableCallback);
                     }
 				}
 	
@@ -1685,7 +1355,7 @@ public class GMAdMob extends GMAdMobInternal {
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
                         // Reload the App Open Ad after failure
-					    impl_admob_appopenad_load();
+					    admob_app_open_ad_load(appOpenEnableCallback);
                     }
 				}
 	
@@ -1740,25 +1410,25 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
 	// #region Targeting
-    private double impl_admob_targeting_coppa(double COPPA) {
+    public double admob_targeting_coppa(boolean COPPA) {
 
-		if (!validateNotInitialized("impl_admob_targeting_coppa")) return ADMOB_ERROR_ILLEGAL_CALL;
+		if (!validateNotInitialized("admob_targeting_coppa")) return ADMOB_ERROR_ILLEGAL_CALL;
 
-		targetCOPPA = COPPA > 0.5;
+		targetCOPPA = COPPA;
 		return ADMOB_OK;
 	}
-    private double impl_admob_targeting_underage(double underAge) {
+    public double admob_targeting_under_age(boolean underAge) {
 
-		if (!validateNotInitialized("impl_admob_targeting_underage")) return ADMOB_ERROR_ILLEGAL_CALL;
+		if (!validateNotInitialized("admob_targeting_under_age")) return ADMOB_ERROR_ILLEGAL_CALL;
 
-		targetUnderAge = underAge >= 0.5;
+		targetUnderAge = underAge;
 		return ADMOB_OK;
 	}
-    private double impl_admob_targeting_maxadcontentrating(double contentRating) {
+    public double admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating contentRating) {
 		
-		if (!validateNotInitialized("impl_admob_targeting_maxadcontentrating")) return ADMOB_ERROR_ILLEGAL_CALL;
+		if (!validateNotInitialized("admob_targeting_max_ad_content_rating")) return ADMOB_ERROR_ILLEGAL_CALL;
 
-		switch ((int) contentRating) {
+		switch ((int) contentRating.value()) {
 			case 0:
 				maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 				break;
@@ -1778,12 +1448,13 @@ public class GMAdMob extends GMAdMobInternal {
 	//#endregion
 
 	// #region Consent Management
-    private void impl_admob_consent_requestinfoupdate(double mode) {
+    public double admob_consent_request_info_update(AdMobConsentDebugGeography mode, final GMFunction callback) {
+        consentRequestInfoUpdateCallback = callback;
 
-		final String callingMethod = "impl_admob_consent_requestinfoupdate";
+		final String callingMethod = "admob_consent_request_info_update";
 
 		if (!validateViewHandler(callingMethod))
-			return;
+			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
 		RunnerActivity.ViewHandler.post(() -> {
 
@@ -1793,9 +1464,9 @@ public class GMAdMob extends GMAdMobInternal {
 			ConsentRequestParameters.Builder builder = new ConsentRequestParameters.Builder();
 			builder.setTagForUnderAgeOfConsent(targetUnderAge);
 
-			if (mode >= 0) {
+			if (mode.value() >= 0) {
 				ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
-						.setDebugGeography((int) mode)
+						.setDebugGeography((int) mode.value())
 						.addTestDeviceHashedId(getDeviceID(callingMethod))
 						.build();
 
@@ -1817,11 +1488,12 @@ public class GMAdMob extends GMAdMobInternal {
 						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdateFailed", data);
 					});
 		});
+        return ADMOB_OK;
 	}
-    private double impl_admob_consent_getstatus() {
+    public double admob_consent_get_status() {
 		return consentInformation == null ? 0 : (double) consentInformation.getConsentStatus();
 	}
-    private double impl_admob_consent_gettype() {
+    public double admob_consent_get_type() {
 		if (consentInformation == null)
 			return 0; // AdMob_Consent_Type_UNKNOWN
 
@@ -1837,18 +1509,20 @@ public class GMAdMob extends GMAdMobInternal {
 
 		return 0.0; // AdMob_Consent_Type_UNKNOWN
 	}
-    private double impl_admob_consent_isformavailable() {
-		return consentInformation == null ? 0.0 : (consentInformation.isConsentFormAvailable() ? 1.0 : 0.0);
-	}
-    private void impl_admob_consent_load() {
+    public boolean admob_consent_is_form_available() {
+        return consentInformation != null
+            && consentInformation.isConsentFormAvailable();
+    }
+    public double admob_consent_load(final GMFunction callback) {
+        consentLoadCallback = callback;
 
-		final String callingMethod = "impl_admob_consent_load";
+		final String callingMethod = "admob_consent_load";
 
 		Activity activity = getActivity(callingMethod);
-        if (activity == null) return;
+        if (activity == null) return ADMOB_ERROR_ILLEGAL_CALL;
 
 		if (!validateViewHandler(callingMethod))
-			return;
+			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
 		RunnerActivity.ViewHandler.post(() -> UserMessagingPlatform.loadConsentForm(activity,
 				consentForm -> {
@@ -1861,13 +1535,15 @@ public class GMAdMob extends GMAdMobInternal {
 					data.put("errorCode", (double) formError.getErrorCode());
 					sendAsyncEvent("AdMob_Consent_OnLoadFailed", data);
 				}));
+        return ADMOB_OK;
 	}
-    private void impl_admob_consent_show() {
+    public double admob_consent_show(final GMFunction callback) {
+        consentShowCallback = callback;
 
-		final String callingMethod = "impl_admob_consent_show";
+		final String callingMethod = "admob_consent_show";
 
 		if (!validateViewHandler(callingMethod))
-			return;
+			return ADMOB_ERROR_NULL_VIEW_HANDLER;
 
 		RunnerActivity.ViewHandler.post(() -> {
 			Activity activity = getActivity(callingMethod);
@@ -1888,16 +1564,17 @@ public class GMAdMob extends GMAdMobInternal {
 					consentFormInstance = null;
 				});
 			} else {
-				Log.i(LOG_TAG, "impl_admob_consent_show :: There is no loaded consent form.");
+				Log.i(LOG_TAG, "admob_consent_show :: There is no loaded consent form.");
 			}
 		});
+        return ADMOB_OK;
 	}
-    private void impl_admob_consent_reset() {
+    public void admob_consent_reset() {
 		if (consentInformation != null)
 			consentInformation.reset();
 	}
-    private void impl_admob_consent_set_rdp(double enabled) {
-		isRdpEnabled = enabled > 0.5;
+    public void admob_consent_set_rdp(boolean enabled) {
+		isRdpEnabled = enabled;
 	}
 
     // https://stackoverflow.com/questions/69307205/mandatory-consent-for-admob-user-messaging-platform
@@ -1991,11 +1668,11 @@ public class GMAdMob extends GMAdMobInternal {
 	// #endregion
 
 	// #region Settings
-    private void impl_admob_settings_setvolume(double value) {
+    public void admob_settings_set_volume(double value) {
 		MobileAds.setAppVolume((float) value);
 	}
-    private void impl_admob_settings_setmuted(double value) {
-		MobileAds.setAppMuted(value >= 0.5);
+    public void admob_settings_set_muted(boolean value) {
+		MobileAds.setAppMuted(value);
 	}
 
 	// #endregion
@@ -2015,11 +1692,11 @@ public class GMAdMob extends GMAdMobInternal {
 		super.onStart();
         if (triggerAppOpenAd && !isShowingAd) {
             if (!appOpenAdIsValid("onStart")) {
-                impl_admob_appopenad_load();
+                admob_app_open_ad_load(appOpenEnableCallback);
                 return;
             }
 
-            impl_admob_appopenad_show();
+            admob_app_open_ad_show(appOpenEnableCallback);
             return;
         }
         isShowingAd = false;

@@ -273,7 +273,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_interstitial_is_loaded
 {
-    double __result = [__impl admob_interstitial_is_loaded];
+    bool __result = [__impl admob_interstitial_is_loaded];
 
     return static_cast<double>(__result);
 }
@@ -346,7 +346,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_rewarded_video_is_loaded
 {
-    double __result = [__impl admob_rewarded_video_is_loaded];
+    bool __result = [__impl admob_rewarded_video_is_loaded];
 
     return static_cast<double>(__result);
 }
@@ -405,7 +405,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_rewarded_interstitial_is_loaded
 {
-    double __result = [__impl admob_rewarded_interstitial_is_loaded];
+    bool __result = [__impl admob_rewarded_interstitial_is_loaded];
 
     return static_cast<double>(__result);
 }
@@ -448,14 +448,14 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_app_open_ad_is_enabled
 {
-    double __result = [__impl admob_app_open_ad_is_enabled];
+    bool __result = [__impl admob_app_open_ad_is_enabled];
 
     return static_cast<double>(__result);
 }
 
 - (double)__EXT_NATIVE__admob_app_open_ad_is_loaded
 {
-    double __result = [__impl admob_app_open_ad_is_loaded];
+    bool __result = [__impl admob_app_open_ad_is_loaded];
 
     return static_cast<double>(__result);
 }
@@ -541,7 +541,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_consent_is_form_available
 {
-    double __result = [__impl admob_consent_is_form_available];
+    bool __result = [__impl admob_consent_is_form_available];
 
     return static_cast<double>(__result);
 }

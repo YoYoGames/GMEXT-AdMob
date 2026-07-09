@@ -169,8 +169,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_interstitial_is_loaded()
     {
-        double __result = admob_interstitial_is_loaded();
-        return (double)__result;
+        boolean __result = admob_interstitial_is_loaded();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_interstitial_instances_count()
@@ -233,8 +233,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_rewarded_video_is_loaded()
     {
-        double __result = admob_rewarded_video_is_loaded();
-        return (double)__result;
+        boolean __result = admob_rewarded_video_is_loaded();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_rewarded_video_instances_count()
@@ -285,8 +285,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_rewarded_interstitial_is_loaded()
     {
-        double __result = admob_rewarded_interstitial_is_loaded();
-        return (double)__result;
+        boolean __result = admob_rewarded_interstitial_is_loaded();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_rewarded_interstitial_instances_count()
@@ -323,14 +323,14 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_app_open_ad_is_enabled()
     {
-        double __result = admob_app_open_ad_is_enabled();
-        return (double)__result;
+        boolean __result = admob_app_open_ad_is_enabled();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_app_open_ad_is_loaded()
     {
-        double __result = admob_app_open_ad_is_loaded();
-        return (double)__result;
+        boolean __result = admob_app_open_ad_is_loaded();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_app_open_ad_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
@@ -406,8 +406,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_consent_is_form_available()
     {
-        double __result = admob_consent_is_form_available();
-        return (double)__result;
+        boolean __result = admob_consent_is_form_available();
+        return __result ? 1.0 : 0.0;
     }
 
     public double __EXT_NATIVE__admob_consent_load(ByteBuffer __arg_buffer, double __arg_buffer_length)

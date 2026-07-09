@@ -115,7 +115,7 @@
 
 /**
  * @function_partial admob_interstitial_is_loaded
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
@@ -173,7 +173,7 @@
 
 /**
  * @function_partial admob_rewarded_video_is_loaded
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
@@ -217,7 +217,7 @@
 
 /**
  * @function_partial admob_rewarded_interstitial_is_loaded
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
@@ -248,13 +248,13 @@
 
 /**
  * @function_partial admob_app_open_ad_is_enabled
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
 /**
  * @function_partial admob_app_open_ad_is_loaded
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
@@ -315,7 +315,7 @@
 
 /**
  * @function_partial admob_consent_is_form_available
- * @returns {Real}
+ * @returns {Bool}
  * @function_end
  */
 
