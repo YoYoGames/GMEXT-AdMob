@@ -3,7 +3,7 @@ set(SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 # =============================================================================
 # GameMaker iOS integration (optional)
 # =============================================================================
-set(EXT_GM_XCODEPROJ_OVERRIDE "/ABS/PATH/TO/GAME.xcodeproj" CACHE STRING "" FORCE)
+set(EXT_GM_XCODEPROJ_OVERRIDE "~/GameMakerStudio2/GM_IOS/AdMob/AdMob/AdMob.xcodeproj" CACHE FILEPATH "" FORCE)
 set(EXT_GM_APP_TARGET_OVERRIDE "" CACHE STRING "" FORCE)
 
 # =============================================================================
