@@ -3,22 +3,20 @@
 if (admob_rewarded_interstitial_is_loaded())
 {
     admob_rewarded_interstitial_show(
-        function(_data_json)
+        function(data)
         {
-            var _data = json_parse(_data_json);
-
             show_debug_message(
                 "Rewarded interstitial callback: "
-                + json_stringify(_data)
+                + json_stringify(data)
             );
 
-            if (_data.event_type == AdMobRewardedInterstitialCallbackEvent.Reward)
+            if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Reward)
             {
                 show_message_async("User Earned Reward");
             }
 
-            if (_data.event_type == AdMobRewardedInterstitialCallbackEvent.Dismissed
-            ||  _data.event_type == AdMobRewardedInterstitialCallbackEvent.ShowFailed)
+            if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Dismissed
+            ||  data.event_type == AdMobRewardedInterstitialCallbackEvent.ShowFailed)
             {
                 admob_rewarded_interstitial_load(Obj_AdMob.admob_log);
             }

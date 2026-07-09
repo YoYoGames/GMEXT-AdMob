@@ -1,12 +1,12 @@
 /// @description Legacy Social Async event
 
 // The GMAdMob Extension Generator port does not use Social Async events.
-// Async AdMob operations now receive their own callback, for example:
+// Async AdMob operations now receive their own callback with a struct payload.
 //
-// admob_interstitial_load(function(_data_json) {
-//     var _data = json_parse(_data_json);
+// Example:
 //
-//     if (_data.event_type == AdMobInterstitialCallbackEvent.Loaded) {
+// admob_interstitial_load(function(data) {
+//     if (data.event_type == AdMobInterstitialCallbackEvent.Loaded) {
 //         // loaded
 //     }
 // });

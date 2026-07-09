@@ -1,6 +1,7 @@
 package ${YYAndroidPackageName};
 
 import ${YYAndroidPackageName}.R;
+import ${YYAndroidPackageName}.GMExtWire;
 import ${YYAndroidPackageName}.GMExtWire.GMFunction;
 import ${YYAndroidPackageName}.enums.*;
 import com.yoyogames.runner.RunnerJNILib;
@@ -75,9 +76,6 @@ import com.google.android.gms.ads.AdapterResponseInfo;
 import android.os.Bundle;
 import com.google.ads.mediation.admob.AdMobAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -285,10 +283,9 @@ public class GMAdMob extends GMAdMobInternal {
         isTestDevice = true;
         return ADMOB_OK;
     }
-    public double admob_events_on_paid_event(boolean enabled, final GMFunction callback) {
+    public void admob_events_on_paid_event(boolean enabled, final GMFunction callback) {
         triggerOnPaidEvent = enabled;
         paidEventCallback = enabled ? callback : null;
-        return ADMOB_OK;
     }
 
     private RequestConfiguration buildRequestConfiguration(final String callingMethod) {
@@ -791,25 +788,13 @@ public class GMAdMob extends GMAdMobInternal {
     // #endregion
 
     // #region Server Side Verification
-    public double admob_server_side_verification_set(final String userId, final String customData) {
-        final String callingMethod = "admob_server_side_verification_set";
-    
-		if (!validateInitialized(callingMethod))
-			return ADMOB_ERROR_NOT_INITIALIZED;
-
+    public void admob_server_side_verification_set(final String userId, final String customData) {
         serverSideVerificationUserId = userId;
         serverSideVerificationCustomData = customData;
-        return ADMOB_OK;
     }
-    public double admob_server_side_verification_clear() {
-        final String callingMethod = "admob_server_side_verification_clear";
-    
-		if (!validateInitialized(callingMethod))
-			return ADMOB_ERROR_NOT_INITIALIZED;
-
+    public void admob_server_side_verification_clear() {
         serverSideVerificationUserId = null;
         serverSideVerificationCustomData = null;
-        return ADMOB_OK;
     }
 
     private void configureServerSideVerification(Object ad, String userId, String customData) {
@@ -1820,7 +1805,7 @@ public class GMAdMob extends GMAdMobInternal {
 
         activity.runOnUiThread(() -> {
             String normalizedEventType = toSnakeCase(eventType);
-            JSONObject payload = eventPayload(normalizedEventType, data);
+            GMExtWire.StructStream payload = eventPayload(normalizedEventType, data);
             GMFunction callback = null;
             boolean clearShowCallback = false;
 
@@ -1937,39 +1922,190 @@ public class GMAdMob extends GMAdMobInternal {
         });
     }
 
-    private JSONObject eventPayload(String eventType, Map<String, Object> data) {
-        JSONObject payload = new JSONObject();
+    private static GMExtWire.StructStream streamStruct() {
+        return new GMExtWire.StructStream(4096);
+    }
 
-        try {
-            int callbackEventType = callbackEventTypeForName(eventType);
-            boolean failed =
-                eventType.endsWith("failed")
-                || eventType.endsWith("load_failed")
-                || eventType.endsWith("show_failed")
-                || eventType.endsWith("request_info_update_failed");
+    private static GMExtWire.ArrayStream streamArray() {
+        return new GMExtWire.ArrayStream(4096);
+    }
 
-            payload.put("success", !failed);
-            payload.put("event_type", callbackEventType);
-            payload.put("code", failed ? -100.0 : ADMOB_OK);
-            payload.put("error_message", "");
+    private GMExtWire.StructStream eventPayload(String eventType, Map<String, Object> data) {
+        int callbackEventType = callbackEventTypeForName(eventType);
 
-            if (data != null) {
-                for (Map.Entry<String, Object> entry : data.entrySet()) {
-                    payload.put(toSnakeCase(entry.getKey()), normalizeJsonValue(entry.getValue()));
-                }
-            }
+        boolean failed =
+            eventType.endsWith("failed")
+            || eventType.endsWith("load_failed")
+            || eventType.endsWith("show_failed")
+            || eventType.endsWith("request_info_update_failed");
 
-            if (payload.has("error_code"))
-                payload.put("code", payload.optDouble("error_code", -100.0));
+        double code = failed ? -100.0 : ADMOB_OK;
+        String errorMessage = "";
 
-            String errorMessage = payload.optString("error_message", "");
-            if (errorMessage != null && !errorMessage.isEmpty())
-                payload.put("success", false);
+        if (data != null) {
+            Object errorCodeValue = data.get("errorCode");
+            if (errorCodeValue == null)
+                errorCodeValue = data.get("error_code");
+
+            if (errorCodeValue instanceof Number)
+                code = ((Number)errorCodeValue).doubleValue();
+
+            Object errorMessageValue = data.get("errorMessage");
+            if (errorMessageValue == null)
+                errorMessageValue = data.get("error_message");
+
+            if (errorMessageValue != null)
+                errorMessage = safeString(errorMessageValue.toString());
+
+            if (!errorMessage.isEmpty())
+                failed = true;
         }
-        catch (JSONException ignored) {
+
+        GMExtWire.StructStream payload = streamStruct()
+            .kv("success", !failed)
+            .kv("event_type", callbackEventType)
+            .kv("code", code)
+            .kv("error_message", errorMessage);
+
+        if (data != null) {
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                String key = toSnakeCase(entry.getKey());
+
+                if ("error_message".equals(key))
+                    continue;
+
+                addValue(payload, key, entry.getValue());
+            }
         }
 
         return payload;
+    }
+
+    private static void addValue(
+        GMExtWire.StructStream stream,
+        String key,
+        Object value) {
+        if (value == null) {
+            stream.kv(key, "");
+            return;
+        }
+
+        if (value instanceof Boolean) {
+            stream.kv(key, (Boolean)value);
+            return;
+        }
+
+        if (value instanceof Integer) {
+            stream.kv(key, (Integer)value);
+            return;
+        }
+
+        if (value instanceof Long) {
+            stream.kv(key, (Long)value);
+            return;
+        }
+
+        if (value instanceof Float) {
+            stream.kv(key, ((Float)value).doubleValue());
+            return;
+        }
+
+        if (value instanceof Double) {
+            stream.kv(key, (Double)value);
+            return;
+        }
+
+        if (value instanceof Number) {
+            stream.kv(key, ((Number)value).doubleValue());
+            return;
+        }
+
+        if (value instanceof Map) {
+            GMExtWire.StructStream nested = streamStruct();
+
+            for (Object rawEntryObject : ((Map)value).entrySet()) {
+                Map.Entry rawEntry = (Map.Entry)rawEntryObject;
+                if (rawEntry.getKey() != null)
+                    addValue(
+                        nested,
+                        toSnakeCase(rawEntry.getKey().toString()),
+                        rawEntry.getValue()
+                    );
+            }
+
+            stream.kv(key, nested);
+            return;
+        }
+
+        if (value instanceof List) {
+            GMExtWire.ArrayStream array = streamArray();
+
+            for (Object item : (List)value)
+                addArrayValue(array, item);
+
+            stream.kv(key, array);
+            return;
+        }
+
+        stream.kv(key, value.toString());
+    }
+
+    private static void addArrayValue(
+        GMExtWire.ArrayStream array,
+        Object value) {
+        if (value == null) {
+            array.add("");
+            return;
+        }
+
+        if (value instanceof Boolean) {
+            array.add((Boolean)value);
+            return;
+        }
+
+        if (value instanceof Integer) {
+            array.add((Integer)value);
+            return;
+        }
+
+        if (value instanceof Long) {
+            array.add((Long)value);
+            return;
+        }
+
+        if (value instanceof Float) {
+            array.add(((Float)value).doubleValue());
+            return;
+        }
+
+        if (value instanceof Double) {
+            array.add((Double)value);
+            return;
+        }
+
+        if (value instanceof Number) {
+            array.add(((Number)value).doubleValue());
+            return;
+        }
+
+        if (value instanceof Map) {
+            GMExtWire.StructStream nested = streamStruct();
+
+            for (Object rawEntryObject : ((Map)value).entrySet()) {
+                Map.Entry rawEntry = (Map.Entry)rawEntryObject;
+                if (rawEntry.getKey() != null)
+                    addValue(
+                        nested,
+                        toSnakeCase(rawEntry.getKey().toString()),
+                        rawEntry.getValue()
+                    );
+            }
+
+            array.add(nested);
+            return;
+        }
+
+        array.add(value.toString());
     }
 
     private int callbackEventTypeForName(String eventType) {
@@ -2048,38 +2184,25 @@ public class GMAdMob extends GMAdMobInternal {
     }
 
     private void callbackResult(GMFunction callback, int eventType, boolean success, double code) {
-        JSONObject payload = new JSONObject();
-
-        try {
-            payload.put("success", success);
-            payload.put("event_type", eventType);
-            payload.put("code", code);
-            payload.put("error_message", success ? "" : errorMessageForCode((int)code));
-        }
-        catch (JSONException ignored) {
-        }
+        GMExtWire.StructStream payload = streamStruct()
+            .kv("success", success)
+            .kv("event_type", eventType)
+            .kv("code", code)
+            .kv(
+                "error_message",
+                success ? "" : errorMessageForCode((int)code)
+            );
 
         invokeCallback(callback, payload);
     }
 
-    private void invokeCallback(GMFunction callback, JSONObject payload) {
+    private void invokeCallback(GMFunction callback, GMExtWire.StructStream payload) {
         if (callback != null)
-            callback.call(payload.toString());
+            callback.call(payload);
     }
 
-    private static Object normalizeJsonValue(Object value) {
-        if (value == null)
-            return JSONObject.NULL;
-        if (value instanceof Map)
-            return new JSONObject((Map)value);
-        if (value instanceof List)
-            return new JSONArray((List)value);
-        if (value instanceof Long) {
-            long longValue = (Long)value;
-            if (Math.abs(longValue) > MAX_DOUBLE_SAFE)
-                return String.format("@i64@%016x$i64$", longValue);
-        }
-        return value;
+    private static String safeString(String value) {
+        return value != null ? value : "";
     }
 
     private static String toSnakeCase(String value) {

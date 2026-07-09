@@ -44,8 +44,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_events_on_paid_event(enabled, callback);
-        return (double)__result;
+        admob_events_on_paid_event(enabled, callback);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_banner_set_ad_unit(String ad_unit_id)
@@ -181,14 +181,14 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_server_side_verification_set(String user_id, String custom_data)
     {
-        double __result = admob_server_side_verification_set(user_id, custom_data);
-        return (double)__result;
+        admob_server_side_verification_set(user_id, custom_data);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_server_side_verification_clear()
     {
-        double __result = admob_server_side_verification_clear();
-        return (double)__result;
+        admob_server_side_verification_clear();
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_rewarded_video_set_ad_unit(String ad_unit_id)

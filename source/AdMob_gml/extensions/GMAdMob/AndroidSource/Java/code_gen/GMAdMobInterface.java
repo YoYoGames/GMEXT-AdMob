@@ -8,7 +8,7 @@ import ${YYAndroidPackageName}.enums.*;
 public interface GMAdMobInterface {
     public double admob_initialize(GMFunction callback);
     public double admob_set_test_device_id();
-    public double admob_events_on_paid_event(boolean enabled, GMFunction callback);
+    public void admob_events_on_paid_event(boolean enabled, GMFunction callback);
     public void admob_banner_set_ad_unit(String ad_unit_id);
     public double admob_banner_create(AdMobBannerSize size, boolean bottom, GMFunction callback);
     public double admob_banner_create_ext(AdMobBannerSize size, boolean bottom, AdMobBannerAlignment alignment, GMFunction callback);
@@ -25,8 +25,8 @@ public interface GMAdMobInterface {
     public double admob_interstitial_show(GMFunction callback);
     public boolean admob_interstitial_is_loaded();
     public double admob_interstitial_instances_count();
-    public double admob_server_side_verification_set(String user_id, String custom_data);
-    public double admob_server_side_verification_clear();
+    public void admob_server_side_verification_set(String user_id, String custom_data);
+    public void admob_server_side_verification_clear();
     public void admob_rewarded_video_set_ad_unit(String ad_unit_id);
     public void admob_rewarded_video_free_loaded_instances(double count);
     public void admob_rewarded_video_max_instances(double value);

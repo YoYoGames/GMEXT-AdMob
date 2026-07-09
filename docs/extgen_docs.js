@@ -15,7 +15,6 @@
  * @function_partial admob_events_on_paid_event
  * @param {Bool} enabled
  * @param {Function} callback
- * @returns {Real}
  * @function_end
  */
 
@@ -129,13 +128,11 @@
  * @function_partial admob_server_side_verification_set
  * @param {String} user_id
  * @param {String} custom_data
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_server_side_verification_clear
- * @returns {Real}
  * @function_end
  */
 

@@ -133,9 +133,9 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_events_on_paid_event:enabled callback:callback];
+    [__impl admob_events_on_paid_event:enabled callback:callback];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_banner_set_ad_unit:(char*)ad_unit_id
@@ -287,16 +287,16 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_server_side_verification_set:(char*)user_id arg1:(char*)custom_data
 {
-    double __result = [__impl admob_server_side_verification_set:user_id custom_data:custom_data];
+    [__impl admob_server_side_verification_set:user_id custom_data:custom_data];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_server_side_verification_clear
 {
-    double __result = [__impl admob_server_side_verification_clear];
+    [__impl admob_server_side_verification_clear];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_rewarded_video_set_ad_unit:(char*)ad_unit_id

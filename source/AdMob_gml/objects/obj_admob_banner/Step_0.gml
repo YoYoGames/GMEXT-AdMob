@@ -8,11 +8,11 @@ if (pressed && displayHeight != display_get_height())
         banner_type,
         bottom,
         alignment,
-        function(_data_json)
+        function(data)
         {
-            var _data = json_parse(_data_json);
             show_debug_message(
-                "Banner callback: " + json_stringify(_data)
+                "Banner callback: "
+                + json_stringify(data)
             );
         }
     );

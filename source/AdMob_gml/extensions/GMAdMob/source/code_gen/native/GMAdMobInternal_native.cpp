@@ -42,8 +42,8 @@ GMEXPORT double __EXT_NATIVE__admob_events_on_paid_event(char* __arg_buffer, dou
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    auto&& __result = admob_events_on_paid_event(enabled, callback);
-    return static_cast<double>(__result);
+    admob_events_on_paid_event(enabled, callback);
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_banner_set_ad_unit(char* ad_unit_id)
@@ -179,14 +179,14 @@ GMEXPORT double __EXT_NATIVE__admob_interstitial_instances_count()
 
 GMEXPORT double __EXT_NATIVE__admob_server_side_verification_set(char* user_id, char* custom_data)
 {
-    auto&& __result = admob_server_side_verification_set(user_id, custom_data);
-    return static_cast<double>(__result);
+    admob_server_side_verification_set(user_id, custom_data);
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_server_side_verification_clear()
 {
-    auto&& __result = admob_server_side_verification_clear();
-    return static_cast<double>(__result);
+    admob_server_side_verification_clear();
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_rewarded_video_set_ad_unit(char* ad_unit_id)

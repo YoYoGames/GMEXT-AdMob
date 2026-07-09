@@ -11,10 +11,11 @@ if (admob_handle_orientation_changes)
 status = "UNKNOWN";
 type = "UNKNOWN";
 
-function admob_log(_data_json)
+function admob_log(data)
 {
-    var _data = json_parse(_data_json);
-    show_debug_message("AdMob callback: " + json_stringify(_data));
+    show_debug_message(
+        "AdMob callback: " + json_stringify(data)
+    );
 }
 
 function showDebugInfo()
@@ -84,42 +85,70 @@ function updateConsentStrings()
 
 function loadAllAds()
 {
-	show_debug_message("loadAllAds()")
-	
-    admob_interstitial_load(function(data){
-		show_debug_message($"admob_interstitial_load: {data}")
-	});
-	
-    admob_rewarded_video_load(function(data){
-		show_debug_message($"admob_rewarded_video_load: {data}")
-	});
-	
-    admob_rewarded_interstitial_load(function(data){
-		show_debug_message($"admob_rewarded_interstitial_load: {data}")
-	});
+    show_debug_message("loadAllAds()");
+
+    admob_interstitial_load(
+        function(data)
+        {
+            show_debug_message(
+                "admob_interstitial_load: "
+                + json_stringify(data)
+            );
+        }
+    );
+
+    admob_rewarded_video_load(
+        function(data)
+        {
+            show_debug_message(
+                "admob_rewarded_video_load: "
+                + json_stringify(data)
+            );
+        }
+    );
+
+    admob_rewarded_interstitial_load(
+        function(data)
+        {
+            show_debug_message(
+                "admob_rewarded_interstitial_load: "
+                + json_stringify(data)
+            );
+        }
+    );
 
     admob_app_open_ad_enable(
-        display_landscape,function(data){
-		show_debug_message($"admob_app_open_ad_enable: {data}")
-	});
+        display_landscape,
+        function(data)
+        {
+            show_debug_message(
+                "admob_app_open_ad_enable: "
+                + json_stringify(data)
+            );
+        }
+    );
 }
 
-function onConsentShown(_data_json)
+function onConsentShown(data)
 {
-    var _data = json_parse(_data_json);
-    show_debug_message("Consent show callback: " + json_stringify(_data));
+    show_debug_message(
+        "Consent show callback: "
+        + json_stringify(data)
+    );
 
     showDebugInfo();
     updateConsentStrings();
     loadAllAds();
 }
 
-function onConsentLoaded(_data_json)
+function onConsentLoaded(data)
 {
-    var _data = json_parse(_data_json);
-    show_debug_message("Consent load callback: " + json_stringify(_data));
+    show_debug_message(
+        "Consent load callback: "
+        + json_stringify(data)
+    );
 
-    if (_data.event_type == AdMobConsentCallbackEvent.Loaded)
+    if (data.event_type == AdMobConsentCallbackEvent.Loaded)
     {
         admob_consent_show(onConsentShown);
     }
@@ -129,14 +158,16 @@ function onConsentLoaded(_data_json)
     }
 }
 
-function onConsentInfoUpdated(_data_json)
+function onConsentInfoUpdated(data)
 {
-    var _data = json_parse(_data_json);
-    show_debug_message("Consent info callback: " + json_stringify(_data));
+    show_debug_message(
+        "Consent info callback: "
+        + json_stringify(data)
+    );
 
     updateConsentStrings();
 
-    if (_data.event_type == AdMobConsentCallbackEvent.RequestInfoUpdated)
+    if (data.event_type == AdMobConsentCallbackEvent.RequestInfoUpdated)
     {
         if (admob_consent_get_status() == AdMobConsentStatus.Required)
         {
@@ -153,25 +184,62 @@ function onConsentInfoUpdated(_data_json)
     }
 }
 
-function onPaidEvent(_data_json)
+function onPaidEvent(data)
 {
-    var _data = json_parse(_data_json);
-
-    if (_data.event_type != AdMobPaidEventCallbackEvent.Paid)
+    if (data.event_type != AdMobPaidEventCallbackEvent.Paid)
     {
         return;
     }
 
-    var _unit_id = variable_struct_exists(_data, "unit_id") ? _data.unit_id : "";
-    var _ad_type = variable_struct_exists(_data, "ad_type") ? _data.ad_type : "";
-    var _micros = variable_struct_exists(_data, "micros") ? _data.micros : 0;
-    var _currency_code = variable_struct_exists(_data, "currency_code") ? _data.currency_code : "";
-    var _precision = variable_struct_exists(_data, "precision") ? _data.precision : 0;
-    var _ad_source_name = variable_struct_exists(_data, "ad_source_name") ? _data.ad_source_name : "";
-    var _ad_source_id = variable_struct_exists(_data, "ad_source_id") ? _data.ad_source_id : "";
-    var _ad_source_instance_name = variable_struct_exists(_data, "ad_source_instance_name") ? _data.ad_source_instance_name : "";
-    var _ad_source_instance_id = variable_struct_exists(_data, "ad_source_instance_id") ? _data.ad_source_instance_id : "";
-    var _mediation_adapter_class_name = variable_struct_exists(_data, "mediation_adapter_class_name") ? _data.mediation_adapter_class_name : "";
+    var _unit_id =
+        variable_struct_exists(data, "unit_id")
+            ? data.unit_id
+            : "";
+
+    var _ad_type =
+        variable_struct_exists(data, "ad_type")
+            ? data.ad_type
+            : "";
+
+    var _micros =
+        variable_struct_exists(data, "micros")
+            ? data.micros
+            : 0;
+
+    var _currency_code =
+        variable_struct_exists(data, "currency_code")
+            ? data.currency_code
+            : "";
+
+    var _precision =
+        variable_struct_exists(data, "precision")
+            ? data.precision
+            : 0;
+
+    var _ad_source_name =
+        variable_struct_exists(data, "ad_source_name")
+            ? data.ad_source_name
+            : "";
+
+    var _ad_source_id =
+        variable_struct_exists(data, "ad_source_id")
+            ? data.ad_source_id
+            : "";
+
+    var _ad_source_instance_name =
+        variable_struct_exists(data, "ad_source_instance_name")
+            ? data.ad_source_instance_name
+            : "";
+
+    var _ad_source_instance_id =
+        variable_struct_exists(data, "ad_source_instance_id")
+            ? data.ad_source_instance_id
+            : "";
+
+    var _mediation_adapter_class_name =
+        variable_struct_exists(data, "mediation_adapter_class_name")
+            ? data.mediation_adapter_class_name
+            : "";
 
     show_debug_message(
         $"Paid event: {_ad_type} {_micros} {_currency_code}"
@@ -181,42 +249,46 @@ function onPaidEvent(_data_json)
 // Development only. Call before admob_initialize().
 admob_set_test_device_id();
 
-// Optional paid event stream.
+// Optional paid event stream. This is now unit/void.
 // admob_events_on_paid_event(true, onPaidEvent);
 
 // Optional targeting examples:
 // admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating.General);
 // admob_targeting_coppa(true);
 // admob_targeting_under_age(true);
-show_debug_message("admob_initialize GM")
-var _init_result = admob_initialize(
-    function(_data_json)
-    {
-		show_debug_message("admob_initialize CALLBACK: " + ": " + _data_json)
-		
-        var _data = json_parse(_data_json);
 
-        if (!_data.success)
+show_debug_message("admob_initialize GM");
+
+var _init_result =
+    admob_initialize(
+        function(data)
         {
             show_debug_message(
-                "AdMob initialize failed: "
-                + string(_data.code)
-                + " "
-                + _data.error_message
+                "admob_initialize callback: "
+                + json_stringify(data)
             );
 
-            return;
-        }
+            if (!data.success)
+            {
+                show_debug_message(
+                    "AdMob initialize failed: "
+                    + string(data.code)
+                    + " "
+                    + data.error_message
+                );
 
-        if (_data.event_type == AdMobInitializeCallbackEvent.Initialized)
-        {
-            admob_consent_request_info_update(
-                AdMobConsentDebugGeography.EEA,
-                onConsentInfoUpdated
-            );
+                return;
+            }
+
+            if (data.event_type == AdMobInitializeCallbackEvent.Initialized)
+            {
+                admob_consent_request_info_update(
+                    AdMobConsentDebugGeography.EEA,
+                    onConsentInfoUpdated
+                );
+            }
         }
-    }
-);
+    );
 
 if (_init_result != AdMobError.Ok)
 {

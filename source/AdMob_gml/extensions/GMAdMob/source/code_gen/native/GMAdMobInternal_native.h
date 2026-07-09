@@ -162,7 +162,7 @@ namespace gm::wire::details
 
 double admob_initialize(const gm::wire::GMFunction& callback);
 double admob_set_test_device_id();
-double admob_events_on_paid_event(bool enabled, const gm::wire::GMFunction& callback);
+void admob_events_on_paid_event(bool enabled, const gm::wire::GMFunction& callback);
 void admob_banner_set_ad_unit(std::string_view ad_unit_id);
 double admob_banner_create(gm_enums::AdMobBannerSize size, bool bottom, const gm::wire::GMFunction& callback);
 double admob_banner_create_ext(gm_enums::AdMobBannerSize size, bool bottom, gm_enums::AdMobBannerAlignment alignment, const gm::wire::GMFunction& callback);
@@ -179,8 +179,8 @@ double admob_interstitial_load(const gm::wire::GMFunction& callback);
 double admob_interstitial_show(const gm::wire::GMFunction& callback);
 bool admob_interstitial_is_loaded();
 double admob_interstitial_instances_count();
-double admob_server_side_verification_set(std::string_view user_id, std::string_view custom_data);
-double admob_server_side_verification_clear();
+void admob_server_side_verification_set(std::string_view user_id, std::string_view custom_data);
+void admob_server_side_verification_clear();
 void admob_rewarded_video_set_ad_unit(std::string_view ad_unit_id);
 void admob_rewarded_video_free_loaded_instances(double count);
 void admob_rewarded_video_max_instances(double value);

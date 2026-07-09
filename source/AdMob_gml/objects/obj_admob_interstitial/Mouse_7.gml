@@ -4,17 +4,15 @@ if (admob_interstitial_is_loaded())
 {
     var _show_result =
         admob_interstitial_show(
-            function(_data_json)
+            function(data)
             {
-                var _data = json_parse(_data_json);
-
                 show_debug_message(
                     "Interstitial show callback: "
-                    + json_stringify(_data)
+                    + json_stringify(data)
                 );
 
-                if (_data.event_type == AdMobInterstitialCallbackEvent.Dismissed
-                ||  _data.event_type == AdMobInterstitialCallbackEvent.ShowFailed)
+                if (data.event_type == AdMobInterstitialCallbackEvent.Dismissed
+                ||  data.event_type == AdMobInterstitialCallbackEvent.ShowFailed)
                 {
                     admob_interstitial_load(Obj_AdMob.admob_log);
                 }
@@ -32,13 +30,11 @@ if (admob_interstitial_is_loaded())
 else
 {
     admob_interstitial_load(
-        function(_data_json)
+        function(data)
         {
-            var _data = json_parse(_data_json);
-
             show_debug_message(
                 "Interstitial load callback: "
-                + json_stringify(_data)
+                + json_stringify(data)
             );
         }
     );

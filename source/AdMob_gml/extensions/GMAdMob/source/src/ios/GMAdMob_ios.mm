@@ -121,20 +121,232 @@ static NSString *AdMobSnakeCase(NSString *value)
     return [result lowercaseString];
 }
 
-static NSString *AdMobJsonString(NSDictionary *dictionary)
+static const char *AdMobCString(NSString *value)
 {
-    if (dictionary == nil)
-        return @"{}";
+    return value != nil ? value.UTF8String : "";
+}
 
-    NSData *jsonData =
-        [NSJSONSerialization dataWithJSONObject:dictionary
-                                        options:0
-                                          error:nil];
-    if (jsonData == nil)
-        return @"{}";
+static void AdMobAddValue(
+    gm::wire::StructStream &stream,
+    const char *key,
+    id value);
 
-    return [[NSString alloc] initWithData:jsonData
-                                 encoding:NSUTF8StringEncoding] ?: @"{}";
+static void AdMobAddArrayValue(
+    gm::wire::ArrayStream &array,
+    id value)
+{
+    if (value == nil || value == [NSNull null])
+    {
+        array.push("");
+        return;
+    }
+
+    if ([value isKindOfClass:[NSString class]])
+    {
+        array.push(AdMobCString((NSString *)value));
+        return;
+    }
+
+    if ([value isKindOfClass:[NSNumber class]])
+    {
+        NSNumber *number = (NSNumber *)value;
+        const char *type = number.objCType;
+
+        if (strcmp(type, @encode(BOOL)) == 0)
+            array.push(number.boolValue);
+        else if (strcmp(type, @encode(int)) == 0 ||
+                 strcmp(type, @encode(short)) == 0 ||
+                 strcmp(type, @encode(char)) == 0)
+            array.push((int32_t)number.intValue);
+        else if (strcmp(type, @encode(long)) == 0 ||
+                 strcmp(type, @encode(long long)) == 0)
+            array.push((int64_t)number.longLongValue);
+        else if (strcmp(type, @encode(unsigned int)) == 0 ||
+                 strcmp(type, @encode(unsigned short)) == 0 ||
+                 strcmp(type, @encode(unsigned char)) == 0)
+            array.push((uint32_t)number.unsignedIntValue);
+        else if (strcmp(type, @encode(unsigned long)) == 0 ||
+                 strcmp(type, @encode(unsigned long long)) == 0)
+            array.push((uint64_t)number.unsignedLongLongValue);
+        else
+            array.push(number.doubleValue);
+
+        return;
+    }
+
+    if ([value isKindOfClass:[NSDictionary class]])
+    {
+        gm::wire::StructStream nested;
+
+        NSDictionary *dict = (NSDictionary *)value;
+        for (id rawKey in dict)
+        {
+            NSString *keyString =
+                AdMobSnakeCase([rawKey description]);
+
+            AdMobAddValue(
+                nested,
+                AdMobCString(keyString),
+                dict[rawKey]
+            );
+        }
+
+        array.push(nested);
+        return;
+    }
+
+    if ([value isKindOfClass:[NSArray class]])
+    {
+        gm::wire::ArrayStream nested;
+
+        for (id item in (NSArray *)value)
+            AdMobAddArrayValue(nested, item);
+
+        array.push(nested);
+        return;
+    }
+
+    array.push(AdMobCString([value description]));
+}
+
+static void AdMobAddValue(
+    gm::wire::StructStream &stream,
+    const char *key,
+    id value)
+{
+    if (value == nil || value == [NSNull null])
+    {
+        stream.add(key, "");
+        return;
+    }
+
+    if ([value isKindOfClass:[NSString class]])
+    {
+        stream.add(key, AdMobCString((NSString *)value));
+        return;
+    }
+
+    if ([value isKindOfClass:[NSNumber class]])
+    {
+        NSNumber *number = (NSNumber *)value;
+        const char *type = number.objCType;
+
+        if (strcmp(type, @encode(BOOL)) == 0)
+            stream.add(key, number.boolValue);
+        else if (strcmp(type, @encode(int)) == 0 ||
+                 strcmp(type, @encode(short)) == 0 ||
+                 strcmp(type, @encode(char)) == 0)
+            stream.add(key, (int32_t)number.intValue);
+        else if (strcmp(type, @encode(long)) == 0 ||
+                 strcmp(type, @encode(long long)) == 0)
+            stream.add(key, (int64_t)number.longLongValue);
+        else if (strcmp(type, @encode(unsigned int)) == 0 ||
+                 strcmp(type, @encode(unsigned short)) == 0 ||
+                 strcmp(type, @encode(unsigned char)) == 0)
+            stream.add(key, (uint32_t)number.unsignedIntValue);
+        else if (strcmp(type, @encode(unsigned long)) == 0 ||
+                 strcmp(type, @encode(unsigned long long)) == 0)
+            stream.add(key, (uint64_t)number.unsignedLongLongValue);
+        else
+            stream.add(key, number.doubleValue);
+
+        return;
+    }
+
+    if ([value isKindOfClass:[NSDictionary class]])
+    {
+        gm::wire::StructStream nested;
+
+        NSDictionary *dict = (NSDictionary *)value;
+        for (id rawKey in dict)
+        {
+            NSString *keyString =
+                AdMobSnakeCase([rawKey description]);
+
+            AdMobAddValue(
+                nested,
+                AdMobCString(keyString),
+                dict[rawKey]
+            );
+        }
+
+        stream.add(key, nested);
+        return;
+    }
+
+    if ([value isKindOfClass:[NSArray class]])
+    {
+        gm::wire::ArrayStream array;
+
+        for (id item in (NSArray *)value)
+            AdMobAddArrayValue(array, item);
+
+        stream.add(key, array);
+        return;
+    }
+
+    stream.add(key, AdMobCString([value description]));
+}
+
+static gm::wire::StructStream AdMobPayload(
+    NSString *eventType,
+    NSDictionary *eventData)
+{
+    BOOL failed =
+        [eventType hasSuffix:@"failed"] ||
+        [eventType hasSuffix:@"load_failed"] ||
+        [eventType hasSuffix:@"show_failed"] ||
+        [eventType hasSuffix:@"request_info_update_failed"];
+
+    double code = failed ? -100.0 : 0.0;
+    NSString *errorMessage = @"";
+
+    id errorCode =
+        eventData[@"errorCode"] ?: eventData[@"error_code"];
+
+    if ([errorCode isKindOfClass:[NSNumber class]])
+        code = [(NSNumber *)errorCode doubleValue];
+
+    id errorMessageValue =
+        eventData[@"errorMessage"] ?: eventData[@"error_message"];
+
+    if (errorMessageValue != nil &&
+        errorMessageValue != [NSNull null])
+    {
+        errorMessage = [errorMessageValue description];
+    }
+
+    if (errorMessage.length > 0)
+        failed = YES;
+
+    gm::wire::StructStream payload;
+    payload.add("success", failed ? false : true);
+    payload.add(
+        "event_type",
+        (int32_t)AdMobCallbackEventTypeForName(eventType)
+    );
+    payload.add("code", code);
+    payload.add("error_message", AdMobCString(errorMessage));
+
+    if (eventData != nil)
+    {
+        for (id rawKey in eventData)
+        {
+            NSString *key =
+                AdMobSnakeCase([rawKey description]);
+
+            if ([key isEqualToString:@"error_message"])
+                continue;
+
+            AdMobAddValue(
+                payload,
+                AdMobCString(key),
+                eventData[rawKey]
+            );
+        }
+    }
+
+    return payload;
 }
 
 static const char *AdMobErrorMessageForCode(double code)
@@ -233,13 +445,10 @@ static int AdMobCallbackEventTypeForName(NSString *eventType)
 
 static void AdMobInvokeCallback(
     gm::wire::GMFunction callback,
-    NSDictionary *payload)
+    gm::wire::StructStream &payload)
 {
     if (callback)
-    {
-        NSString *json = AdMobJsonString(payload);
-        callback.call(json.UTF8String ?: "{}");
-    }
+        callback.call(payload);
 }
 
 static void AdMobCallbackResult(
@@ -247,17 +456,18 @@ static void AdMobCallbackResult(
     int eventType,
     double code)
 {
-    BOOL success = ((int)code == 0);
+    bool success = ((int)code == 0);
 
-    AdMobInvokeCallback(callback, @{
-        @"success": @(success),
-        @"event_type": @(eventType),
-        @"code": @(code),
-        @"error_message": success
-            ? @""
-            : [NSString stringWithUTF8String:
-                AdMobErrorMessageForCode(code)]
-    });
+    gm::wire::StructStream payload;
+    payload.add("success", success);
+    payload.add("event_type", (int32_t)eventType);
+    payload.add("code", code);
+    payload.add(
+        "error_message",
+        success ? "" : AdMobErrorMessageForCode(code)
+    );
+
+    AdMobInvokeCallback(callback, payload);
 }
 
 @interface ThreadSafeQueue : NSObject
@@ -461,15 +671,13 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return ADMOB_OK;
 }
 
-- (double)admob_events_on_paid_event:
+- (void)admob_events_on_paid_event:
             (bool)enabled
                             callback:
             (gm::wire::GMFunction)callback
 {
     self.triggerOnPaidEvent = enabled;
     g_paid_event_callback = enabled ? callback : nil;
-
-    return ADMOB_OK;
 }
 
 - (void)admob_banner_set_ad_unit:
@@ -830,32 +1038,22 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     return [self.interstitialAdQueue size];
 }
 
-- (double)admob_server_side_verification_set:
+- (void)admob_server_side_verification_set:
             (std::string_view)user_id
                                       custom_data:
             (std::string_view)custom_data
 {
-    if (![self validateInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NOT_INITIALIZED;
-
     self.serverSideVerificationUserId =
         AdMobStringFromStringView(user_id);
 
     self.serverSideVerificationCustomData =
         AdMobStringFromStringView(custom_data);
-
-    return ADMOB_OK;
 }
 
-- (double)admob_server_side_verification_clear
+- (void)admob_server_side_verification_clear
 {
-    if (![self validateInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NOT_INITIALIZED;
-
     self.serverSideVerificationUserId = nil;
     self.serverSideVerificationCustomData = nil;
-
-    return ADMOB_OK;
 }
 
 - (void)admob_rewarded_video_set_ad_unit:
@@ -2417,7 +2615,8 @@ typedef void (^AdCleanerBlock)(id ad);
     [self freeLoadedInstances:queue count:size - maxSize withCleaner:cleaner];
 }
 
--(void)sendAsyncEvent:(const char *)eventType eventData:(NSDictionary *)eventData
+-(void)sendAsyncEvent:(const char *)eventType
+            eventData:(NSDictionary *)eventData
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *rawEvent =
@@ -2426,38 +2625,8 @@ typedef void (^AdCleanerBlock)(id ad);
         NSString *normalizedEvent =
             AdMobSnakeCase(rawEvent);
 
-        NSMutableDictionary *payload =
-            [NSMutableDictionary dictionary];
-
-        BOOL failed =
-            [normalizedEvent hasSuffix:@"failed"] ||
-            [normalizedEvent hasSuffix:@"load_failed"] ||
-            [normalizedEvent hasSuffix:@"show_failed"] ||
-            [normalizedEvent hasSuffix:@"request_info_update_failed"];
-
-        payload[@"success"] = @(!failed);
-        payload[@"event_type"] =
-            @(AdMobCallbackEventTypeForName(normalizedEvent));
-        payload[@"code"] = failed ? @(-100) : @(0);
-        payload[@"error_message"] = @"";
-
-        for (NSString *key in eventData)
-        {
-            NSString *normalizedKey =
-                AdMobSnakeCase(key);
-
-            payload[normalizedKey] =
-                eventData[key] ?: [NSNull null];
-        }
-
-        if (payload[@"error_code"] != nil)
-            payload[@"code"] = payload[@"error_code"];
-
-        if (payload[@"error_message"] != nil &&
-            [payload[@"error_message"] length] > 0)
-        {
-            payload[@"success"] = @NO;
-        }
+        gm::wire::StructStream payload =
+            AdMobPayload(normalizedEvent, eventData ?: @{});
 
         gm::wire::GMFunction callback = nil;
         BOOL clearShowCallback = NO;

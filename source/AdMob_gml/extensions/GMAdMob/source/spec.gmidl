@@ -12,7 +12,7 @@ function admob_initialize(callback: func): real;
 function admob_set_test_device_id(): real;
 
 [global, bind = typed_gml]
-function admob_events_on_paid_event(enabled: bool, callback: func): real;
+function admob_events_on_paid_event(enabled: bool, callback: func): unit;
 
 // -----------------------------------------------------------------------------
 // Banner
@@ -87,10 +87,10 @@ function admob_interstitial_instances_count(): real;
 function admob_server_side_verification_set(
     user_id: string,
     custom_data: string
-): real;
+): unit;
 
 [global, bind = typed_gml]
-function admob_server_side_verification_clear(): real;
+function admob_server_side_verification_clear(): unit;
 
 // -----------------------------------------------------------------------------
 // Rewarded video

@@ -3,16 +3,14 @@
 if (admob_rewarded_video_is_loaded())
 {
     admob_rewarded_video_show(
-        function(_data_json)
+        function(data)
         {
-            var _data = json_parse(_data_json);
-
             show_debug_message(
                 "Rewarded show callback: "
-                + json_stringify(_data)
+                + json_stringify(data)
             );
 
-            if (_data.event_type == AdMobRewardedVideoCallbackEvent.Reward)
+            if (data.event_type == AdMobRewardedVideoCallbackEvent.Reward)
             {
                 show_message_async("User Earned Reward");
             }

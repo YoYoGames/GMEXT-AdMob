@@ -6,11 +6,11 @@ else
 {
     admob_app_open_ad_enable(
         display_landscape,
-        function(_data_json)
+        function(data)
         {
-            var _data = json_parse(_data_json);
             show_debug_message(
-                "App open callback: " + json_stringify(_data)
+                "App open callback: "
+                + json_stringify(data)
             );
         }
     );

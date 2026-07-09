@@ -178,7 +178,6 @@ function admob_initialize(_callback)
 /**
  * @param {Bool} _enabled
  * @param {Function} _callback
- * @returns {Real}
  */
 function admob_events_on_paid_event(_enabled, _callback)
 {
