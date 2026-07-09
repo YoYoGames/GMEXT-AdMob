@@ -4,6 +4,7 @@
 #import <UIKit/UIKit.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
+#include <cstring>
 
 
 extern int CreateDsMap( int _num, ... );
@@ -121,202 +122,29 @@ static NSString *AdMobSnakeCase(NSString *value)
     return [result lowercaseString];
 }
 
+static int AdMobCallbackEventTypeForName(NSString *eventType);
+
 static const char *AdMobCString(NSString *value)
 {
     return value != nil ? value.UTF8String : "";
 }
 
-static void AdMobAddValue(
-    gm::wire::StructStream &stream,
-    const char *key,
-    id value);
-
-static void AdMobAddArrayValue(
-    gm::wire::ArrayStream &array,
-    id value)
-{
-    if (value == nil || value == [NSNull null])
-    {
-        array.push("");
-        return;
-    }
-
-    if ([value isKindOfClass:[NSString class]])
-    {
-        array.push(AdMobCString((NSString *)value));
-        return;
-    }
-
-    if ([value isKindOfClass:[NSNumber class]])
-    {
-        NSNumber *number = (NSNumber *)value;
-        const char *type = number.objCType;
-
-        if (strcmp(type, @encode(BOOL)) == 0)
-            array.push(number.boolValue);
-        else if (strcmp(type, @encode(int)) == 0 ||
-                 strcmp(type, @encode(short)) == 0 ||
-                 strcmp(type, @encode(char)) == 0)
-            array.push((int32_t)number.intValue);
-        else if (strcmp(type, @encode(long)) == 0 ||
-                 strcmp(type, @encode(long long)) == 0)
-            array.push((int64_t)number.longLongValue);
-        else if (strcmp(type, @encode(unsigned int)) == 0 ||
-                 strcmp(type, @encode(unsigned short)) == 0 ||
-                 strcmp(type, @encode(unsigned char)) == 0)
-            array.push((uint32_t)number.unsignedIntValue);
-        else if (strcmp(type, @encode(unsigned long)) == 0 ||
-                 strcmp(type, @encode(unsigned long long)) == 0)
-            array.push((uint64_t)number.unsignedLongLongValue);
-        else
-            array.push(number.doubleValue);
-
-        return;
-    }
-
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
-        gm::wire::StructStream nested;
-
-        NSDictionary *dict = (NSDictionary *)value;
-        for (id rawKey in dict)
-        {
-            NSString *keyString =
-                AdMobSnakeCase([rawKey description]);
-
-            AdMobAddValue(
-                nested,
-                AdMobCString(keyString),
-                dict[rawKey]
-            );
-        }
-
-        array.push(nested);
-        return;
-    }
-
-    if ([value isKindOfClass:[NSArray class]])
-    {
-        gm::wire::ArrayStream nested;
-
-        for (id item in (NSArray *)value)
-            AdMobAddArrayValue(nested, item);
-
-        array.push(nested);
-        return;
-    }
-
-    array.push(AdMobCString([value description]));
-}
-
-static void AdMobAddValue(
-    gm::wire::StructStream &stream,
-    const char *key,
-    id value)
-{
-    if (value == nil || value == [NSNull null])
-    {
-        stream.add(key, "");
-        return;
-    }
-
-    if ([value isKindOfClass:[NSString class]])
-    {
-        stream.add(key, AdMobCString((NSString *)value));
-        return;
-    }
-
-    if ([value isKindOfClass:[NSNumber class]])
-    {
-        NSNumber *number = (NSNumber *)value;
-        const char *type = number.objCType;
-
-        if (strcmp(type, @encode(BOOL)) == 0)
-            stream.add(key, number.boolValue);
-        else if (strcmp(type, @encode(int)) == 0 ||
-                 strcmp(type, @encode(short)) == 0 ||
-                 strcmp(type, @encode(char)) == 0)
-            stream.add(key, (int32_t)number.intValue);
-        else if (strcmp(type, @encode(long)) == 0 ||
-                 strcmp(type, @encode(long long)) == 0)
-            stream.add(key, (int64_t)number.longLongValue);
-        else if (strcmp(type, @encode(unsigned int)) == 0 ||
-                 strcmp(type, @encode(unsigned short)) == 0 ||
-                 strcmp(type, @encode(unsigned char)) == 0)
-            stream.add(key, (uint32_t)number.unsignedIntValue);
-        else if (strcmp(type, @encode(unsigned long)) == 0 ||
-                 strcmp(type, @encode(unsigned long long)) == 0)
-            stream.add(key, (uint64_t)number.unsignedLongLongValue);
-        else
-            stream.add(key, number.doubleValue);
-
-        return;
-    }
-
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
-        gm::wire::StructStream nested;
-
-        NSDictionary *dict = (NSDictionary *)value;
-        for (id rawKey in dict)
-        {
-            NSString *keyString =
-                AdMobSnakeCase([rawKey description]);
-
-            AdMobAddValue(
-                nested,
-                AdMobCString(keyString),
-                dict[rawKey]
-            );
-        }
-
-        stream.add(key, nested);
-        return;
-    }
-
-    if ([value isKindOfClass:[NSArray class]])
-    {
-        gm::wire::ArrayStream array;
-
-        for (id item in (NSArray *)value)
-            AdMobAddArrayValue(array, item);
-
-        stream.add(key, array);
-        return;
-    }
-
-    stream.add(key, AdMobCString([value description]));
-}
-
 static gm::wire::StructStream AdMobPayload(
     NSString *eventType,
-    NSDictionary *eventData)
+    double code,
+    const char *errorMessage)
 {
     BOOL failed =
+        ((int)code != 0) ||
         [eventType hasSuffix:@"failed"] ||
         [eventType hasSuffix:@"load_failed"] ||
         [eventType hasSuffix:@"show_failed"] ||
         [eventType hasSuffix:@"request_info_update_failed"];
 
-    double code = failed ? -100.0 : 0.0;
-    NSString *errorMessage = @"";
+    const char *safeError =
+        errorMessage != nullptr ? errorMessage : "";
 
-    id errorCode =
-        eventData[@"errorCode"] ?: eventData[@"error_code"];
-
-    if ([errorCode isKindOfClass:[NSNumber class]])
-        code = [(NSNumber *)errorCode doubleValue];
-
-    id errorMessageValue =
-        eventData[@"errorMessage"] ?: eventData[@"error_message"];
-
-    if (errorMessageValue != nil &&
-        errorMessageValue != [NSNull null])
-    {
-        errorMessage = [errorMessageValue description];
-    }
-
-    if (errorMessage.length > 0)
+    if (strlen(safeError) > 0)
         failed = YES;
 
     gm::wire::StructStream payload;
@@ -326,27 +154,15 @@ static gm::wire::StructStream AdMobPayload(
         (int32_t)AdMobCallbackEventTypeForName(eventType)
     );
     payload.add("code", code);
-    payload.add("error_message", AdMobCString(errorMessage));
-
-    if (eventData != nil)
-    {
-        for (id rawKey in eventData)
-        {
-            NSString *key =
-                AdMobSnakeCase([rawKey description]);
-
-            if ([key isEqualToString:@"error_message"])
-                continue;
-
-            AdMobAddValue(
-                payload,
-                AdMobCString(key),
-                eventData[rawKey]
-            );
-        }
-    }
+    payload.add("error_code", code);
+    payload.add("error_message", safeError);
 
     return payload;
+}
+
+static gm::wire::StructStream AdMobPayload(NSString *eventType)
+{
+    return AdMobPayload(eventType, 0.0, "");
 }
 
 static const char *AdMobErrorMessageForCode(double code)
@@ -462,6 +278,7 @@ static void AdMobCallbackResult(
     payload.add("success", success);
     payload.add("event_type", (int32_t)eventType);
     payload.add("code", code);
+    payload.add("error_code", code);
     payload.add(
         "error_message",
         success ? "" : AdMobErrorMessageForCode(code)
@@ -655,8 +472,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
             [self initializeAdUnits];
             self.isInitialized = YES;
-            [self sendAsyncEvent:"AdMob_OnInitialized"
-                       eventData:nil];
+            gm::wire::StructStream eventData =
+                AdMobPayload(@);
+            [self sendAsyncEvent:             eventData:eventData];
         }];
 
     return ADMOB_OK;
@@ -917,21 +735,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (error)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"unit_id"] =
-                        [adUnitId copy];
-
-                    eventData[@"errorMessage"] =
-                        [error.localizedDescription copy];
-
-                    eventData[@"errorCode"] =
-                        @(error.code);
-
-                    [self
-                        sendAsyncEvent:"AdMob_Interstitial_OnLoadFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_Interstitial_OnLoadFailed", error.code, AdMobCString([error.localizedDescription copy]));
+                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                    [self sendAsyncEvent:"AdMob_Interstitial_OnLoadFailed" eventData:eventData];
 
                     return;
                 }
@@ -973,15 +780,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                         };
                 }
 
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    [adUnitId copy];
-
-                [self
-                    sendAsyncEvent:"AdMob_Interstitial_OnLoaded"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_Interstitial_OnLoaded");
+                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                [self sendAsyncEvent:"AdMob_Interstitial_OnLoaded" eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1150,21 +952,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (error)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"unit_id"] =
-                        [adUnitId copy];
-
-                    eventData[@"errorCode"] =
-                        @(error.code);
-
-                    eventData[@"errorMessage"] =
-                        [error.localizedDescription copy];
-
-                    [self
-                        sendAsyncEvent:"AdMob_RewardedVideo_OnLoadFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_RewardedVideo_OnLoadFailed", error.code, AdMobCString([error.localizedDescription copy]));
+                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                    [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoadFailed" eventData:eventData];
 
                     return;
                 }
@@ -1206,15 +997,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                         };
                 }
 
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    [adUnitId copy];
-
-                [self
-                    sendAsyncEvent:"AdMob_RewardedVideo_OnLoaded"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_RewardedVideo_OnLoaded");
+                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoaded" eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1256,21 +1042,12 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             presentFromRootViewController:g_controller
             userDidEarnRewardHandler:^
             {
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    rewardedAd.adUnitID;
-
-                eventData[@"reward_amount"] =
-                    @(rewardedAd.adReward.amount.doubleValue);
-
-                eventData[@"reward_type"] =
-                    rewardedAd.adReward.type;
-
-                [self
-                    sendAsyncEvent:"AdMob_RewardedVideo_OnReward"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_RewardedVideo_OnReward");
+                eventData.add("unit_id", AdMobCString(rewardedAd.adUnitID));
+                eventData.add("reward_amount", rewardedAd.adReward.amount.doubleValue);
+                eventData.add("reward_type", AdMobCString(rewardedAd.adReward.type));
+                [self sendAsyncEvent:"AdMob_RewardedVideo_OnReward" eventData:eventData];
             }];
     });
 
@@ -1385,21 +1162,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (error)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"unit_id"] =
-                        [adUnitId copy];
-
-                    eventData[@"errorMessage"] =
-                        [error.localizedDescription copy];
-
-                    eventData[@"errorCode"] =
-                        @(error.code);
-
-                    [self
-                        sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoadFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_RewardedInterstitial_OnLoadFailed", error.code, AdMobCString([error.localizedDescription copy]));
+                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                    [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoadFailed" eventData:eventData];
 
                     return;
                 }
@@ -1442,15 +1208,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                         };
                 }
 
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    [adUnitId copy];
-
-                [self
-                    sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoaded"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_RewardedInterstitial_OnLoaded");
+                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoaded" eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1492,21 +1253,12 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             presentFromRootViewController:g_controller
             userDidEarnRewardHandler:^
             {
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    rewardedInterstitialAd.adUnitID;
-
-                eventData[@"reward_amount"] =
-                    rewardedInterstitialAd.adReward.amount;
-
-                eventData[@"reward_type"] =
-                    rewardedInterstitialAd.adReward.type;
-
-                [self
-                    sendAsyncEvent:"AdMob_RewardedInterstitial_OnReward"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_RewardedInterstitial_OnReward");
+                eventData.add("unit_id", AdMobCString(rewardedInterstitialAd.adUnitID));
+                eventData.add("reward_amount", rewardedInterstitialAd.adReward.amount.doubleValue);
+                eventData.add("reward_type", AdMobCString(rewardedInterstitialAd.adReward.type));
+                [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnReward" eventData:eventData];
             }];
     });
 
@@ -1648,21 +1400,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (error)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"unit_id"] =
-                        [adUnitId copy];
-
-                    eventData[@"errorCode"] =
-                        @(error.code);
-
-                    eventData[@"errorMessage"] =
-                        [error.localizedDescription copy];
-
-                    [self
-                        sendAsyncEvent:"AdMob_AppOpenAd_OnLoadFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_AppOpenAd_OnLoadFailed", error.code, AdMobCString([error.localizedDescription copy]));
+                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                    [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoadFailed" eventData:eventData];
 
                     return;
                 }
@@ -1695,15 +1436,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                         };
                 }
 
-                NSMutableDictionary *eventData =
-                    [NSMutableDictionary dictionary];
-
-                eventData[@"unit_id"] =
-                    [adUnitId copy];
-
-                [self
-                    sendAsyncEvent:"AdMob_AppOpenAd_OnLoaded"
-                    eventData:eventData];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@"AdMob_AppOpenAd_OnLoaded");
+                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoaded" eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1837,24 +1573,15 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (error)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"errorCode"] =
-                        @(error.code);
-
-                    eventData[@"errorMessage"] =
-                        [error.localizedDescription copy];
-
-                    [self
-                        sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdateFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_Consent_OnRequestInfoUpdateFailed", error.code, AdMobCString([error.localizedDescription copy]));
+                    [self sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdateFailed" eventData:eventData];
                 }
                 else
                 {
-                    [self
-                        sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdated"
-                        eventData:nil];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@);
+                    [self sendAsyncEvent:                     eventData:eventData];
                 }
             }];
 
@@ -1898,27 +1625,18 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (loadError)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"errorCode"] =
-                        @(loadError.code);
-
-                    eventData[@"errorMessage"] =
-                        [loadError.localizedDescription copy];
-
-                    [self
-                        sendAsyncEvent:"AdMob_Consent_OnLoadFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_Consent_OnLoadFailed", loadError.code, AdMobCString([loadError.localizedDescription copy]));
+                    [self sendAsyncEvent:"AdMob_Consent_OnLoadFailed" eventData:eventData];
 
                     return;
                 }
 
                 self.consentForm = form;
 
-                [self
-                    sendAsyncEvent:"AdMob_Consent_OnLoaded"
-                    eventData:nil];
+                gm::wire::StructStream eventData =
+                    AdMobPayload(@);
+                [self sendAsyncEvent:                 eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1947,24 +1665,15 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             {
                 if (dismissError)
                 {
-                    NSMutableDictionary *eventData =
-                        [NSMutableDictionary dictionary];
-
-                    eventData[@"errorCode"] =
-                        @(dismissError.code);
-
-                    eventData[@"errorMessage"] =
-                        [dismissError.localizedDescription copy];
-
-                    [self
-                        sendAsyncEvent:"AdMob_Consent_OnShowFailed"
-                        eventData:eventData];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@"AdMob_Consent_OnShowFailed", dismissError.code, AdMobCString([dismissError.localizedDescription copy]));
+                    [self sendAsyncEvent:"AdMob_Consent_OnShowFailed" eventData:eventData];
                 }
                 else
                 {
-                    [self
-                        sendAsyncEvent:"AdMob_Consent_OnShown"
-                        eventData:nil];
+                    gm::wire::StructStream eventData =
+                        AdMobPayload(@);
+                    [self sendAsyncEvent:                     eventData:eventData];
                 }
 
                 self.consentForm = nil;
@@ -2029,28 +1738,23 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
 -(void)bannerView:(nonnull GADBannerView *)bannerView didFailToReceiveAdWithError:(nonnull NSError *)error
 {
-    // Create a dictionary with error details
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"errorCode"] = @(error.code);
-    eventData[@"errorMessage"] = [error.localizedDescription copy];
-    
-    // Trigger the event using sendAsyncEvent
+        gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_Banner_OnLoadFailed", error.code, AdMobCString([error.localizedDescription copy]));
     [self sendAsyncEvent:"AdMob_Banner_OnLoadFailed" eventData:eventData];
 }
 
 -(void)bannerViewDidReceiveAd:(nonnull GADBannerView *)bannerView
 {
-    // Create a dictionary with the banner ad details
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"unit_id"] = bannerView.adUnitID;
-    
-    // Trigger the event using sendAsyncEvent
+        gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_Banner_OnLoaded");
+    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
     [self sendAsyncEvent:"AdMob_Banner_OnLoaded" eventData:eventData];
 }
 
 - (void)bannerViewWillPresentScreen:(GADBannerView *)bannerView {
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"unit_id"] = bannerView.adUnitID;
+    gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_Banner_OnOpened");
+    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
     [self sendAsyncEvent:"AdMob_Banner_OnOpened" eventData:eventData];
 }
 
@@ -2059,14 +1763,16 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 }
 
 - (void)bannerViewDidDismissScreen:(GADBannerView *)bannerView {
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"unit_id"] = bannerView.adUnitID;
+    gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_Banner_OnClosed");
+    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
     [self sendAsyncEvent:"AdMob_Banner_OnClosed" eventData:eventData];
 }
 
 - (void)bannerViewDidRecordClick:(GADBannerView *)bannerView {
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"unit_id"] = bannerView.adUnitID;
+    gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_Banner_OnClicked");
+    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
     [self sendAsyncEvent:"AdMob_Banner_OnClicked" eventData:eventData];
 }
 
@@ -2105,13 +1811,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     }
     
     if (eventType && adUnitID) {
-        // Create a dictionary with the event data
-        NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-        eventData[@"unit_id"] = adUnitID;
-        eventData[@"errorCode"] = @(error.code);
-        eventData[@"errorMessage"] = [error.localizedDescription copy];
-        
-        // Trigger the event using sendAsyncEvent
+                gm::wire::StructStream eventData =
+            AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy]));
+        eventData.add("unit_id", AdMobCString(adUnitID));
         [self sendAsyncEvent:[eventType UTF8String] eventData:eventData];
     }
 }
@@ -2120,95 +1822,114 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     NSString *eventType = nil;
     NSString *adUnitID = nil;
-    
-    if ([presentingAd isMemberOfClass:[GADInterstitialAd class]]) {
+
+    if ([presentingAd isMemberOfClass:[GADInterstitialAd class]])
+    {
         eventType = @"AdMob_Interstitial_OnFullyShown";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
     }
-    else if ([presentingAd isMemberOfClass:[GADRewardedAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADRewardedAd class]])
+    {
         eventType = @"AdMob_RewardedVideo_OnFullyShown";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
     }
-    else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]])
+    {
         eventType = @"AdMob_RewardedInterstitial_OnFullyShown";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
     }
-    else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
+    {
         eventType = @"AdMob_AppOpenAd_OnFullyShown";
         adUnitID = [(GADAppOpenAd *)presentingAd adUnitID];
-        
-        // If AppOpenAd is being automatically managed
-        if (self.triggerAppOpenAd) {
-            // Reload the App Open Ad after failure
+
+        if (self.triggerAppOpenAd)
             [self admob_app_open_ad_load:g_app_open_enable_callback];
-        }
     }
-    
-    // If eventType and adUnitID are set, send the event
-    if (eventType && adUnitID) {
-        NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-        eventData[@"unit_id"] = adUnitID; // Add the unit ID
-        [self sendAsyncEvent:[eventType UTF8String] eventData:eventData]; // Trigger the event using sendAsyncEvent
+
+    if (eventType != nil && adUnitID != nil)
+    {
+        gm::wire::StructStream eventData =
+            AdMobPayload(eventType);
+
+        eventData.add("unit_id", AdMobCString(adUnitID));
+
+        [self sendAsyncEvent:[eventType UTF8String]
+                   eventData:eventData];
     }
 }
 
 -(void)adDidDismissFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)presentingAd
-{    
+{
     NSString *eventType = nil;
     NSString *adUnitID = nil;
-    
-    if ([presentingAd isMemberOfClass:[GADInterstitialAd class]]) {
+
+    if ([presentingAd isMemberOfClass:[GADInterstitialAd class]])
+    {
         eventType = @"AdMob_Interstitial_OnDismissed";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
-        
-        // Clean up the delegate and event handler for the interstitial ad
-        [self cleanAd:(GADInterstitialAd *)presentingAd withCleaner:^(id ad){
+
+        [self cleanAd:(GADInterstitialAd *)presentingAd
+          withCleaner:^(id ad)
+        {
             [self cleanUpInterstitialAd:(GADInterstitialAd *)ad];
         }];
+
         self.interstitialAd = nil;
     }
-    else if ([presentingAd isMemberOfClass:[GADRewardedAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADRewardedAd class]])
+    {
         eventType = @"AdMob_RewardedVideo_OnDismissed";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
-        
-        // Clean up the delegate and event handler for the rewarded ad
-        [self cleanAd:(GADRewardedAd *)presentingAd withCleaner:^(id ad){
+
+        [self cleanAd:(GADRewardedAd *)presentingAd
+          withCleaner:^(id ad)
+        {
             [self cleanUpRewardedAd:(GADRewardedAd *)ad];
         }];
+
         self.rewardedAd = nil;
     }
-    else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]])
+    {
         eventType = @"AdMob_RewardedInterstitial_OnDismissed";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
-        
-        // Clean up the delegate and event handler for the rewarded interstitial ad
-        [self cleanAd:(GADRewardedInterstitialAd *)presentingAd withCleaner:^(id ad){
-            [self cleanUpRewardedInterstitialAd:(GADRewardedInterstitialAd *)ad];
+
+        [self cleanAd:(GADRewardedInterstitialAd *)presentingAd
+          withCleaner:^(id ad)
+        {
+            [self cleanUpRewardedInterstitialAd:
+                (GADRewardedInterstitialAd *)ad];
         }];
+
         self.rewardedInterstitialAd = nil;
     }
-    else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]]) {
+    else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
+    {
         eventType = @"AdMob_AppOpenAd_OnDismissed";
         adUnitID = self.appOpenAdUnitId;
-        
-        // Clean up the delegate and event handler for the app open ad
-        [self cleanAd:(GADAppOpenAd *)presentingAd withCleaner:^(id ad){
+
+        [self cleanAd:(GADAppOpenAd *)presentingAd
+          withCleaner:^(id ad)
+        {
             [self cleanUpAppOpenAd:(GADAppOpenAd *)ad];
         }];
+
         self.appOpenAd = nil;
 
-        // If AppOpenAd is being automatically managed
-        if (self.triggerAppOpenAd) {
-            // Load the App Open Ad again
+        if (self.triggerAppOpenAd)
             [self admob_app_open_ad_load:g_app_open_enable_callback];
-        }
     }
-    
-    // If eventType and adUnitID are set, send the event
-    if (eventType && adUnitID) {
-        NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-        eventData[@"unit_id"] = adUnitID; // Add the unit ID
-        [self sendAsyncEvent:[eventType UTF8String] eventData:eventData];
+
+    if (eventType != nil && adUnitID != nil)
+    {
+        gm::wire::StructStream eventData =
+            AdMobPayload(eventType);
+
+        eventData.add("unit_id", AdMobCString(adUnitID));
+
+        [self sendAsyncEvent:[eventType UTF8String]
+                   eventData:eventData];
     }
 }
 
@@ -2616,7 +2337,7 @@ typedef void (^AdCleanerBlock)(id ad);
 }
 
 -(void)sendAsyncEvent:(const char *)eventType
-            eventData:(NSDictionary *)eventData
+            eventData:(gm::wire::StructStream)payload
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *rawEvent =
@@ -2624,9 +2345,6 @@ typedef void (^AdCleanerBlock)(id ad);
 
         NSString *normalizedEvent =
             AdMobSnakeCase(rawEvent);
-
-        gm::wire::StructStream payload =
-            AdMobPayload(normalizedEvent, eventData ?: @{});
 
         gm::wire::GMFunction callback = nil;
         BOOL clearShowCallback = NO;
@@ -2765,20 +2483,18 @@ typedef void (^AdCleanerBlock)(id ad);
 
 -(void)onPaidEventHandler:(GADAdValue*) value adUnitId:(NSString*)adUnitId adType:(NSString*)adType loadedAdNetworkResponseInfo:(GADAdNetworkResponseInfo*)loadedAdNetworkResponseInfo mediationAdapterClassName:(NSString*)mediationAdapterClassName
 {
-    // Create a dictionary with all the relevant event data
-    NSMutableDictionary *eventData = [NSMutableDictionary dictionary];
-    eventData[@"mediation_adapter_class_name"] = mediationAdapterClassName;
-    eventData[@"unit_id"] = adUnitId;
-    eventData[@"ad_type"] = adType;
-    eventData[@"micros"] = @(value.value.doubleValue * 1000000.0); // Convert micros
-    eventData[@"currency_code"] = value.currencyCode;
-    eventData[@"precision"] = @(value.precision);
-    eventData[@"ad_source_name"] = loadedAdNetworkResponseInfo.adSourceName;
-    eventData[@"ad_source_id"] = loadedAdNetworkResponseInfo.adSourceID;
-    eventData[@"ad_source_instance_name"] = loadedAdNetworkResponseInfo.adSourceInstanceName;
-    eventData[@"ad_source_instance_id"] = loadedAdNetworkResponseInfo.adSourceInstanceID;
-    
-    // Trigger the event using sendAsyncEvent
+        gm::wire::StructStream eventData =
+        AdMobPayload(@"AdMob_OnPaidEvent");
+    eventData.add("mediation_adapter_class_name", AdMobCString(mediationAdapterClassName));
+    eventData.add("unit_id", AdMobCString(adUnitId));
+    eventData.add("ad_type", AdMobCString(adType));
+    eventData.add("micros", value.value.doubleValue * 1000000.0);
+    eventData.add("currency_code", AdMobCString(value.currencyCode));
+    eventData.add("precision", value.precision);
+    eventData.add("ad_source_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceName));
+    eventData.add("ad_source_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceID));
+    eventData.add("ad_source_instance_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceName));
+    eventData.add("ad_source_instance_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceID));
     [self sendAsyncEvent:"AdMob_OnPaidEvent" eventData:eventData];
 }
 
@@ -2789,7 +2505,7 @@ typedef void (^AdCleanerBlock)(id ad);
     // Set the request agent as per Google's requirement
     request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion((char*)"AdMob")];
     
-    // Initialize a mutable dictionary to hold additional parameters
+    // Additional network request parameters for AdMob.
     NSMutableDictionary<NSString *, NSString *> *additionalParams = [NSMutableDictionary dictionary];
     
     // Handle Revenue Data Processing (rdp)

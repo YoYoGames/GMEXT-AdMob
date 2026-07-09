@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -246,7 +245,7 @@ public class GMAdMob extends GMAdMobInternal {
                     initializeAdUnits();
                     isInitialized = true;
 
-                    sendAsyncEvent("AdMob_OnInitialized", null);
+                    sendAsyncEvent("AdMob_OnInitialized", eventPayload("AdMob_OnInitialized"));
                 });
             } catch (Exception e) {
                 Log.i(LOG_TAG, "GoogleMobileAds Init Error: " + e.toString());
@@ -547,30 +546,34 @@ public class GMAdMob extends GMAdMobInternal {
 	
 				@Override
 				public void onAdLoaded() {
-					sendAsyncEvent("AdMob_Banner_OnLoaded", null);
+					sendAsyncEvent("AdMob_Banner_OnLoaded", eventPayload("AdMob_Banner_OnLoaded"));
 				}
 	
 				@Override
 				public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-					Map<String, Object> data = new HashMap<>();
-					data.put("errorMessage", loadAdError.getMessage());
-					data.put("errorCode", (double) loadAdError.getCode());
-					sendAsyncEvent("AdMob_Banner_OnLoadFailed", data);
+					sendAsyncEvent(
+					    "AdMob_Banner_OnLoadFailed",
+					    eventPayload(
+					        "AdMob_Banner_OnLoadFailed",
+					        (double) loadAdError.getCode(),
+					        loadAdError.getMessage()
+					    )
+					);
 				}
 				
 				@Override
 				public void onAdOpened() {
-					sendAsyncEvent("AdMob_Banner_OnOpened", null);
+					sendAsyncEvent("AdMob_Banner_OnOpened", eventPayload("AdMob_Banner_OnOpened"));
 				}
 
 				@Override
 				public void onAdClicked() {
-					sendAsyncEvent("AdMob_Banner_OnClicked", null);
+					sendAsyncEvent("AdMob_Banner_OnClicked", eventPayload("AdMob_Banner_OnClicked"));
 				}
 
 				@Override
 				public void onAdClosed() {
-					sendAsyncEvent("AdMob_Banner_OnClosed", null);
+					sendAsyncEvent("AdMob_Banner_OnClosed", eventPayload("AdMob_Banner_OnClosed"));
 				}
 			});
 
@@ -718,18 +721,24 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", adUnitId);
-					sendAsyncEvent("AdMob_Interstitial_OnLoaded", data);
+					sendAsyncEvent(
+					    "AdMob_Interstitial_OnLoaded",
+					    eventPayload("AdMob_Interstitial_OnLoaded")
+					        .kv("unit_id", adUnitId)
+					);
                 }
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", adUnitId);
-                    data.put("errorMessage", loadAdError.getMessage());
-                    data.put("errorCode", (double) loadAdError.getCode());
-                    sendAsyncEvent("AdMob_Interstitial_OnLoadFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_Interstitial_OnLoadFailed",
+                        eventPayload(
+                            "AdMob_Interstitial_OnLoadFailed",
+                            (double) loadAdError.getCode(),
+                            loadAdError.getMessage()
+                        )
+                            .kv("unit_id", adUnitId)
+                    );
                 }
             });
         });
@@ -752,9 +761,11 @@ public class GMAdMob extends GMAdMobInternal {
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", interstitialAdRef.getAdUnitId());
-					sendAsyncEvent("AdMob_Interstitial_OnDismissed", data);
+					sendAsyncEvent(
+					    "AdMob_Interstitial_OnDismissed",
+					    eventPayload("AdMob_Interstitial_OnDismissed")
+					        .kv("unit_id", interstitialAdRef.getAdUnitId())
+					);
                 }
 
                 @Override
@@ -764,19 +775,25 @@ public class GMAdMob extends GMAdMobInternal {
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
 
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", interstitialAdRef.getAdUnitId());
-                    data.put("errorMessage", adError.getMessage());
-                    data.put("errorCode", (double) adError.getCode());
-                    sendAsyncEvent("AdMob_Interstitial_OnShowFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_Interstitial_OnShowFailed",
+                        eventPayload(
+                            "AdMob_Interstitial_OnShowFailed",
+                            (double) adError.getCode(),
+                            adError.getMessage()
+                        )
+                            .kv("unit_id", interstitialAdRef.getAdUnitId())
+                    );
                 }
 
                 @Override
                 public void onAdShowedFullScreenContent() {
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", interstitialAdRef.getAdUnitId());
-					sendAsyncEvent("AdMob_Interstitial_OnFullyShown", data);
+					sendAsyncEvent(
+					    "AdMob_Interstitial_OnFullyShown",
+					    eventPayload("AdMob_Interstitial_OnFullyShown")
+					        .kv("unit_id", interstitialAdRef.getAdUnitId())
+					);
                 }
             });
 
@@ -922,18 +939,24 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", adUnitId);
-					sendAsyncEvent("AdMob_RewardedVideo_OnLoaded", data);
+					sendAsyncEvent(
+					    "AdMob_RewardedVideo_OnLoaded",
+					    eventPayload("AdMob_RewardedVideo_OnLoaded")
+					        .kv("unit_id", adUnitId)
+					);
                 }
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", adUnitId);
-                    data.put("errorMessage", loadAdError.getMessage());
-                    data.put("errorCode", (double) loadAdError.getCode());
-                    sendAsyncEvent("AdMob_RewardedVideo_OnLoadFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_RewardedVideo_OnLoadFailed",
+                        eventPayload(
+                            "AdMob_RewardedVideo_OnLoadFailed",
+                            (double) loadAdError.getCode(),
+                            loadAdError.getMessage()
+                        )
+                            .kv("unit_id", adUnitId)
+                    );
                 }
             });
         });
@@ -959,9 +982,11 @@ public class GMAdMob extends GMAdMobInternal {
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", rewardedAdRef.getAdUnitId());
-					sendAsyncEvent("AdMob_RewardedVideo_OnDismissed", data);
+					sendAsyncEvent(
+					    "AdMob_RewardedVideo_OnDismissed",
+					    eventPayload("AdMob_RewardedVideo_OnDismissed")
+					        .kv("unit_id", rewardedAdRef.getAdUnitId())
+					);
                 }
 
                 @Override
@@ -971,18 +996,24 @@ public class GMAdMob extends GMAdMobInternal {
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
 
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", rewardedAdRef.getAdUnitId());
-                    data.put("errorMessage", adError.getMessage());
-                    data.put("errorCode", (double) adError.getCode());
-                    sendAsyncEvent("AdMob_RewardedVideo_OnShowFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_RewardedVideo_OnShowFailed",
+                        eventPayload(
+                            "AdMob_RewardedVideo_OnShowFailed",
+                            (double) adError.getCode(),
+                            adError.getMessage()
+                        )
+                            .kv("unit_id", rewardedAdRef.getAdUnitId())
+                    );
                 }
 
                 @Override
                 public void onAdShowedFullScreenContent() {
-                    Map<String, Object> data = new HashMap<>();
-					data.put("unit_id", rewardedAdRef.getAdUnitId());
-					sendAsyncEvent("AdMob_RewardedVideo_OnFullyShown", data);
+                    sendAsyncEvent(
+                        "AdMob_RewardedVideo_OnFullyShown",
+                        eventPayload("AdMob_RewardedVideo_OnFullyShown")
+                            .kv("unit_id", rewardedAdRef.getAdUnitId())
+                    );
                 }
             });
 
@@ -990,11 +1021,13 @@ public class GMAdMob extends GMAdMobInternal {
                 int rewardAmount = rewardItem.getAmount();
                 String rewardType = rewardItem.getType();
 
-                Map<String, Object> data = new HashMap<>();
-                data.put("unit_id", rewardedAdRef.getAdUnitId());
-                data.put("reward_amount", (double) rewardAmount);
-                data.put("reward_type", rewardType);
-                sendAsyncEvent("AdMob_RewardedVideo_OnReward", data);
+                sendAsyncEvent(
+                    "AdMob_RewardedVideo_OnReward",
+                    eventPayload("AdMob_RewardedVideo_OnReward")
+                        .kv("unit_id", rewardedAdRef.getAdUnitId())
+                        .kv("reward_amount", (double) rewardAmount)
+                        .kv("reward_type", rewardType)
+                );
             });
 
             isShowingAd = true;
@@ -1096,18 +1129,24 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", adUnitId);
-                    sendAsyncEvent("AdMob_RewardedInterstitial_OnLoaded", data);
+					sendAsyncEvent(
+					    "AdMob_RewardedInterstitial_OnLoaded",
+					    eventPayload("AdMob_RewardedInterstitial_OnLoaded")
+					        .kv("unit_id", adUnitId)
+					);
                 }
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", adUnitId);
-                    data.put("errorMessage", loadAdError.getMessage());
-                    data.put("errorCode", (double) loadAdError.getCode());
-                    sendAsyncEvent("AdMob_RewardedInterstitial_OnLoadFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_RewardedInterstitial_OnLoadFailed",
+                        eventPayload(
+                            "AdMob_RewardedInterstitial_OnLoadFailed",
+                            (double) loadAdError.getCode(),
+                            loadAdError.getMessage()
+                        )
+                            .kv("unit_id", adUnitId)
+                    );
                 }
             });
         });
@@ -1132,9 +1171,11 @@ public class GMAdMob extends GMAdMobInternal {
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedInterstitialAdRef, ad -> cleanUpAd(ad));
 
-					Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", rewardedInterstitialAdRef.getAdUnitId());
-                    sendAsyncEvent("AdMob_RewardedInterstitial_OnDismissed", data);
+					sendAsyncEvent(
+					    "AdMob_RewardedInterstitial_OnDismissed",
+					    eventPayload("AdMob_RewardedInterstitial_OnDismissed")
+					        .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
+					);
                 }
 
                 @Override
@@ -1144,18 +1185,24 @@ public class GMAdMob extends GMAdMobInternal {
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedInterstitialAdRef, ad -> cleanUpAd(ad));
 
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", rewardedInterstitialAdRef.getAdUnitId());
-                    data.put("errorMessage", adError.getMessage());
-                    data.put("errorCode", (double) adError.getCode());
-                    sendAsyncEvent("AdMob_RewardedInterstitial_OnShowFailed", data);
+                    sendAsyncEvent(
+                        "AdMob_RewardedInterstitial_OnShowFailed",
+                        eventPayload(
+                            "AdMob_RewardedInterstitial_OnShowFailed",
+                            (double) adError.getCode(),
+                            adError.getMessage()
+                        )
+                            .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
+                    );
                 }
 
                 @Override
                 public void onAdShowedFullScreenContent() {
-					Map<String, Object> data = new HashMap<>();
-                    data.put("unit_id", rewardedInterstitialAdRef.getAdUnitId());
-                    sendAsyncEvent("AdMob_RewardedInterstitial_OnFullyShown", data);
+					sendAsyncEvent(
+					    "AdMob_RewardedInterstitial_OnFullyShown",
+					    eventPayload("AdMob_RewardedInterstitial_OnFullyShown")
+					        .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
+					);
                 }
             });
 
@@ -1163,11 +1210,13 @@ public class GMAdMob extends GMAdMobInternal {
                 int rewardAmount = rewardItem.getAmount();
                 String rewardType = rewardItem.getType();
 
-                Map<String, Object> data = new HashMap<>();
-                data.put("unit_id", rewardedInterstitialAdRef.getAdUnitId());
-                data.put("reward_amount", (double) rewardAmount);
-                data.put("reward_type", rewardType);
-                sendAsyncEvent("AdMob_RewardedInterstitial_OnReward", data);
+                sendAsyncEvent(
+                    "AdMob_RewardedInterstitial_OnReward",
+                    eventPayload("AdMob_RewardedInterstitial_OnReward")
+                        .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
+                        .kv("reward_amount", (double) rewardAmount)
+                        .kv("reward_type", rewardType)
+                );
             });
 
             isShowingAd = true;
@@ -1277,20 +1326,26 @@ public class GMAdMob extends GMAdMobInternal {
                                 });
                             }
 
-							Map<String, Object> data = new HashMap<>();
-                            data.put("unit_id", adUnitId);
-                            sendAsyncEvent("AdMob_AppOpenAd_OnLoaded", data);
+							sendAsyncEvent(
+							    "AdMob_AppOpenAd_OnLoaded",
+							    eventPayload("AdMob_AppOpenAd_OnLoaded")
+							        .kv("unit_id", adUnitId)
+							);
                         }
 
                         @Override
                         public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                             appOpenAd = null;
 
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("unit_id", adUnitId);
-                            data.put("errorMessage", loadAdError.getMessage());
-                            data.put("errorCode", (double) loadAdError.getCode());
-                            sendAsyncEvent("AdMob_AppOpenAd_OnLoadFailed", data);
+                            sendAsyncEvent(
+                                "AdMob_AppOpenAd_OnLoadFailed",
+                                eventPayload(
+                                    "AdMob_AppOpenAd_OnLoadFailed",
+                                    (double) loadAdError.getCode(),
+                                    loadAdError.getMessage()
+                                )
+                                    .kv("unit_id", adUnitId)
+                            );
                         }
                     });
         });
@@ -1315,7 +1370,7 @@ public class GMAdMob extends GMAdMobInternal {
                 	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
                     appOpenAd = null;
 					
-                    sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", null);
+                    sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", eventPayload("AdMob_AppOpenAd_OnDismissed"));
 
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
@@ -1332,10 +1387,14 @@ public class GMAdMob extends GMAdMobInternal {
                 	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
                     appOpenAd = null;
 
-					Map<String, Object> data = new HashMap<>();
-					data.put("errorMessage", adError.getMessage());
-					data.put("errorCode", (double) adError.getCode());
-					sendAsyncEvent("AdMob_AppOpenAd_OnShowFailed", data);
+					sendAsyncEvent(
+					    "AdMob_AppOpenAd_OnShowFailed",
+					    eventPayload(
+					        "AdMob_AppOpenAd_OnShowFailed",
+					        (double) adError.getCode(),
+					        adError.getMessage()
+					    )
+					);
 					
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
@@ -1346,7 +1405,7 @@ public class GMAdMob extends GMAdMobInternal {
 	
 				@Override
 				public void onAdShowedFullScreenContent() {
-					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", null);
+					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", eventPayload("AdMob_AppOpenAd_OnFullyShown"));
 				}
 			});
 	
@@ -1464,13 +1523,17 @@ public class GMAdMob extends GMAdMobInternal {
 			consentInformation.requestConsentInfoUpdate(activity, params,
 					() -> 
 					{
-						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", null);
+						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", eventPayload("AdMob_Consent_OnRequestInfoUpdated"));
 					},
 					formError -> {
-						Map<String, Object> data = new HashMap<>();
-						data.put("errorMessage", formError.getMessage());
-						data.put("errorCode", (double) formError.getErrorCode());
-						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdateFailed", data);
+						sendAsyncEvent(
+						    "AdMob_Consent_OnRequestInfoUpdateFailed",
+						    eventPayload(
+						        "AdMob_Consent_OnRequestInfoUpdateFailed",
+						        (double) formError.getErrorCode(),
+						        formError.getMessage()
+						    )
+						);
 					});
 		});
         return ADMOB_OK;
@@ -1512,13 +1575,17 @@ public class GMAdMob extends GMAdMobInternal {
 		RunnerActivity.ViewHandler.post(() -> UserMessagingPlatform.loadConsentForm(activity,
 				consentForm -> {
 					consentFormInstance = consentForm;
-					sendAsyncEvent("AdMob_Consent_OnLoaded", null);
+					sendAsyncEvent("AdMob_Consent_OnLoaded", eventPayload("AdMob_Consent_OnLoaded"));
 				},
 				formError -> {
-					Map<String, Object> data = new HashMap<>();
-					data.put("errorMessage", formError.getMessage());
-					data.put("errorCode", (double) formError.getErrorCode());
-					sendAsyncEvent("AdMob_Consent_OnLoadFailed", data);
+					sendAsyncEvent(
+					    "AdMob_Consent_OnLoadFailed",
+					    eventPayload(
+					        "AdMob_Consent_OnLoadFailed",
+					        (double) formError.getErrorCode(),
+					        formError.getMessage()
+					    )
+					);
 				}));
         return ADMOB_OK;
 	}
@@ -1538,12 +1605,16 @@ public class GMAdMob extends GMAdMobInternal {
 			if (consentForm != null) {
 				consentForm.show(activity, formError -> {
 					if (formError == null) {
-						sendAsyncEvent("AdMob_Consent_OnShown", null);
+						sendAsyncEvent("AdMob_Consent_OnShown", eventPayload("AdMob_Consent_OnShown"));
 					} else {
-						Map<String, Object> data = new HashMap<>();
-						data.put("errorMessage", formError.getMessage());
-						data.put("errorCode", (double) formError.getErrorCode());
-						sendAsyncEvent("AdMob_Consent_OnShowFailed", data);
+						sendAsyncEvent(
+						    "AdMob_Consent_OnShowFailed",
+						    eventPayload(
+						        "AdMob_Consent_OnShowFailed",
+						        (double) formError.getErrorCode(),
+						        formError.getMessage()
+						    )
+						);
 					}
 					// Nullify instance after use
 					consentFormInstance = null;
@@ -1798,14 +1869,13 @@ public class GMAdMob extends GMAdMobInternal {
         freeLoadedInstances(queue, size - maxSize, cleaner);
     }
 
-    private void sendAsyncEvent(String eventType, Map<String, Object> data) {
+    private void sendAsyncEvent(String eventType, GMExtWire.StructStream payload) {
         Activity activity = RunnerActivity.CurrentActivity;
         if (activity == null)
             return;
 
         activity.runOnUiThread(() -> {
             String normalizedEventType = toSnakeCase(eventType);
-            GMExtWire.StructStream payload = eventPayload(normalizedEventType, data);
             GMFunction callback = null;
             boolean clearShowCallback = false;
 
@@ -1926,186 +1996,32 @@ public class GMAdMob extends GMAdMobInternal {
         return new GMExtWire.StructStream(4096);
     }
 
-    private static GMExtWire.ArrayStream streamArray() {
-        return new GMExtWire.ArrayStream(4096);
+    private GMExtWire.StructStream eventPayload(String eventType) {
+        return eventPayload(eventType, ADMOB_OK, "");
     }
 
-    private GMExtWire.StructStream eventPayload(String eventType, Map<String, Object> data) {
-        int callbackEventType = callbackEventTypeForName(eventType);
-
+    private GMExtWire.StructStream eventPayload(
+        String eventType,
+        double code,
+        String errorMessage) {
+        String normalizedEventType = toSnakeCase(eventType);
         boolean failed =
-            eventType.endsWith("failed")
-            || eventType.endsWith("load_failed")
-            || eventType.endsWith("show_failed")
-            || eventType.endsWith("request_info_update_failed");
+            code != ADMOB_OK
+            || normalizedEventType.endsWith("failed")
+            || normalizedEventType.endsWith("load_failed")
+            || normalizedEventType.endsWith("show_failed")
+            || normalizedEventType.endsWith("request_info_update_failed");
 
-        double code = failed ? -100.0 : ADMOB_OK;
-        String errorMessage = "";
+        String safeError = safeString(errorMessage);
+        if (!safeError.isEmpty())
+            failed = true;
 
-        if (data != null) {
-            Object errorCodeValue = data.get("errorCode");
-            if (errorCodeValue == null)
-                errorCodeValue = data.get("error_code");
-
-            if (errorCodeValue instanceof Number)
-                code = ((Number)errorCodeValue).doubleValue();
-
-            Object errorMessageValue = data.get("errorMessage");
-            if (errorMessageValue == null)
-                errorMessageValue = data.get("error_message");
-
-            if (errorMessageValue != null)
-                errorMessage = safeString(errorMessageValue.toString());
-
-            if (!errorMessage.isEmpty())
-                failed = true;
-        }
-
-        GMExtWire.StructStream payload = streamStruct()
+        return streamStruct()
             .kv("success", !failed)
-            .kv("event_type", callbackEventType)
+            .kv("event_type", callbackEventTypeForName(normalizedEventType))
             .kv("code", code)
-            .kv("error_message", errorMessage);
-
-        if (data != null) {
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                String key = toSnakeCase(entry.getKey());
-
-                if ("error_message".equals(key))
-                    continue;
-
-                addValue(payload, key, entry.getValue());
-            }
-        }
-
-        return payload;
-    }
-
-    private static void addValue(
-        GMExtWire.StructStream stream,
-        String key,
-        Object value) {
-        if (value == null) {
-            stream.kv(key, "");
-            return;
-        }
-
-        if (value instanceof Boolean) {
-            stream.kv(key, (Boolean)value);
-            return;
-        }
-
-        if (value instanceof Integer) {
-            stream.kv(key, (Integer)value);
-            return;
-        }
-
-        if (value instanceof Long) {
-            stream.kv(key, (Long)value);
-            return;
-        }
-
-        if (value instanceof Float) {
-            stream.kv(key, ((Float)value).doubleValue());
-            return;
-        }
-
-        if (value instanceof Double) {
-            stream.kv(key, (Double)value);
-            return;
-        }
-
-        if (value instanceof Number) {
-            stream.kv(key, ((Number)value).doubleValue());
-            return;
-        }
-
-        if (value instanceof Map) {
-            GMExtWire.StructStream nested = streamStruct();
-
-            for (Object rawEntryObject : ((Map)value).entrySet()) {
-                Map.Entry rawEntry = (Map.Entry)rawEntryObject;
-                if (rawEntry.getKey() != null)
-                    addValue(
-                        nested,
-                        toSnakeCase(rawEntry.getKey().toString()),
-                        rawEntry.getValue()
-                    );
-            }
-
-            stream.kv(key, nested);
-            return;
-        }
-
-        if (value instanceof List) {
-            GMExtWire.ArrayStream array = streamArray();
-
-            for (Object item : (List)value)
-                addArrayValue(array, item);
-
-            stream.kv(key, array);
-            return;
-        }
-
-        stream.kv(key, value.toString());
-    }
-
-    private static void addArrayValue(
-        GMExtWire.ArrayStream array,
-        Object value) {
-        if (value == null) {
-            array.add("");
-            return;
-        }
-
-        if (value instanceof Boolean) {
-            array.add((Boolean)value);
-            return;
-        }
-
-        if (value instanceof Integer) {
-            array.add((Integer)value);
-            return;
-        }
-
-        if (value instanceof Long) {
-            array.add((Long)value);
-            return;
-        }
-
-        if (value instanceof Float) {
-            array.add(((Float)value).doubleValue());
-            return;
-        }
-
-        if (value instanceof Double) {
-            array.add((Double)value);
-            return;
-        }
-
-        if (value instanceof Number) {
-            array.add(((Number)value).doubleValue());
-            return;
-        }
-
-        if (value instanceof Map) {
-            GMExtWire.StructStream nested = streamStruct();
-
-            for (Object rawEntryObject : ((Map)value).entrySet()) {
-                Map.Entry rawEntry = (Map.Entry)rawEntryObject;
-                if (rawEntry.getKey() != null)
-                    addValue(
-                        nested,
-                        toSnakeCase(rawEntry.getKey().toString()),
-                        rawEntry.getValue()
-                    );
-            }
-
-            array.add(nested);
-            return;
-        }
-
-        array.add(value.toString());
+            .kv("error_code", code)
+            .kv("error_message", safeError);
     }
 
     private int callbackEventTypeForName(String eventType) {
@@ -2188,6 +2104,7 @@ public class GMAdMob extends GMAdMobInternal {
             .kv("success", success)
             .kv("event_type", eventType)
             .kv("code", code)
+            .kv("error_code", code)
             .kv(
                 "error_message",
                 success ? "" : errorMessageForCode((int)code)
@@ -2244,24 +2161,26 @@ public class GMAdMob extends GMAdMobInternal {
     private void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
                                     AdapterResponseInfo loadedAdapterResponseInfo, String mediationAdapterClassName) {
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("mediation_adapter_class_name", mediationAdapterClassName);
-        data.put("unit_id", adUnitId);
-        data.put("ad_type", adType);
-        data.put("micros", adValue.getValueMicros());
-        data.put("currency_code", adValue.getCurrencyCode());
-        data.put("precision", (double) adValue.getPrecisionType());
+        GMExtWire.StructStream payload =
+            eventPayload("AdMob_OnPaidEvent")
+                .kv("mediation_adapter_class_name", safeString(mediationAdapterClassName))
+                .kv("unit_id", safeString(adUnitId))
+                .kv("ad_type", safeString(adType))
+                .kv("micros", adValue.getValueMicros())
+                .kv("currency_code", safeString(adValue.getCurrencyCode()))
+                .kv("precision", (double) adValue.getPrecisionType());
 
         if (loadedAdapterResponseInfo != null) {
-            data.put("ad_source_name", loadedAdapterResponseInfo.getAdSourceName());
-            data.put("ad_source_id", loadedAdapterResponseInfo.getAdSourceId());
-            data.put("ad_source_instance_name", loadedAdapterResponseInfo.getAdSourceInstanceName());
-            data.put("ad_source_instance_id", loadedAdapterResponseInfo.getAdSourceInstanceId());
+            payload
+                .kv("ad_source_name", safeString(loadedAdapterResponseInfo.getAdSourceName()))
+                .kv("ad_source_id", safeString(loadedAdapterResponseInfo.getAdSourceId()))
+                .kv("ad_source_instance_name", safeString(loadedAdapterResponseInfo.getAdSourceInstanceName()))
+                .kv("ad_source_instance_id", safeString(loadedAdapterResponseInfo.getAdSourceInstanceId()));
         } else {
             Log.w(LOG_TAG, "LoadedAdapterResponseInfo is null.");
         }
 
-        sendAsyncEvent("AdMob_OnPaidEvent", data);
+        sendAsyncEvent("AdMob_OnPaidEvent", payload);
     }
 
 	private AdRequest buildAdRequest() {
