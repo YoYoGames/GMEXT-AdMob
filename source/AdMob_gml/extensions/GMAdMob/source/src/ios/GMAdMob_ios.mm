@@ -4,7 +4,10 @@
 #import <UIKit/UIKit.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
+#import <AdSupport/AdSupport.h>
+#import <CommonCrypto/CommonDigest.h>
 #include <cstring>
+#include <deque>
 
 
 extern int CreateDsMap( int _num, ... );
@@ -44,9 +47,9 @@ static gm::wire::GMFunction g_app_open_show_callback = nil;
 static gm::wire::GMFunction g_consent_request_callback = nil;
 static gm::wire::GMFunction g_consent_load_callback = nil;
 static gm::wire::GMFunction g_consent_show_callback = nil;
-static NSMutableArray *g_interstitial_load_callbacks = nil;
-static NSMutableArray *g_rewarded_video_load_callbacks = nil;
-static NSMutableArray *g_rewarded_interstitial_load_callbacks = nil;
+static std::deque<gm::wire::GMFunction> g_interstitial_load_callbacks;
+static std::deque<gm::wire::GMFunction> g_rewarded_video_load_callbacks;
+static std::deque<gm::wire::GMFunction> g_rewarded_interstitial_load_callbacks;
 
 static const int ADMOB_INIT_EVENT_INITIALIZED = 0;
 static const int ADMOB_INIT_EVENT_FAILED = 1;
@@ -75,10 +78,13 @@ static const int ADMOB_PAID_EVENT_PAID = 0;
 
 static NSString *AdMobStringFromStringView(std::string_view value)
 {
-    return [[NSString alloc]
-        initWithBytes:value.data()
-        length:value.size()
-        encoding:NSUTF8StringEncoding] ?: @"";
+    NSString *string =
+        [[NSString alloc]
+            initWithBytes:value.data()
+            length:value.size()
+            encoding:NSUTF8StringEncoding];
+
+    return string != nil ? string : @"";
 }
 
 static NSString *AdMobSnakeCase(NSString *value)
@@ -261,7 +267,7 @@ static int AdMobCallbackEventTypeForName(NSString *eventType)
 
 static void AdMobInvokeCallback(
     gm::wire::GMFunction callback,
-    gm::wire::StructStream &payload)
+    gm::wire::StructStream payload)
 {
     if (callback)
         callback.call(payload);
@@ -329,13 +335,15 @@ static void AdMobCallbackResult(
 @end
 
 
-@interface GMAdMob ()
+@interface GMAdMob () <GADFullScreenContentDelegate, GADBannerViewDelegate>
 @property (nonatomic, assign) BOOL isInitialized;
 @property (nonatomic, assign) BOOL isTestDevice;
 @property (nonatomic, assign) BOOL isRdpEnabled;
 @property (nonatomic, assign) BOOL isShowingAd;
 @property (nonatomic, assign) BOOL triggerOnPaidEvent;
 @property (nonatomic, assign) BOOL triggerAppOpenAd;
+@property (nonatomic, assign) BOOL targetCOPPA;
+@property (nonatomic, assign) BOOL targetUnderAge;
 @property (nonatomic, strong) NSString *bannerAdUnitId;
 @property (nonatomic, strong) NSString *interstitialAdUnitId;
 @property (nonatomic, strong) NSString *rewardedUnitId;
@@ -400,9 +408,8 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         self.serverSideVerificationCustomData = nil;
 
         self.triggerOnPaidEvent = NO;
-        g_interstitial_load_callbacks = [NSMutableArray array];
-        g_rewarded_video_load_callbacks = [NSMutableArray array];
-        g_rewarded_interstitial_load_callbacks = [NSMutableArray array];
+        self.targetCOPPA = NO;
+        self.targetUnderAge = NO;
         
         self.triggerAppOpenAd = NO;
         self.appOpenAdOrientation = UIInterfaceOrientationUnknown;
@@ -473,8 +480,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             [self initializeAdUnits];
             self.isInitialized = YES;
             gm::wire::StructStream eventData =
-                AdMobPayload(@);
-            [self sendAsyncEvent:             eventData:eventData];
+                AdMobPayload(@"AdMob_OnInitialized");
+            [self sendAsyncEvent:"AdMob_OnInitialized"
+                       eventData:eventData];
         }];
 
     return ADMOB_OK;
@@ -718,7 +726,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         return ADMOB_ERROR_AD_LIMIT_REACHED;
     }
 
-    [g_interstitial_load_callbacks addObject:callback];
+    g_interstitial_load_callbacks.push_back(callback);
 
     const NSString *adUnitId =
         self.interstitialAdUnitId;
@@ -930,7 +938,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         return ADMOB_ERROR_AD_LIMIT_REACHED;
     }
 
-    [g_rewarded_video_load_callbacks addObject:callback];
+    g_rewarded_video_load_callbacks.push_back(callback);
 
     const NSString *adUnitId =
         self.rewardedUnitId;
@@ -1140,7 +1148,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         return ADMOB_ERROR_AD_LIMIT_REACHED;
     }
 
-    [g_rewarded_interstitial_load_callbacks addObject:callback];
+    g_rewarded_interstitial_load_callbacks.push_back(callback);
 
     const NSString *adUnitId =
         self.rewardedInterstitialAdUnitId;
@@ -1580,8 +1588,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 else
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayload(@);
-                    [self sendAsyncEvent:                     eventData:eventData];
+                        AdMobPayload(@"AdMob_Consent_OnShown");
+                    [self sendAsyncEvent:"AdMob_Consent_OnShown"
+                               eventData:eventData];
                 }
             }];
 
@@ -1635,8 +1644,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 self.consentForm = form;
 
                 gm::wire::StructStream eventData =
-                    AdMobPayload(@);
-                [self sendAsyncEvent:                 eventData:eventData];
+                    AdMobPayload(@"AdMob_Consent_OnLoaded");
+                [self sendAsyncEvent:"AdMob_Consent_OnLoaded"
+                           eventData:eventData];
             }];
 
     return ADMOB_OK;
@@ -1672,8 +1682,9 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 else
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayload(@);
-                    [self sendAsyncEvent:                     eventData:eventData];
+                        AdMobPayload(@"AdMob_Consent_OnShown");
+                    [self sendAsyncEvent:"AdMob_Consent_OnShown"
+                               eventData:eventData];
                 }
 
                 self.consentForm = nil;
@@ -2178,7 +2189,7 @@ Boolean canShowPersonalizedAds()
 Boolean hasAttribute(NSString* input, int index)
 {
     if (input == nil) return NO;
-    if (index <= 0 || index > input.length) return NO;
+    if (index <= 0 || (NSUInteger)index > input.length) return NO;
     return [input characterAtIndex:(NSUInteger)index-1] == '1';
 }
 
@@ -2361,10 +2372,10 @@ typedef void (^AdCleanerBlock)(id ad);
         else if ([normalizedEvent isEqualToString:@"admob_interstitial_on_loaded"] ||
                  [normalizedEvent isEqualToString:@"admob_interstitial_on_load_failed"])
         {
-            if (g_interstitial_load_callbacks.count > 0)
+            if (!g_interstitial_load_callbacks.empty())
             {
-                callback = [g_interstitial_load_callbacks firstObject];
-                [g_interstitial_load_callbacks removeObjectAtIndex:0];
+                callback = g_interstitial_load_callbacks.front();
+                g_interstitial_load_callbacks.pop_front();
             }
         }
         else if ([normalizedEvent isEqualToString:@"admob_interstitial_on_fully_shown"])
@@ -2380,10 +2391,10 @@ typedef void (^AdCleanerBlock)(id ad);
         else if ([normalizedEvent isEqualToString:@"admob_rewarded_video_on_loaded"] ||
                  [normalizedEvent isEqualToString:@"admob_rewarded_video_on_load_failed"])
         {
-            if (g_rewarded_video_load_callbacks.count > 0)
+            if (!g_rewarded_video_load_callbacks.empty())
             {
-                callback = [g_rewarded_video_load_callbacks firstObject];
-                [g_rewarded_video_load_callbacks removeObjectAtIndex:0];
+                callback = g_rewarded_video_load_callbacks.front();
+                g_rewarded_video_load_callbacks.pop_front();
             }
         }
         else if ([normalizedEvent isEqualToString:@"admob_rewarded_video_on_fully_shown"] ||
@@ -2400,10 +2411,10 @@ typedef void (^AdCleanerBlock)(id ad);
         else if ([normalizedEvent isEqualToString:@"admob_rewarded_interstitial_on_loaded"] ||
                  [normalizedEvent isEqualToString:@"admob_rewarded_interstitial_on_load_failed"])
         {
-            if (g_rewarded_interstitial_load_callbacks.count > 0)
+            if (!g_rewarded_interstitial_load_callbacks.empty())
             {
-                callback = [g_rewarded_interstitial_load_callbacks firstObject];
-                [g_rewarded_interstitial_load_callbacks removeObjectAtIndex:0];
+                callback = g_rewarded_interstitial_load_callbacks.front();
+                g_rewarded_interstitial_load_callbacks.pop_front();
             }
         }
         else if ([normalizedEvent isEqualToString:@"admob_rewarded_interstitial_on_fully_shown"] ||
@@ -2490,7 +2501,7 @@ typedef void (^AdCleanerBlock)(id ad);
     eventData.add("ad_type", AdMobCString(adType));
     eventData.add("micros", value.value.doubleValue * 1000000.0);
     eventData.add("currency_code", AdMobCString(value.currencyCode));
-    eventData.add("precision", value.precision);
+    eventData.add("precision", (int32_t)value.precision);
     eventData.add("ad_source_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceName));
     eventData.add("ad_source_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceID));
     eventData.add("ad_source_instance_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceName));
@@ -2578,7 +2589,7 @@ const char * getDeviceId()
 }
 
 - (BOOL)validateLoadedAdsLimit:(ThreadSafeQueue *)queue maxSize:(int)maxSize callingMethod:(const char *)callingMethod {
-    if ([queue size] >= maxSize) {
+    if ([queue size] >= (NSUInteger)maxSize) {
         NSLog(@"%s :: Maximum number of loaded ads reached.", callingMethod);
         return NO;
     }

@@ -86,14 +86,16 @@
   "installdir":"",
   "iosCocoaPodDependencies":"",
   "iosCocoaPods":"",
-  "ioscodeinjection":"<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_AdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n    <key>SKAdNetworkIdentifier</key>\r\n    <string>cstr6suwn9.skadnetwork</string>\r\n  </dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\npod 'Google-Mobile-Ads-SDK', '11.10.0'\r\n</YYIosCocoaPods>\r\n\r\n",
+  "ioscodeinjection":"<YYIosPlist>\r\n<key>GADIsAdManagerApp</key>\r\n    <true/>\r\n\r\n<key>GADApplicationIdentifier</key>\r\n<string>${YYEXTOPT_GMAdMob_iOS_AppID}</string>\r\n\r\n<key>SKAdNetworkItems</key>\r\n<array>\r\n<dict>\r\n    <key>SKAdNetworkIdentifier</key>\r\n    <string>cstr6suwn9.skadnetwork</string>\r\n  </dict>\r\n</array>\r\n</YYIosPlist>\r\n\r\n<YYIosCocoaPods>\r\npod 'Google-Mobile-Ads-SDK', '11.10.0'\r\n</YYIosCocoaPods>\r\n\r\n",
   "iosdelegatename":"",
   "iosplistinject":null,
   "iosProps":true,
   "iosSystemFrameworkEntries":[
     {"$GMExtensionFrameworkEntry":"","%Name":"AdSupport.framework","embed":0,"name":"AdSupport.framework","resourceType":"GMExtensionFrameworkEntry","resourceVersion":"2.0","weakReference":false,},
   ],
-  "iosThirdPartyFrameworkEntries":[],
+  "iosThirdPartyFrameworkEntries":[
+    {"$GMExtensionFrameworkEntry":"","%Name":"GMAdMob.xcframework","embed":0,"name":"GMAdMob.xcframework","resourceType":"GMExtensionFrameworkEntry","resourceVersion":"2.0","weakReference":false,},
+  ],
   "license":"",
   "maccompilerflags":"",
   "maclinkerflags":"-ObjC",
