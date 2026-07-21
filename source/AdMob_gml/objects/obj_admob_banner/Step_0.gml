@@ -10,10 +10,7 @@ if (pressed && displayHeight != display_get_height())
         alignment,
         function(data)
         {
-            show_debug_message(
-                "Banner callback: "
-                + json_stringify(data)
-            );
+            show_debug_message($"Banner callback: {json_stringify(data)}");
         }
     );
 

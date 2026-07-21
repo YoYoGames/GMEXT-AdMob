@@ -5,10 +5,7 @@ if (admob_rewarded_interstitial_is_loaded())
     admob_rewarded_interstitial_show(
         function(data)
         {
-            show_debug_message(
-                "Rewarded interstitial callback: "
-                + json_stringify(data)
-            );
+            show_debug_message($"Rewarded interstitial callback: {json_stringify(data)}");
 
             if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Reward)
             {
@@ -18,7 +15,10 @@ if (admob_rewarded_interstitial_is_loaded())
             if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Dismissed
             ||  data.event_type == AdMobRewardedInterstitialCallbackEvent.ShowFailed)
             {
-                admob_rewarded_interstitial_load(Obj_AdMob.admob_log);
+                admob_rewarded_interstitial_load(function(data)
+					{
+					    show_debug_message($"AdMob Interstitial Load: {json_stringify(data)}");
+					});
             }
         }
     );
@@ -29,5 +29,8 @@ else
         "RewardedInterstitialAd still loading, try again soon"
     );
 
-    admob_rewarded_interstitial_load(Obj_AdMob.admob_log);
+    admob_rewarded_interstitial_load(function(data)
+		{
+		    show_debug_message($"Rewarded Interstitial load: {json_stringify(data)}");
+		});
 }
