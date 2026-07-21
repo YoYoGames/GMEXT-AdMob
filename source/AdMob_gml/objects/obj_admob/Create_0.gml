@@ -197,9 +197,7 @@ admob_set_test_device_id();
 
 show_debug_message("admob_initialize GM");
 
-var _init_result =
-    admob_initialize(
-        function(data)
+var _init_result = admob_initialize(function(data)
         {
             show_debug_message($"admob_initialize callback: {json_stringify(data)}");
 
@@ -211,9 +209,7 @@ var _init_result =
 
             if (data.event_type == AdMobInitializeCallbackEvent.Initialized)
             {
-                admob_consent_request_info_update(
-                    AdMobConsentDebugGeography.EEA,
-					function(data)
+                admob_consent_request_info_update(AdMobConsentDebugGeography.EEA,function(data)
 					{
 					    show_debug_message($"Consent info callback: {json_stringify(data)}");
 						show_debug_message($"consent_get_status: {admob_consent_get_status()}")
@@ -227,7 +223,7 @@ var _init_result =
 					            admob_consent_load(function(data)
 									{
 									    show_debug_message("Consent load callback: " + json_stringify(data));
-
+										
 									    if (data.event_type == AdMobConsentCallbackEvent.Loaded)
 									    {
 									        admob_consent_show(onConsentShown);
