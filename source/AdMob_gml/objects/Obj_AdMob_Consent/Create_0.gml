@@ -1,11 +1,11 @@
 
 //For production:
-//#macro admob_consent_mode = AdMobConsentDebugGeography.Disabled
+//#macro admob_consent_mode AdMobConsentDebugGeography.Disabled
 
 //For debuging
-#macro admob_consent_mode = AdMobConsentDebugGeography.EEA
-//#macro admob_consent_mode = AdMobConsentDebugGeography.NotEEA
-//#macro admob_consent_mode = AdMobConsentDebugGeography.RegulatedUSState
+#macro admob_consent_mode AdMobConsentDebugGeography.EEA
+//#macro admob_consent_mode AdMobConsentDebugGeography.NotEEA
+//#macro admob_consent_mode AdMobConsentDebugGeography.RegulatedUSState
 
 
 function consent_finished()
