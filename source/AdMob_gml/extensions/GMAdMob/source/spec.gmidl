@@ -230,6 +230,7 @@ function admob_settings_set_muted(muted: bool): unit;
 // Error/status enums
 // -----------------------------------------------------------------------------
 
+// Extension-defined error codes. These are not raw Google Mobile Ads SDK error codes.
 [global, bind = typed_gml]
 enum AdMobError:int32
 {
@@ -243,6 +244,7 @@ enum AdMobError:int32
     NullViewHandler = -7,
 }
 
+// Extension-defined banner placement values.
 [global, bind = typed_gml]
 enum AdMobBannerAlignment:int32
 {
@@ -251,6 +253,9 @@ enum AdMobBannerAlignment:int32
     Right = 2,
 }
 
+// Extension-defined numeric mapping to Google banner-size APIs.
+// SmartBanner is retained for compatibility but is deprecated by Google.
+// AnchoredAdaptive should map to the current large anchored adaptive API.
 [global, bind = typed_gml]
 enum AdMobBannerSize:int32
 {
@@ -263,6 +268,8 @@ enum AdMobBannerSize:int32
     AnchoredAdaptive = 6,
 }
 
+// Extension-defined numeric mapping. Native code must translate these values
+// to Google's G, PG, T, and MA content-rating constants.
 [global, bind = typed_gml]
 enum AdMobMaxAdContentRating:int32
 {
@@ -272,23 +279,33 @@ enum AdMobMaxAdContentRating:int32
     MatureAudience = 3,
 }
 
+// Values match Android ConsentDebugSettings.DebugGeography and iOS
+// UMPDebugGeography. NotEEA is deprecated by Google; use Other instead.
 [global, bind = typed_gml]
 enum AdMobConsentDebugGeography:int32
 {
-    Disabled = -1,
+    Disabled = 0,
     EEA = 1,
     NotEEA = 2,
+    RegulatedUSState = 3,
+    Other = 4,
 }
 
+// Public cross-platform values follow Android UMP ConsentStatus.
+// iOS uses Required = 1 and NotRequired = 2 internally, so the iOS native
+// implementation must translate its raw UMPConsentStatus before returning it.
 [global, bind = typed_gml]
 enum AdMobConsentStatus:int32
 {
     Unknown = 0,
-    Required = 1,
-    NotRequired = 2,
+    NotRequired = 1,
+    Required = 2,
     Obtained = 3,
 }
 
+// Legacy extension-defined classification. Current Google UMP does not expose
+// personalized, non-personalized, or declined as a ConsentInformation enum.
+// Do not derive these values from AdMobConsentStatus.
 [global, bind = typed_gml]
 enum AdMobConsentType:int32
 {
@@ -301,6 +318,8 @@ enum AdMobConsentType:int32
 // -----------------------------------------------------------------------------
 // Callback event enums
 // -----------------------------------------------------------------------------
+// Numeric values are extension-owned. Event names correspond to the relevant
+// Google SDK callbacks; they are not raw SDK enum values.
 
 [global, bind = typed_gml]
 enum AdMobInitializeCallbackEvent:int32
@@ -324,7 +343,7 @@ enum AdMobInterstitialCallbackEvent:int32
 {
     Loaded = 0,
     LoadFailed = 1,
-    FullyShown = 2,
+    Shown = 2,
     ShowFailed = 3,
     Dismissed = 4,
 }
@@ -334,7 +353,7 @@ enum AdMobRewardedVideoCallbackEvent:int32
 {
     Loaded = 0,
     LoadFailed = 1,
-    FullyShown = 2,
+    Shown = 2,
     ShowFailed = 3,
     Dismissed = 4,
     Reward = 5,
@@ -345,7 +364,7 @@ enum AdMobRewardedInterstitialCallbackEvent:int32
 {
     Loaded = 0,
     LoadFailed = 1,
-    FullyShown = 2,
+    Shown = 2,
     ShowFailed = 3,
     Dismissed = 4,
     Reward = 5,
@@ -356,7 +375,7 @@ enum AdMobAppOpenAdCallbackEvent:int32
 {
     Loaded = 0,
     LoadFailed = 1,
-    FullyShown = 2,
+    Shown = 2,
     ShowFailed = 3,
     Dismissed = 4,
 }
@@ -368,7 +387,7 @@ enum AdMobConsentCallbackEvent:int32
     RequestInfoUpdateFailed = 1,
     Loaded = 2,
     LoadFailed = 3,
-    Shown = 4,
+    Dismissed = 4,
     ShowFailed = 5,
 }
 

@@ -1508,7 +1508,7 @@ public class GMAdMob extends GMAdMobInternal {
 			ConsentRequestParameters.Builder builder = new ConsentRequestParameters.Builder();
 			builder.setTagForUnderAgeOfConsent(targetUnderAge);
 
-			if (mode.value() >= 0) {
+			if (mode.value() > 0) {
 				ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(activity)
 						.setDebugGeography((int) mode.value())
 						.addTestDeviceHashedId(getDeviceID(callingMethod))

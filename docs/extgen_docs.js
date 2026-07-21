@@ -400,14 +400,16 @@
  * @member Disabled
  * @member EEA
  * @member NotEEA
+ * @member RegulatedUSState
+ * @member Other
  * @enum_end
  */
 
 /**
  * @enum_partial AdMobConsentStatus
  * @member Unknown
- * @member Required
  * @member NotRequired
+ * @member Required
  * @member Obtained
  * @enum_end
  */
@@ -442,7 +444,7 @@
  * @enum_partial AdMobInterstitialCallbackEvent
  * @member Loaded
  * @member LoadFailed
- * @member FullyShown
+ * @member Shown
  * @member ShowFailed
  * @member Dismissed
  * @enum_end
@@ -452,7 +454,7 @@
  * @enum_partial AdMobRewardedVideoCallbackEvent
  * @member Loaded
  * @member LoadFailed
- * @member FullyShown
+ * @member Shown
  * @member ShowFailed
  * @member Dismissed
  * @member Reward
@@ -463,7 +465,7 @@
  * @enum_partial AdMobRewardedInterstitialCallbackEvent
  * @member Loaded
  * @member LoadFailed
- * @member FullyShown
+ * @member Shown
  * @member ShowFailed
  * @member Dismissed
  * @member Reward
@@ -474,7 +476,7 @@
  * @enum_partial AdMobAppOpenAdCallbackEvent
  * @member Loaded
  * @member LoadFailed
- * @member FullyShown
+ * @member Shown
  * @member ShowFailed
  * @member Dismissed
  * @enum_end
@@ -486,7 +488,7 @@
  * @member RequestInfoUpdateFailed
  * @member Loaded
  * @member LoadFailed
- * @member Shown
+ * @member Dismissed
  * @member ShowFailed
  * @enum_end
  */

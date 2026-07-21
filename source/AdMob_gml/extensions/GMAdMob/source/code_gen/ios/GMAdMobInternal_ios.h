@@ -57,16 +57,18 @@ namespace gm_enums
 
     enum class AdMobConsentDebugGeography : std::int32_t
     {
-        Disabled = -1,
+        Disabled = 0,
         EEA = 1,
-        NotEEA = 2
+        NotEEA = 2,
+        RegulatedUSState = 3,
+        Other = 4
     };
 
     enum class AdMobConsentStatus : std::int32_t
     {
         Unknown = 0,
-        Required = 1,
-        NotRequired = 2,
+        NotRequired = 1,
+        Required = 2,
         Obtained = 3
     };
 
@@ -97,7 +99,7 @@ namespace gm_enums
     {
         Loaded = 0,
         LoadFailed = 1,
-        FullyShown = 2,
+        Shown = 2,
         ShowFailed = 3,
         Dismissed = 4
     };
@@ -106,7 +108,7 @@ namespace gm_enums
     {
         Loaded = 0,
         LoadFailed = 1,
-        FullyShown = 2,
+        Shown = 2,
         ShowFailed = 3,
         Dismissed = 4,
         Reward = 5
@@ -116,7 +118,7 @@ namespace gm_enums
     {
         Loaded = 0,
         LoadFailed = 1,
-        FullyShown = 2,
+        Shown = 2,
         ShowFailed = 3,
         Dismissed = 4,
         Reward = 5
@@ -126,7 +128,7 @@ namespace gm_enums
     {
         Loaded = 0,
         LoadFailed = 1,
-        FullyShown = 2,
+        Shown = 2,
         ShowFailed = 3,
         Dismissed = 4
     };
@@ -137,7 +139,7 @@ namespace gm_enums
         RequestInfoUpdateFailed = 1,
         Loaded = 2,
         LoadFailed = 3,
-        Shown = 4,
+        Dismissed = 4,
         ShowFailed = 5
     };
 

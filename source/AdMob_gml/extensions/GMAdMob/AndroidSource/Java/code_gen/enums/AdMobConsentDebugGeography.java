@@ -4,9 +4,11 @@ package ${YYAndroidPackageName}.enums;
 
 public enum AdMobConsentDebugGeography
 {
-    Disabled((int)-1),
+    Disabled((int)0),
     EEA((int)1),
-    NotEEA((int)2);
+    NotEEA((int)2),
+    RegulatedUSState((int)3),
+    Other((int)4);
 
     private final int value;
     private AdMobConsentDebugGeography(int v)
@@ -21,12 +23,16 @@ public enum AdMobConsentDebugGeography
     {
         switch (v)
         {
-            case -1:
+            case 0:
                 return AdMobConsentDebugGeography.Disabled;
             case 1:
                 return AdMobConsentDebugGeography.EEA;
             case 2:
                 return AdMobConsentDebugGeography.NotEEA;
+            case 3:
+                return AdMobConsentDebugGeography.RegulatedUSState;
+            case 4:
+                return AdMobConsentDebugGeography.Other;
             default:
                 throw new IllegalArgumentException("Unknown AdMobConsentDebugGeography value: " + v);
         }

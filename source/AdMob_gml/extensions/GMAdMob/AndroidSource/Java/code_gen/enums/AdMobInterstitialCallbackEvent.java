@@ -6,7 +6,7 @@ public enum AdMobInterstitialCallbackEvent
 {
     Loaded((int)0),
     LoadFailed((int)1),
-    FullyShown((int)2),
+    Shown((int)2),
     ShowFailed((int)3),
     Dismissed((int)4);
 
@@ -28,7 +28,7 @@ public enum AdMobInterstitialCallbackEvent
             case 1:
                 return AdMobInterstitialCallbackEvent.LoadFailed;
             case 2:
-                return AdMobInterstitialCallbackEvent.FullyShown;
+                return AdMobInterstitialCallbackEvent.Shown;
             case 3:
                 return AdMobInterstitialCallbackEvent.ShowFailed;
             case 4:

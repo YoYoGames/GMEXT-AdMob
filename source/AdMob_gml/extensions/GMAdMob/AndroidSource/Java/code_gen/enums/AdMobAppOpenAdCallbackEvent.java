@@ -6,7 +6,7 @@ public enum AdMobAppOpenAdCallbackEvent
 {
     Loaded((int)0),
     LoadFailed((int)1),
-    FullyShown((int)2),
+    Shown((int)2),
     ShowFailed((int)3),
     Dismissed((int)4);
 
@@ -28,7 +28,7 @@ public enum AdMobAppOpenAdCallbackEvent
             case 1:
                 return AdMobAppOpenAdCallbackEvent.LoadFailed;
             case 2:
-                return AdMobAppOpenAdCallbackEvent.FullyShown;
+                return AdMobAppOpenAdCallbackEvent.Shown;
             case 3:
                 return AdMobAppOpenAdCallbackEvent.ShowFailed;
             case 4:

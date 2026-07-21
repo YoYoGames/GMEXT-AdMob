@@ -1558,7 +1558,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     double testing =
         (double)(int32_t)debug_geography;
 
-    if (testing >= 0)
+    if (testing > 0)
     {
         UMPDebugSettings *debugSettings =
             [[UMPDebugSettings alloc] init];

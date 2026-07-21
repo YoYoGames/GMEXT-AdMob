@@ -8,7 +8,7 @@ public enum AdMobConsentCallbackEvent
     RequestInfoUpdateFailed((int)1),
     Loaded((int)2),
     LoadFailed((int)3),
-    Shown((int)4),
+    Dismissed((int)4),
     ShowFailed((int)5);
 
     private final int value;
@@ -33,7 +33,7 @@ public enum AdMobConsentCallbackEvent
             case 3:
                 return AdMobConsentCallbackEvent.LoadFailed;
             case 4:
-                return AdMobConsentCallbackEvent.Shown;
+                return AdMobConsentCallbackEvent.Dismissed;
             case 5:
                 return AdMobConsentCallbackEvent.ShowFailed;
             default:

@@ -6,7 +6,7 @@ public enum AdMobRewardedVideoCallbackEvent
 {
     Loaded((int)0),
     LoadFailed((int)1),
-    FullyShown((int)2),
+    Shown((int)2),
     ShowFailed((int)3),
     Dismissed((int)4),
     Reward((int)5);
@@ -29,7 +29,7 @@ public enum AdMobRewardedVideoCallbackEvent
             case 1:
                 return AdMobRewardedVideoCallbackEvent.LoadFailed;
             case 2:
-                return AdMobRewardedVideoCallbackEvent.FullyShown;
+                return AdMobRewardedVideoCallbackEvent.Shown;
             case 3:
                 return AdMobRewardedVideoCallbackEvent.ShowFailed;
             case 4:
