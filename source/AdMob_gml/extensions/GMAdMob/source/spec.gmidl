@@ -43,16 +43,16 @@ function admob_banner_get_width(): real;
 function admob_banner_get_height(): real;
 
 [global, bind = typed_gml]
-function admob_banner_move(bottom: bool): real;
+function admob_banner_move(bottom: bool): unit;
 
 [global, bind = typed_gml]
-function admob_banner_show(): real;
+function admob_banner_show(): unit;
 
 [global, bind = typed_gml]
-function admob_banner_hide(): real;
+function admob_banner_hide(): unit;
 
 [global, bind = typed_gml]
-function admob_banner_remove(): real;
+function admob_banner_remove(): unit;
 
 // -----------------------------------------------------------------------------
 // Interstitial
@@ -175,15 +175,15 @@ function admob_app_open_ad_show(callback: func): real;
 // -----------------------------------------------------------------------------
 
 [global, bind = typed_gml]
-function admob_targeting_coppa(coppa: bool): real;
+function admob_targeting_coppa(coppa: bool): unit;
 
 [global, bind = typed_gml]
-function admob_targeting_under_age(under_age: bool): real;
+function admob_targeting_under_age(under_age: bool): unit;
 
 [global, bind = typed_gml]
 function admob_targeting_max_ad_content_rating(
     [type_hint=`AdMobMaxAdContentRating`] content_rating
-): real;
+): unit;
 
 // -----------------------------------------------------------------------------
 // Consent

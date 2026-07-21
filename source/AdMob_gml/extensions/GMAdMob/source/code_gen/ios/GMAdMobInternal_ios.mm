@@ -200,30 +200,30 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_banner_move:(double)bottom
 {
-    double __result = [__impl admob_banner_move:bottom];
+    [__impl admob_banner_move:bottom];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_banner_show
 {
-    double __result = [__impl admob_banner_show];
+    [__impl admob_banner_show];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_banner_hide
 {
-    double __result = [__impl admob_banner_hide];
+    [__impl admob_banner_hide];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_banner_remove
 {
-    double __result = [__impl admob_banner_remove];
+    [__impl admob_banner_remove];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_interstitial_set_ad_unit:(char*)ad_unit_id
@@ -486,16 +486,16 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 
 - (double)__EXT_NATIVE__admob_targeting_coppa:(double)coppa
 {
-    double __result = [__impl admob_targeting_coppa:coppa];
+    [__impl admob_targeting_coppa:coppa];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_targeting_under_age:(double)under_age
 {
-    double __result = [__impl admob_targeting_under_age:under_age];
+    [__impl admob_targeting_under_age:under_age];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_targeting_max_ad_content_rating:(char*)__arg_buffer arg1:(double)__arg_buffer_length
@@ -505,9 +505,9 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: content_rating, type: enum AdMobMaxAdContentRating
     gm_enums::AdMobMaxAdContentRating content_rating = gm::wire::codec::readValue<gm_enums::AdMobMaxAdContentRating>(__br);
 
-    double __result = [__impl admob_targeting_max_ad_content_rating:content_rating];
+    [__impl admob_targeting_max_ad_content_rating:content_rating];
 
-    return static_cast<double>(__result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_consent_request_info_update:(char*)__arg_buffer arg1:(double)__arg_buffer_length

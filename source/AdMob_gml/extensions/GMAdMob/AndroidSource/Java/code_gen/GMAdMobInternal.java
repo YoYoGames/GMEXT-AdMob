@@ -105,26 +105,26 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_banner_move(double bottom)
     {
-        double __result = admob_banner_move(bottom != 0);
-        return (double)__result;
+        admob_banner_move(bottom != 0);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_banner_show()
     {
-        double __result = admob_banner_show();
-        return (double)__result;
+        admob_banner_show();
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_banner_hide()
     {
-        double __result = admob_banner_hide();
-        return (double)__result;
+        admob_banner_hide();
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_banner_remove()
     {
-        double __result = admob_banner_remove();
-        return (double)__result;
+        admob_banner_remove();
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_interstitial_set_ad_unit(String ad_unit_id)
@@ -357,14 +357,14 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
 
     public double __EXT_NATIVE__admob_targeting_coppa(double coppa)
     {
-        double __result = admob_targeting_coppa(coppa != 0);
-        return (double)__result;
+        admob_targeting_coppa(coppa != 0);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_targeting_under_age(double under_age)
     {
-        double __result = admob_targeting_under_age(under_age != 0);
-        return (double)__result;
+        admob_targeting_under_age(under_age != 0);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_targeting_max_ad_content_rating(ByteBuffer __arg_buffer, double __arg_buffer_length)
@@ -374,8 +374,8 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: content_rating, type: enum AdMobMaxAdContentRating
         AdMobMaxAdContentRating content_rating = AdMobMaxAdContentRating.from(GMExtWire.readI32(__arg_buffer));
 
-        double __result = admob_targeting_max_ad_content_rating(content_rating);
-        return (double)__result;
+        admob_targeting_max_ad_content_rating(content_rating);
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_consent_request_info_update(ByteBuffer __arg_buffer, double __arg_buffer_length)

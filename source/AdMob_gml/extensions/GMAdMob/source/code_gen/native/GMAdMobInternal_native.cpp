@@ -103,26 +103,26 @@ GMEXPORT double __EXT_NATIVE__admob_banner_get_height()
 
 GMEXPORT double __EXT_NATIVE__admob_banner_move(double bottom)
 {
-    auto&& __result = admob_banner_move(static_cast<bool>(bottom));
-    return static_cast<double>(__result);
+    admob_banner_move(static_cast<bool>(bottom));
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_banner_show()
 {
-    auto&& __result = admob_banner_show();
-    return static_cast<double>(__result);
+    admob_banner_show();
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_banner_hide()
 {
-    auto&& __result = admob_banner_hide();
-    return static_cast<double>(__result);
+    admob_banner_hide();
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_banner_remove()
 {
-    auto&& __result = admob_banner_remove();
-    return static_cast<double>(__result);
+    admob_banner_remove();
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_interstitial_set_ad_unit(char* ad_unit_id)
@@ -355,14 +355,14 @@ GMEXPORT double __EXT_NATIVE__admob_app_open_ad_show(char* __arg_buffer, double 
 
 GMEXPORT double __EXT_NATIVE__admob_targeting_coppa(double coppa)
 {
-    auto&& __result = admob_targeting_coppa(static_cast<bool>(coppa));
-    return static_cast<double>(__result);
+    admob_targeting_coppa(static_cast<bool>(coppa));
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_targeting_under_age(double under_age)
 {
-    auto&& __result = admob_targeting_under_age(static_cast<bool>(under_age));
-    return static_cast<double>(__result);
+    admob_targeting_under_age(static_cast<bool>(under_age));
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_targeting_max_ad_content_rating(char* __arg_buffer, double __arg_buffer_length)
@@ -372,8 +372,8 @@ GMEXPORT double __EXT_NATIVE__admob_targeting_max_ad_content_rating(char* __arg_
     // field: content_rating, type: enum AdMobMaxAdContentRating
     gm_enums::AdMobMaxAdContentRating content_rating = gm::wire::codec::readValue<gm_enums::AdMobMaxAdContentRating>(__br);
 
-    auto&& __result = admob_targeting_max_ad_content_rating(content_rating);
-    return static_cast<double>(__result);
+    admob_targeting_max_ad_content_rating(content_rating);
+    return 0;
 }
 
 GMEXPORT double __EXT_NATIVE__admob_consent_request_info_update(char* __arg_buffer, double __arg_buffer_length)

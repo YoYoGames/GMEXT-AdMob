@@ -58,25 +58,21 @@
 /**
  * @function_partial admob_banner_move
  * @param {Bool} bottom
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_banner_show
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_banner_hide
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_banner_remove
- * @returns {Real}
  * @function_end
  */
 
@@ -272,21 +268,18 @@
 /**
  * @function_partial admob_targeting_coppa
  * @param {Bool} coppa
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_targeting_under_age
  * @param {Bool} under_age
- * @returns {Real}
  * @function_end
  */
 
 /**
  * @function_partial admob_targeting_max_ad_content_rating
  * @param {Enum.AdMobMaxAdContentRating} content_rating
- * @returns {Real}
  * @function_end
  */
 

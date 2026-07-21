@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/Github/GMEXT-AdMob/source/AdMob_gml/extensions/GMAdMob/AndroidSource/Java/**)"
+    ],
+    "additionalDirectories": [
+      "D:\\Github\\GMEXT-AdMob\\source\\AdMob_gml\\extensions\\GMAdMob\\AndroidSource\\Java"
+    ]
+  }
+}

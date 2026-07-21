@@ -14,10 +14,10 @@ public interface GMAdMobInterface {
     public double admob_banner_create_ext(AdMobBannerSize size, boolean bottom, AdMobBannerAlignment alignment, GMFunction callback);
     public double admob_banner_get_width();
     public double admob_banner_get_height();
-    public double admob_banner_move(boolean bottom);
-    public double admob_banner_show();
-    public double admob_banner_hide();
-    public double admob_banner_remove();
+    public void admob_banner_move(boolean bottom);
+    public void admob_banner_show();
+    public void admob_banner_hide();
+    public void admob_banner_remove();
     public void admob_interstitial_set_ad_unit(String ad_unit_id);
     public void admob_interstitial_free_loaded_instances(double count);
     public void admob_interstitial_max_instances(double value);
@@ -48,9 +48,9 @@ public interface GMAdMobInterface {
     public boolean admob_app_open_ad_is_loaded();
     public double admob_app_open_ad_load(GMFunction callback);
     public double admob_app_open_ad_show(GMFunction callback);
-    public double admob_targeting_coppa(boolean coppa);
-    public double admob_targeting_under_age(boolean under_age);
-    public double admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating content_rating);
+    public void admob_targeting_coppa(boolean coppa);
+    public void admob_targeting_under_age(boolean under_age);
+    public void admob_targeting_max_ad_content_rating(AdMobMaxAdContentRating content_rating);
     public double admob_consent_request_info_update(AdMobConsentDebugGeography debug_geography, GMFunction callback);
     public double admob_consent_get_status();
     public double admob_consent_get_type();

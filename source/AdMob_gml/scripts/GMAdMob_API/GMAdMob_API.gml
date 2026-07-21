@@ -582,7 +582,6 @@ function admob_app_open_ad_show(_callback)
 
 /**
  * @param {Enum.AdMobMaxAdContentRating} _content_rating
- * @returns {Real}
  */
 function admob_targeting_max_ad_content_rating(_content_rating)
 {

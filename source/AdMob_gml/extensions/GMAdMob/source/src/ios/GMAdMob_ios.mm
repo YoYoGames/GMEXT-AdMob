@@ -51,31 +51,6 @@ static std::deque<gm::wire::GMFunction> g_interstitial_load_callbacks;
 static std::deque<gm::wire::GMFunction> g_rewarded_video_load_callbacks;
 static std::deque<gm::wire::GMFunction> g_rewarded_interstitial_load_callbacks;
 
-static const int ADMOB_INIT_EVENT_INITIALIZED = 0;
-static const int ADMOB_INIT_EVENT_FAILED = 1;
-
-static const int ADMOB_BANNER_EVENT_LOADED = 0;
-static const int ADMOB_BANNER_EVENT_LOAD_FAILED = 1;
-static const int ADMOB_BANNER_EVENT_OPENED = 2;
-static const int ADMOB_BANNER_EVENT_CLICKED = 3;
-static const int ADMOB_BANNER_EVENT_CLOSED = 4;
-
-static const int ADMOB_FULLSCREEN_EVENT_LOADED = 0;
-static const int ADMOB_FULLSCREEN_EVENT_LOAD_FAILED = 1;
-static const int ADMOB_FULLSCREEN_EVENT_FULLY_SHOWN = 2;
-static const int ADMOB_FULLSCREEN_EVENT_SHOW_FAILED = 3;
-static const int ADMOB_FULLSCREEN_EVENT_DISMISSED = 4;
-static const int ADMOB_FULLSCREEN_EVENT_REWARD = 5;
-
-static const int ADMOB_CONSENT_EVENT_REQUEST_INFO_UPDATED = 0;
-static const int ADMOB_CONSENT_EVENT_REQUEST_INFO_UPDATE_FAILED = 1;
-static const int ADMOB_CONSENT_EVENT_LOADED = 2;
-static const int ADMOB_CONSENT_EVENT_LOAD_FAILED = 3;
-static const int ADMOB_CONSENT_EVENT_SHOWN = 4;
-static const int ADMOB_CONSENT_EVENT_SHOW_FAILED = 5;
-
-static const int ADMOB_PAID_EVENT_PAID = 0;
-
 static NSString *AdMobStringFromStringView(std::string_view value)
 {
     NSString *string =
@@ -190,16 +165,16 @@ static const char *AdMobErrorMessageForCode(double code)
 static int AdMobCallbackEventTypeForName(NSString *eventType)
 {
     if ([eventType isEqualToString:@"admob_on_initialized"])
-        return ADMOB_INIT_EVENT_INITIALIZED;
+        return (int)gm_enums::AdMobInitializeCallbackEvent::Initialized;
 
     if ([eventType isEqualToString:@"admob_banner_on_loaded"])
-        return ADMOB_BANNER_EVENT_LOADED;
+        return (int)gm_enums::AdMobBannerCallbackEvent::Loaded;
 
     if ([eventType isEqualToString:@"admob_banner_on_load_failed"])
-        return ADMOB_BANNER_EVENT_LOAD_FAILED;
+        return (int)gm_enums::AdMobBannerCallbackEvent::LoadFailed;
 
     if ([eventType isEqualToString:@"admob_banner_on_opened"])
-        return ADMOB_BANNER_EVENT_OPENED;
+        return (int)gm_enums::AdMobBannerCallbackEvent::Opened;
 
     if ([eventType isEqualToString:@"admob_banner_on_clicked"])
         return ADMOB_BANNER_EVENT_CLICKED;
@@ -371,17 +346,9 @@ static void AdMobCallbackResult(
 
 @implementation GMAdMob
 
-const int ADMOB_OK = 0;
-const int ADMOB_ERROR_NOT_INITIALIZED = -1;
-const int ADMOB_ERROR_INVALID_AD_ID = -2;
-const int ADMOB_ERROR_AD_LIMIT_REACHED = -3;
-const int ADMOB_ERROR_NO_ADS_LOADED = -4;
-const int ADMOB_ERROR_NO_ACTIVE_BANNER_AD = -5;
-const int ADMOB_ERROR_ILLEGAL_CALL = -6;
-
-const int ADMOB_BANNER_ALIGNMENT_LEFT = 0;
-const int ADMOB_BANNER_ALIGNMENT_CENTER = 1;
-const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
+const int (int)gm_enums::AdMobBannerAlignment::Left = 0;
+const int (int)gm_enums::AdMobBannerAlignment::Center = 1;
+const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
 -(id)init {
     if ( self = [super init] ) {
@@ -434,10 +401,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_INIT_EVENT_FAILED,
-            ADMOB_ERROR_ILLEGAL_CALL
+            (int)gm_enums::AdMobError::IllegalCall
         );
 
-        return ADMOB_ERROR_ILLEGAL_CALL;
+        return (int)gm_enums::AdMobError::IllegalCall;
     }
 
     if (self.isTestDevice)
@@ -485,16 +452,16 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                        eventData:eventData];
         }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_set_test_device_id
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_ILLEGAL_CALL;
+        return (int)gm_enums::AdMobError::IllegalCall;
 
     self.isTestDevice = YES;
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (void)admob_events_on_paid_event:
@@ -529,13 +496,13 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             alignment:1
             callingMethod:__FUNCTION__];
 
-    if (code != ADMOB_OK)
+    if (code != (int)gm_enums::AdMobError::Ok)
     {
         g_banner_callback = nil;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_BANNER_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobBannerCallbackEvent::LoadFailed,
             code
         );
     }
@@ -561,13 +528,13 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
             alignment:(int)(int32_t)alignment
             callingMethod:__FUNCTION__];
 
-    if (code != ADMOB_OK)
+    if (code != (int)gm_enums::AdMobError::Ok)
     {
         g_banner_callback = nil;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_BANNER_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobBannerCallbackEvent::LoadFailed,
             code
         );
     }
@@ -589,13 +556,13 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         : 0.0;
 }
 
-- (double)admob_banner_move:(bool)bottom
+- (void)admob_banner_move:(bool)bottom
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return;
 
     if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
+        return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.bannerView == nil)
@@ -612,46 +579,38 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
         self.bannerView.frame = frame;
     });
-
-    return ADMOB_OK;
 }
 
-- (double)admob_banner_show
+- (void)admob_banner_show
 {
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return;
 
     if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
+        return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         self.bannerView.hidden = NO;
     });
-
-    return ADMOB_OK;
 }
 
-- (double)admob_banner_hide
+- (void)admob_banner_hide
 {
     if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
+        return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         self.bannerView.hidden = YES;
     });
-
-    return ADMOB_OK;
 }
 
-- (double)admob_banner_remove
+- (void)admob_banner_remove
 {
     if (![self validateActiveBannerAdWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_NO_ACTIVE_BANNER_AD;
+        return;
 
     [self deleteBannerAdView];
     g_banner_callback = nil;
-
-    return ADMOB_OK;
 }
 
 - (void)admob_interstitial_set_ad_unit:
@@ -695,10 +654,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.interstitialAdUnitId
@@ -707,10 +666,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_INVALID_AD_ID
+            (int)gm_enums::AdMobError::InvalidAdId
         );
 
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
 
     if (![self validateLoadedAdsLimit:self.interstitialAdQueue
@@ -720,10 +679,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_AD_LIMIT_REACHED
+            (int)gm_enums::AdMobError::AdLimitReached
         );
 
-        return ADMOB_ERROR_AD_LIMIT_REACHED;
+        return (int)gm_enums::AdMobError::AdLimitReached;
     }
 
     g_interstitial_load_callbacks.push_back(callback);
@@ -794,7 +753,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 [self sendAsyncEvent:"AdMob_Interstitial_OnLoaded" eventData:eventData];
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_interstitial_show:
@@ -805,10 +764,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     GADInterstitialAd *interstitialAd =
@@ -819,10 +778,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NO_ADS_LOADED
+            (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
-        return ADMOB_ERROR_NO_ADS_LOADED;
+        return (int)gm_enums::AdMobError::NoAdsLoaded;
     }
 
     g_interstitial_show_callback = callback;
@@ -835,7 +794,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     self.interstitialAd = interstitialAd;
     self.isShowingAd = YES;
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (bool)admob_interstitial_is_loaded
@@ -907,10 +866,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.rewardedUnitId
@@ -919,10 +878,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_INVALID_AD_ID
+            (int)gm_enums::AdMobError::InvalidAdId
         );
 
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
 
     if (![self validateLoadedAdsLimit:self.rewardedAdQueue
@@ -932,10 +891,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_AD_LIMIT_REACHED
+            (int)gm_enums::AdMobError::AdLimitReached
         );
 
-        return ADMOB_ERROR_AD_LIMIT_REACHED;
+        return (int)gm_enums::AdMobError::AdLimitReached;
     }
 
     g_rewarded_video_load_callbacks.push_back(callback);
@@ -1011,7 +970,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoaded" eventData:eventData];
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_rewarded_video_show:
@@ -1022,10 +981,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     GADRewardedAd *rewardedAd =
@@ -1036,10 +995,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NO_ADS_LOADED
+            (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
-        return ADMOB_ERROR_NO_ADS_LOADED;
+        return (int)gm_enums::AdMobError::NoAdsLoaded;
     }
 
     g_rewarded_video_show_callback = callback;
@@ -1062,7 +1021,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     self.rewardedAd = rewardedAd;
     self.isShowingAd = YES;
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (bool)admob_rewarded_video_is_loaded
@@ -1117,10 +1076,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.rewardedInterstitialAdUnitId
@@ -1129,10 +1088,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_INVALID_AD_ID
+            (int)gm_enums::AdMobError::InvalidAdId
         );
 
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
 
     if (![self validateLoadedAdsLimit:self.rewardedInterstitialAdQueue
@@ -1142,10 +1101,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_AD_LIMIT_REACHED
+            (int)gm_enums::AdMobError::AdLimitReached
         );
 
-        return ADMOB_ERROR_AD_LIMIT_REACHED;
+        return (int)gm_enums::AdMobError::AdLimitReached;
     }
 
     g_rewarded_interstitial_load_callbacks.push_back(callback);
@@ -1222,7 +1181,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoaded" eventData:eventData];
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_rewarded_interstitial_show:
@@ -1233,10 +1192,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     GADRewardedInterstitialAd *rewardedInterstitialAd =
@@ -1247,10 +1206,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NO_ADS_LOADED
+            (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
-        return ADMOB_ERROR_NO_ADS_LOADED;
+        return (int)gm_enums::AdMobError::NoAdsLoaded;
     }
 
     g_rewarded_interstitial_show_callback = callback;
@@ -1275,7 +1234,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
     self.isShowingAd = YES;
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (bool)admob_rewarded_interstitial_is_loaded
@@ -1309,10 +1268,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.appOpenAdUnitId
@@ -1323,10 +1282,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_INVALID_AD_ID
+            (int)gm_enums::AdMobError::InvalidAdId
         );
 
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
 
     self.triggerAppOpenAd = YES;
@@ -1334,7 +1293,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     if (![self appOpenAdIsValid:__FUNCTION__])
         return [self admob_app_open_ad_load:callback];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (void)admob_app_open_ad_disable
@@ -1365,10 +1324,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.appOpenAdUnitId
@@ -1379,14 +1338,14 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
-            ADMOB_ERROR_INVALID_AD_ID
+            (int)gm_enums::AdMobError::InvalidAdId
         );
 
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
 
     if ([self appOpenAdIsValid:__FUNCTION__])
-        return ADMOB_OK;
+        return (int)gm_enums::AdMobError::Ok;
 
     NSString *adUnitId =
         self.appOpenAdUnitId;
@@ -1450,7 +1409,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoaded" eventData:eventData];
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_app_open_ad_show:
@@ -1465,10 +1424,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NOT_INITIALIZED
+            (int)gm_enums::AdMobError::NotInitialized
         );
 
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self appOpenAdIsValid:__FUNCTION__])
@@ -1478,10 +1437,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NO_ADS_LOADED
+            (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
-        return ADMOB_ERROR_NO_ADS_LOADED;
+        return (int)gm_enums::AdMobError::NoAdsLoaded;
     }
 
     self.appOpenAd.fullScreenContentDelegate = self;
@@ -1492,32 +1451,30 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 
     self.isShowingAd = YES;
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
-- (double)admob_targeting_coppa:(bool)coppa
+- (void)admob_targeting_coppa:(bool)coppa
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_ILLEGAL_CALL;
+        return;
 
     self.targetCOPPA = coppa;
-    return ADMOB_OK;
 }
 
-- (double)admob_targeting_under_age:(bool)under_age
+- (void)admob_targeting_under_age:(bool)under_age
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_ILLEGAL_CALL;
+        return;
 
     self.targetUnderAge = under_age;
-    return ADMOB_OK;
 }
 
-- (double)admob_targeting_max_ad_content_rating:
+- (void)admob_targeting_max_ad_content_rating:
     (gm_enums::AdMobMaxAdContentRating)content_rating
 {
     if (![self validateNotInitializedWithCallingMethod:__FUNCTION__])
-        return ADMOB_ERROR_ILLEGAL_CALL;
+        return;
 
     switch ((int32_t)content_rating)
     {
@@ -1541,8 +1498,6 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 setMaxAdContentRating:GADMaxAdContentRatingMatureAudience];
             break;
     }
-
-    return ADMOB_OK;
 }
 
 - (double)admob_consent_request_info_update:
@@ -1594,7 +1549,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 }
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_consent_get_status
@@ -1649,7 +1604,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                            eventData:eventData];
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (double)admob_consent_show:
@@ -1662,10 +1617,10 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
         AdMobCallbackResult(
             callback,
             ADMOB_CONSENT_EVENT_SHOW_FAILED,
-            ADMOB_ERROR_NO_ADS_LOADED
+            (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
-        return ADMOB_ERROR_NO_ADS_LOADED;
+        return (int)gm_enums::AdMobError::NoAdsLoaded;
     }
 
     [self.consentForm
@@ -1690,7 +1645,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
                 self.consentForm = nil;
             }];
 
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (void)admob_consent_reset
@@ -1949,12 +1904,12 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
 {
     // Validate initialization
     if (![self validateInitializedWithCallingMethod:callingMethod]) {
-        return ADMOB_ERROR_NOT_INITIALIZED;
+        return (int)gm_enums::AdMobError::NotInitialized;
     }
     
     // Validate Ad Unit ID
     if (![self validateAdId:self.bannerAdUnitId callingMethod:callingMethod]) {
-        return ADMOB_ERROR_INVALID_AD_ID;
+        return (int)gm_enums::AdMobError::InvalidAdId;
     }
     
     // Remove the previous banner view if it exists
@@ -2003,7 +1958,7 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     GADRequest *request = [self buildAdRequest];
     [bannerView loadRequest:request];
     
-    return ADMOB_OK;
+    return (int)gm_enums::AdMobError::Ok;
 }
 
 - (void)addBannerView:(UIView *)bannerView toPosition:(NSLayoutAttribute)position alignment:(int)alignment
@@ -2023,13 +1978,13 @@ const int ADMOB_BANNER_ALIGNMENT_RIGHT = 2;
     // Horizontal Constraints based on alignment
     NSLayoutConstraint *horizontalConstraint;
     switch (alignment) {
-        case ADMOB_BANNER_ALIGNMENT_LEFT:
+        case (int)gm_enums::AdMobBannerAlignment::Left:
             horizontalConstraint = [bannerView.leadingAnchor constraintEqualToAnchor:g_controller.view.leadingAnchor];
             break;
-        case ADMOB_BANNER_ALIGNMENT_CENTER:
+        case (int)gm_enums::AdMobBannerAlignment::Center:
             horizontalConstraint = [bannerView.centerXAnchor constraintEqualToAnchor:g_controller.view.centerXAnchor];
             break;
-        case ADMOB_BANNER_ALIGNMENT_RIGHT:
+        case (int)gm_enums::AdMobBannerAlignment::Right:
             horizontalConstraint = [bannerView.trailingAnchor constraintEqualToAnchor:g_controller.view.trailingAnchor];
             break;
         default:
