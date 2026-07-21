@@ -1,4 +1,13 @@
 
+//For production:
+//#macro admob_consent_mode = AdMobConsentDebugGeography.Disabled
+
+//For debuging
+#macro admob_consent_mode = AdMobConsentDebugGeography.EEA
+//#macro admob_consent_mode = AdMobConsentDebugGeography.NotEEA
+//#macro admob_consent_mode = AdMobConsentDebugGeography.RegulatedUSState
+
+
 function consent_finished()
 {
 	owner.start_ads_init_flow();
@@ -16,7 +25,7 @@ function consent_finished()
 }
 
 show_debug_message("admob_consent_request_info_update GM");
-admob_consent_request_info_update(AdMobConsentDebugGeography.EEA,function(data)
+admob_consent_request_info_update(admob_consent_mode,function(data)
 	{
 		show_debug_message($"Consent info callback: {json_stringify(data)}");
 		show_debug_message($"consent_get_status: {admob_consent_get_status()}")

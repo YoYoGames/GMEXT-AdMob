@@ -1,9 +1,11 @@
 /// @description Initialize variables
 
+
 #macro admob_consent_enabled true
 
-#macro admob_handle_orientation_changes false
 
+
+#macro admob_handle_orientation_changes false
 if (admob_handle_orientation_changes)
 {
     orientation = display_get_orientation();
