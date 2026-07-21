@@ -5,8 +5,6 @@ draw_set_font(Font_YoYo_15);
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
 
-draw_text(x, y, "Consent Status: " + status);
-draw_text(x, y + 35, "Consent Type: " + type);
 
 // The function 'admob_consent_is_form_available()' will return either true or false depending
 // on whether there is a consent form available or not on this device.
