@@ -67,8 +67,8 @@ namespace gm_enums
     enum class AdMobConsentStatus : std::int32_t
     {
         Unknown = 0,
-        NotRequired = 1,
-        Required = 2,
+        Required = 1,
+        NotRequired = 2,
         Obtained = 3
     };
 

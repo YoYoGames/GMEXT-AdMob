@@ -58,8 +58,8 @@ enum AdMobConsentDebugGeography
 enum AdMobConsentStatus
 {
     Unknown = 0,
-    NotRequired = 1,
-    Required = 2,
+    Required = 1,
+    NotRequired = 2,
     Obtained = 3
 }
 
