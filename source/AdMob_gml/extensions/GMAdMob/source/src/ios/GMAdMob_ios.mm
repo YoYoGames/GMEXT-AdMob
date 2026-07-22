@@ -1668,94 +1668,106 @@ static void AdMobCallbackResult(
 -(void)ad:(nonnull id<GADFullScreenPresentingAd>)presentingAd didFailToPresentFullScreenContentWithError:(nonnull NSError *)error
 {
     self.isShowingAd = NO;
-    
-    NSString *eventType = nil;
+
+    int eventType = -1;
+    NSString *eventName = nil;
     NSString *adUnitID = nil;
-    
+
     if ([presentingAd isMemberOfClass:[GADInterstitialAd class]]) {
-        eventType = @"AdMob_Interstitial_OnShowFailed";
+        eventType = (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed;
+        eventName = @"AdMob_Interstitial_OnShowFailed";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
         self.interstitialAd = nil;
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedAd class]]) {
-        eventType = @"AdMob_RewardedVideo_OnShowFailed";
+        eventType = (int)gm_enums::AdMobRewardedVideoCallbackEvent::ShowFailed;
+        eventName = @"AdMob_RewardedVideo_OnShowFailed";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
         self.rewardedAd = nil;
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]]) {
-        eventType = @"AdMob_RewardedInterstitial_OnShowFailed";
+        eventType = (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::ShowFailed;
+        eventName = @"AdMob_RewardedInterstitial_OnShowFailed";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
         self.rewardedInterstitialAd = nil;
     }
     else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]]) {
-        eventType = @"AdMob_AppOpenAd_OnShowFailed";
+        eventType = (int)gm_enums::AdMobAppOpenAdCallbackEvent::ShowFailed;
+        eventName = @"AdMob_AppOpenAd_OnShowFailed";
         adUnitID = [(GADAppOpenAd *)presentingAd adUnitID];
         self.appOpenAd = nil;
-        
+
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Reload the App Open Ad after failure
             [self admob_app_open_ad_load:g_app_open_enable_callback];
         }
     }
-    
-    if (eventType && adUnitID) {
-                gm::wire::StructStream eventData =
+
+    if (eventType != -1 && adUnitID) {
+        gm::wire::StructStream eventData =
             AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy]));
         eventData.add("unit_id", AdMobCString(adUnitID));
-        [self sendAsyncEvent:[eventType UTF8String] eventData:eventData];
+        [self sendAsyncEvent:[eventName UTF8String] eventData:eventData];
     }
 }
 
 -(void)adDidPresentFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)presentingAd
 {
-    NSString *eventType = nil;
+    int eventType = -1;
+    NSString *eventName = nil;
     NSString *adUnitID = nil;
 
     if ([presentingAd isMemberOfClass:[GADInterstitialAd class]])
     {
-        eventType = @"AdMob_Interstitial_OnFullyShown";
+        eventType = (int)gm_enums::AdMobInterstitialCallbackEvent::Shown;
+        eventName = @"AdMob_Interstitial_OnFullyShown";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedAd class]])
     {
-        eventType = @"AdMob_RewardedVideo_OnFullyShown";
+        eventType = (int)gm_enums::AdMobRewardedVideoCallbackEvent::Shown;
+        eventName = @"AdMob_RewardedVideo_OnFullyShown";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-        eventType = @"AdMob_RewardedInterstitial_OnFullyShown";
+        eventType = (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::Shown;
+        eventName = @"AdMob_RewardedInterstitial_OnFullyShown";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
     }
     else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
     {
-        eventType = @"AdMob_AppOpenAd_OnFullyShown";
+        eventType = (int)gm_enums::AdMobAppOpenAdCallbackEvent::Shown;
+        eventName = @"AdMob_AppOpenAd_OnFullyShown";
         adUnitID = [(GADAppOpenAd *)presentingAd adUnitID];
 
         if (self.triggerAppOpenAd)
             [self admob_app_open_ad_load:g_app_open_enable_callback];
     }
 
-    if (eventType != nil && adUnitID != nil)
+    if (eventType != -1 && adUnitID != nil)
     {
         gm::wire::StructStream eventData =
             AdMobPayload(eventType);
 
         eventData.add("unit_id", AdMobCString(adUnitID));
 
-        [self sendAsyncEvent:[eventType UTF8String]
+        [self sendAsyncEvent:[eventName UTF8String]
                    eventData:eventData];
     }
 }
 
 -(void)adDidDismissFullScreenContent:(nonnull id<GADFullScreenPresentingAd>)presentingAd
 {
-    NSString *eventType = nil;
+    int eventType = -1;
+    NSString *eventName = nil;
     NSString *adUnitID = nil;
 
     if ([presentingAd isMemberOfClass:[GADInterstitialAd class]])
     {
-        eventType = @"AdMob_Interstitial_OnDismissed";
+        eventType = (int)gm_enums::AdMobInterstitialCallbackEvent::Dismissed;
+        eventName = @"AdMob_Interstitial_OnDismissed";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
 
         [self cleanAd:(GADInterstitialAd *)presentingAd
@@ -1768,7 +1780,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedAd class]])
     {
-        eventType = @"AdMob_RewardedVideo_OnDismissed";
+        eventType = (int)gm_enums::AdMobRewardedVideoCallbackEvent::Dismissed;
+        eventName = @"AdMob_RewardedVideo_OnDismissed";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
 
         [self cleanAd:(GADRewardedAd *)presentingAd
@@ -1781,7 +1794,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
-        eventType = @"AdMob_RewardedInterstitial_OnDismissed";
+        eventType = (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::Dismissed;
+        eventName = @"AdMob_RewardedInterstitial_OnDismissed";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
 
         [self cleanAd:(GADRewardedInterstitialAd *)presentingAd
@@ -1795,7 +1809,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
     {
-        eventType = @"AdMob_AppOpenAd_OnDismissed";
+        eventType = (int)gm_enums::AdMobAppOpenAdCallbackEvent::Dismissed;
+        eventName = @"AdMob_AppOpenAd_OnDismissed";
         adUnitID = self.appOpenAdUnitId;
 
         [self cleanAd:(GADAppOpenAd *)presentingAd
@@ -1810,14 +1825,14 @@ static void AdMobCallbackResult(
             [self admob_app_open_ad_load:g_app_open_enable_callback];
     }
 
-    if (eventType != nil && adUnitID != nil)
+    if (eventType != -1 && adUnitID != nil)
     {
         gm::wire::StructStream eventData =
             AdMobPayload(eventType);
 
         eventData.add("unit_id", AdMobCString(adUnitID));
 
-        [self sendAsyncEvent:[eventType UTF8String]
+        [self sendAsyncEvent:[eventName UTF8String]
                    eventData:eventData];
     }
 }
