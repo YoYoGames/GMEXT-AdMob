@@ -1475,20 +1475,33 @@ static void AdMobCallbackResult(
 
 - (double)admob_consent_get_status
 {
-    return UMPConsentInformation.sharedInstance.consentStatus;
+    // NOTE: iOS UMP SDK has inverted enum values vs Android!
+    // iOS: Unknown=0, Required=1, NotRequired=2, Obtained=3
+    // Android: Unknown=0, NotRequired=1, Required=2, Obtained=3
+    // Convert iOS values to Android/spec values for consistency
+    UMPConsentStatus iosStatus = UMPConsentInformation.sharedInstance.consentStatus;
+    switch (iosStatus) {
+        case UMPConsentStatusUnknown:
+            return 0; // Unknown
+        case UMPConsentStatusRequired:
+            return 2; // Required (1 in iOS -> 2 in Android)
+        case UMPConsentStatusNotRequired:
+            return 1; // NotRequired (2 in iOS -> 1 in Android)
+        case UMPConsentStatusObtained:
+            return 3; // Obtained
+        default:
+            return 0;
+    }
 }
 
 - (double)admob_consent_get_type
 {
-    if (UMPConsentInformation.sharedInstance.consentStatus ==
-        UMPConsentStatusObtained)
-    {
+    // Note: Direct comparison with iOS UMP enum value (UMPConsentStatusObtained = 3)
+    if (UMPConsentInformation.sharedInstance.consentStatus == UMPConsentStatusObtained) {
         if (!canShowAds())
             return 3.0;
-
         return canShowPersonalizedAds() ? 2.0 : 1.0;
     }
-
     return 0.0;
 }
 

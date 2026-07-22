@@ -298,8 +298,8 @@ enum AdMobConsentDebugGeography:int32
 enum AdMobConsentStatus:int32
 {
     Unknown = 0,
-    Required = 1,
-    NotRequired = 2,
+    NotRequired = 1,
+    Required = 2,
     Obtained = 3,
 }
 

@@ -401,8 +401,8 @@
 /**
  * @enum_partial AdMobConsentStatus
  * @member Unknown
- * @member Required
  * @member NotRequired
+ * @member Required
  * @member Obtained
  * @enum_end
  */
