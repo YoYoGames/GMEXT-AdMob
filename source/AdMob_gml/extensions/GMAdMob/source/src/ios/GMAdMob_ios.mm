@@ -1467,7 +1467,7 @@ static void AdMobCallbackResult(
                 {
                     gm::wire::StructStream eventData =
                         AdMobPayloadSimple(0, "");
-                    [self sendAsyncEvent:"AdMob_Consent_OnShown"
+                    [self sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdated"
                                eventData:eventData];
                 }
             }];
