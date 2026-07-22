@@ -273,10 +273,6 @@ static void AdMobCallbackResult(
 
 @implementation GMAdMob
 
-const int (int)gm_enums::AdMobBannerAlignment::Left = 0;
-const int (int)gm_enums::AdMobBannerAlignment::Center = 1;
-const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
-
 -(id)init {
     if ( self = [super init] ) {
         
@@ -327,7 +323,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
         g_initialize_callback = nil;
         AdMobCallbackResult(
             callback,
-            ADMOB_INIT_EVENT_FAILED,
+            (int)gm_enums::AdMobInitializeCallbackEvent::Failed,
             (int)gm_enums::AdMobError::IllegalCall
         );
 
@@ -580,7 +576,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -592,7 +588,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -605,7 +601,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::AdLimitReached
         );
 
@@ -690,7 +686,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -704,7 +700,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -792,7 +788,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -804,7 +800,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -817,7 +813,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::AdLimitReached
         );
 
@@ -907,7 +903,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -921,7 +917,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -1002,7 +998,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1014,7 +1010,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1027,7 +1023,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::AdLimitReached
         );
 
@@ -1118,7 +1114,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1132,7 +1128,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -1194,7 +1190,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1208,7 +1204,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1250,7 +1246,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1264,7 +1260,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_LOAD_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1350,7 +1346,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1363,7 +1359,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
 
         AdMobCallbackResult(
             callback,
-            ADMOB_FULLSCREEN_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -1543,7 +1539,7 @@ const int (int)gm_enums::AdMobBannerAlignment::Right = 2;
     {
         AdMobCallbackResult(
             callback,
-            ADMOB_CONSENT_EVENT_SHOW_FAILED,
+            (int)gm_enums::AdMobConsentCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
