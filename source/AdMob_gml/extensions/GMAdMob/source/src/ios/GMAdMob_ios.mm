@@ -124,7 +124,7 @@ static gm::wire::StructStream AdMobPayload(int eventType, double code, const cha
     payload.add("event_type", (int32_t)eventType);
     payload.add("code", code);
     payload.add("error_code", code);
-    payload.add("error_message", safeError);
+    payload.add("error_message", std::string(safeError));
 
     return payload;
 }
@@ -145,7 +145,7 @@ static gm::wire::StructStream AdMobPayloadSimple(double code, const char *errorM
     payload.add("success", failed ? false : true);
     payload.add("code", code);
     payload.add("error_code", code);
-    payload.add("error_message", safeError);
+    payload.add("error_message", std::string(safeError));
 
     return payload;
 }
@@ -187,10 +187,8 @@ static void AdMobCallbackResult(
     payload.add("event_type", (int32_t)eventType);
     payload.add("code", code);
     payload.add("error_code", code);
-    payload.add(
-        "error_message",
-        success ? "" : AdMobErrorMessageForCode(code)
-    );
+    const char *errorMsg = success ? "" : AdMobErrorMessageForCode(code);
+    payload.add("error_message", std::string(errorMsg));
 
     AdMobInvokeCallback(callback, payload);
 }
@@ -626,8 +624,8 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
-                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy])]));
+                    eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_Interstitial_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -672,7 +670,7 @@ static void AdMobCallbackResult(
 
                 gm::wire::StructStream eventData =
                     AdMobPayloadSimple(0, "");
-                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                 [self sendAsyncEvent:"AdMob_Interstitial_OnLoaded" eventData:eventData];
             }];
 
@@ -843,8 +841,8 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
-                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy])]));
+                    eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -889,7 +887,7 @@ static void AdMobCallbackResult(
 
                 gm::wire::StructStream eventData =
                     AdMobPayloadSimple(0, "");
-                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                 [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoaded" eventData:eventData];
             }];
 
@@ -934,9 +932,9 @@ static void AdMobCallbackResult(
             {
                 gm::wire::StructStream eventData =
                     AdMobPayload((int)gm_enums::AdMobRewardedVideoCallbackEvent::Reward);
-                eventData.add("unit_id", AdMobCString(rewardedAd.adUnitID));
+                eventData.add("unit_id", std::string(AdMobCString(rewardedAd.adUnitID)));
                 eventData.add("reward_amount", rewardedAd.adReward.amount.doubleValue);
-                eventData.add("reward_type", AdMobCString(rewardedAd.adReward.type));
+                eventData.add("reward_type", AdMobCString(rewardedAd.adReward.type)]));
                 [self sendAsyncEvent:"AdMob_RewardedVideo_OnReward" eventData:eventData];
             }];
     });
@@ -1053,8 +1051,8 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
-                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy])]));
+                    eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -1100,7 +1098,7 @@ static void AdMobCallbackResult(
 
                 gm::wire::StructStream eventData =
                     AdMobPayloadSimple(0, "");
-                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                 [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoaded" eventData:eventData];
             }];
 
@@ -1145,9 +1143,9 @@ static void AdMobCallbackResult(
             {
                 gm::wire::StructStream eventData =
                     AdMobPayload((int)gm_enums::AdMobRewardedInterstitialCallbackEvent::Reward);
-                eventData.add("unit_id", AdMobCString(rewardedInterstitialAd.adUnitID));
+                eventData.add("unit_id", std::string(AdMobCString(rewardedInterstitialAd.adUnitID)));
                 eventData.add("reward_amount", rewardedInterstitialAd.adReward.amount.doubleValue);
-                eventData.add("reward_type", AdMobCString(rewardedInterstitialAd.adReward.type));
+                eventData.add("reward_type", AdMobCString(rewardedInterstitialAd.adReward.type)]));
                 [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnReward" eventData:eventData];
             }];
     });
@@ -1291,8 +1289,8 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
-                    eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy])]));
+                    eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -1328,7 +1326,7 @@ static void AdMobCallbackResult(
 
                 gm::wire::StructStream eventData =
                     AdMobPayloadSimple(0, "");
-                eventData.add("unit_id", AdMobCString([adUnitId copy]));
+                eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                 [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoaded" eventData:eventData];
             }];
 
@@ -1460,7 +1458,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy])]));
                     [self sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdateFailed" eventData:eventData];
                 }
                 else
@@ -1513,7 +1511,7 @@ static void AdMobCallbackResult(
                 if (loadError)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(loadError.code, AdMobCString([loadError.localizedDescription copy]));
+                        AdMobPayloadSimple(loadError.code, AdMobCString([loadError.localizedDescription copy])]));
                     [self sendAsyncEvent:"AdMob_Consent_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -1554,7 +1552,7 @@ static void AdMobCallbackResult(
                 if (dismissError)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(dismissError.code, AdMobCString([dismissError.localizedDescription copy]));
+                        AdMobPayloadSimple(dismissError.code, AdMobCString([dismissError.localizedDescription copy])]));
                     [self sendAsyncEvent:"AdMob_Consent_OnShowFailed" eventData:eventData];
                 }
                 else
@@ -1628,7 +1626,7 @@ static void AdMobCallbackResult(
 -(void)bannerView:(nonnull GADBannerView *)bannerView didFailToReceiveAdWithError:(nonnull NSError *)error
 {
         gm::wire::StructStream eventData =
-        AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::LoadFailed, error.code, AdMobCString([error.localizedDescription copy]));
+        AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::LoadFailed, error.code, AdMobCString([error.localizedDescription copy])]));
     [self sendAsyncEvent:"AdMob_Banner_OnLoadFailed" eventData:eventData];
 }
 
@@ -1636,14 +1634,14 @@ static void AdMobCallbackResult(
 {
         gm::wire::StructStream eventData =
         AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::Loaded);
-    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
+    eventData.add("unit_id", std::string(AdMobCString(bannerView.adUnitID)));
     [self sendAsyncEvent:"AdMob_Banner_OnLoaded" eventData:eventData];
 }
 
 - (void)bannerViewWillPresentScreen:(GADBannerView *)bannerView {
     gm::wire::StructStream eventData =
         AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::Opened);
-    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
+    eventData.add("unit_id", std::string(AdMobCString(bannerView.adUnitID)));
     [self sendAsyncEvent:"AdMob_Banner_OnOpened" eventData:eventData];
 }
 
@@ -1654,14 +1652,14 @@ static void AdMobCallbackResult(
 - (void)bannerViewDidDismissScreen:(GADBannerView *)bannerView {
     gm::wire::StructStream eventData =
         AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::Closed);
-    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
+    eventData.add("unit_id", std::string(AdMobCString(bannerView.adUnitID)));
     [self sendAsyncEvent:"AdMob_Banner_OnClosed" eventData:eventData];
 }
 
 - (void)bannerViewDidRecordClick:(GADBannerView *)bannerView {
     gm::wire::StructStream eventData =
         AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::Clicked);
-    eventData.add("unit_id", AdMobCString(bannerView.adUnitID));
+    eventData.add("unit_id", std::string(AdMobCString(bannerView.adUnitID)));
     [self sendAsyncEvent:"AdMob_Banner_OnClicked" eventData:eventData];
 }
 
@@ -1706,8 +1704,8 @@ static void AdMobCallbackResult(
 
     if (eventType != -1 && adUnitID) {
         gm::wire::StructStream eventData =
-            AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy]));
-        eventData.add("unit_id", AdMobCString(adUnitID));
+            AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy])]));
+        eventData.add("unit_id", std::string(AdMobCString(adUnitID)));
         [self sendAsyncEvent:[eventName UTF8String] eventData:eventData];
     }
 }
@@ -1751,7 +1749,7 @@ static void AdMobCallbackResult(
         gm::wire::StructStream eventData =
             AdMobPayload(eventType);
 
-        eventData.add("unit_id", AdMobCString(adUnitID));
+        eventData.add("unit_id", std::string(AdMobCString(adUnitID)));
 
         [self sendAsyncEvent:[eventName UTF8String]
                    eventData:eventData];
@@ -1830,7 +1828,7 @@ static void AdMobCallbackResult(
         gm::wire::StructStream eventData =
             AdMobPayload(eventType);
 
-        eventData.add("unit_id", AdMobCString(adUnitID));
+        eventData.add("unit_id", std::string(AdMobCString(adUnitID)));
 
         [self sendAsyncEvent:[eventName UTF8String]
                    eventData:eventData];
@@ -2389,16 +2387,16 @@ typedef void (^AdCleanerBlock)(id ad);
 {
     gm::wire::StructStream eventData;
     eventData.add("success", true);
-    eventData.add("mediation_adapter_class_name", AdMobCString(mediationAdapterClassName));
-    eventData.add("unit_id", AdMobCString(adUnitId));
-    eventData.add("ad_type", AdMobCString(adType));
+    eventData.add("mediation_adapter_class_name", AdMobCString(mediationAdapterClassName)]));
+    eventData.add("unit_id", std::string(AdMobCString(adUnitId)));
+    eventData.add("ad_type", AdMobCString(adType)]));
     eventData.add("micros", value.value.doubleValue * 1000000.0);
-    eventData.add("currency_code", AdMobCString(value.currencyCode));
+    eventData.add("currency_code", AdMobCString(value.currencyCode)]));
     eventData.add("precision", (int32_t)value.precision);
-    eventData.add("ad_source_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceName));
-    eventData.add("ad_source_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceID));
-    eventData.add("ad_source_instance_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceName));
-    eventData.add("ad_source_instance_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceID));
+    eventData.add("ad_source_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceName)]));
+    eventData.add("ad_source_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceID)]));
+    eventData.add("ad_source_instance_name", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceName)]));
+    eventData.add("ad_source_instance_id", AdMobCString(loadedAdNetworkResponseInfo.adSourceInstanceID)]));
     [self sendAsyncEvent:"AdMob_OnPaidEvent" eventData:eventData];
 }
 
