@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Read(//d/Github/GMEXT-AdMob/source/AdMob_gml/extensions/GMAdMob/AndroidSource/Java/**)"
+      "Read(//d/Github/GMEXT-AdMob/source/AdMob_gml/extensions/GMAdMob/AndroidSource/Java/**)",
+      "Bash(sed -i 's/eventPayload\\(\"AdMob_RewardedInterstitial_OnDismissed\"\\)/eventPayload\\(AdMobRewardedInterstitialCallbackEvent.Dismissed.value\\(\\)\\)/g' GMAdMob.java)",
+      "Bash(sed -i 's/eventPayload\\(\"AdMob_RewardedInterstitial_OnFullyShown\"\\)/eventPayload\\(AdMobRewardedInterstitialCallbackEvent.Shown.value\\(\\)\\)/g' GMAdMob.java)",
+      "Bash(sed -i 's/eventPayload\\(\"AdMob_RewardedInterstitial_OnShowFailed\"/eventPayload\\(AdMobRewardedInterstitialCallbackEvent.ShowFailed.value\\(\\)/g' GMAdMob.java)",
+      "Bash(sed -i 's/eventPayload\\(\"AdMob_RewardedInterstitial_OnReward\"\\)/eventPayload\\(AdMobRewardedInterstitialCallbackEvent.Reward.value\\(\\)\\)/g' GMAdMob.java)"
     ],
     "additionalDirectories": [
       "D:\\Github\\GMEXT-AdMob\\source\\AdMob_gml\\extensions\\GMAdMob\\AndroidSource\\Java"

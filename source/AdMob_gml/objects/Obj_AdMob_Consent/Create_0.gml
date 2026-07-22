@@ -29,33 +29,19 @@ admob_consent_request_info_update(admob_consent_mode,function(data)
 	{
 		show_debug_message($"Consent info callback: {json_stringify(data)}");
 		show_debug_message($"consent_get_status: {admob_consent_get_status()}")
-
-		if (data.event_type == AdMobConsentCallbackEvent.RequestInfoUpdated)
+		
+		if (admob_consent_get_status() == AdMobConsentStatus.Required)
 		{
-			if (admob_consent_get_status() == AdMobConsentStatus.Required)
-			{
-				admob_consent_load(function(data)
-					{
-						show_debug_message("Consent load callback: " + json_stringify(data));
-										
-						if (data.event_type == AdMobConsentCallbackEvent.Loaded)
+			admob_consent_load(function(data)
+				{
+					show_debug_message("Consent load callback: " + json_stringify(data));
+					
+					admob_consent_show(function(data)
 						{
-							admob_consent_show(function(data)
-								{
-								    show_debug_message($"Consent show callback: {json_stringify(data)}");
-								    consent_finished()
-								});
-						}
-						else
-						{
+							show_debug_message($"Consent show callback: {json_stringify(data)}");
 							consent_finished()
-						}
-					});
-			}
-			else
-			{
-				consent_finished()
-			}
+						});
+				});
 		}
 		else
 		{

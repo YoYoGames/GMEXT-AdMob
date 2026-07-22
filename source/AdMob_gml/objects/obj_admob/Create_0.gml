@@ -83,11 +83,6 @@ function start_ads_init_flow()
 	// Optional paid event stream. This is now unit/void.
 	//admob_events_on_paid_event(true, function(data)
 	//	{
-		//    if (data.event_type != AdMobPaidEventCallbackEvent.Paid)
-		//    {
-		//        return;
-		//    }
-
 		//    var _unit_id =
 		//        variable_struct_exists(data, "unit_id")
 		//            ? data.unit_id

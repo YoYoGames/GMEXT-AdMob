@@ -207,7 +207,7 @@ public class GMAdMob extends GMAdMobInternal {
                     initializeAdUnits();
                     isInitialized = true;
 
-                    sendAsyncEvent("AdMob_OnInitialized", eventPayload("AdMob_OnInitialized"));
+                    sendAsyncEvent("AdMob_OnInitialized", eventPayloadSimple(AdMobError.Ok.value(), ""));
                 });
             } catch (Exception e) {
                 Log.i(LOG_TAG, "GoogleMobileAds Init Error: " + e.toString());
@@ -503,7 +503,7 @@ public class GMAdMob extends GMAdMobInternal {
 	
 				@Override
 				public void onAdLoaded() {
-					sendAsyncEvent("AdMob_Banner_OnLoaded", eventPayload("AdMob_Banner_OnLoaded"));
+					sendAsyncEvent("AdMob_Banner_OnLoaded", eventPayload(AdMobBannerCallbackEvent.Loaded.value()));
 				}
 	
 				@Override
@@ -511,7 +511,7 @@ public class GMAdMob extends GMAdMobInternal {
 					sendAsyncEvent(
 					    "AdMob_Banner_OnLoadFailed",
 					    eventPayload(
-					        "AdMob_Banner_OnLoadFailed",
+					        AdMobBannerCallbackEvent.LoadFailed.value(),
 					        (double) loadAdError.getCode(),
 					        loadAdError.getMessage()
 					    )
@@ -520,17 +520,17 @@ public class GMAdMob extends GMAdMobInternal {
 				
 				@Override
 				public void onAdOpened() {
-					sendAsyncEvent("AdMob_Banner_OnOpened", eventPayload("AdMob_Banner_OnOpened"));
+					sendAsyncEvent("AdMob_Banner_OnOpened", eventPayload(AdMobBannerCallbackEvent.Opened.value()));
 				}
 
 				@Override
 				public void onAdClicked() {
-					sendAsyncEvent("AdMob_Banner_OnClicked", eventPayload("AdMob_Banner_OnClicked"));
+					sendAsyncEvent("AdMob_Banner_OnClicked", eventPayload(AdMobBannerCallbackEvent.Clicked.value()));
 				}
 
 				@Override
 				public void onAdClosed() {
-					sendAsyncEvent("AdMob_Banner_OnClosed", eventPayload("AdMob_Banner_OnClosed"));
+					sendAsyncEvent("AdMob_Banner_OnClosed", eventPayload(AdMobBannerCallbackEvent.Closed.value()));
 				}
 			});
 
@@ -680,7 +680,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_Interstitial_OnLoaded",
-					    eventPayload("AdMob_Interstitial_OnLoaded")
+					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
                 }
@@ -689,8 +689,7 @@ public class GMAdMob extends GMAdMobInternal {
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     sendAsyncEvent(
                         "AdMob_Interstitial_OnLoadFailed",
-                        eventPayload(
-                            "AdMob_Interstitial_OnLoadFailed",
+                        eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
                         )
@@ -720,7 +719,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_Interstitial_OnDismissed",
-					    eventPayload("AdMob_Interstitial_OnDismissed")
+					    eventPayload(AdMobInterstitialCallbackEvent.Dismissed.value())
 					        .kv("unit_id", interstitialAdRef.getAdUnitId())
 					);
                 }
@@ -735,7 +734,7 @@ public class GMAdMob extends GMAdMobInternal {
                     sendAsyncEvent(
                         "AdMob_Interstitial_OnShowFailed",
                         eventPayload(
-                            "AdMob_Interstitial_OnShowFailed",
+                            AdMobInterstitialCallbackEvent.ShowFailed.value(),
                             (double) adError.getCode(),
                             adError.getMessage()
                         )
@@ -748,7 +747,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_Interstitial_OnFullyShown",
-					    eventPayload("AdMob_Interstitial_OnFullyShown")
+					    eventPayload(AdMobInterstitialCallbackEvent.Shown.value())
 					        .kv("unit_id", interstitialAdRef.getAdUnitId())
 					);
                 }
@@ -898,7 +897,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_RewardedVideo_OnLoaded",
-					    eventPayload("AdMob_RewardedVideo_OnLoaded")
+					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
                 }
@@ -907,8 +906,7 @@ public class GMAdMob extends GMAdMobInternal {
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     sendAsyncEvent(
                         "AdMob_RewardedVideo_OnLoadFailed",
-                        eventPayload(
-                            "AdMob_RewardedVideo_OnLoadFailed",
+                        eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
                         )
@@ -941,7 +939,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_RewardedVideo_OnDismissed",
-					    eventPayload("AdMob_RewardedVideo_OnDismissed")
+					    eventPayload(AdMobRewardedVideoCallbackEvent.Dismissed.value())
 					        .kv("unit_id", rewardedAdRef.getAdUnitId())
 					);
                 }
@@ -956,7 +954,7 @@ public class GMAdMob extends GMAdMobInternal {
                     sendAsyncEvent(
                         "AdMob_RewardedVideo_OnShowFailed",
                         eventPayload(
-                            "AdMob_RewardedVideo_OnShowFailed",
+                            AdMobRewardedVideoCallbackEvent.ShowFailed.value(),
                             (double) adError.getCode(),
                             adError.getMessage()
                         )
@@ -968,7 +966,7 @@ public class GMAdMob extends GMAdMobInternal {
                 public void onAdShowedFullScreenContent() {
                     sendAsyncEvent(
                         "AdMob_RewardedVideo_OnFullyShown",
-                        eventPayload("AdMob_RewardedVideo_OnFullyShown")
+                        eventPayload(AdMobRewardedVideoCallbackEvent.Shown.value())
                             .kv("unit_id", rewardedAdRef.getAdUnitId())
                     );
                 }
@@ -980,7 +978,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                 sendAsyncEvent(
                     "AdMob_RewardedVideo_OnReward",
-                    eventPayload("AdMob_RewardedVideo_OnReward")
+                    eventPayload(AdMobRewardedVideoCallbackEvent.Reward.value())
                         .kv("unit_id", rewardedAdRef.getAdUnitId())
                         .kv("reward_amount", (double) rewardAmount)
                         .kv("reward_type", rewardType)
@@ -1088,7 +1086,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_RewardedInterstitial_OnLoaded",
-					    eventPayload("AdMob_RewardedInterstitial_OnLoaded")
+					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
                 }
@@ -1097,8 +1095,7 @@ public class GMAdMob extends GMAdMobInternal {
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     sendAsyncEvent(
                         "AdMob_RewardedInterstitial_OnLoadFailed",
-                        eventPayload(
-                            "AdMob_RewardedInterstitial_OnLoadFailed",
+                        eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
                         )
@@ -1130,7 +1127,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 					sendAsyncEvent(
 					    "AdMob_RewardedInterstitial_OnDismissed",
-					    eventPayload("AdMob_RewardedInterstitial_OnDismissed")
+					    eventPayload(AdMobRewardedInterstitialCallbackEvent.Dismissed.value())
 					        .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
 					);
                 }
@@ -1145,7 +1142,7 @@ public class GMAdMob extends GMAdMobInternal {
                     sendAsyncEvent(
                         "AdMob_RewardedInterstitial_OnShowFailed",
                         eventPayload(
-                            "AdMob_RewardedInterstitial_OnShowFailed",
+                            AdMobRewardedInterstitialCallbackEvent.ShowFailed.value(),
                             (double) adError.getCode(),
                             adError.getMessage()
                         )
@@ -1157,7 +1154,7 @@ public class GMAdMob extends GMAdMobInternal {
                 public void onAdShowedFullScreenContent() {
 					sendAsyncEvent(
 					    "AdMob_RewardedInterstitial_OnFullyShown",
-					    eventPayload("AdMob_RewardedInterstitial_OnFullyShown")
+					    eventPayload(AdMobRewardedInterstitialCallbackEvent.Shown.value())
 					        .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
 					);
                 }
@@ -1169,7 +1166,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                 sendAsyncEvent(
                     "AdMob_RewardedInterstitial_OnReward",
-                    eventPayload("AdMob_RewardedInterstitial_OnReward")
+                    eventPayload(AdMobRewardedInterstitialCallbackEvent.Reward.value())
                         .kv("unit_id", rewardedInterstitialAdRef.getAdUnitId())
                         .kv("reward_amount", (double) rewardAmount)
                         .kv("reward_type", rewardType)
@@ -1285,7 +1282,7 @@ public class GMAdMob extends GMAdMobInternal {
 
 							sendAsyncEvent(
 							    "AdMob_AppOpenAd_OnLoaded",
-							    eventPayload("AdMob_AppOpenAd_OnLoaded")
+							    eventPayloadSimple(AdMobError.Ok.value(), "")
 							        .kv("unit_id", adUnitId)
 							);
                         }
@@ -1296,8 +1293,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                             sendAsyncEvent(
                                 "AdMob_AppOpenAd_OnLoadFailed",
-                                eventPayload(
-                                    "AdMob_AppOpenAd_OnLoadFailed",
+                                eventPayloadSimple(
                                     (double) loadAdError.getCode(),
                                     loadAdError.getMessage()
                                 )
@@ -1327,7 +1323,7 @@ public class GMAdMob extends GMAdMobInternal {
                 	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
                     appOpenAd = null;
 					
-                    sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", eventPayload("AdMob_AppOpenAd_OnDismissed"));
+                    sendAsyncEvent("AdMob_AppOpenAd_OnDismissed", eventPayload(AdMobAppOpenAdCallbackEvent.Dismissed.value()));
 
                     // If AppOpenAd is being automatically managed
                     if (triggerAppOpenAd) {
@@ -1347,7 +1343,7 @@ public class GMAdMob extends GMAdMobInternal {
 					sendAsyncEvent(
 					    "AdMob_AppOpenAd_OnShowFailed",
 					    eventPayload(
-					        "AdMob_AppOpenAd_OnShowFailed",
+					        AdMobAppOpenAdCallbackEvent.ShowFailed.value(),
 					        (double) adError.getCode(),
 					        adError.getMessage()
 					    )
@@ -1362,7 +1358,7 @@ public class GMAdMob extends GMAdMobInternal {
 	
 				@Override
 				public void onAdShowedFullScreenContent() {
-					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", eventPayload("AdMob_AppOpenAd_OnFullyShown"));
+					sendAsyncEvent("AdMob_AppOpenAd_OnFullyShown", eventPayload(AdMobAppOpenAdCallbackEvent.Shown.value()));
 				}
 			});
 	
@@ -1475,15 +1471,14 @@ public class GMAdMob extends GMAdMobInternal {
 
 			consentInformation = UserMessagingPlatform.getConsentInformation(activity);
 			consentInformation.requestConsentInfoUpdate(activity, params,
-					() -> 
+					() ->
 					{
-						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", eventPayload("AdMob_Consent_OnRequestInfoUpdated"));
+						sendAsyncEvent("AdMob_Consent_OnRequestInfoUpdated", eventPayloadSimple(AdMobError.Ok.value(), ""));
 					},
 					formError -> {
 						sendAsyncEvent(
 						    "AdMob_Consent_OnRequestInfoUpdateFailed",
-						    eventPayload(
-						        "AdMob_Consent_OnRequestInfoUpdateFailed",
+						    eventPayloadSimple(
 						        (double) formError.getErrorCode(),
 						        formError.getMessage()
 						    )
@@ -1529,13 +1524,12 @@ public class GMAdMob extends GMAdMobInternal {
 		RunnerActivity.ViewHandler.post(() -> UserMessagingPlatform.loadConsentForm(activity,
 				consentForm -> {
 					consentFormInstance = consentForm;
-					sendAsyncEvent("AdMob_Consent_OnLoaded", eventPayload("AdMob_Consent_OnLoaded"));
+					sendAsyncEvent("AdMob_Consent_OnLoaded", eventPayloadSimple(AdMobError.Ok.value(), ""));
 				},
 				formError -> {
 					sendAsyncEvent(
 					    "AdMob_Consent_OnLoadFailed",
-					    eventPayload(
-					        "AdMob_Consent_OnLoadFailed",
+					    eventPayloadSimple(
 					        (double) formError.getErrorCode(),
 					        formError.getMessage()
 					    )
@@ -1559,12 +1553,11 @@ public class GMAdMob extends GMAdMobInternal {
 			if (consentForm != null) {
 				consentForm.show(activity, formError -> {
 					if (formError == null) {
-						sendAsyncEvent("AdMob_Consent_OnShown", eventPayload("AdMob_Consent_OnShown"));
+						sendAsyncEvent("AdMob_Consent_OnShown", eventPayloadSimple(AdMobError.Ok.value(), ""));
 					} else {
 						sendAsyncEvent(
 						    "AdMob_Consent_OnShowFailed",
-						    eventPayload(
-						        "AdMob_Consent_OnShowFailed",
+						    eventPayloadSimple(
 						        (double) formError.getErrorCode(),
 						        formError.getMessage()
 						    )
@@ -1950,21 +1943,12 @@ public class GMAdMob extends GMAdMobInternal {
         return new GMExtWire.StructStream(4096);
     }
 
-    private GMExtWire.StructStream eventPayload(String eventType) {
+    private GMExtWire.StructStream eventPayload(int eventType) {
         return eventPayload(eventType, AdMobError.Ok.value(), "");
     }
 
-    private GMExtWire.StructStream eventPayload(
-        String eventType,
-        double code,
-        String errorMessage) {
-        String normalizedEventType = toSnakeCase(eventType);
-        boolean failed =
-            code != AdMobError.Ok.value()
-            || normalizedEventType.endsWith("failed")
-            || normalizedEventType.endsWith("load_failed")
-            || normalizedEventType.endsWith("show_failed")
-            || normalizedEventType.endsWith("request_info_update_failed");
+    private GMExtWire.StructStream eventPayload(int eventType, double code, String errorMessage) {
+        boolean failed = code != AdMobError.Ok.value();
 
         String safeError = safeString(errorMessage);
         if (!safeError.isEmpty())
@@ -1972,82 +1956,26 @@ public class GMAdMob extends GMAdMobInternal {
 
         return streamStruct()
             .kv("success", !failed)
-            .kv("event_type", callbackEventTypeForName(normalizedEventType))
+            .kv("event_type", eventType)
             .kv("code", code)
             .kv("error_code", code)
             .kv("error_message", safeError);
     }
 
-    private int callbackEventTypeForName(String eventType) {
-        switch (eventType) {
-            case "admob_on_initialized":
-                return AdMobInitializeCallbackEvent.Initialized.value();
+    private GMExtWire.StructStream eventPayloadSimple(double code, String errorMessage) {
+        boolean failed = code != AdMobError.Ok.value();
 
-            case "admob_banner_on_loaded":
-                return AdMobBannerCallbackEvent.Loaded.value();
-            case "admob_banner_on_load_failed":
-                return AdMobBannerCallbackEvent.LoadFailed.value();
-            case "admob_banner_on_opened":
-                return AdMobBannerCallbackEvent.Opened.value();
-            case "admob_banner_on_clicked":
-                return AdMobBannerCallbackEvent.Clicked.value();
-            case "admob_banner_on_closed":
-                return AdMobBannerCallbackEvent.Closed.value();
+        String safeError = safeString(errorMessage);
+        if (!safeError.isEmpty())
+            failed = true;
 
-            case "admob_interstitial_on_loaded":
-            case "admob_rewarded_video_on_loaded":
-            case "admob_rewarded_interstitial_on_loaded":
-            case "admob_app_open_ad_on_loaded":
-                return AdMobInterstitialCallbackEvent.Loaded.value();
-
-            case "admob_interstitial_on_load_failed":
-            case "admob_rewarded_video_on_load_failed":
-            case "admob_rewarded_interstitial_on_load_failed":
-            case "admob_app_open_ad_on_load_failed":
-                return AdMobInterstitialCallbackEvent.LoadFailed.value();
-
-            case "admob_interstitial_on_fully_shown":
-            case "admob_rewarded_video_on_fully_shown":
-            case "admob_rewarded_interstitial_on_fully_shown":
-            case "admob_app_open_ad_on_fully_shown":
-                return AdMobInterstitialCallbackEvent.Shown.value();
-
-            case "admob_interstitial_on_show_failed":
-            case "admob_rewarded_video_on_show_failed":
-            case "admob_rewarded_interstitial_on_show_failed":
-            case "admob_app_open_ad_on_show_failed":
-                return AdMobInterstitialCallbackEvent.ShowFailed.value();
-
-            case "admob_interstitial_on_dismissed":
-            case "admob_rewarded_video_on_dismissed":
-            case "admob_rewarded_interstitial_on_dismissed":
-            case "admob_app_open_ad_on_dismissed":
-                return AdMobInterstitialCallbackEvent.Dismissed.value();
-
-            case "admob_rewarded_video_on_reward":
-            case "admob_rewarded_interstitial_on_reward":
-                return AdMobRewardedVideoCallbackEvent.Reward.value();
-
-            case "admob_consent_on_request_info_updated":
-                return AdMobConsentCallbackEvent.RequestInfoUpdated.value();
-            case "admob_consent_on_request_info_update_failed":
-                return AdMobConsentCallbackEvent.RequestInfoUpdateFailed.value();
-            case "admob_consent_on_loaded":
-                return AdMobConsentCallbackEvent.Loaded.value();
-            case "admob_consent_on_load_failed":
-                return AdMobConsentCallbackEvent.LoadFailed.value();
-            case "admob_consent_on_shown":
-                return AdMobConsentCallbackEvent.Dismissed.value();
-            case "admob_consent_on_show_failed":
-                return AdMobConsentCallbackEvent.ShowFailed.value();
-
-            case "admob_on_paid_event":
-                return AdMobPaidEventCallbackEvent.Paid.value();
-
-            default:
-                return -1;
-        }
+        return streamStruct()
+            .kv("success", !failed)
+            .kv("code", code)
+            .kv("error_code", code)
+            .kv("error_message", safeError);
     }
+
 
     private void callbackResult(GMFunction callback, int eventType, double code) {
         callbackResult(callback, eventType, code == AdMobError.Ok.value(), code);
@@ -2115,14 +2043,14 @@ public class GMAdMob extends GMAdMobInternal {
     private void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
                                     AdapterResponseInfo loadedAdapterResponseInfo, String mediationAdapterClassName) {
 
-        GMExtWire.StructStream payload =
-            eventPayload("AdMob_OnPaidEvent")
-                .kv("mediation_adapter_class_name", safeString(mediationAdapterClassName))
-                .kv("unit_id", safeString(adUnitId))
-                .kv("ad_type", safeString(adType))
-                .kv("micros", adValue.getValueMicros())
-                .kv("currency_code", safeString(adValue.getCurrencyCode()))
-                .kv("precision", (double) adValue.getPrecisionType());
+        GMExtWire.StructStream payload = streamStruct()
+            .kv("success", true)
+            .kv("mediation_adapter_class_name", safeString(mediationAdapterClassName))
+            .kv("unit_id", safeString(adUnitId))
+            .kv("ad_type", safeString(adType))
+            .kv("micros", adValue.getValueMicros())
+            .kv("currency_code", safeString(adValue.getCurrencyCode()))
+            .kv("precision", (double) adValue.getPrecisionType());
 
         if (loadedAdapterResponseInfo != null) {
             payload
