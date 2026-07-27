@@ -32,22 +32,48 @@ file(MAKE_DIRECTORY "${_LOCAL_GEM_BIN}")
 set(_BUNDLE_DIR "${CMAKE_BINARY_DIR}/bundle")
 file(MAKE_DIRECTORY "${_BUNDLE_DIR}")
 
+# --- Resolve a known-good, CURRENT macOS SDK path ---
+#
+# Don't trust whatever SDK the host Ruby's own RbConfig was built against
+# (its baked -isysroot can go stale/nonexistent after an Xcode upgrade
+# removes the old SDK version) and don't trust the ambient SDKROOT env var
+# either (unsetting it isn't enough on its own - see below). Resolve the
+# host's actual current macOS SDK fresh, every run, so this step never
+# depends on whatever state happens to be lying around on the machine.
+execute_process(
+  COMMAND xcrun --sdk macosx --show-sdk-path
+  OUTPUT_VARIABLE _MACOS_SDK_PATH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  RESULT_VARIABLE _sdk_res
+)
+if(NOT _sdk_res EQUAL 0 OR NOT EXISTS "${_MACOS_SDK_PATH}")
+  message(FATAL_ERROR "Could not resolve a valid macOS SDK ('xcrun --sdk macosx --show-sdk-path' returned '${_MACOS_SDK_PATH}', exit ${_sdk_res}). Check your Xcode Command Line Tools: xcode-select -p, xcodebuild -runFirstLaunch.")
+endif()
+
 # Helper: env for ALL ruby/bundler invocations
 #
 # This runs inside an Xcode "Run Script" build phase for an iOS target, so
 # Xcode has already injected its SDK/architecture/compiler env vars (SDKROOT,
-# ARCHS, CC, CFLAGS, LDFLAGS, ...) into this process for the iOS build.
-# Bundler/RubyGems building a native gem extension (e.g. xcodeproj's nkf
-# dependency) inherits that environment and tries to cross-compile the
-# extension for iOS instead of the host macOS Ruby it actually links
-# against - the compiler picks up the iOS SDK/flags but links against the
-# host libruby.dylib, which fails at link time ("building for iOS, but
-# linking in dylib ... built for macOS"). This is a host-only tool step, so
-# these must be genuinely unset (--unset), not set to an empty string: Ruby's
-# own mkmf/RbConfig fallback logic (e.g. `ENV['CFLAGS'] || RbConfig::CONFIG[...]`)
+# ARCHS, CC, CFLAGS, LDFLAGS, ...) into this process for the iOS build -
+# CMake's Xcode generator applies CMAKE_SYSTEM_NAME=iOS to every target in
+# the generated .xcodeproj, including this non-compiling utility one, so
+# there's no way to keep this target iOS-free at the project-generation
+# level. Bundler/RubyGems building a native gem extension (e.g. xcodeproj's
+# nkf dependency) inherits that environment and tries to cross-compile the
+# extension for iOS instead of the host macOS Ruby it actually links against
+# - the compiler picks up the iOS SDK/flags but links against the host
+# libruby.dylib, which fails at link time ("building for iOS, but linking in
+# dylib ... built for macOS").
+#
+# Genuinely unsetting these (--unset, not an empty string - Ruby's own
+# mkmf/RbConfig fallback logic like `ENV['CFLAGS'] || RbConfig::CONFIG[...]`
 # treats an empty string as "the user provided a value" and drops Ruby's own
-# correct baked-in -isysroot default instead of falling back to it, which
-# then fails differently (stdio.h/standard headers not found at all).
+# baked default instead of falling back to it) is only half the fix: it
+# still leaves header/library resolution up to whatever sysroot Ruby's own
+# RbConfig happens to have baked in, which can itself be stale. So SDKROOT/
+# CFLAGS/CPPFLAGS/LDFLAGS get an explicit, freshly-resolved macOS sysroot
+# instead of just being unset, and only the platform/toolchain-selection
+# vars that have no reason to be set at all for a host tool are unset.
 set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "BUNDLE_GEMFILE=${_GEMFILE}"
   "BUNDLE_PATH=${_BUNDLE_DIR}"
@@ -55,7 +81,10 @@ set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "GEM_HOME=${_LOCAL_GEM_HOME}"
   "GEM_PATH=${_LOCAL_GEM_HOME}"
   "PATH=${_LOCAL_GEM_BIN}:$ENV{PATH}"
-  --unset=SDKROOT
+  "SDKROOT=${_MACOS_SDK_PATH}"
+  "CFLAGS=-isysroot ${_MACOS_SDK_PATH}"
+  "CPPFLAGS=-isysroot ${_MACOS_SDK_PATH}"
+  "LDFLAGS=-isysroot ${_MACOS_SDK_PATH}"
   --unset=ARCHS
   --unset=PLATFORM_NAME
   --unset=IPHONEOS_DEPLOYMENT_TARGET
@@ -63,10 +92,7 @@ set(_ENV_CMD ${CMAKE_COMMAND} -E env
   --unset=CXX
   --unset=CPP
   --unset=LD
-  --unset=CFLAGS
-  --unset=CPPFLAGS
   --unset=CXXFLAGS
-  --unset=LDFLAGS
   --unset=OTHER_CFLAGS
   --unset=OTHER_CPLUSPLUSFLAGS
   --unset=OTHER_LDFLAGS
