@@ -4,6 +4,12 @@ if(NOT DEFINED EXT_REPO_ROOT OR EXT_REPO_ROOT STREQUAL "")
   message(FATAL_ERROR "EXT_REPO_ROOT is empty (expected repo root path).")
 endif()
 
+# `cmake -E env --unset=<name>` (used below to strip Xcode's injected iOS
+# build env out of the Ruby/Bundler invocations) needs CMake 3.24+.
+if(CMAKE_VERSION VERSION_LESS 3.24)
+  message(FATAL_ERROR "This script requires CMake 3.24+ (found ${CMAKE_VERSION}) for 'cmake -E env --unset'. Upgrade CMake, e.g. `brew upgrade cmake`.")
+endif()
+
 # --- Locate ruby (only) ---
 find_program(RUBY_EXECUTABLE ruby HINTS /opt/homebrew/opt/ruby/bin /usr/bin)
 if(NOT RUBY_EXECUTABLE)
@@ -37,8 +43,11 @@ file(MAKE_DIRECTORY "${_BUNDLE_DIR}")
 # against - the compiler picks up the iOS SDK/flags but links against the
 # host libruby.dylib, which fails at link time ("building for iOS, but
 # linking in dylib ... built for macOS"). This is a host-only tool step, so
-# blank these out to force ruby/gem/bundle to always build against the host
-# toolchain regardless of what platform Xcode's outer build is targeting.
+# these must be genuinely unset (--unset), not set to an empty string: Ruby's
+# own mkmf/RbConfig fallback logic (e.g. `ENV['CFLAGS'] || RbConfig::CONFIG[...]`)
+# treats an empty string as "the user provided a value" and drops Ruby's own
+# correct baked-in -isysroot default instead of falling back to it, which
+# then fails differently (stdio.h/standard headers not found at all).
 set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "BUNDLE_GEMFILE=${_GEMFILE}"
   "BUNDLE_PATH=${_BUNDLE_DIR}"
@@ -46,21 +55,21 @@ set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "GEM_HOME=${_LOCAL_GEM_HOME}"
   "GEM_PATH=${_LOCAL_GEM_HOME}"
   "PATH=${_LOCAL_GEM_BIN}:$ENV{PATH}"
-  "SDKROOT="
-  "ARCHS="
-  "PLATFORM_NAME="
-  "IPHONEOS_DEPLOYMENT_TARGET="
-  "CC="
-  "CXX="
-  "CPP="
-  "LD="
-  "CFLAGS="
-  "CPPFLAGS="
-  "CXXFLAGS="
-  "LDFLAGS="
-  "OTHER_CFLAGS="
-  "OTHER_CPLUSPLUSFLAGS="
-  "OTHER_LDFLAGS="
+  --unset=SDKROOT
+  --unset=ARCHS
+  --unset=PLATFORM_NAME
+  --unset=IPHONEOS_DEPLOYMENT_TARGET
+  --unset=CC
+  --unset=CXX
+  --unset=CPP
+  --unset=LD
+  --unset=CFLAGS
+  --unset=CPPFLAGS
+  --unset=CXXFLAGS
+  --unset=LDFLAGS
+  --unset=OTHER_CFLAGS
+  --unset=OTHER_CPLUSPLUSFLAGS
+  --unset=OTHER_LDFLAGS
 )
 
 # --- Ensure bundler is available in the local GEM_HOME ---
