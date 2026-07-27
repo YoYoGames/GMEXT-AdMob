@@ -27,6 +27,18 @@ set(_BUNDLE_DIR "${CMAKE_BINARY_DIR}/bundle")
 file(MAKE_DIRECTORY "${_BUNDLE_DIR}")
 
 # Helper: env for ALL ruby/bundler invocations
+#
+# This runs inside an Xcode "Run Script" build phase for an iOS target, so
+# Xcode has already injected its SDK/architecture/compiler env vars (SDKROOT,
+# ARCHS, CC, CFLAGS, LDFLAGS, ...) into this process for the iOS build.
+# Bundler/RubyGems building a native gem extension (e.g. xcodeproj's nkf
+# dependency) inherits that environment and tries to cross-compile the
+# extension for iOS instead of the host macOS Ruby it actually links
+# against - the compiler picks up the iOS SDK/flags but links against the
+# host libruby.dylib, which fails at link time ("building for iOS, but
+# linking in dylib ... built for macOS"). This is a host-only tool step, so
+# blank these out to force ruby/gem/bundle to always build against the host
+# toolchain regardless of what platform Xcode's outer build is targeting.
 set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "BUNDLE_GEMFILE=${_GEMFILE}"
   "BUNDLE_PATH=${_BUNDLE_DIR}"
@@ -34,6 +46,21 @@ set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "GEM_HOME=${_LOCAL_GEM_HOME}"
   "GEM_PATH=${_LOCAL_GEM_HOME}"
   "PATH=${_LOCAL_GEM_BIN}:$ENV{PATH}"
+  "SDKROOT="
+  "ARCHS="
+  "PLATFORM_NAME="
+  "IPHONEOS_DEPLOYMENT_TARGET="
+  "CC="
+  "CXX="
+  "CPP="
+  "LD="
+  "CFLAGS="
+  "CPPFLAGS="
+  "CXXFLAGS="
+  "LDFLAGS="
+  "OTHER_CFLAGS="
+  "OTHER_CPLUSPLUSFLAGS="
+  "OTHER_LDFLAGS="
 )
 
 # --- Ensure bundler is available in the local GEM_HOME ---
