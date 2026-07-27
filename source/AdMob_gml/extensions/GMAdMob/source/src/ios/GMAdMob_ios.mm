@@ -10,30 +10,13 @@
 #include <deque>
 
 
-extern int CreateDsMap( int _num, ... );
-extern void CreateAsynEventWithDSMap(int dsmapindex, int event_index);
 extern UIViewController *g_controller;
 extern UIView *g_glView;
 extern int g_DeviceWidth;
 extern int g_DeviceHeight;
 
-extern "C" void dsMapClear(int _dsMap );
-extern "C" int dsMapCreate();
-extern "C" void dsMapAddInt(int _dsMap, char* _key, int _value);
-extern "C" void dsMapAddDouble(int _dsMap, char* _key, double _value);
-extern "C" void dsMapAddString(int _dsMap, char* _key, char* _value);
-
-extern "C" int dsListCreate();
-extern "C" void dsListAddInt(int _dsList, int _value);
-extern "C" void dsListAddString(int _dsList, char* _value);
-extern "C" const char* dsListGetValueString(int _dsList, int _listIdx);
-extern "C" double dsListGetValueDouble(int _dsList, int _listIdx);
-extern "C" int dsListGetSize(int _dsList);
-
 extern "C" const char* extOptGetString(char* _ext, char* _opt);
 extern "C" const char* extGetVersion(char* _ext);
-
-extern "C" void createSocialAsyncEventWithDSMap(int dsmapindex);
 
 static gm::wire::GMFunction g_initialize_callback = nil;
 static gm::wire::GMFunction g_paid_event_callback = nil;
@@ -42,11 +25,11 @@ static gm::wire::GMFunction g_interstitial_show_callback = nil;
 static gm::wire::GMFunction g_rewarded_video_show_callback = nil;
 static gm::wire::GMFunction g_rewarded_interstitial_show_callback = nil;
 static gm::wire::GMFunction g_app_open_enable_callback = nil;
-static gm::wire::GMFunction g_app_open_load_callback = nil;
-static gm::wire::GMFunction g_app_open_show_callback = nil;
-static gm::wire::GMFunction g_consent_request_callback = nil;
-static gm::wire::GMFunction g_consent_load_callback = nil;
-static gm::wire::GMFunction g_consent_show_callback = nil;
+static std::deque<gm::wire::GMFunction> g_app_open_load_callbacks;
+static std::deque<gm::wire::GMFunction> g_app_open_show_callbacks;
+static std::deque<gm::wire::GMFunction> g_consent_request_callbacks;
+static std::deque<gm::wire::GMFunction> g_consent_load_callbacks;
+static std::deque<gm::wire::GMFunction> g_consent_show_callbacks;
 static std::deque<gm::wire::GMFunction> g_interstitial_load_callbacks;
 static std::deque<gm::wire::GMFunction> g_rewarded_video_load_callbacks;
 static std::deque<gm::wire::GMFunction> g_rewarded_interstitial_load_callbacks;
@@ -109,7 +92,7 @@ static const char *AdMobCString(NSString *value)
     return value != nil ? value.UTF8String : "";
 }
 
-static gm::wire::StructStream AdMobPayload(int eventType, double code, const char *errorMessage)
+static gm::wire::StructStream AdMobPayload(int eventType, double code, const char *errorMessage, const char *errorDomain = "")
 {
     BOOL failed = ((int)code != 0);
 
@@ -125,6 +108,7 @@ static gm::wire::StructStream AdMobPayload(int eventType, double code, const cha
     payload.add("code", code);
     payload.add("error_code", code);
     payload.add("error_message", std::string(safeError));
+    payload.add("error_domain", std::string(errorDomain != nullptr ? errorDomain : ""));
 
     return payload;
 }
@@ -134,7 +118,7 @@ static gm::wire::StructStream AdMobPayload(int eventType)
     return AdMobPayload(eventType, 0.0, "");
 }
 
-static gm::wire::StructStream AdMobPayloadSimple(double code, const char *errorMessage)
+static gm::wire::StructStream AdMobPayloadSimple(double code, const char *errorMessage, const char *errorDomain = "")
 {
     BOOL failed = ((int)code != 0);
     const char *safeError = errorMessage != nullptr ? errorMessage : "";
@@ -146,6 +130,7 @@ static gm::wire::StructStream AdMobPayloadSimple(double code, const char *errorM
     payload.add("code", code);
     payload.add("error_code", code);
     payload.add("error_message", std::string(safeError));
+    payload.add("error_domain", std::string(errorDomain != nullptr ? errorDomain : ""));
 
     return payload;
 }
@@ -267,6 +252,7 @@ static void AdMobCallbackResult(
 @property (nonatomic, strong) NSString *serverSideVerificationUserId;
 @property (nonatomic, strong) NSString *serverSideVerificationCustomData;
 @property (nonatomic, strong) UMPConsentForm *consentForm;
+@property (nonatomic, assign) BOOL bannerLoadPending;
 @end
 
 @implementation GMAdMob
@@ -283,6 +269,8 @@ static void AdMobCallbackResult(
         self.rewardedInterstitialAdUnitId = @"";
         self.appOpenAdUnitId = @"";
         
+        self.bannerLoadPending = NO;
+
         self.interstitialAdQueueCapacity = 1;
         self.interstitialAdQueue = [[ThreadSafeQueue alloc] init];
         
@@ -624,7 +612,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
                     eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_Interstitial_OnLoadFailed" eventData:eventData];
 
@@ -786,7 +774,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedVideoCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -798,7 +786,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedVideoCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -811,7 +799,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedVideoCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::AdLimitReached
         );
 
@@ -841,7 +829,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
                     eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_RewardedVideo_OnLoadFailed" eventData:eventData];
 
@@ -901,7 +889,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobRewardedVideoCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -915,7 +903,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobRewardedVideoCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -996,7 +984,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1008,7 +996,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1021,7 +1009,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::AdLimitReached
         );
 
@@ -1051,7 +1039,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
                     eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_RewardedInterstitial_OnLoadFailed" eventData:eventData];
 
@@ -1112,7 +1100,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1126,7 +1114,7 @@ static void AdMobCallbackResult(
     {
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -1188,7 +1176,7 @@ static void AdMobCallbackResult(
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1202,7 +1190,7 @@ static void AdMobCallbackResult(
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1236,15 +1224,15 @@ static void AdMobCallbackResult(
 - (double)admob_app_open_ad_load:
     (gm::wire::GMFunction)callback
 {
-    g_app_open_load_callback = callback;
+    g_app_open_load_callbacks.push_back(callback);
 
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
     {
-        g_app_open_load_callback = nil;
+        g_app_open_load_callbacks.pop_back();
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1254,11 +1242,11 @@ static void AdMobCallbackResult(
     if (![self validateAdId:self.appOpenAdUnitId
               callingMethod:__FUNCTION__])
     {
-        g_app_open_load_callback = nil;
+        g_app_open_load_callbacks.pop_back();
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::LoadFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::LoadFailed,
             (int)gm_enums::AdMobError::InvalidAdId
         );
 
@@ -1266,7 +1254,10 @@ static void AdMobCallbackResult(
     }
 
     if ([self appOpenAdIsValid:__FUNCTION__])
+    {
+        g_app_open_load_callbacks.pop_back();
         return (int)gm_enums::AdMobError::Ok;
+    }
 
     NSString *adUnitId =
         self.appOpenAdUnitId;
@@ -1289,7 +1280,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
                     eventData.add("unit_id", std::string(AdMobCString([adUnitId copy])));
                     [self sendAsyncEvent:"AdMob_AppOpenAd_OnLoadFailed" eventData:eventData];
 
@@ -1336,15 +1327,15 @@ static void AdMobCallbackResult(
 - (double)admob_app_open_ad_show:
     (gm::wire::GMFunction)callback
 {
-    g_app_open_show_callback = callback;
+    g_app_open_show_callbacks.push_back(callback);
 
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
     {
-        g_app_open_show_callback = nil;
+        g_app_open_show_callbacks.pop_back();
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NotInitialized
         );
 
@@ -1353,11 +1344,11 @@ static void AdMobCallbackResult(
 
     if (![self appOpenAdIsValid:__FUNCTION__])
     {
-        g_app_open_show_callback = nil;
+        g_app_open_show_callbacks.pop_back();
 
         AdMobCallbackResult(
             callback,
-            (int)gm_enums::AdMobInterstitialCallbackEvent::ShowFailed,
+            (int)gm_enums::AdMobAppOpenAdCallbackEvent::ShowFailed,
             (int)gm_enums::AdMobError::NoAdsLoaded
         );
 
@@ -1426,7 +1417,7 @@ static void AdMobCallbackResult(
                                       callback:
             (gm::wire::GMFunction)callback
 {
-    g_consent_request_callback = callback;
+    g_consent_request_callbacks.push_back(callback);
 
     UMPRequestParameters *parameters =
         [[UMPRequestParameters alloc] init];
@@ -1458,7 +1449,7 @@ static void AdMobCallbackResult(
                 if (error)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]));
+                        AdMobPayloadSimple(error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
                     [self sendAsyncEvent:"AdMob_Consent_OnRequestInfoUpdateFailed" eventData:eventData];
                 }
                 else
@@ -1514,7 +1505,7 @@ static void AdMobCallbackResult(
 - (double)admob_consent_load:
     (gm::wire::GMFunction)callback
 {
-    g_consent_load_callback = callback;
+    g_consent_load_callbacks.push_back(callback);
 
     [UMPConsentForm
         loadWithCompletionHandler:
@@ -1524,7 +1515,7 @@ static void AdMobCallbackResult(
                 if (loadError)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(loadError.code, AdMobCString([loadError.localizedDescription copy]));
+                        AdMobPayloadSimple(loadError.code, AdMobCString([loadError.localizedDescription copy]), AdMobCString([loadError.domain copy]));
                     [self sendAsyncEvent:"AdMob_Consent_OnLoadFailed" eventData:eventData];
 
                     return;
@@ -1544,10 +1535,12 @@ static void AdMobCallbackResult(
 - (double)admob_consent_show:
     (gm::wire::GMFunction)callback
 {
-    g_consent_show_callback = callback;
+    g_consent_show_callbacks.push_back(callback);
 
     if (self.consentForm == nil)
     {
+        g_consent_show_callbacks.pop_back();
+
         AdMobCallbackResult(
             callback,
             (int)gm_enums::AdMobConsentCallbackEvent::ShowFailed,
@@ -1565,7 +1558,7 @@ static void AdMobCallbackResult(
                 if (dismissError)
                 {
                     gm::wire::StructStream eventData =
-                        AdMobPayloadSimple(dismissError.code, AdMobCString([dismissError.localizedDescription copy]));
+                        AdMobPayloadSimple(dismissError.code, AdMobCString([dismissError.localizedDescription copy]), AdMobCString([dismissError.domain copy]));
                     [self sendAsyncEvent:"AdMob_Consent_OnShowFailed" eventData:eventData];
                 }
                 else
@@ -1638,13 +1631,15 @@ static void AdMobCallbackResult(
 
 -(void)bannerView:(nonnull GADBannerView *)bannerView didFailToReceiveAdWithError:(nonnull NSError *)error
 {
+        self.bannerLoadPending = NO;
         gm::wire::StructStream eventData =
-        AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::LoadFailed, error.code, AdMobCString([error.localizedDescription copy]));
+        AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::LoadFailed, error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
     [self sendAsyncEvent:"AdMob_Banner_OnLoadFailed" eventData:eventData];
 }
 
 -(void)bannerViewDidReceiveAd:(nonnull GADBannerView *)bannerView
 {
+        self.bannerLoadPending = NO;
         gm::wire::StructStream eventData =
         AdMobPayload((int)gm_enums::AdMobBannerCallbackEvent::Loaded);
     eventData.add("unit_id", std::string(AdMobCString(bannerView.adUnitID)));
@@ -1717,7 +1712,7 @@ static void AdMobCallbackResult(
 
     if (eventType != -1 && adUnitID) {
         gm::wire::StructStream eventData =
-            AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy]));
+            AdMobPayload(eventType, error.code, AdMobCString([error.localizedDescription copy]), AdMobCString([error.domain copy]));
         eventData.add("unit_id", std::string(AdMobCString(adUnitID)));
         [self sendAsyncEvent:[eventName UTF8String] eventData:eventData];
     }
@@ -1777,6 +1772,8 @@ static void AdMobCallbackResult(
 
     if ([presentingAd isMemberOfClass:[GADInterstitialAd class]])
     {
+        self.isShowingAd = NO;
+
         eventType = (int)gm_enums::AdMobInterstitialCallbackEvent::Dismissed;
         eventName = @"AdMob_Interstitial_OnDismissed";
         adUnitID = [(GADInterstitialAd *)presentingAd adUnitID];
@@ -1791,6 +1788,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedAd class]])
     {
+        self.isShowingAd = NO;
+
         eventType = (int)gm_enums::AdMobRewardedVideoCallbackEvent::Dismissed;
         eventName = @"AdMob_RewardedVideo_OnDismissed";
         adUnitID = [(GADRewardedAd *)presentingAd adUnitID];
@@ -1805,6 +1804,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADRewardedInterstitialAd class]])
     {
+        self.isShowingAd = NO;
+
         eventType = (int)gm_enums::AdMobRewardedInterstitialCallbackEvent::Dismissed;
         eventName = @"AdMob_RewardedInterstitial_OnDismissed";
         adUnitID = [(GADRewardedInterstitialAd *)presentingAd adUnitID];
@@ -1820,6 +1821,8 @@ static void AdMobCallbackResult(
     }
     else if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
     {
+        self.isShowingAd = NO;
+
         eventType = (int)gm_enums::AdMobAppOpenAdCallbackEvent::Dismissed;
         eventName = @"AdMob_AppOpenAd_OnDismissed";
         adUnitID = self.appOpenAdUnitId;
@@ -1860,53 +1863,67 @@ static void AdMobCallbackResult(
     if (![self validateAdId:self.bannerAdUnitId callingMethod:callingMethod]) {
         return (int)gm_enums::AdMobError::InvalidAdId;
     }
-    
+
+    // Reject a concurrent create while a previous create's load is still in
+    // flight - deleteBannerAdView below would otherwise silently drop the
+    // still-pending callback of the banner being replaced.
+    if (self.bannerLoadPending) {
+        return (int)gm_enums::AdMobError::IllegalCall;
+    }
+
     // Remove the previous banner view if it exists
     if (self.bannerView != nil) {
         [self deleteBannerAdView];
     }
-    
-    // Create and configure the banner view
-    GADAdSize bannerSize = getBannerSize(size);
-    GADBannerView *bannerView = [[GADBannerView alloc] initWithAdSize:bannerSize];
-    
-    bannerView.translatesAutoresizingMaskIntoConstraints = NO;
-    bannerView.adUnitID = self.bannerAdUnitId;
-    bannerView.rootViewController = g_controller;
-    bannerView.delegate = self;
-    
-    // Assign the banner view to the instance variable
-    self.bannerView = bannerView;
-    
-    // Store the alignment for future reference
-    self.currentBannerAlignment = alignment;
-    
-    // Set up paid event handler if necessary
-    if (self.triggerOnPaidEvent) {
-        __weak GMAdMob *weakSelf = self;
-        __weak GADBannerView *weakBannerView = bannerView;
-        bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value) {
-            GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = weakBannerView.responseInfo.loadedAdNetworkResponseInfo;
-            [weakSelf onPaidEventHandler:value
-                                adUnitId:weakBannerView.adUnitID
-                                  adType:@"Banner"
-             loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo
-               mediationAdapterClassName:weakBannerView.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
-        };
-    }
-    
-    // Determine the vertical position based on the 'bottom' parameter
-    NSLayoutAttribute position = (bottom > 0.5) ? NSLayoutAttributeBottom : NSLayoutAttributeTop;
-    
-    // Position the banner using the helper method with alignment
-    [self addBannerView:self.bannerView
-             toPosition:position
-              alignment:self.currentBannerAlignment];
-    
-    // Load the ad request
-    GADRequest *request = [self buildAdRequest];
-    [bannerView loadRequest:request];
-    
+
+    self.bannerLoadPending = YES;
+
+    // UIKit view construction/layout must happen on the main thread - every
+    // other banner mutation (move/show/hide/remove) is already dispatched
+    // there, this was the one inconsistent entry point.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Create and configure the banner view
+        GADAdSize bannerSize = getBannerSize(size);
+        GADBannerView *bannerView = [[GADBannerView alloc] initWithAdSize:bannerSize];
+
+        bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+        bannerView.adUnitID = self.bannerAdUnitId;
+        bannerView.rootViewController = g_controller;
+        bannerView.delegate = self;
+
+        // Assign the banner view to the instance variable
+        self.bannerView = bannerView;
+
+        // Store the alignment for future reference
+        self.currentBannerAlignment = alignment;
+
+        // Set up paid event handler if necessary
+        if (self.triggerOnPaidEvent) {
+            __weak GMAdMob *weakSelf = self;
+            __weak GADBannerView *weakBannerView = bannerView;
+            bannerView.paidEventHandler = ^void(GADAdValue *_Nonnull value) {
+                GADAdNetworkResponseInfo *loadedAdNetworkResponseInfo = weakBannerView.responseInfo.loadedAdNetworkResponseInfo;
+                [weakSelf onPaidEventHandler:value
+                                    adUnitId:weakBannerView.adUnitID
+                                      adType:@"Banner"
+                 loadedAdNetworkResponseInfo:loadedAdNetworkResponseInfo
+                   mediationAdapterClassName:weakBannerView.responseInfo.adNetworkInfoArray[0].adNetworkClassName];
+            };
+        }
+
+        // Determine the vertical position based on the 'bottom' parameter
+        NSLayoutAttribute position = (bottom > 0.5) ? NSLayoutAttributeBottom : NSLayoutAttributeTop;
+
+        // Position the banner using the helper method with alignment
+        [self addBannerView:self.bannerView
+                 toPosition:position
+                  alignment:self.currentBannerAlignment];
+
+        // Load the ad request
+        GADRequest *request = [self buildAdRequest];
+        [bannerView loadRequest:request];
+    });
+
     return (int)gm_enums::AdMobError::Ok;
 }
 
@@ -2140,12 +2157,11 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
             self.isShowingAd = NO;
             return;
         }
-        
+
         if (!self.isShowingAd) {
             [self admob_app_open_ad_show:g_app_open_enable_callback];
         }
     }
-    self.isShowingAd = NO;
 }
 
 -(void) onStop
@@ -2335,47 +2351,58 @@ typedef void (^AdCleanerBlock)(id ad);
         else if ([normalizedEvent isEqualToString:@"admob_app_open_ad_on_loaded"] ||
                  [normalizedEvent isEqualToString:@"admob_app_open_ad_on_load_failed"])
         {
-            callback =
-                g_app_open_load_callback
-                    ? g_app_open_load_callback
-                    : g_app_open_enable_callback;
-
-            g_app_open_load_callback = nil;
+            if (!g_app_open_load_callbacks.empty())
+            {
+                callback = g_app_open_load_callbacks.front();
+                g_app_open_load_callbacks.pop_front();
+            }
         }
         else if ([normalizedEvent isEqualToString:@"admob_app_open_ad_on_fully_shown"])
         {
             callback =
-                g_app_open_show_callback
-                    ? g_app_open_show_callback
+                !g_app_open_show_callbacks.empty()
+                    ? g_app_open_show_callbacks.front()
                     : g_app_open_enable_callback;
         }
         else if ([normalizedEvent isEqualToString:@"admob_app_open_ad_on_dismissed"] ||
                  [normalizedEvent isEqualToString:@"admob_app_open_ad_on_show_failed"])
         {
-            callback =
-                g_app_open_show_callback
-                    ? g_app_open_show_callback
-                    : g_app_open_enable_callback;
-
-            g_app_open_show_callback = nil;
+            if (!g_app_open_show_callbacks.empty())
+            {
+                callback = g_app_open_show_callbacks.front();
+                g_app_open_show_callbacks.pop_front();
+            }
+            else
+            {
+                callback = g_app_open_enable_callback;
+            }
         }
         else if ([normalizedEvent isEqualToString:@"admob_consent_on_request_info_updated"] ||
                  [normalizedEvent isEqualToString:@"admob_consent_on_request_info_update_failed"])
         {
-            callback = g_consent_request_callback;
-            g_consent_request_callback = nil;
+            if (!g_consent_request_callbacks.empty())
+            {
+                callback = g_consent_request_callbacks.front();
+                g_consent_request_callbacks.pop_front();
+            }
         }
         else if ([normalizedEvent isEqualToString:@"admob_consent_on_loaded"] ||
                  [normalizedEvent isEqualToString:@"admob_consent_on_load_failed"])
         {
-            callback = g_consent_load_callback;
-            g_consent_load_callback = nil;
+            if (!g_consent_load_callbacks.empty())
+            {
+                callback = g_consent_load_callbacks.front();
+                g_consent_load_callbacks.pop_front();
+            }
         }
         else if ([normalizedEvent isEqualToString:@"admob_consent_on_shown"] ||
                  [normalizedEvent isEqualToString:@"admob_consent_on_show_failed"])
         {
-            callback = g_consent_show_callback;
-            g_consent_show_callback = nil;
+            if (!g_consent_show_callbacks.empty())
+            {
+                callback = g_consent_show_callbacks.front();
+                g_consent_show_callbacks.pop_front();
+            }
         }
         else if ([normalizedEvent isEqualToString:@"admob_on_paid_event"])
         {

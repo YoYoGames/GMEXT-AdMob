@@ -6,10 +6,13 @@ This repository was created with the intent of presenting users with the latest 
 This extension will work both with Android and iOS platform exports. However note that iOS version will require [installing CocoaPods](https://help.yoyogames.com/hc/en-us/articles/360008958858-iOS-and-tvOS-Using-CocoaPods) in your system (**on later versions of the IDE installing cocoapods is no longer necessary**)
 
 ANDROID SOURCE:
-`source/AdMob_gml/extensions/admob/AndroidSource/Java/`
+`source/AdMob_gml/extensions/GMAdMob/AndroidSource/Java/`
 
 IOS SOURCE:
-`source/AdMob_gml/extensions/admob/iOSSource/`
+`source/AdMob_gml/extensions/GMAdMob/source/src/ios/`
+
+This repository also bundles 5 mediation sub-extensions alongside the main `GMAdMob` extension:
+`AdMobAppLovin`, `AdMobIronSource`, `AdMobMeta`, `AdMobPangle`, and `AdMobUnityAds`.
 
 ---
 

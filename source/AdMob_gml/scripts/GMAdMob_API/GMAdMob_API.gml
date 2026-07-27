@@ -157,21 +157,21 @@ enum AdMobPaidEventCallbackEvent
  */
 function admob_initialize(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_initialize(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_initialize(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_set_test_device_id (no wrapper is required)
@@ -183,10 +183,10 @@ function admob_initialize(_callback)
  */
 function admob_events_on_paid_event(_enabled, _callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -196,12 +196,12 @@ function admob_events_on_paid_event(_enabled, _callback)
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_events_on_paid_event(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_events_on_paid_event(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_banner_set_ad_unit (no wrapper is required)
@@ -215,10 +215,10 @@ function admob_events_on_paid_event(_enabled, _callback)
  */
 function admob_banner_create(_size, _bottom, _callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -233,12 +233,12 @@ function admob_banner_create(_size, _bottom, _callback)
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_banner_create(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_banner_create(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -250,10 +250,10 @@ function admob_banner_create(_size, _bottom, _callback)
  */
 function admob_banner_create_ext(_size, _bottom, _alignment, _callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -273,12 +273,12 @@ function admob_banner_create_ext(_size, _bottom, _alignment, _callback)
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_banner_create_ext(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_banner_create_ext(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_banner_get_width (no wrapper is required)
@@ -314,21 +314,21 @@ function admob_banner_create_ext(_size, _bottom, _alignment, _callback)
  */
 function admob_interstitial_load(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_interstitial_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_interstitial_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -337,21 +337,21 @@ function admob_interstitial_load(_callback)
  */
 function admob_interstitial_show(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_interstitial_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_interstitial_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_interstitial_is_loaded (no wrapper is required)
@@ -381,21 +381,21 @@ function admob_interstitial_show(_callback)
  */
 function admob_rewarded_video_load(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_rewarded_video_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_rewarded_video_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -404,21 +404,21 @@ function admob_rewarded_video_load(_callback)
  */
 function admob_rewarded_video_show(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_rewarded_video_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_rewarded_video_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_rewarded_video_is_loaded (no wrapper is required)
@@ -442,21 +442,21 @@ function admob_rewarded_video_show(_callback)
  */
 function admob_rewarded_interstitial_load(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_rewarded_interstitial_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_rewarded_interstitial_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -465,21 +465,21 @@ function admob_rewarded_interstitial_load(_callback)
  */
 function admob_rewarded_interstitial_show(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_rewarded_interstitial_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_rewarded_interstitial_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_rewarded_interstitial_is_loaded (no wrapper is required)
@@ -498,10 +498,10 @@ function admob_rewarded_interstitial_show(_callback)
  */
 function admob_app_open_ad_enable(_orientation, _callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -511,12 +511,12 @@ function admob_app_open_ad_enable(_orientation, _callback)
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_app_open_ad_enable(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_app_open_ad_enable(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_app_open_ad_disable (no wrapper is required)
@@ -534,21 +534,21 @@ function admob_app_open_ad_enable(_orientation, _callback)
  */
 function admob_app_open_ad_load(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_app_open_ad_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_app_open_ad_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -557,21 +557,21 @@ function admob_app_open_ad_load(_callback)
  */
 function admob_app_open_ad_show(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_app_open_ad_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_app_open_ad_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_targeting_coppa (no wrapper is required)
@@ -585,8 +585,8 @@ function admob_app_open_ad_show(_callback)
  */
 function admob_targeting_max_ad_content_rating(_content_rating)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -595,9 +595,9 @@ function admob_targeting_max_ad_content_rating(_content_rating)
     if (!is_numeric(_content_rating)) show_error($"{_GMFUNCTION_} :: _content_rating expected number", true);
     buffer_write(__args_buffer, buffer_s32, _content_rating);
 
-    var _return_value = __admob_targeting_max_ad_content_rating(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_targeting_max_ad_content_rating(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -607,10 +607,10 @@ function admob_targeting_max_ad_content_rating(_content_rating)
  */
 function admob_consent_request_info_update(_debug_geography, _callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
@@ -621,12 +621,12 @@ function admob_consent_request_info_update(_debug_geography, _callback)
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_consent_request_info_update(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_consent_request_info_update(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_consent_get_status (no wrapper is required)
@@ -644,21 +644,21 @@ function admob_consent_request_info_update(_debug_geography, _callback)
  */
 function admob_consent_load(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_consent_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_consent_load(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 /**
@@ -667,21 +667,21 @@ function admob_consent_load(_callback)
  */
 function admob_consent_show(_callback)
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
+    var __available__ = __GMAdMob_is_available();
+    if (!__available__) return;
 
-    static __dispatcher = __GMAdMob_get_dispatcher();
+    var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
-    var _callback_handle = __ext_core_function_register(_callback, __dispatcher);
+    var _callback_handle = __ext_core_function_register(_callback, __dispatcher__);
     buffer_write(__args_buffer, buffer_u64, _callback_handle);
 
-    var _return_value = __admob_consent_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
+    var __return_value__ = __admob_consent_show(buffer_get_address(__args_buffer), buffer_tell(__args_buffer));
 
-    return _return_value;
+    return __return_value__;
 }
 
 // Skipping function admob_consent_reset (no wrapper is required)
@@ -699,21 +699,18 @@ function admob_consent_show(_callback)
 /// @ignore
 function __GMAdMob_get_decoders()
 {
-    static __decoders = [];
-    return __decoders;
+    static __decoders__ = [];
+    return __decoders__;
 }
 /// @ignore
 function __GMAdMob_get_dispatcher()
 {
-    static __available = __GMAdMob_is_available();
-    if (!__available) return;
-
-    static __dispatcher = new __GMNativeFunctionDispatcher(__GMAdMob_invocation_handler, __GMAdMob_get_decoders());
-    return __dispatcher;
+    static __dispatcher__ = new __GMNativeFunctionDispatcher(__GMAdMob_invocation_handler, __GMAdMob_get_decoders());
+    return __dispatcher__;
 }
 /// @ignore
 function __GMAdMob_is_available()
 {
-    static __available = extension_exists("GMAdMob");
-    return __available;
+    static __available__ = extension_exists("GMAdMob");
+    return __available__;
 }

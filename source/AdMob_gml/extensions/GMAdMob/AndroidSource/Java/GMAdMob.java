@@ -21,7 +21,6 @@ import android.provider.Settings;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,14 +104,14 @@ public class GMAdMob extends GMAdMobInternal {
     private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
     // Banner ad variables
-    private String bannerAdUnitId = "";
+    private volatile String bannerAdUnitId = "";
     private AdView bannerAdView = null;
     private AdSize bannerSize = null;
     private int currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
     private RelativeLayout bannerLayout = null;
 
     // Interstitial ad variables
-    private String interstitialAdUnitId = "";
+    private volatile String interstitialAdUnitId = "";
     private int interstitialAdQueueCapacity = 1;
     private final ConcurrentLinkedQueue<InterstitialAd> interstitialAdQueue = new ConcurrentLinkedQueue<>();
 
@@ -121,17 +120,17 @@ public class GMAdMob extends GMAdMobInternal {
 	private String serverSideVerificationCustomData = null;
 
     // Rewarded video ad variables
-    private String rewardedUnitId = "";
+    private volatile String rewardedUnitId = "";
     private int rewardedAdQueueCapacity = 1;
     private final ConcurrentLinkedQueue<RewardedAd> rewardedAdQueue = new ConcurrentLinkedQueue<>();
 
     // Rewarded interstitial ad variables
-    private String rewardedInterstitialAdUnitId = "";
+    private volatile String rewardedInterstitialAdUnitId = "";
     private int rewardedAdInterstitialQueueCapacity = 1;
     private final ConcurrentLinkedQueue<RewardedInterstitialAd> rewardedInterstitialAdQueue = new ConcurrentLinkedQueue<>();
 
     // App Open ad variables
-    private String appOpenAdUnitId = "";
+    private volatile String appOpenAdUnitId = "";
     private int appOpenAdOrientation = Configuration.ORIENTATION_UNDEFINED;
     private long appOpenAdLoadTime = 0;
     private int appOpenAdExpirationTime = 4;
@@ -144,22 +143,18 @@ public class GMAdMob extends GMAdMobInternal {
     private ConsentInformation consentInformation;
     private ConsentForm consentFormInstance;
 
-    private GMFunction initializeCallback = null;
-    private GMFunction paidEventCallback = null;
-    private GMFunction bannerCallback = null;
-    private GMFunction interstitialShowCallback = null;
-    private GMFunction rewardedVideoShowCallback = null;
-    private GMFunction rewardedInterstitialShowCallback = null;
-    private GMFunction appOpenEnableCallback = null;
-    private GMFunction appOpenLoadCallback = null;
-    private GMFunction appOpenShowCallback = null;
-    private GMFunction consentRequestInfoUpdateCallback = null;
-    private GMFunction consentLoadCallback = null;
-    private GMFunction consentShowCallback = null;
-
-    private final ConcurrentLinkedQueue<GMFunction> interstitialLoadCallbacks = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<GMFunction> rewardedVideoLoadCallbacks = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<GMFunction> rewardedInterstitialLoadCallbacks = new ConcurrentLinkedQueue<>();
+    private volatile GMFunction initializeCallback = null;
+    private volatile GMFunction paidEventCallback = null;
+    private volatile GMFunction bannerCallback = null;
+    private volatile GMFunction interstitialShowCallback = null;
+    private volatile GMFunction rewardedVideoShowCallback = null;
+    private volatile GMFunction rewardedInterstitialShowCallback = null;
+    private volatile GMFunction appOpenEnableCallback = null;
+    private volatile GMFunction appOpenLoadCallback = null;
+    private volatile GMFunction appOpenShowCallback = null;
+    private volatile GMFunction consentRequestInfoUpdateCallback = null;
+    private volatile GMFunction consentLoadCallback = null;
+    private volatile GMFunction consentShowCallback = null;
 
     public GMAdMob() {
 		Activity activity = RunnerActivity.CurrentActivity;
@@ -190,8 +185,10 @@ public class GMAdMob extends GMAdMobInternal {
 
             try {
                 Activity activity = getActivity(callingMethod);
-                if (activity == null) return;
-                
+                if (activity == null) {
+                    sendAsyncEvent("AdMob_OnInitialized", eventPayloadSimple(AdMobError.IllegalCall.value(), "Activity reference is null."));
+                    return;
+                }
 
                 MobileAds.initialize(activity, initializationStatus -> {
 
@@ -211,7 +208,7 @@ public class GMAdMob extends GMAdMobInternal {
                 });
             } catch (Exception e) {
                 Log.i(LOG_TAG, "GoogleMobileAds Init Error: " + e.toString());
-                Log.i(LOG_TAG, e.toString());
+                sendAsyncEvent("AdMob_OnInitialized", eventPayloadSimple(AdMobError.IllegalCall.value(), e.toString()));
             }
         }).start();
 
@@ -466,7 +463,7 @@ public class GMAdMob extends GMAdMobInternal {
 	
 			if (triggerOnPaidEvent) {
 				bannerAdView.setOnPaidEventListener(adValue -> {
-					AdapterResponseInfo loadedAdapterResponseInfo = Objects.requireNonNull(bannerAdView.getResponseInfo())
+					AdapterResponseInfo loadedAdapterResponseInfo = bannerAdView.getResponseInfo()
 							.getLoadedAdapterResponseInfo();
 					if (loadedAdapterResponseInfo == null) return;
 					onPaidEventHandler(adValue, bannerAdView.getAdUnitId(), "Banner",
@@ -617,8 +614,7 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return AdMobError.NullViewHandler.value();
 
-        interstitialLoadCallbacks.offer(callback);
-        loadInterstitialAd(interstitialAdUnitId, interstitialAdQueue, interstitialAdQueueCapacity, callingMethod);
+        loadInterstitialAd(interstitialAdUnitId, interstitialAdQueue, interstitialAdQueueCapacity, callback, callingMethod);
 
         return AdMobError.Ok.value();
     }
@@ -647,9 +643,9 @@ public class GMAdMob extends GMAdMobInternal {
         return interstitialAdQueue.size();
     }
 
-    private void loadInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<InterstitialAd> adQueue, final int maxInstances, final String callingMethod) {
+    private void loadInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<InterstitialAd> adQueue, final int maxInstances, final GMFunction callback, final String callingMethod) {
         RunnerActivity.ViewHandler.post(() -> {
-            
+
 			Activity activity = getActivity(callingMethod);
             if (activity == null) return;
 
@@ -663,6 +659,11 @@ public class GMAdMob extends GMAdMobInternal {
 
                     if (adQueue.size() >= maxInstances) {
                         Log.i(LOG_TAG, callingMethod + " :: Maximum number of loaded ads reached.");
+                        invokeLoadCallback(
+                            callback,
+                            eventPayloadSimple(AdMobError.AdLimitReached.value(), "Maximum number of loaded ads reached.")
+                                .kv("unit_id", adUnitId)
+                        );
                         return;
                     }
 
@@ -678,8 +679,8 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					sendAsyncEvent(
-					    "AdMob_Interstitial_OnLoaded",
+					invokeLoadCallback(
+					    callback,
 					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
@@ -687,8 +688,8 @@ public class GMAdMob extends GMAdMobInternal {
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    sendAsyncEvent(
-                        "AdMob_Interstitial_OnLoadFailed",
+                    invokeLoadCallback(
+                        callback,
                         eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
@@ -713,6 +714,7 @@ public class GMAdMob extends GMAdMobInternal {
             interstitialAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(interstitialAdRef, ad -> cleanUpAd(ad));
@@ -828,8 +830,7 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return AdMobError.NullViewHandler.value();
 
-        rewardedVideoLoadCallbacks.offer(callback);
-        loadRewardedAd(rewardedUnitId, rewardedAdQueue, rewardedAdQueueCapacity, callingMethod);
+        loadRewardedAd(rewardedUnitId, rewardedAdQueue, rewardedAdQueueCapacity, callback, callingMethod);
 
         return AdMobError.Ok.value();
     }
@@ -858,7 +859,7 @@ public class GMAdMob extends GMAdMobInternal {
         return rewardedAdQueue.size();
     }
 
-    private void loadRewardedAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedAd> adQueue, final int maxInstances, final String callingMethod) {
+    private void loadRewardedAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedAd> adQueue, final int maxInstances, final GMFunction callback, final String callingMethod) {
         RunnerActivity.ViewHandler.post(() -> {
 
             Activity activity = getActivity(callingMethod);
@@ -874,6 +875,11 @@ public class GMAdMob extends GMAdMobInternal {
 
 					if (adQueue.size() >= maxInstances) {
                         Log.i(LOG_TAG, callingMethod + " :: Maximum number of loaded ads reached.");
+                        invokeLoadCallback(
+                            callback,
+                            eventPayloadSimple(AdMobError.AdLimitReached.value(), "Maximum number of loaded ads reached.")
+                                .kv("unit_id", adUnitId)
+                        );
                         return;
                     }
 
@@ -895,8 +901,8 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					sendAsyncEvent(
-					    "AdMob_RewardedVideo_OnLoaded",
+					invokeLoadCallback(
+					    callback,
 					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
@@ -904,8 +910,8 @@ public class GMAdMob extends GMAdMobInternal {
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    sendAsyncEvent(
-                        "AdMob_RewardedVideo_OnLoadFailed",
+                    invokeLoadCallback(
+                        callback,
                         eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
@@ -933,6 +939,7 @@ public class GMAdMob extends GMAdMobInternal {
             rewardedAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedAdRef, ad -> cleanUpAd(ad));
@@ -1018,8 +1025,7 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return AdMobError.NullViewHandler.value();
 
-        rewardedInterstitialLoadCallbacks.offer(callback);
-        loadRewardedInterstitialAd(rewardedInterstitialAdUnitId, rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, callingMethod);
+        loadRewardedInterstitialAd(rewardedInterstitialAdUnitId, rewardedInterstitialAdQueue, rewardedAdInterstitialQueueCapacity, callback, callingMethod);
 
         return AdMobError.Ok.value();
     }
@@ -1048,7 +1054,7 @@ public class GMAdMob extends GMAdMobInternal {
         return rewardedInterstitialAdQueue.size();
     }
 
-    private void loadRewardedInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedInterstitialAd> adQueue, final int maxInstances, final String callingMethod) {
+    private void loadRewardedInterstitialAd(final String adUnitId, final ConcurrentLinkedQueue<RewardedInterstitialAd> adQueue, final int maxInstances, final GMFunction callback, final String callingMethod) {
         RunnerActivity.ViewHandler.post(() -> {
 
             Activity activity = getActivity(callingMethod);
@@ -1063,6 +1069,11 @@ public class GMAdMob extends GMAdMobInternal {
 
                     if (adQueue.size() >= maxInstances) {
                         Log.i(LOG_TAG, callingMethod + " :: Maximum number of loaded ads reached.");
+                        invokeLoadCallback(
+                            callback,
+                            eventPayloadSimple(AdMobError.AdLimitReached.value(), "Maximum number of loaded ads reached.")
+                                .kv("unit_id", adUnitId)
+                        );
                         return;
                     }
 
@@ -1084,8 +1095,8 @@ public class GMAdMob extends GMAdMobInternal {
                         });
                     }
 
-					sendAsyncEvent(
-					    "AdMob_RewardedInterstitial_OnLoaded",
+					invokeLoadCallback(
+					    callback,
 					    eventPayloadSimple(AdMobError.Ok.value(), "")
 					        .kv("unit_id", adUnitId)
 					);
@@ -1093,8 +1104,8 @@ public class GMAdMob extends GMAdMobInternal {
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    sendAsyncEvent(
-                        "AdMob_RewardedInterstitial_OnLoadFailed",
+                    invokeLoadCallback(
+                        callback,
                         eventPayloadSimple(
                             (double) loadAdError.getCode(),
                             loadAdError.getMessage()
@@ -1121,6 +1132,7 @@ public class GMAdMob extends GMAdMobInternal {
             rewardedInterstitialAdRef.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
 					// Use the generic cleanAd method with cleanUpAd as the cleaner
 					cleanAd(rewardedInterstitialAdRef, ad -> cleanUpAd(ad));
@@ -1184,6 +1196,7 @@ public class GMAdMob extends GMAdMobInternal {
         appOpenAdUnitId = normalizeAdUnitId(adUnitId);
     }
     public double admob_app_open_ad_enable(double orientation, final GMFunction callback) {
+        appOpenEnableCallback = callback;
 
         final String callingMethod = "admob_app_open_ad_enable";
 
@@ -1318,6 +1331,7 @@ public class GMAdMob extends GMAdMobInternal {
 			appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
 				@Override
 				public void onAdDismissedFullScreenContent() {
+                    isShowingAd = false; // Reset the flag
 
                     // Use the generic cleanAd method with cleanUpAd as the cleaner
                 	cleanAd(appOpenAd, ad -> cleanUpAd(ad));
@@ -1816,12 +1830,20 @@ public class GMAdMob extends GMAdMobInternal {
         freeLoadedInstances(queue, size - maxSize, cleaner);
     }
 
-    private void sendAsyncEvent(String eventType, GMExtWire.StructStream payload) {
+    private void runOnUiThreadOrNow(Runnable action) {
         Activity activity = RunnerActivity.CurrentActivity;
-        if (activity == null)
-            return;
+        if (activity != null)
+            activity.runOnUiThread(action);
+        else
+            action.run();
+    }
 
-        activity.runOnUiThread(() -> {
+    private void invokeLoadCallback(GMFunction callback, GMExtWire.StructStream payload) {
+        runOnUiThreadOrNow(() -> invokeCallback(callback, payload));
+    }
+
+    private void sendAsyncEvent(String eventType, GMExtWire.StructStream payload) {
+        Runnable dispatch = () -> {
             String normalizedEventType = toSnakeCase(eventType);
             GMFunction callback = null;
             boolean clearShowCallback = false;
@@ -1840,11 +1862,6 @@ public class GMAdMob extends GMAdMobInternal {
                     callback = bannerCallback;
                     break;
 
-                case "admob_interstitial_on_loaded":
-                case "admob_interstitial_on_load_failed":
-                    callback = interstitialLoadCallbacks.poll();
-                    break;
-
                 case "admob_interstitial_on_fully_shown":
                     callback = interstitialShowCallback;
                     break;
@@ -1853,11 +1870,6 @@ public class GMAdMob extends GMAdMobInternal {
                 case "admob_interstitial_on_show_failed":
                     callback = interstitialShowCallback;
                     clearShowCallback = true;
-                    break;
-
-                case "admob_rewarded_video_on_loaded":
-                case "admob_rewarded_video_on_load_failed":
-                    callback = rewardedVideoLoadCallbacks.poll();
                     break;
 
                 case "admob_rewarded_video_on_fully_shown":
@@ -1869,11 +1881,6 @@ public class GMAdMob extends GMAdMobInternal {
                 case "admob_rewarded_video_on_show_failed":
                     callback = rewardedVideoShowCallback;
                     clearShowCallback = true;
-                    break;
-
-                case "admob_rewarded_interstitial_on_loaded":
-                case "admob_rewarded_interstitial_on_load_failed":
-                    callback = rewardedInterstitialLoadCallbacks.poll();
                     break;
 
                 case "admob_rewarded_interstitial_on_fully_shown":
@@ -1936,7 +1943,9 @@ public class GMAdMob extends GMAdMobInternal {
                 else if (normalizedEventType.startsWith("admob_rewarded_interstitial_"))
                     rewardedInterstitialShowCallback = null;
             }
-        });
+        };
+
+        runOnUiThreadOrNow(dispatch);
     }
 
     private static GMExtWire.StructStream streamStruct() {
@@ -1977,24 +1986,6 @@ public class GMAdMob extends GMAdMobInternal {
     }
 
 
-    private void callbackResult(GMFunction callback, int eventType, double code) {
-        callbackResult(callback, eventType, code == AdMobError.Ok.value(), code);
-    }
-
-    private void callbackResult(GMFunction callback, int eventType, boolean success, double code) {
-        GMExtWire.StructStream payload = streamStruct()
-            .kv("success", success)
-            .kv("event_type", eventType)
-            .kv("code", code)
-            .kv("error_code", code)
-            .kv(
-                "error_message",
-                success ? "" : errorMessageForCode((int)code)
-            );
-
-        invokeCallback(callback, payload);
-    }
-
     private void invokeCallback(GMFunction callback, GMExtWire.StructStream payload) {
         if (callback != null)
             callback.call(payload);
@@ -2015,30 +2006,6 @@ public class GMAdMob extends GMAdMobInternal {
         normalized = normalized.replaceAll("([a-z0-9])([A-Z])", "$1_$2");
         return normalized.replace("__", "_").toLowerCase(Locale.US);
     }
-
-    private static String errorMessageForCode(int code) {
-        switch (AdMobError.from(code)) {
-            case Ok:
-                return "";
-            case NotInitialized:
-                return "AdMob SDK is not initialized.";
-            case InvalidAdId:
-                return "The AdMob ad unit ID is invalid or empty.";
-            case AdLimitReached:
-                return "The loaded ad instance limit was reached.";
-            case NoAdsLoaded:
-                return "There are no ads loaded.";
-            case NoActiveBannerAd:
-                return "There is no active banner ad.";
-            case IllegalCall:
-                return "This call is not valid in the current AdMob state.";
-            case NullViewHandler:
-                return "RunnerActivity.ViewHandler is null.";
-            default:
-                return "Unknown AdMob error.";
-        }
-    }
-
 
     private void onPaidEventHandler(AdValue adValue, String adUnitId, String adType,
                                     AdapterResponseInfo loadedAdapterResponseInfo, String mediationAdapterClassName) {

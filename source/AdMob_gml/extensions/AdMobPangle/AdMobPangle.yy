@@ -16,7 +16,7 @@
   "exportToGame":true,
   "extensionVersion":"1.0.0",
   "files":[],
-  "gradleinject":"\r\n    // Pangle Mediation Adapter for AdMob\r\n    implementation(\"com.google.ads.mediation:pangle:6.2.0.5.0\")\r\n",
+  "gradleinject":"",
   "hasConvertedCodeInjection":true,
   "helpfile":"",
   "HTML5CodeInjection":"",
