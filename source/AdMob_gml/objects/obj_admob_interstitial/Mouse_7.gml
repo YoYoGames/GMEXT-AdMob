@@ -1,15 +1,49 @@
 /// @description Interstitial load/show
 
-// Check if current interstitial ad is loaded
-if(AdMob_Interstitial_IsLoaded())
+if (!is_undefined(interstitial_handle))
 {
-	// Loaded: show interstitial ad
-    AdMob_Interstitial_Show();
-}	
+    var _handle = interstitial_handle;
+    interstitial_handle = undefined;
+
+    var _show_result =
+        admob_interstitial_show(
+            _handle,
+            function(_result, _type)
+            {
+                show_debug_message($"Interstitial show callback: success={_result.success}, type={_type}, error={_result.error_message}");
+
+                if (!_result.success || _type == AdMobInterstitialShowEvent.Dismissed)
+                {
+                    admob_interstitial_load(function(_result, _handle)
+                    {
+                        show_debug_message($"Interstitial load callback: success={_result.success}, error={_result.error_message}");
+
+                        if (_result.success)
+                            interstitial_handle = _handle;
+                    });
+                }
+            }
+        );
+
+    if (_show_result != AdMobError.Ok)
+    {
+        show_debug_message(
+            "Interstitial show failed immediately: "
+            + string(_show_result)
+        );
+    }
+}
 else
 {
-	// Not Loaded: load interstitial ad
-	AdMob_Interstitial_Load();
-    show_message_async("Interstitial Still loading, try again soon");
-}
+    admob_interstitial_load(
+        function(_result, _handle)
+        {
+            show_debug_message($"Interstitial load callback: success={_result.success}, error={_result.error_message}");
 
+            if (_result.success)
+                interstitial_handle = _handle;
+        }
+    );
+
+    show_message_async("Interstitial still loading, try again soon");
+}

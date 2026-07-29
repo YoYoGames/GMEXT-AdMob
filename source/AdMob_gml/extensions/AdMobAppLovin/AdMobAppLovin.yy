@@ -16,7 +16,7 @@
   "exportToGame":true,
   "extensionVersion":"1.0.0",
   "files":[],
-  "gradleinject":"\r\n    implementation(\"com.google.ads.mediation:applovin:12.5.0.0\")\r\n",
+  "gradleinject":"",
   "hasConvertedCodeInjection":true,
   "helpfile":"",
   "HTML5CodeInjection":"",

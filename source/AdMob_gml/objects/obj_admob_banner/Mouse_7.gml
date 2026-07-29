@@ -1,21 +1,33 @@
 /// @description Banner create/move
 
-// If button was pressed
-if(pressed)
+if (pressed)
 {
-	// We flip the bottom flag
-	bottom = !bottom;
-	
-	// We change the position to the bottom flag
-	// 1: places banner at bottom
-	// 0: places banner at top
-	AdMob_Banner_Move(bottom);
+    bottom = !bottom;
+
+    var _move_result =
+        admob_banner_move(bottom);
+
+    if (_move_result != AdMobError.Ok)
+    {
+        show_debug_message($"Banner move failed: {_move_result}");
+    }
 }
 else
 {
-	// This was the first press
-	pressed = true;
+    pressed = true;
 
-	// Create banner with selected type at the button of the screen
-	AdMob_Banner_Create_Ext(banner_type, bottom, alignment);
+    var _create_result = admob_banner_create_ext(
+            banner_type,
+            bottom,
+            alignment,
+            function(_result, _type)
+            {
+                show_debug_message($"Banner callback: success={_result.success}, type={_type}, error={_result.error_message}");
+            }
+        );
+
+    if (_create_result != AdMobError.Ok)
+    {
+        show_debug_message($"Banner create failed immediately: {_create_result}");
+    }
 }

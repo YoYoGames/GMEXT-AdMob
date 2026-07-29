@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>App Open Ads - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "App Open Ads";
+        var mkdocs_page_input_path = "app_open.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Modules</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="general.html">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_interstitial.html">Rewarded Interstitial</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">App Open Ads</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Modules</li>
+      <li class="breadcrumb-item active">App Open Ads</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/app_open.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="top"></a></p>
+<h1 id="app-open-ads"><strong>App Open Ads</strong></h1>
+<p>Functions for app open ads - a special format intended for monetizing your app's loading
+screen. App open ads can be closed at any time and are designed to be shown when your users bring
+your app to the foreground.</p>
+<h2 id="functions">Functions</h2>
+<p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
+<ul>
+<li><a href="app_open.html#admob_app_open_ad_set_ad_unit">admob_app_open_ad_set_ad_unit</a></li>
+<li><a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a></li>
+<li><a href="app_open.html#admob_app_open_ad_disable">admob_app_open_ad_disable</a></li>
+<li><a href="app_open.html#admob_app_open_ad_is_enabled">admob_app_open_ad_is_enabled</a></li>
+<li><a href="app_open.html#admob_app_open_ad_is_loaded">admob_app_open_ad_is_loaded</a></li>
+<li><a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a></li>
+<li><a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a></li>
+</ul>
+<h2 id="constants">Constants</h2>
+<p>This module includes a set of predefined constants that can be utilized for various purposes. Browse through the available constants to find values relevant to your needs and enhance the efficiency of your code.</p>
+<ul>
+<li><a href="app_open.html#admobappopenadshowevent">AdMobAppOpenAdShowEvent</a></li>
+</ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_set_ad_unit">admob_app_open_ad_set_ad_unit</h1>
+<p>Sets the ad unit ID used by <a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a>/
+<a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_set_ad_unit(ad_unit_id)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ad_unit_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The app open ad unit ID, from the AdMob dashboard.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_enable">admob_app_open_ad_enable</h1>
+<p>Turns on automatic app open ads: every time the app returns to the foreground, this
+automatically loads (if needed) and shows an app open ad, using <code>callback</code> for both the load
+outcome and the show-lifecycle events - unless <a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a>/
+<a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a> are called manually with their own callback in the meantime.
+This models Google's own <code>AppOpenAdManager</code> sample pattern for a cold-start/splash ad. There is
+only ever one app open ad instance - no handles, unlike the interstitial/rewarded families.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_enable(callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call for both the automatic load outcome and the<br>automatic show-lifecycle events.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if enabling succeeded, an error code
+otherwise.</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once per automatic load outcome, then once per automatic show-lifecycle event whenever
+the app returns to the foreground. Same argument shape as <a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a>'s and
+<a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a>'s callbacks respectively.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The event's result.</td>
+</tr>
+<tr>
+<td>type</td>
+<td><a href="app_open.html#admobappopenadshowevent">AdMobAppOpenAdShowEvent</a></td>
+<td>Present only for a show-lifecycle event (absent for a<br>load outcome, or when <code>result.success</code> is <code>false</code>).</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_disable">admob_app_open_ad_disable</h1>
+<p>Turns off automatic app open ads, previously enabled with
+<a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a>. The app no longer auto-loads or auto-shows an app open ad
+when returning to the foreground.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_disable()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_is_enabled">admob_app_open_ad_is_enabled</h1>
+<p>Checks whether automatic app open ads are currently turned on.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_is_enabled()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></p>
+</blockquote>
+<p><code>true</code> if <a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a> was called and
+<a href="app_open.html#admob_app_open_ad_disable">admob_app_open_ad_disable</a> hasn't been called since.</p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_is_loaded">admob_app_open_ad_is_loaded</h1>
+<p>Checks whether an app open ad is currently loaded and ready to show.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_is_loaded()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></p>
+</blockquote>
+<p><code>true</code> if an app open ad is loaded.</p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_load">admob_app_open_ad_load</h1>
+<p>Manually loads an app open ad. There is only ever one app open ad instance - loading again
+while one is already loaded is a no-op that immediately reports success.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_load(callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call once the load completes or fails.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if the load request was accepted, an error
+code otherwise.</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once, when the load completes or fails.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The load outcome.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_app_open_ad_show">admob_app_open_ad_show</h1>
+<p>Manually shows the currently-loaded app open ad full-screen.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_app_open_ad_show(callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call for the ad's show-lifecycle events.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if the show request was accepted,
+<a href="general.html#admoberror">AdMobError</a>.NoAdsLoaded if no app open ad is currently loaded, an error code otherwise.</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once per show-lifecycle event on success; fires once with <code>success = false</code> and no
+<code>type</code> if the ad fails to show.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The event's result.</td>
+</tr>
+<tr>
+<td>type</td>
+<td><a href="app_open.html#admobappopenadshowevent">AdMobAppOpenAdShowEvent</a></td>
+<td>Which show-lifecycle event this is. Absent when<br><code>result.success</code> is <code>false</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobappopenadshowevent">AdMobAppOpenAdShowEvent</h1>
+<p>The show-lifecycle events <a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a>'s (and, when auto-showing,
+<a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a>'s) callback can fire with on success. Numeric values are
+extension-owned.</p>
+<p>These constants are referenced by the following functions:</p>
+<ul>
+<li><a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a></li>
+<li><a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Shown</code></td>
+<td>The app open ad was displayed.</td>
+</tr>
+<tr>
+<td><code>Dismissed</code></td>
+<td>The user closed the app open ad.</td>
+</tr>
+<tr>
+<td><code>Clicked</code></td>
+<td>The user clicked the app open ad.</td>
+</tr>
+<tr>
+<td><code>Impression</code></td>
+<td>The app open ad recorded an impression.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="reward_interstitial.html" class="btn btn-neutral float-left" title="Rewarded Interstitial"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="settings.html" class="btn btn-neutral float-right" title="Settings">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="reward_interstitial.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="settings.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

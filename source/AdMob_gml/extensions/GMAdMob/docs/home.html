@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Home - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "home.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Modules</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="general.html">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_interstitial.html">Rewarded Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/home.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="top"></a></p>
+<h1 id="admob"><strong>AdMob</strong></h1>
+<h2 id="extensions-features">Extension's Features</h2>
+<ul>
+<li>Initialize the Google Mobile Ads SDK</li>
+<li>Show banner, interstitial, rewarded video, rewarded interstitial, and app open ads</li>
+<li>Request and read the user's consent status (GDPR/CCPA) via Google's User Messaging Platform</li>
+<li>Target ads by COPPA/under-age/max content rating</li>
+<li>Track ad revenue via a shared paid-event stream</li>
+<li>Configure server-side reward verification and app-wide ad volume</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>This extension wraps Google's <a href="https://developers.google.com/admob">Mobile Ads SDK</a> for <strong>Android
+and iOS</strong>. Call <a href="general.html#admob_initialize">admob_initialize</a> once, before any other function (other than the
+targeting functions and <a href="general.html#admob_set_test_device_id">admob_set_test_device_id</a>, which must be called <em>before</em>
+initialization). Every function that talks to Google's servers reports its outcome asynchronously
+through a callback carrying a <a href="general.html#admobresult">AdMobResult</a> - check <code>result.success</code> before trusting the
+rest of the payload.</p>
+<p>Interstitial, rewarded video, and rewarded interstitial ads share the same load/show shape: loading
+produces a handle you hold onto, then showing consumes that handle. Multiple ads can be pre-loaded
+at once by holding several handles. Banner and app open ads work differently - there is only ever
+one instance of each, so no handles are involved.</p>
+<h2 id="guides">Guides</h2>
+<p>Guides for the AdMob extension.</p>
+<ul>
+<li><a href="getting_started.html">Getting Started</a></li>
+<li><a href="extension_options.html">Extension Options</a></li>
+</ul>
+<h2 id="modules">Modules</h2>
+<p>The following are the available modules for the AdMob extension:</p>
+<ul>
+<li><a href="general.html">General</a></li>
+<li><a href="banner.html">Banner</a></li>
+<li><a href="interstitial.html">Interstitial</a></li>
+<li><a href="reward_video.html">Rewarded Video</a></li>
+<li><a href="reward_interstitial.html">Rewarded Interstitial</a></li>
+<li><a href="app_open.html">App Open Ads</a></li>
+<li><a href="targeting.html">Targeting</a></li>
+<li><a href="consent.html">Consent</a></li>
+<li><a href="settings.html">Settings</a></li>
+</ul>
+<p><br></p>
+<hr />
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

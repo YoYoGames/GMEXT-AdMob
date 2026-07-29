@@ -1,4 +1,3 @@
-
 event_inherited();
 
-text = $"AppOpenAd : {AdMob_AppOpenAd_IsEnabled() ? "ON" : "OFF"}"
+text = $"AppOpenAd : {admob_app_open_ad_is_enabled() ? "ON" : "OFF"}";

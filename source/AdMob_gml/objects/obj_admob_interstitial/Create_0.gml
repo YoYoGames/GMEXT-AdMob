@@ -2,3 +2,4 @@
 
 event_inherited();
 text = "Interstitial";
+interstitial_handle = undefined;
