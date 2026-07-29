@@ -1,6 +1,15 @@
 set(SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # =============================================================================
+# Deployment target
+# Unset elsewhere, so it defaults to the host's newest SDK - mismatches the
+# GameMaker app's own target and crashes the linker. Pin to the SDKs' floor.
+# =============================================================================
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "12.0"
+  XCODE_ATTRIBUTE_TVOS_DEPLOYMENT_TARGET "12.0")
+
+# =============================================================================
 # GameMaker iOS integration (optional)
 # =============================================================================
 set(EXT_GM_XCODEPROJ_OVERRIDE "~/GameMakerStudio2/GM_IOS/AdMob/AdMob/AdMob.xcodeproj" CACHE FILEPATH "" FORCE)
