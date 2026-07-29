@@ -474,13 +474,10 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
-    // field: orientation, type: Float64
-    double orientation = gm::wire::codec::readValue<double>(__br);
-
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    gm_enums::AdMobError __result = [__impl admob_app_open_ad_enable:orientation callback:callback];
+    gm_enums::AdMobError __result = [__impl admob_app_open_ad_enable:callback];
 
     gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
 

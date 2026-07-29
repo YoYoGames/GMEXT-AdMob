@@ -384,13 +384,10 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
     {
         GMExtWire.order(__arg_buffer);
 
-        // field: orientation, type: Float64
-        double orientation = GMExtWire.readF64(__arg_buffer);
-
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        AdMobError __result = admob_app_open_ad_enable(orientation, callback);
+        AdMobError __result = admob_app_open_ad_enable(callback);
 
         GMExtWire.order(__ret_buffer);
         // return: __result, type: enum AdMobError

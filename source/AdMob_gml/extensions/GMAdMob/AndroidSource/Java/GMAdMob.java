@@ -1080,7 +1080,7 @@ public class GMAdMob extends GMAdMobInternal {
     public void admob_app_open_ad_set_ad_unit(String adUnitId) {
         appOpenAdUnitId = normalizeAdUnitId(adUnitId);
     }
-    public AdMobError admob_app_open_ad_enable(double orientation, final GMFunction callback) {
+    public AdMobError admob_app_open_ad_enable(final GMFunction callback) {
         appOpenEnableCallback = callback;
 
         final String callingMethod = "admob_app_open_ad_enable";

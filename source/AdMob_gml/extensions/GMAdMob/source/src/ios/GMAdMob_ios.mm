@@ -810,8 +810,6 @@ static const char *AdMobCString(NSString *value)
 }
 
 - (gm_enums::AdMobError)admob_app_open_ad_enable:
-            (double)orientation
-                         callback:
             (gm::wire::GMFunction)callback
 {
     g_app_open_enable_callback = callback;

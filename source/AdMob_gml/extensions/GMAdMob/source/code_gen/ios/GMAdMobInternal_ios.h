@@ -306,7 +306,7 @@ namespace gm::wire::details
 - (void)admob_rewarded_interstitial_dispose:(std::uint64_t)handle;
 - (gm_enums::AdMobError)admob_rewarded_interstitial_show:(std::uint64_t)handle callback:(gm::wire::GMFunction)callback;
 - (void)admob_app_open_ad_set_ad_unit:(std::string_view)ad_unit_id;
-- (gm_enums::AdMobError)admob_app_open_ad_enable:(double)orientation callback:(gm::wire::GMFunction)callback;
+- (gm_enums::AdMobError)admob_app_open_ad_enable:(gm::wire::GMFunction)callback;
 - (void)admob_app_open_ad_disable;
 - (bool)admob_app_open_ad_is_enabled;
 - (bool)admob_app_open_ad_is_loaded;

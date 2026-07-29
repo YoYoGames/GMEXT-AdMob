@@ -39,7 +39,7 @@ public interface GMAdMobInterface {
     public void admob_rewarded_interstitial_dispose(long handle);
     public AdMobError admob_rewarded_interstitial_show(long handle, GMFunction callback);
     public void admob_app_open_ad_set_ad_unit(String ad_unit_id);
-    public AdMobError admob_app_open_ad_enable(double orientation, GMFunction callback);
+    public AdMobError admob_app_open_ad_enable(GMFunction callback);
     public void admob_app_open_ad_disable();
     public boolean admob_app_open_ad_is_enabled();
     public boolean admob_app_open_ad_is_loaded();

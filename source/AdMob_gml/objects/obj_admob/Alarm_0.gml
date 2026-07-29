@@ -57,7 +57,6 @@ if (orientation != display_get_orientation())
         case display_landscape:
         case display_landscape_flipped:
             admob_app_open_ad_enable(
-                display_landscape,
 				function(_result, _type = undefined)
 				{
 				    show_debug_message($"AppOpen Landscape: success={_result.success}, type={_type}, error={_result.error_message}");
@@ -68,7 +67,6 @@ if (orientation != display_get_orientation())
         case display_portrait:
         case display_portrait_flipped:
             admob_app_open_ad_enable(
-                display_portrait,
 				function(_result, _type = undefined)
 				{
 				    show_debug_message($"AppOpen Portrait: success={_result.success}, type={_type}, error={_result.error_message}");

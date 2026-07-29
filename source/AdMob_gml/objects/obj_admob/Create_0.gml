@@ -53,7 +53,6 @@ function start_ads_init_flow()
 			    );
 
 			    admob_app_open_ad_enable(
-			        display_landscape,
 			        function(_result, _type = undefined)
 			        {
 			            show_debug_message($"admob_app_open_ad_enable: success={_result.success}, type={_type}, error={_result.error_message}");

@@ -217,7 +217,6 @@ function admob_app_open_ad_set_ad_unit(ad_unit_id: string): unit;
 /// _show unless one of those supplies its own.
 [global, bind = typed_gml, type_hint=`AdMobError`]
 function admob_app_open_ad_enable(
-    orientation: real,
     callback: func
 ): gmval;
 

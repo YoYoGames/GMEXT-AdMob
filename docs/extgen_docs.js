@@ -201,7 +201,6 @@
 
 /**
  * @function_partial admob_app_open_ad_enable
- * @param {Real} orientation
  * @param {Function} callback
  * @returns {Enum.AdMobError}
  * @function_end

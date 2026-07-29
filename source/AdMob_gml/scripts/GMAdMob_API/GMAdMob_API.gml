@@ -1051,11 +1051,10 @@ function admob_rewarded_interstitial_show(_handle, _callback)
 
 
 /**
- * @param {Real} _orientation
  * @param {Function} _callback
  * @returns {Enum.AdMobError}
  */
-function admob_app_open_ad_enable(_orientation, _callback)
+function admob_app_open_ad_enable(_callback)
 {
     var __available__ = __GMAdMob_is_available();
     if (!__available__) return;
@@ -1063,10 +1062,6 @@ function admob_app_open_ad_enable(_orientation, _callback)
     var __dispatcher__ = __GMAdMob_get_dispatcher();
 
     var __args_buffer = __ext_core_get_args_buffer();
-
-    // param: _orientation, type: Float64
-    if (!is_numeric(_orientation)) show_error($"{_GMFUNCTION_} :: _orientation expected number", true);
-    buffer_write(__args_buffer, buffer_f64, _orientation);
 
     // param: _callback, type: Function
     if (!is_callable(_callback)) show_error($"{_GMFUNCTION_} :: _callback expected callable type", true);
