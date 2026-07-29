@@ -6,6 +6,7 @@
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
 #import <AdSupport/AdSupport.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "core/GMExtUtils.h"
 #include <atomic>
 #include <cstring>
 #include <unordered_map>
@@ -16,7 +17,6 @@ extern UIView *g_glView;
 extern int g_DeviceWidth;
 extern int g_DeviceHeight;
 
-extern "C" const char* extOptGetString(char* _ext, char* _opt);
 extern "C" const char* extGetVersion(char* _ext);
 
 static gm::wire::GMFunction g_paid_event_callback = nil;
@@ -33,7 +33,9 @@ static std::unordered_map<void *, gm::wire::GMFunction> g_rewarded_interstitial_
 static std::atomic<int64_t> g_next_ad_handle{1};
 static gm::wire::GMFunction g_app_open_enable_callback = nil;
 // Single slot each (not a queue) - app open is genuinely single-instance, matching Android and
-// Google's own AppOpenAdManager sample; an overlapping load/show call overwrites the pending one.
+// Google's own AppOpenAdManager sample. An overlapping load/show call is rejected with
+// IllegalCall (appOpenLoadPending/appOpenShowPending) rather than overwriting the pending one.
+// All three guarded by adHandlesLock.
 static gm::wire::GMFunction g_app_open_load_callback = nil;
 static gm::wire::GMFunction g_app_open_show_callback = nil;
 
@@ -87,6 +89,11 @@ static const char *AdMobCString(NSString *value)
 @property (nonatomic, strong) NSString *serverSideVerificationCustomData;
 @property (nonatomic, strong) UMPConsentForm *consentForm;
 @property (nonatomic, assign) BOOL bannerLoadPending;
+// Reject a concurrent load/show instead of silently overwriting the pending caller's
+// callback, same idea as bannerLoadPending. Both guarded by adHandlesLock alongside the
+// g_app_open_*_callback globals they gate.
+@property (nonatomic, assign) BOOL appOpenLoadPending;
+@property (nonatomic, assign) BOOL appOpenShowPending;
 @end
 
 @implementation GMAdMob
@@ -104,6 +111,8 @@ static const char *AdMobCString(NSString *value)
         self.appOpenAdUnitId = @"";
         
         self.bannerLoadPending = NO;
+        self.appOpenLoadPending = NO;
+        self.appOpenShowPending = NO;
 
         self.interstitialAdHandles = [NSMutableDictionary dictionary];
         self.rewardedAdHandles = [NSMutableDictionary dictionary];
@@ -141,9 +150,7 @@ static const char *AdMobCString(NSString *value)
         // GADSimulatorID was removed in Google Mobile Ads SDK 12.0.0 - simulators
         // are now automatically treated as test devices, no identifier needed.
 #else
-        NSString *device =
-            [NSString stringWithCString:getDeviceId()
-                                encoding:NSUTF8StringEncoding];
+        NSString *device = getDeviceId();
 
         GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers =
             @[device];
@@ -215,8 +222,6 @@ static const char *AdMobCString(NSString *value)
                        callback:
             (gm::wire::GMFunction)callback
 {
-    g_banner_callback = callback;
-
     double code =
         [self
             createBannerAdViewWithSize:(double)(int32_t)size
@@ -224,8 +229,11 @@ static const char *AdMobCString(NSString *value)
             alignment:1
             callingMethod:__FUNCTION__];
 
-    if (code != (int)gm_enums::AdMobError::Ok)
-        g_banner_callback = nil;
+    // Only take over the shared callback slot once the create is actually going
+    // ahead - a rejected concurrent create (e.g. IllegalCall while another load is
+    // still in flight) must never clobber the in-flight caller's callback.
+    if (code == (int)gm_enums::AdMobError::Ok)
+        g_banner_callback = callback;
 
     return (gm_enums::AdMobError)(int)code;
 }
@@ -239,8 +247,6 @@ static const char *AdMobCString(NSString *value)
                            callback:
             (gm::wire::GMFunction)callback
 {
-    g_banner_callback = callback;
-
     double code =
         [self
             createBannerAdViewWithSize:(double)(int32_t)size
@@ -248,8 +254,11 @@ static const char *AdMobCString(NSString *value)
             alignment:(int)(int32_t)alignment
             callingMethod:__FUNCTION__];
 
-    if (code != (int)gm_enums::AdMobError::Ok)
-        g_banner_callback = nil;
+    // Only take over the shared callback slot once the create is actually going
+    // ahead - a rejected concurrent create (e.g. IllegalCall while another load is
+    // still in flight) must never clobber the in-flight caller's callback.
+    if (code == (int)gm_enums::AdMobError::Ok)
+        g_banner_callback = callback;
 
     return (gm_enums::AdMobError)(int)code;
 }
@@ -453,7 +462,9 @@ static const char *AdMobCString(NSString *value)
     if (interstitialAd == nil)
         return gm_enums::AdMobError::InvalidHandle;
 
-    g_interstitial_show_callbacks[(__bridge void *)interstitialAd] = callback;
+    @synchronized (self.adHandlesLock) {
+        g_interstitial_show_callbacks[(__bridge void *)interstitialAd] = callback;
+    }
     interstitialAd.fullScreenContentDelegate = self;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -617,7 +628,9 @@ static const char *AdMobCString(NSString *value)
     if (rewardedAd == nil)
         return gm_enums::AdMobError::InvalidHandle;
 
-    g_rewarded_video_show_callbacks[(__bridge void *)rewardedAd] = callback;
+    @synchronized (self.adHandlesLock) {
+        g_rewarded_video_show_callbacks[(__bridge void *)rewardedAd] = callback;
+    }
     rewardedAd.fullScreenContentDelegate = self;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -775,7 +788,9 @@ static const char *AdMobCString(NSString *value)
     if (rewardedInterstitialAd == nil)
         return gm_enums::AdMobError::InvalidHandle;
 
-    g_rewarded_interstitial_show_callbacks[(__bridge void *)rewardedInterstitialAd] = callback;
+    @synchronized (self.adHandlesLock) {
+        g_rewarded_interstitial_show_callbacks[(__bridge void *)rewardedInterstitialAd] = callback;
+    }
     rewardedInterstitialAd.fullScreenContentDelegate = self;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -812,18 +827,24 @@ static const char *AdMobCString(NSString *value)
 - (gm_enums::AdMobError)admob_app_open_ad_enable:
             (gm::wire::GMFunction)callback
 {
-    g_app_open_enable_callback = callback;
+    @synchronized (self.adHandlesLock) {
+        g_app_open_enable_callback = callback;
+    }
 
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
     {
-        g_app_open_enable_callback = nil;
+        @synchronized (self.adHandlesLock) {
+            g_app_open_enable_callback = nil;
+        }
         return gm_enums::AdMobError::NotInitialized;
     }
 
     if (![self validateAdId:self.appOpenAdUnitId
               callingMethod:__FUNCTION__])
     {
-        g_app_open_enable_callback = nil;
+        @synchronized (self.adHandlesLock) {
+            g_app_open_enable_callback = nil;
+        }
         return gm_enums::AdMobError::InvalidAdId;
     }
 
@@ -832,13 +853,21 @@ static const char *AdMobCString(NSString *value)
     if (![self appOpenAdIsValid:__FUNCTION__])
         return [self admob_app_open_ad_load:callback];
 
+    gm_structs::AdMobResult result{};
+    result.success = true;
+
+    if (callback)
+        callback.call(result);
+
     return gm_enums::AdMobError::Ok;
 }
 
 - (void)admob_app_open_ad_disable
 {
     self.triggerAppOpenAd = NO;
-    g_app_open_enable_callback = nil;
+    @synchronized (self.adHandlesLock) {
+        g_app_open_enable_callback = nil;
+    }
 }
 
 - (bool)admob_app_open_ad_is_enabled
@@ -854,8 +883,6 @@ static const char *AdMobCString(NSString *value)
 - (gm_enums::AdMobError)admob_app_open_ad_load:
     (gm::wire::GMFunction)callback
 {
-    g_app_open_load_callback = callback;
-
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
         return gm_enums::AdMobError::NotInitialized;
 
@@ -864,7 +891,27 @@ static const char *AdMobCString(NSString *value)
         return gm_enums::AdMobError::InvalidAdId;
 
     if ([self appOpenAdIsValid:__FUNCTION__])
+    {
+        gm_structs::AdMobResult result{};
+        result.success = true;
+
+        if (callback)
+            callback.call(result);
+
         return gm_enums::AdMobError::Ok;
+    }
+
+    BOOL alreadyPending = NO;
+    @synchronized (self.adHandlesLock) {
+        alreadyPending = self.appOpenLoadPending;
+        if (!alreadyPending) {
+            self.appOpenLoadPending = YES;
+            g_app_open_load_callback = callback;
+        }
+    }
+
+    if (alreadyPending)
+        return gm_enums::AdMobError::IllegalCall;
 
     NSString *adUnitId =
         self.appOpenAdUnitId;
@@ -885,9 +932,13 @@ static const char *AdMobCString(NSString *value)
             ^(GADAppOpenAd *_Nullable appOpenAd,
               NSError *_Nullable error)
             {
-                gm::wire::GMFunction resolvedCallback =
-                    g_app_open_load_callback ? g_app_open_load_callback : g_app_open_enable_callback;
-                g_app_open_load_callback = nil;
+                gm::wire::GMFunction resolvedCallback;
+                @synchronized (self.adHandlesLock) {
+                    resolvedCallback =
+                        g_app_open_load_callback ? g_app_open_load_callback : g_app_open_enable_callback;
+                    g_app_open_load_callback = nil;
+                    self.appOpenLoadPending = NO;
+                }
 
                 if (error)
                 {
@@ -945,13 +996,23 @@ static const char *AdMobCString(NSString *value)
 - (gm_enums::AdMobError)admob_app_open_ad_show:
     (gm::wire::GMFunction)callback
 {
-    g_app_open_show_callback = callback;
-
     if (![self validateInitializedWithCallingMethod:__FUNCTION__])
         return gm_enums::AdMobError::NotInitialized;
 
     if (![self appOpenAdIsValid:__FUNCTION__])
         return gm_enums::AdMobError::NoAdsLoaded;
+
+    BOOL alreadyPending = NO;
+    @synchronized (self.adHandlesLock) {
+        alreadyPending = self.appOpenShowPending;
+        if (!alreadyPending) {
+            self.appOpenShowPending = YES;
+            g_app_open_show_callback = callback;
+        }
+    }
+
+    if (alreadyPending)
+        return gm_enums::AdMobError::IllegalCall;
 
     self.appOpenAd.fullScreenContentDelegate = self;
 
@@ -1006,6 +1067,10 @@ static const char *AdMobCString(NSString *value)
         case 3:
             [GADMobileAds.sharedInstance.requestConfiguration
                 setMaxAdContentRating:GADMaxAdContentRatingMatureAudience];
+            break;
+
+        default:
+            NSLog(@"admob_targeting_max_ad_content_rating :: Unknown content rating value: %d", (int32_t)content_rating);
             break;
     }
 }
@@ -1190,35 +1255,35 @@ static const char *AdMobCString(NSString *value)
 }
 
 #pragma mark - Setup Methods
+- (nullable NSString *)extensionOptionForKey:(NSString *)key
+{
+    std::string value =
+        gm::ExtUtils::GetExtensionOption("GMAdMob", [key UTF8String]);
+
+    return value.empty() ? nil : [NSString stringWithUTF8String:value.c_str()];
+}
+
 - (void)initializeAdUnits
 {
-    NSDictionary *adUnitKeys = @{
-        @"iOS_BANNER": @"bannerAdUnitId",
-        @"iOS_INTERSTITIAL": @"interstitialAdUnitId",
-        @"iOS_REWARDED": @"rewardedUnitId",
-        @"iOS_REWARDED_INTERSTITIAL": @"rewardedInterstitialAdUnitId",
-        @"iOS_OPENAPPAD": @"appOpenAdUnitId"
-    };
+    NSString *bannerAdUnit = [self extensionOptionForKey:@"iOS_BANNER"];
+    if (bannerAdUnit != nil)
+        self.bannerAdUnitId = bannerAdUnit;
 
-    for (NSString *key in adUnitKeys)
-    {
-        const char *temp =
-            extOptGetString((char*)"GMAdMob", (char*)[key UTF8String]);
+    NSString *interstitialAdUnit = [self extensionOptionForKey:@"iOS_INTERSTITIAL"];
+    if (interstitialAdUnit != nil)
+        self.interstitialAdUnitId = interstitialAdUnit;
 
-        if (temp == nullptr || strlen(temp) == 0)
-        {
-            temp =
-                extOptGetString((char*)"AdMob", (char*)[key UTF8String]);
-        }
+    NSString *rewardedAdUnit = [self extensionOptionForKey:@"iOS_REWARDED"];
+    if (rewardedAdUnit != nil)
+        self.rewardedUnitId = rewardedAdUnit;
 
-        if (temp != nullptr && strlen(temp) > 0)
-        {
-            NSString *adUnit =
-                [NSString stringWithUTF8String:temp];
+    NSString *rewardedInterstitialAdUnit = [self extensionOptionForKey:@"iOS_REWARDED_INTERSTITIAL"];
+    if (rewardedInterstitialAdUnit != nil)
+        self.rewardedInterstitialAdUnitId = rewardedInterstitialAdUnit;
 
-            [self setValue:adUnit forKey:adUnitKeys[key]];
-        }
-    }
+    NSString *appOpenAdUnit = [self extensionOptionForKey:@"iOS_OPENAPPAD"];
+    if (appOpenAdUnit != nil)
+        self.appOpenAdUnitId = appOpenAdUnit;
 }
 
 #pragma mark - Delegate Methods
@@ -1286,48 +1351,69 @@ static const char *AdMobCString(NSString *value)
 - (void)invokeInterstitialShowEvent:(GADInterstitialAd *)ad
                                 type:(gm_enums::AdMobInterstitialShowEvent)type
 {
-    auto it = g_interstitial_show_callbacks.find((__bridge void *)ad);
-    if (it == g_interstitial_show_callbacks.end())
+    gm::wire::GMFunction callback = nil;
+    @synchronized (self.adHandlesLock) {
+        auto it = g_interstitial_show_callbacks.find((__bridge void *)ad);
+        if (it != g_interstitial_show_callbacks.end())
+            callback = it->second;
+    }
+
+    if (!callback)
         return;
 
     gm_structs::AdMobResult result{};
     result.success = true;
 
-    it->second.call(result, type);
+    callback.call(result, type);
 }
 
 - (void)invokeRewardedVideoShowEvent:(GADRewardedAd *)ad
                                  type:(gm_enums::AdMobRewardedVideoShowEvent)type
 {
-    auto it = g_rewarded_video_show_callbacks.find((__bridge void *)ad);
-    if (it == g_rewarded_video_show_callbacks.end())
+    gm::wire::GMFunction callback = nil;
+    @synchronized (self.adHandlesLock) {
+        auto it = g_rewarded_video_show_callbacks.find((__bridge void *)ad);
+        if (it != g_rewarded_video_show_callbacks.end())
+            callback = it->second;
+    }
+
+    if (!callback)
         return;
 
     gm_structs::AdMobResult result{};
     result.success = true;
 
-    it->second.call(result, type);
+    callback.call(result, type);
 }
 
 - (void)invokeRewardedInterstitialShowEvent:(GADRewardedInterstitialAd *)ad
                                         type:(gm_enums::AdMobRewardedInterstitialShowEvent)type
 {
-    auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)ad);
-    if (it == g_rewarded_interstitial_show_callbacks.end())
+    gm::wire::GMFunction callback = nil;
+    @synchronized (self.adHandlesLock) {
+        auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)ad);
+        if (it != g_rewarded_interstitial_show_callbacks.end())
+            callback = it->second;
+    }
+
+    if (!callback)
         return;
 
     gm_structs::AdMobResult result{};
     result.success = true;
 
-    it->second.call(result, type);
+    callback.call(result, type);
 }
 
 // App open is single-instance (not a handle map), so unlike the three helpers above this
 // resolves against the persistent show/enable callback slots directly, same fallback as Shown.
 - (void)invokeAppOpenShowEvent:(gm_enums::AdMobAppOpenAdShowEvent)type
 {
-    gm::wire::GMFunction resolvedCallback =
-        g_app_open_show_callback ? g_app_open_show_callback : g_app_open_enable_callback;
+    gm::wire::GMFunction resolvedCallback;
+    @synchronized (self.adHandlesLock) {
+        resolvedCallback =
+            g_app_open_show_callback ? g_app_open_show_callback : g_app_open_enable_callback;
+    }
 
     if (!resolvedCallback)
         return;
@@ -1353,12 +1439,18 @@ static const char *AdMobCString(NSString *value)
             [self cleanUpInterstitialAd:(GADInterstitialAd *)ad];
         }];
 
-        auto it = g_interstitial_show_callbacks.find((__bridge void *)interstitialAd);
-        if (it != g_interstitial_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_interstitial_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_interstitial_show_callbacks.find((__bridge void *)interstitialAd);
+            if (it != g_interstitial_show_callbacks.end())
+            {
+                callback = it->second;
+                g_interstitial_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = false;
             result.error_message = std::string(AdMobCString([error.localizedDescription copy]));
@@ -1381,12 +1473,18 @@ static const char *AdMobCString(NSString *value)
             [self cleanUpRewardedAd:(GADRewardedAd *)ad];
         }];
 
-        auto it = g_rewarded_video_show_callbacks.find((__bridge void *)rewardedAd);
-        if (it != g_rewarded_video_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_rewarded_video_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_rewarded_video_show_callbacks.find((__bridge void *)rewardedAd);
+            if (it != g_rewarded_video_show_callbacks.end())
+            {
+                callback = it->second;
+                g_rewarded_video_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = false;
             result.error_message = std::string(AdMobCString([error.localizedDescription copy]));
@@ -1409,12 +1507,18 @@ static const char *AdMobCString(NSString *value)
             [self cleanUpRewardedInterstitialAd:(GADRewardedInterstitialAd *)ad];
         }];
 
-        auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)rewardedInterstitialAd);
-        if (it != g_rewarded_interstitial_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_rewarded_interstitial_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)rewardedInterstitialAd);
+            if (it != g_rewarded_interstitial_show_callbacks.end())
+            {
+                callback = it->second;
+                g_rewarded_interstitial_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = false;
             result.error_message = std::string(AdMobCString([error.localizedDescription copy]));
@@ -1431,9 +1535,14 @@ static const char *AdMobCString(NSString *value)
             self.appOpenAd = nil;
         }
 
-        gm::wire::GMFunction resolvedCallback =
-            g_app_open_show_callback ? g_app_open_show_callback : g_app_open_enable_callback;
-        g_app_open_show_callback = nil;
+        gm::wire::GMFunction resolvedCallback;
+        gm::wire::GMFunction enableCallback;
+        @synchronized (self.adHandlesLock) {
+            enableCallback = g_app_open_enable_callback;
+            resolvedCallback = g_app_open_show_callback ? g_app_open_show_callback : enableCallback;
+            g_app_open_show_callback = nil;
+            self.appOpenShowPending = NO;
+        }
 
         gm_structs::AdMobResult result{};
         result.success = false;
@@ -1446,7 +1555,7 @@ static const char *AdMobCString(NSString *value)
         // If AppOpenAd is being automatically managed
         if (self.triggerAppOpenAd) {
             // Reload the App Open Ad after failure
-            [self admob_app_open_ad_load:g_app_open_enable_callback];
+            [self admob_app_open_ad_load:enableCallback];
         }
     }
 }
@@ -1476,8 +1585,12 @@ static const char *AdMobCString(NSString *value)
 
     if ([presentingAd isMemberOfClass:[GADAppOpenAd class]])
     {
-        gm::wire::GMFunction resolvedCallback =
-            g_app_open_show_callback ? g_app_open_show_callback : g_app_open_enable_callback;
+        gm::wire::GMFunction resolvedCallback;
+        gm::wire::GMFunction enableCallback;
+        @synchronized (self.adHandlesLock) {
+            enableCallback = g_app_open_enable_callback;
+            resolvedCallback = g_app_open_show_callback ? g_app_open_show_callback : enableCallback;
+        }
 
         gm_structs::AdMobResult result{};
         result.success = true;
@@ -1486,7 +1599,7 @@ static const char *AdMobCString(NSString *value)
             resolvedCallback.call(result, gm_enums::AdMobAppOpenAdShowEvent::Shown);
 
         if (self.triggerAppOpenAd)
-            [self admob_app_open_ad_load:g_app_open_enable_callback];
+            [self admob_app_open_ad_load:enableCallback];
     }
 }
 
@@ -1555,12 +1668,18 @@ static const char *AdMobCString(NSString *value)
 
         self.interstitialAd = nil;
 
-        auto it = g_interstitial_show_callbacks.find((__bridge void *)interstitialAd);
-        if (it != g_interstitial_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_interstitial_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_interstitial_show_callbacks.find((__bridge void *)interstitialAd);
+            if (it != g_interstitial_show_callbacks.end())
+            {
+                callback = it->second;
+                g_interstitial_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = true;
 
@@ -1584,12 +1703,18 @@ static const char *AdMobCString(NSString *value)
 
         self.rewardedAd = nil;
 
-        auto it = g_rewarded_video_show_callbacks.find((__bridge void *)rewardedAd);
-        if (it != g_rewarded_video_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_rewarded_video_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_rewarded_video_show_callbacks.find((__bridge void *)rewardedAd);
+            if (it != g_rewarded_video_show_callbacks.end())
+            {
+                callback = it->second;
+                g_rewarded_video_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = true;
 
@@ -1613,12 +1738,18 @@ static const char *AdMobCString(NSString *value)
 
         self.rewardedInterstitialAd = nil;
 
-        auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)rewardedInterstitialAd);
-        if (it != g_rewarded_interstitial_show_callbacks.end())
-        {
-            gm::wire::GMFunction callback = it->second;
-            g_rewarded_interstitial_show_callbacks.erase(it);
+        gm::wire::GMFunction callback;
+        @synchronized (self.adHandlesLock) {
+            auto it = g_rewarded_interstitial_show_callbacks.find((__bridge void *)rewardedInterstitialAd);
+            if (it != g_rewarded_interstitial_show_callbacks.end())
+            {
+                callback = it->second;
+                g_rewarded_interstitial_show_callbacks.erase(it);
+            }
+        }
 
+        if (callback)
+        {
             gm_structs::AdMobResult result{};
             result.success = true;
 
@@ -1642,9 +1773,14 @@ static const char *AdMobCString(NSString *value)
             self.appOpenAd = nil;
         }
 
-        gm::wire::GMFunction resolvedCallback =
-            g_app_open_show_callback ? g_app_open_show_callback : g_app_open_enable_callback;
-        g_app_open_show_callback = nil;
+        gm::wire::GMFunction resolvedCallback;
+        gm::wire::GMFunction enableCallback;
+        @synchronized (self.adHandlesLock) {
+            enableCallback = g_app_open_enable_callback;
+            resolvedCallback = g_app_open_show_callback ? g_app_open_show_callback : enableCallback;
+            g_app_open_show_callback = nil;
+            self.appOpenShowPending = NO;
+        }
 
         if (resolvedCallback)
         {
@@ -1654,7 +1790,7 @@ static const char *AdMobCString(NSString *value)
         }
 
         if (self.triggerAppOpenAd)
-            [self admob_app_open_ad_load:g_app_open_enable_callback];
+            [self admob_app_open_ad_load:enableCallback];
     }
 }
 
@@ -1969,14 +2105,19 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
 -(void) onResume
 {
     if (self.triggerAppOpenAd) {
+        gm::wire::GMFunction enableCallback;
+        @synchronized (self.adHandlesLock) {
+            enableCallback = g_app_open_enable_callback;
+        }
+
         if(![self appOpenAdIsValid:"onResume"]) {
-            [self admob_app_open_ad_load:g_app_open_enable_callback];
+            [self admob_app_open_ad_load:enableCallback];
             self.isShowingAd = NO;
             return;
         }
 
         if (!self.isShowingAd) {
-            [self admob_app_open_ad_show:g_app_open_enable_callback];
+            [self admob_app_open_ad_show:enableCallback];
         }
     }
 }
@@ -1997,8 +2138,8 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
             }];
         }
         [self.interstitialAdHandles removeAllObjects];
+        g_interstitial_show_callbacks.clear();
     }
-    g_interstitial_show_callbacks.clear();
 
     // Clear Rewarded Ads
     @synchronized (self.adHandlesLock) {
@@ -2008,8 +2149,8 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
             }];
         }
         [self.rewardedAdHandles removeAllObjects];
+        g_rewarded_video_show_callbacks.clear();
     }
-    g_rewarded_video_show_callbacks.clear();
 
     // Clear Rewarded Interstitial Ads
     @synchronized (self.adHandlesLock) {
@@ -2019,8 +2160,8 @@ Boolean hasConsentOrLegitimateInterestFor(int* indexes, int size, NSString* purp
             }];
         }
         [self.rewardedInterstitialAdHandles removeAllObjects];
+        g_rewarded_interstitial_show_callbacks.clear();
     }
-    g_rewarded_interstitial_show_callbacks.clear();
 
     // Nullify App Open Ad
     @synchronized (self.adHandlesLock) {
@@ -2143,21 +2284,21 @@ typedef void (^AdCleanerBlock)(id ad);
     return request;
 }
 
-const char * getDeviceId()
+NSString * getDeviceId()
 {
     NSUUID* adid = [[ASIdentifierManager sharedManager] advertisingIdentifier];
     const char *cStr = [adid.UUIDString UTF8String];
     unsigned char digest[16];
     CC_MD5( cStr, (CC_LONG) strlen(cStr), digest );
-    
+
     NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    
+
     for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
     {
         [output appendFormat:@"%02x", digest[i]];
     }
-    
-    return [output UTF8String];
+
+    return output;
 }
 
 #pragma mark - Validations

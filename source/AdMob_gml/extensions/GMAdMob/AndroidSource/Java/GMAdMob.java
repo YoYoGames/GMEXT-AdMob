@@ -80,35 +80,35 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class GMAdMob extends GMAdMobInternal {
 
-    // Constants
-    private static final long MAX_DOUBLE_SAFE = 9007199254740992L; // 2^53
-    private static final int EVENT_OTHER_SOCIAL = 70;
-
     private static final String LOG_TAG = "AdMob";
+
+    // Loud-log threshold for an ad-handle map - not a hard cap, since evicting one would
+    // silently invalidate a handle the caller may still legitimately hold.
+    private static final int AD_HANDLE_WARN_THRESHOLD = 50;
 
     // WeakReference to Activity to prevent memory leaks
     private WeakReference<Activity> activityRef;
 
     // Root view to attach banner ads
-    private final ViewGroup rootView;
+    private volatile ViewGroup rootView;
 
     // AdMob settings
-    private boolean isInitialized = false;
-    private boolean isTestDevice = false;
-    private boolean isRdpEnabled = false;
+    private volatile boolean isInitialized = false;
+    private volatile boolean isTestDevice = false;
+    private volatile boolean isRdpEnabled = false;
     private boolean isShowingAd = false;
 
     // Targeting options
-    private boolean targetCOPPA = false;
-    private boolean targetUnderAge = false;
-    private String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
+    private volatile boolean targetCOPPA = false;
+    private volatile boolean targetUnderAge = false;
+    private volatile String maxAdContentRating = RequestConfiguration.MAX_AD_CONTENT_RATING_G;
 
     // Banner ad variables
     private volatile String bannerAdUnitId = "";
-    private AdView bannerAdView = null;
-    private AdSize bannerSize = null;
+    private volatile AdView bannerAdView = null;
+    private volatile AdSize bannerSize = null;
     private int currentBannerAlignment = RelativeLayout.CENTER_HORIZONTAL;
-    private RelativeLayout bannerLayout = null;
+    private volatile RelativeLayout bannerLayout = null;
 
     // Shared across interstitial/rewarded video/rewarded interstitial handles so a handle from
     // one ad type can never coincide with a live handle from another - a mismatched call site
@@ -121,8 +121,8 @@ public class GMAdMob extends GMAdMobInternal {
     private final Map<Long, InterstitialAd> interstitialAdHandles = new ConcurrentHashMap<>();
 
     // Server side verification variables
-	private String serverSideVerificationUserId = null;
-	private String serverSideVerificationCustomData = null;
+	private volatile String serverSideVerificationUserId = null;
+	private volatile String serverSideVerificationCustomData = null;
 
     // Rewarded video ad variables
     private volatile String rewardedUnitId = "";
@@ -142,18 +142,22 @@ public class GMAdMob extends GMAdMobInternal {
     private volatile int appOpenAdExpirationTime = 4;
     private volatile AppOpenAd appOpenAd = null;
 
-    private boolean triggerOnPaidEvent = false;
-    private boolean triggerAppOpenAd = false;
+    private volatile boolean triggerOnPaidEvent = false;
+    private volatile boolean triggerAppOpenAd = false;
 
     // Consent variables
-    private ConsentInformation consentInformation;
-    private ConsentForm consentFormInstance;
+    private volatile ConsentInformation consentInformation;
+    private volatile ConsentForm consentFormInstance;
 
     private volatile GMFunction paidEventCallback = null;
     private volatile GMFunction bannerCallback = null;
     private volatile GMFunction appOpenEnableCallback = null;
     private volatile GMFunction appOpenLoadCallback = null;
     private volatile GMFunction appOpenShowCallback = null;
+    // Reject a concurrent load/show instead of silently overwriting the pending
+    // caller's callback, same as banner's bannerLoadPending guard.
+    private volatile boolean appOpenLoadPending = false;
+    private volatile boolean appOpenShowPending = false;
 
     public GMAdMob() {
 		Activity activity = RunnerActivity.CurrentActivity;
@@ -222,10 +226,7 @@ public class GMAdMob extends GMAdMobInternal {
     }
 
     private String getAdMobOptionString(String optionName) {
-        String value = RunnerJNILib.extOptGetString("GMAdMob", optionName);
-
-        if (value == null || value.isEmpty())
-            value = RunnerJNILib.extOptGetString("AdMob", optionName);
+        String value = GMExtUtils.GetExtensionOption("GMAdMob", optionName);
 
         return value != null ? value : "";
     }
@@ -540,7 +541,10 @@ public class GMAdMob extends GMAdMobInternal {
 	}
 
     private void deleteBannerAdView() {
-		cleanAd(bannerAdView, this::cleanUpAd);
+		// Already always called from the UI thread (ViewHandler.post/onDestroy), so clean up
+		// synchronously here instead of via cleanAd()'s own post - that nested post would only
+		// run after destroy() below, clearing the listeners after the view is already gone.
+		cleanUpAd(bannerAdView);
 
         bannerLayout.removeView(bannerAdView);
         bannerAdView.destroy();
@@ -663,6 +667,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                     long handle = nextAdHandle.getAndIncrement();
                     interstitialAdHandles.put(handle, interstitialAd);
+                    warnIfAdHandleMapGrowing("interstitialAdHandles", interstitialAdHandles);
 
                     invokeLoadCallback(callback, new AdMobResult(true, Optional.empty(), Optional.empty()), handle);
                 }
@@ -852,6 +857,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                     long handle = nextAdHandle.getAndIncrement();
                     rewardedAdHandles.put(handle, rewardedAd);
+                    warnIfAdHandleMapGrowing("rewardedAdHandles", rewardedAdHandles);
 
                     invokeLoadCallback(callback, new AdMobResult(true, Optional.empty(), Optional.empty()), handle);
                 }
@@ -1005,6 +1011,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                     long handle = nextAdHandle.getAndIncrement();
                     rewardedInterstitialAdHandles.put(handle, rewardedInterstitialAd);
+                    warnIfAdHandleMapGrowing("rewardedInterstitialAdHandles", rewardedInterstitialAdHandles);
 
                     invokeLoadCallback(callback, new AdMobResult(true, Optional.empty(), Optional.empty()), handle);
                 }
@@ -1095,6 +1102,8 @@ public class GMAdMob extends GMAdMobInternal {
 
         if (!appOpenAdIsValid(callingMethod)) {
             admob_app_open_ad_load(appOpenEnableCallback);
+        } else {
+            invokeLoadCallback(callback, new AdMobResult(true, Optional.empty(), Optional.empty()));
         }
 
         return AdMobError.Ok;
@@ -1121,9 +1130,15 @@ public class GMAdMob extends GMAdMobInternal {
 		if (!validateViewHandler(callingMethod))
 			return AdMobError.NullViewHandler;
 
-        if (appOpenAdIsValid(callingMethod))
+        if (appOpenAdIsValid(callingMethod)) {
+            invokeLoadCallback(callback, new AdMobResult(true, Optional.empty(), Optional.empty()));
             return AdMobError.Ok;
+        }
 
+        if (appOpenLoadPending)
+            return AdMobError.IllegalCall;
+
+        appOpenLoadPending = true;
         appOpenLoadCallback = callback;
         loadAppOpenAd(appOpenAdUnitId, callingMethod);
 
@@ -1142,6 +1157,10 @@ public class GMAdMob extends GMAdMobInternal {
         if (!appOpenAdIsValid(callingMethod))
             return AdMobError.NoAdsLoaded;
 
+        if (appOpenShowPending)
+            return AdMobError.IllegalCall;
+
+        appOpenShowPending = true;
         appOpenShowCallback = callback;
         showAppOpenAd(callingMethod);
 
@@ -1180,6 +1199,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                             GMFunction resolvedCallback = appOpenLoadCallback != null ? appOpenLoadCallback : appOpenEnableCallback;
                             appOpenLoadCallback = null;
+                            appOpenLoadPending = false;
                             invokeLoadCallback(resolvedCallback, new AdMobResult(true, Optional.empty(), Optional.empty()));
                         }
 
@@ -1189,6 +1209,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                             GMFunction resolvedCallback = appOpenLoadCallback != null ? appOpenLoadCallback : appOpenEnableCallback;
                             appOpenLoadCallback = null;
+                            appOpenLoadPending = false;
                             invokeLoadCallback(
                                 resolvedCallback,
                                 new AdMobResult(false, Optional.of(loadAdError.getMessage()), Optional.of(loadAdError.getCode()))
@@ -1220,6 +1241,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                     GMFunction resolvedCallback = appOpenShowCallback != null ? appOpenShowCallback : appOpenEnableCallback;
                     appOpenShowCallback = null;
+                    appOpenShowPending = false;
                     invokeShowEventCallback(resolvedCallback, AdMobAppOpenAdShowEvent.Dismissed);
 
                     // If AppOpenAd is being automatically managed
@@ -1239,6 +1261,7 @@ public class GMAdMob extends GMAdMobInternal {
 
                     GMFunction resolvedCallback = appOpenShowCallback != null ? appOpenShowCallback : appOpenEnableCallback;
                     appOpenShowCallback = null;
+                    appOpenShowPending = false;
                     invokeShowFailedCallback(resolvedCallback, adError);
 
                     // If AppOpenAd is being automatically managed
@@ -1572,7 +1595,14 @@ public class GMAdMob extends GMAdMobInternal {
 		super.onConfigurationChanged(newConfig);
 
 		// Update activity reference
-		activityRef = new WeakReference<>(RunnerActivity.CurrentActivity);
+		Activity activity = RunnerActivity.CurrentActivity;
+		activityRef = new WeakReference<>(activity);
+
+		// Refresh rootView too - it holds a hard reference into the Activity's view
+		// hierarchy, so surviving an Activity recreation without refreshing it would
+		// attach new banners into a destroyed view tree and leak the old Activity.
+		if (activity != null)
+			rootView = activity.findViewById(android.R.id.content);
 	}
 
 	@Override
@@ -1585,9 +1615,7 @@ public class GMAdMob extends GMAdMobInternal {
             }
 
             admob_app_open_ad_show(appOpenEnableCallback);
-            return;
         }
-        isShowingAd = false;
     }
 
 	@Override
@@ -1638,6 +1666,13 @@ public class GMAdMob extends GMAdMobInternal {
 	@FunctionalInterface
 	public interface AdCleaner<T> {
 		void clean(T ad);
+	}
+
+	private void warnIfAdHandleMapGrowing(String mapName, Map<Long, ?> handles) {
+		if (handles.size() == AD_HANDLE_WARN_THRESHOLD) {
+			Log.w(LOG_TAG, mapName + " has " + handles.size()
+					+ " outstanding loaded-but-undisposed handles - are load() calls missing a matching show()/dispose()?");
+		}
 	}
 
 	private <T> void cleanAd(T ad, AdCleaner<T> cleaner) {

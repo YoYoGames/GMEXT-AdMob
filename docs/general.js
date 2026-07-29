@@ -131,7 +131,7 @@
  * @member InvalidAdId No ad unit ID has been set for this ad family (or it is empty).
  * @member AdLimitReached Reserved for future use.
  * @member NoAdsLoaded The requested ad instance has not been loaded (or has already been shown/disposed).
- * @member NoActiveBannerAd No banner has been created yet.
+ * @member NoActiveBannerAd Reserved for future use.
  * @member IllegalCall The call is not valid in the SDK's current state (e.g. calling
  * ${function.admob_set_test_device_id} after ${function.admob_initialize}).
  * @member NullViewHandler The game's view is not available yet (too early in the app lifecycle).
