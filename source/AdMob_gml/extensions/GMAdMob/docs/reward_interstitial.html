@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Rewarded Interstitial - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Rewarded Interstitial";
+        var mkdocs_page_input_path = "reward_interstitial.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Modules</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="general.html">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Rewarded Interstitial</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Modules</li>
+      <li class="breadcrumb-item active">Rewarded Interstitial</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/reward_interstitial.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="top"></a></p>
+<h1 id="rewarded-interstitial"><strong>Rewarded Interstitial</strong></h1>
+<p>Functions for loading and showing rewarded interstitial ads - full-screen ads shown at
+natural transition points, like an interstitial, but that also grant the player an in-game reward.</p>
+<h2 id="functions">Functions</h2>
+<p>This module offers a collection of functions designed to address specific tasks and provide utilities for various purposes. Explore the available functions to make the most of the functionalities provided by this module.</p>
+<ul>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_set_ad_unit">admob_rewarded_interstitial_set_ad_unit</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_is_valid">admob_rewarded_interstitial_is_valid</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_dispose">admob_rewarded_interstitial_dispose</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a></li>
+</ul>
+<h2 id="constants">Constants</h2>
+<p>This module includes a set of predefined constants that can be utilized for various purposes. Browse through the available constants to find values relevant to your needs and enhance the efficiency of your code.</p>
+<ul>
+<li><a href="reward_interstitial.html#admobrewardedinterstitialshowevent">AdMobRewardedInterstitialShowEvent</a></li>
+</ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewarded_interstitial_set_ad_unit">admob_rewarded_interstitial_set_ad_unit</h1>
+<p>Sets the default ad unit ID used by <a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a> when its own
+<code>ad_unit_id</code> argument is omitted.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_set_ad_unit(ad_unit_id)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ad_unit_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The rewarded interstitial ad unit ID, from the AdMob dashboard.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</h1>
+<p>Loads a rewarded interstitial ad. Multiple rewarded interstitials can be in flight at once -
+each successful load produces its own independent <code>handle</code>, so you can pre-load several and show
+them later in any order.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_load(callback, ad_unit_id=undefined)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call once the load completes or fails.</td>
+</tr>
+<tr>
+<td>ad_unit_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The ad unit ID to load. If omitted, uses the unit set by<br><a href="reward_interstitial.html#admob_rewarded_interstitial_set_ad_unit">admob_rewarded_interstitial_set_ad_unit</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if the load request was accepted, an error
+code otherwise.</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once, when the load completes or fails.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The load outcome.</td>
+</tr>
+<tr>
+<td>handle</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>A handle identifying this loaded ad instance, for use with<br><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a>/<a href="reward_interstitial.html#admob_rewarded_interstitial_is_valid">admob_rewarded_interstitial_is_valid</a>/<br><a href="reward_interstitial.html#admob_rewarded_interstitial_dispose">admob_rewarded_interstitial_dispose</a>. Only present on success.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewarded_interstitial_is_valid">admob_rewarded_interstitial_is_valid</h1>
+<p>Checks whether a handle still refers to a loaded, unshown rewarded interstitial ad instance.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_is_valid(handle)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>handle</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>A handle returned by <a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></p>
+</blockquote>
+<p><code>true</code> if the handle is still valid (loaded, not yet shown or disposed).</p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewarded_interstitial_dispose">admob_rewarded_interstitial_dispose</h1>
+<p>Releases a loaded rewarded interstitial ad instance without showing it. Does nothing if the
+handle is already invalid.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_dispose(handle)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>handle</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>A handle returned by <a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</h1>
+<p>Shows a loaded rewarded interstitial ad full-screen. <code>handle</code> is consumed by this call
+(whether it succeeds or fails) - it cannot be shown again, even if
+<code>admob_rewarded_interstitial_show</code> itself fails.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_show(handle, callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>handle</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>A handle returned by <a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a>.</td>
+</tr>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call for the ad's show-lifecycle events.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if the show request was accepted,
+<a href="general.html#admoberror">AdMobError</a>.InvalidHandle if <code>handle</code> is invalid, already shown, or already disposed, an
+error code otherwise.</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once per show-lifecycle event on success; fires once with <code>success = false</code> and no
+<code>type</code> if the ad fails to show.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The event's result.</td>
+</tr>
+<tr>
+<td>type</td>
+<td><a href="reward_interstitial.html#admobrewardedinterstitialshowevent">AdMobRewardedInterstitialShowEvent</a></td>
+<td>Which show-lifecycle event this is. Absent<br>when <code>result.success</code> is <code>false</code>.</td>
+</tr>
+<tr>
+<td>reward</td>
+<td><a href="general.html#admobreward">AdMobReward</a></td>
+<td>The reward the user earned. Only present when <code>type</code> is<br><a href="reward_interstitial.html#admobrewardedinterstitialshowevent">AdMobRewardedInterstitialShowEvent</a>.Reward.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>admob_rewarded_interstitial_show(global.rewarded_interstitial_handle, function(_result, _type = undefined, _reward = undefined)
+{
+    if (_type == AdMobRewardedInterstitialShowEvent.Reward)
+        show_debug_message($&quot;Earned {_reward.amount} {_reward.type}&quot;);
+});
+</code></pre></div>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobrewardedinterstitialshowevent">AdMobRewardedInterstitialShowEvent</h1>
+<p>The show-lifecycle events <a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a>'s callback can fire
+with on success. Numeric values are extension-owned.</p>
+<p>These constants are referenced by the following functions:</p>
+<ul>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Shown</code></td>
+<td>The rewarded interstitial was displayed.</td>
+</tr>
+<tr>
+<td><code>Dismissed</code></td>
+<td>The user closed the rewarded interstitial.</td>
+</tr>
+<tr>
+<td><code>Clicked</code></td>
+<td>The user clicked the rewarded interstitial.</td>
+</tr>
+<tr>
+<td><code>Impression</code></td>
+<td>The rewarded interstitial recorded an impression.</td>
+</tr>
+<tr>
+<td><code>Reward</code></td>
+<td>The user earned a reward - the callback's <code>reward</code> argument is present for this<br>event only.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="reward_video.html" class="btn btn-neutral float-left" title="Rewarded Video"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="app_open.html" class="btn btn-neutral float-right" title="App Open Ads">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="reward_video.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="app_open.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

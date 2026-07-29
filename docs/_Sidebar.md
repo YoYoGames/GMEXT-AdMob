@@ -3,8 +3,8 @@
 ### Guides
 
  * ${page.setup}
- * ${page.quick_start_guide}
- * ${page.workflow}
+ * ${page.getting_started}
+ * ${page.extension_options}
 
 ### Modules
 
@@ -17,7 +17,3 @@
  * ${module.reward_interstitial}
  * ${module.app_open}
  * ${module.settings}
-
-### Extras
-
- * ${module.constants}

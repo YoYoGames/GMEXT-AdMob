@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>General - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "General";
+        var mkdocs_page_input_path = "general.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Modules</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">General</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structs">Structs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_interstitial.html">Rewarded Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Modules</li>
+      <li class="breadcrumb-item active">General</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/general.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="top"></a></p>
+<h1 id="general"><strong>General</strong></h1>
+<p>Initialization, the shared paid-event stream, server-side verification, and the shared result
+types every other module's callbacks use.</p>
+<h2 id="functions">Functions</h2>
+<p>Initialization and cross-family functions.</p>
+<ul>
+<li><a href="general.html#admob_initialize">admob_initialize</a></li>
+<li><a href="general.html#admob_set_test_device_id">admob_set_test_device_id</a></li>
+<li><a href="general.html#admob_events_on_paid_event">admob_events_on_paid_event</a></li>
+<li><a href="general.html#admob_server_side_verification_set">admob_server_side_verification_set</a></li>
+<li><a href="general.html#admob_server_side_verification_clear">admob_server_side_verification_clear</a></li>
+</ul>
+<h2 id="structs">Structs</h2>
+<p>Shared data types used across every module.</p>
+<ul>
+<li><a href="general.html#admobresult">AdMobResult</a></li>
+<li><a href="general.html#admobreward">AdMobReward</a></li>
+<li><a href="general.html#admobpaidevent">AdMobPaidEvent</a></li>
+</ul>
+<h2 id="constants">Constants</h2>
+<p>This module includes a set of predefined constants that can be utilized for various purposes. Browse through the available constants to find values relevant to your needs and enhance the efficiency of your code.</p>
+<ul>
+<li><a href="general.html#admoberror">AdMobError</a></li>
+<li><a href="general.html#admobadtype">AdMobAdType</a></li>
+<li><a href="general.html#admobprecisiontype">AdMobPrecisionType</a></li>
+</ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_initialize">admob_initialize</h1>
+<p>Initializes the Google Mobile Ads SDK. Call this once, before any other AdMob function
+(other than <a href="general.html#admob_set_test_device_id">admob_set_test_device_id</a>, which must be called <em>before</em> this one if you
+need test ads on the current device). Every other function in this extension fails with
+<a href="general.html#admoberror">AdMobError</a>.NotInitialized until this has completed successfully.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_initialize(callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call once initialization completes or fails.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok if the initialization request was accepted,
+an error code if it was rejected outright (e.g. already initialized).</p>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once, when the SDK finishes starting up (or fails to).</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>result</td>
+<td><a href="general.html#admobresult">AdMobResult</a></td>
+<td>The initialization outcome.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>admob_initialize(function(_result)
+{
+    if (_result.success)
+        show_debug_message(&quot;AdMob initialized&quot;);
+    else
+        show_debug_message($&quot;AdMob failed to initialize: {_result.error_message}&quot;);
+});
+</code></pre></div>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_set_test_device_id">admob_set_test_device_id</h1>
+<p>Marks the current device as a test device, so every ad request from this session returns a
+Google test ad instead of a live ad. Must be called <strong>before</strong> <a href="general.html#admob_initialize">admob_initialize</a> -
+calling it after initialization returns <a href="general.html#admoberror">AdMobError</a>.IllegalCall.</p>
+<blockquote>
+<p>Never ship a build with this enabled - it must only be used during development.</p>
+</blockquote>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_set_test_device_id()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="general.html#admoberror">AdMobError</a></p>
+</blockquote>
+<p><a href="general.html#admoberror">AdMobError</a>.Ok on success,
+<a href="general.html#admoberror">AdMobError</a>.IllegalCall if the SDK is already initialized.</p>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_events_on_paid_event">admob_events_on_paid_event</h1>
+<p>Subscribes to (or unsubscribes from) Google's paid-event stream, shared across every ad
+family this extension wraps. Once subscribed, <code>callback</code> fires once per ad impression that earns
+revenue, for every banner/interstitial/rewarded video/rewarded interstitial/app open ad shown -
+check <a href="general.html#admobpaidevent">AdMobPaidEvent</a>.ad_type to tell which family it came from.</p>
+<p>This function operates asynchronously, which means that it does not immediately return the requested result. Instead, upon completion of the task, it will trigger the <a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a>.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_events_on_paid_event(enabled, callback)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enabled</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></td>
+<td><code>true</code> to subscribe, <code>false</code> to unsubscribe (in which case <code>callback</code> is<br>ignored and can be <code>undefined</code>).</td>
+</tr>
+<tr>
+<td>callback</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Script_Functions.htm">Function</a></td>
+<td>The function to call for every paid impression.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<p><strong>Triggers:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Method_Variables.htm">Callback</a></p>
+</blockquote>
+<p>Fires once per ad impression that earns revenue, across every ad family.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td><a href="general.html#admobpaidevent">AdMobPaidEvent</a></td>
+<td>The paid-event details.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>admob_events_on_paid_event(true, function(_event)
+{
+    show_debug_message($&quot;Earned {_event.value_micros / 1000000} {_event.currency_code} from {_event.ad_type}&quot;);
+});
+</code></pre></div>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_server_side_verification_set">admob_server_side_verification_set</h1>
+<p>Configures the custom data Google's <a href="https://developers.google.com/admob/android/ssv">Server-Side Verification</a>
+feature attaches to the reward callback your backend receives when a rewarded video or rewarded
+interstitial ad is completed. Applies to every rewarded ad loaded after this call.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_server_side_verification_set(user_id, custom_data)
+</code></pre></div>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>An opaque identifier for the current user, echoed back to your server in<br>the SSV callback.</td>
+</tr>
+<tr>
+<td>custom_data</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>Arbitrary custom data, echoed back to your server in the SSV callback.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admob_server_side_verification_clear">admob_server_side_verification_clear</h1>
+<p>Clears the server-side-verification data previously set with
+<a href="general.html#admob_server_side_verification_set">admob_server_side_verification_set</a>. Rewarded ads loaded after this call carry no SSV
+custom data.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>admob_server_side_verification_clear()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p>N/A</p>
+</blockquote>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admoberror">AdMobError</h1>
+<p>Extension-defined error codes returned synchronously by most functions in this extension.
+These are <strong>not</strong> raw Google Mobile Ads SDK error codes - a Google SDK failure is instead reported
+asynchronously via <a href="general.html#admobresult">AdMobResult</a>.sdk_error_code in the relevant callback.</p>
+<p>These constants are referenced by the following functions:</p>
+<ul>
+<li><a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a></li>
+<li><a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a></li>
+<li><a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a></li>
+<li><a href="banner.html#admob_banner_create">admob_banner_create</a></li>
+<li><a href="banner.html#admob_banner_create_ext">admob_banner_create_ext</a></li>
+<li><a href="consent.html#admob_consent_request_info_update">admob_consent_request_info_update</a></li>
+<li><a href="consent.html#admob_consent_load">admob_consent_load</a></li>
+<li><a href="consent.html#admob_consent_show">admob_consent_show</a></li>
+<li><a href="general.html#admob_initialize">admob_initialize</a></li>
+<li><a href="general.html#admob_set_test_device_id">admob_set_test_device_id</a></li>
+<li><a href="interstitial.html#admob_interstitial_load">admob_interstitial_load</a></li>
+<li><a href="interstitial.html#admob_interstitial_show">admob_interstitial_show</a></li>
+<li><a href="reward_video.html#admob_rewarded_video_load">admob_rewarded_video_load</a></li>
+<li><a href="reward_video.html#admob_rewarded_video_show">admob_rewarded_video_show</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ok</code></td>
+<td>The call succeeded.</td>
+</tr>
+<tr>
+<td><code>NotInitialized</code></td>
+<td><a href="general.html#admob_initialize">admob_initialize</a> has not completed successfully yet.</td>
+</tr>
+<tr>
+<td><code>InvalidAdId</code></td>
+<td>No ad unit ID has been set for this ad family (or it is empty).</td>
+</tr>
+<tr>
+<td><code>AdLimitReached</code></td>
+<td>Reserved for future use.</td>
+</tr>
+<tr>
+<td><code>NoAdsLoaded</code></td>
+<td>The requested ad instance has not been loaded (or has already been shown/disposed).</td>
+</tr>
+<tr>
+<td><code>NoActiveBannerAd</code></td>
+<td>No banner has been created yet.</td>
+</tr>
+<tr>
+<td><code>IllegalCall</code></td>
+<td>The call is not valid in the SDK's current state (e.g. calling<br><a href="general.html#admob_set_test_device_id">admob_set_test_device_id</a> after <a href="general.html#admob_initialize">admob_initialize</a>).</td>
+</tr>
+<tr>
+<td><code>NullViewHandler</code></td>
+<td>The game's view is not available yet (too early in the app lifecycle).</td>
+</tr>
+<tr>
+<td><code>InvalidHandle</code></td>
+<td>The handle passed does not refer to a currently-loaded ad instance - it may<br>already have been shown, disposed, or never existed.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobadtype">AdMobAdType</h1>
+<p>Distinguishes which ad family a shared <a href="general.html#admob_events_on_paid_event">admob_events_on_paid_event</a> callback fired
+for. Extension-owned - Google's own <code>AdValue</code> type carries no ad-family concept.</p>
+<p>These constants are referenced by the following structs:</p>
+<ul>
+<li><a href="general.html#admobpaidevent">AdMobPaidEvent</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Banner</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Interstitial</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RewardedVideo</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RewardedInterstitial</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AppOpen</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobprecisiontype">AdMobPrecisionType</h1>
+<p>How precisely <a href="general.html#admobpaidevent">AdMobPaidEvent</a>.value_micros is known. Mirrors Android
+<code>AdValue.PrecisionType</code>/iOS <code>GADAdValuePrecision</code> directly - both platforms already use these same
+ordinals, so no translation is needed.</p>
+<p>These constants are referenced by the following structs:</p>
+<ul>
+<li><a href="general.html#admobpaidevent">AdMobPaidEvent</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Unknown</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Estimated</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>PublisherProvided</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Precise</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobresult">AdMobResult</h1>
+<p>The uniform success/failure envelope delivered to every async callback in this extension.
+<code>error_message</code> and <code>sdk_error_code</code> are both absent on success. <code>sdk_error_code</code> carries Google's
+own <code>LoadAdError</code>/<code>AdError</code> code verbatim when the failure came from the ad SDK itself; it is absent
+when the extension rejected the call before ever reaching Google (see <a href="general.html#admoberror">AdMobError</a> instead).</p>
+<p>This struct is referenced by the following functions:</p>
+<ul>
+<li><a href="app_open.html#admob_app_open_ad_enable">admob_app_open_ad_enable</a></li>
+<li><a href="app_open.html#admob_app_open_ad_load">admob_app_open_ad_load</a></li>
+<li><a href="app_open.html#admob_app_open_ad_show">admob_app_open_ad_show</a></li>
+<li><a href="banner.html#admob_banner_create">admob_banner_create</a></li>
+<li><a href="banner.html#admob_banner_create_ext">admob_banner_create_ext</a></li>
+<li><a href="consent.html#admob_consent_request_info_update">admob_consent_request_info_update</a></li>
+<li><a href="consent.html#admob_consent_load">admob_consent_load</a></li>
+<li><a href="consent.html#admob_consent_show">admob_consent_show</a></li>
+<li><a href="general.html#admob_initialize">admob_initialize</a></li>
+<li><a href="interstitial.html#admob_interstitial_load">admob_interstitial_load</a></li>
+<li><a href="interstitial.html#admob_interstitial_show">admob_interstitial_show</a></li>
+<li><a href="reward_video.html#admob_rewarded_video_load">admob_rewarded_video_load</a></li>
+<li><a href="reward_video.html#admob_rewarded_video_show">admob_rewarded_video_show</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_load">admob_rewarded_interstitial_load</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>success</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></td>
+<td>Whether the operation succeeded.</td>
+</tr>
+<tr>
+<td>error_message</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The SDK's own error message. Only present on failure.</td>
+</tr>
+<tr>
+<td>sdk_error_code</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>Google's raw <code>LoadAdError</code>/<code>AdError</code> code. Only present when the<br>failure came from the SDK (not from this extension rejecting the call outright).</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobreward">AdMobReward</h1>
+<p>The reward earned from a rewarded video or rewarded interstitial ad. Mirrors Google's
+<code>RewardItem.getAmount()</code>/<code>getType()</code> directly.</p>
+<p>This struct is referenced by the following functions:</p>
+<ul>
+<li><a href="reward_video.html#admob_rewarded_video_show">admob_rewarded_video_show</a></li>
+<li><a href="reward_interstitial.html#admob_rewarded_interstitial_show">admob_rewarded_interstitial_show</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>amount</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>The reward amount.</td>
+</tr>
+<tr>
+<td>type</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The reward type, as configured for the ad unit in the AdMob dashboard.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="admobpaidevent">AdMobPaidEvent</h1>
+<p>Delivered by Google's <code>OnPaidEventListener</code> - always a success signal (the underlying SDK
+event has no failure case), so unlike <a href="general.html#admobresult">AdMobResult</a> there is no <code>success</code>/<code>error_message</code>
+pair. <code>ad_type</code> and <code>ad_unit_id</code> are enrichment this extension adds so a single shared subscription
+(see <a href="general.html#admob_events_on_paid_event">admob_events_on_paid_event</a>) can tell which ad family and unit the impression came
+from; the rest mirrors Google's <code>AdValue</code>/<code>AdapterResponseInfo</code> directly.</p>
+<p>This struct is referenced by the following functions:</p>
+<ul>
+<li><a href="general.html#admob_events_on_paid_event">admob_events_on_paid_event</a></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ad_type</td>
+<td><a href="general.html#admobadtype">AdMobAdType</a></td>
+<td>Which ad family the impression came from.</td>
+</tr>
+<tr>
+<td>ad_unit_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The ad unit ID the impression came from.</td>
+</tr>
+<tr>
+<td>value_micros</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Real</a></td>
+<td>The estimated earned value, in micro-units of <code>currency_code</code>.</td>
+</tr>
+<tr>
+<td>currency_code</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The ISO 4217 currency code (e.g. <code>"USD"</code>).</td>
+</tr>
+<tr>
+<td>precision</td>
+<td><a href="general.html#admobprecisiontype">AdMobPrecisionType</a></td>
+<td>How precisely <code>value_micros</code> is known.</td>
+</tr>
+<tr>
+<td>mediation_adapter_class_name</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The class name of the mediation adapter that served<br>the ad, or the AdMob network's own class name if no mediation was involved.</td>
+</tr>
+<tr>
+<td>ad_source_name</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The name of the ad source (network) that served the ad. Only<br>present when Google's <code>AdapterResponseInfo</code> was available for this impression.</td>
+</tr>
+<tr>
+<td>ad_source_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The ID of the ad source that served the ad.</td>
+</tr>
+<tr>
+<td>ad_source_instance_name</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The name of the specific ad source instance/placement.</td>
+</tr>
+<tr>
+<td>ad_source_instance_id</td>
+<td><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Reference/Strings/Strings.htm">String</a></td>
+<td>The ID of the specific ad source instance/placement.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="extension_options.html" class="btn btn-neutral float-left" title="Extension Options"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="consent.html" class="btn btn-neutral float-right" title="Consent">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="extension_options.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="consent.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

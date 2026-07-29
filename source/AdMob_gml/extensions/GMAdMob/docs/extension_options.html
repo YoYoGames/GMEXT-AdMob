@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Extension Options - GMEXT-AdMob</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Extension Options";
+        var mkdocs_page_input_path = "extension_options.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-AdMob
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Extension Options</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#android-options">Android Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ios-options">iOS Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extra-options">Extra Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#per-ad-unit-vs-per-call-ad-units">Per-Ad-Unit vs. Per-Call Ad Units</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Modules</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="general.html">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="consent.html">Consent</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="targeting.html">Targeting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="banner.html">Banner</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="interstitial.html">Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_video.html">Rewarded Video</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reward_interstitial.html">Rewarded Interstitial</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="app_open.html">App Open Ads</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-AdMob</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Guides</li>
+      <li class="breadcrumb-item active">Extension Options</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob/edit/master/docs/extension_options.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="extension-options">Extension Options</h1>
+<p>Open the AdMob extension's Extension Options from the Asset Browser (right-click the extension →
+<strong>Properties</strong>, or double-click it) to fill in your app and ad unit IDs. Every ID below is a "test ad"
+placeholder by default, from Google's own <a href="https://developers.google.com/admob/android/test-ads">test ad unit list</a>
+- replace every one with your real IDs (<a href="setup.html">Setup</a>) before shipping.</p>
+<h2 id="android-options">Android Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Required</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Application ID</strong></td>
+<td>Yes</td>
+<td>Your app's AdMob Application ID (from the AdMob dashboard), used to initialize the SDK on Android.</td>
+</tr>
+<tr>
+<td><strong>Banner Unit ID</strong></td>
+<td>Only if using banners</td>
+<td>The ad unit ID passed to <a href="banner.html#admob_banner_create">admob_banner_create</a>/<a href="banner.html#admob_banner_create_ext">admob_banner_create_ext</a> when you don't set one manually with <a href="banner.html#admob_banner_set_ad_unit">admob_banner_set_ad_unit</a>.</td>
+</tr>
+<tr>
+<td><strong>Interstitial Unit ID</strong></td>
+<td>Only if using interstitials</td>
+<td>The default interstitial ad unit ID.</td>
+</tr>
+<tr>
+<td><strong>Rewarded Unit ID</strong></td>
+<td>Only if using rewarded video</td>
+<td>The default rewarded video ad unit ID.</td>
+</tr>
+<tr>
+<td><strong>Rewarded Interstitial Unit ID</strong></td>
+<td>Only if using rewarded interstitials</td>
+<td>The default rewarded interstitial ad unit ID.</td>
+</tr>
+<tr>
+<td><strong>App Open Ad ID</strong></td>
+<td>Only if using app open ads</td>
+<td>The default app open ad unit ID.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ios-options">iOS Options</h2>
+<p>Same fields as Android, mirrored for the iOS platform: <strong>Application ID</strong>, <strong>Banner Unit ID</strong>,
+<strong>Interstitial Unit ID</strong>, <strong>Rewarded Unit ID</strong>, <strong>Rewarded Interstitial Unit ID</strong>, <strong>App Open Ad ID</strong>.</p>
+<h2 id="extra-options">Extra Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Google Ad Manager</strong></td>
+<td>Boolean, default off. Enable only if your app also integrates Google Ad Manager (<code>AdManagerAdView</code>/<code>AdManagerAdRequest</code>) alongside AdMob - leave disabled for a plain AdMob-only integration. Controls the <code>AD_MANAGER_APP</code>/<code>GADIsAdManagerApp</code> manifest and plist flags on Android and iOS respectively.</td>
+</tr>
+<tr>
+<td><strong>Log Level</strong></td>
+<td>A dropdown (<code>0</code>/<code>1</code>/<code>2</code>) controlling how much the extension logs to the native platform log (Logcat on Android, the device console on iOS). Higher is more verbose - raise it when diagnosing an issue, lower it for release builds.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="per-ad-unit-vs-per-call-ad-units">Per-Ad-Unit vs. Per-Call Ad Units</h2>
+<p>Every ad family also has its own <code>admob_*_set_ad_unit</code> function (e.g.
+<a href="interstitial.html#admob_interstitial_set_ad_unit">admob_interstitial_set_ad_unit</a>) that overrides the Extension Option value at runtime -
+useful if you want to switch ad units without rebuilding, or if you manage multiple ad units per
+family. The load functions for handle-based families (interstitial, rewarded video, rewarded
+interstitial) also accept an optional <code>ad_unit_id</code> argument that overrides both the Extension Option
+and any <code>set_ad_unit</code> call for that one load.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="general.html" class="btn btn-neutral float-right" title="General">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">YoYoGames 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-AdMob" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="getting_started.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="general.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

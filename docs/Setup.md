@@ -2,16 +2,16 @@
 
 # Setup
 
-While Google is primarily directed towards supporting their Android platform, they do provide the [AdMob](https://www.google.com/admob/) platform to deliver advertising to both Android *and* iOS. This article provides information on how to set up your game on the AdMob dashboard, as well as steps on how prepare it in GameMaker so that ads will be shown when the final game is played by users. This is achieved using the AdMob extension, which is to be used alongside your Google AdMob account ([web page](https://admob.google.com/home/)). All the required personal ad IDs and consent messages should be handled through there.
+While Google is primarily directed towards supporting their Android platform, they do provide the [AdMob](https://admob.google.com/home/) platform to deliver advertising to both Android *and* iOS. This article provides information on how to set up your game on the AdMob dashboard, as well as steps on how prepare it in GameMaker so that ads will be shown when the final game is played by users. This is achieved using the AdMob extension, which is to be used alongside your Google AdMob account ([web page](https://admob.google.com/home/)). All the required personal ad IDs and consent messages should be handled through there.
 
 [[NOTE: If you have the Amazon Fire target, the setup for advertising is exactly the same as is described in this article for Android.]]
 
-[[WARNING: To build and deploy to iOS it's required for the developer to install CocoaPods. ([installation guide](https://help.gamemaker.io/hc/en-us/articles/360008958858-iOS-and-tvOS-Using-CocoaPods))]]
+[[WARNING: To build and deploy to iOS it's required for the developer to install CocoaPods. ([installation guide](https://gamemaker.io/en/help/articles/ios-and-tvos-using-cocoapods))]]
 
 If you have not already signed up for an AdMob account, you should [do this now](https://support.google.com/admob/answer/7356219?hl=en) (it's free), and also ensure that you have your game set up and running on the target platform(s). You can find setup guides from the following links:
 
-* [Setting Up For Android](https://help.gamemaker.io/hc/en-us/articles/115001368727)
-* [Setting Up For iOS](https://help.gamemaker.io/hc/en-us/articles/115001368747)
+* [Setting Up For Android](https://gamemaker.io/en/help/articles/setting-up-for-android)
+* [Setting Up For iOS](https://gamemaker.io/en/help/articles/setting-up-for-ios-including-ipados)
 
 We also recommend that you read the **AdMob Implementation Guidelines**, as these outline how Google expects you to use each type of ad unit:
 
@@ -70,7 +70,7 @@ You can optionally import the "**AdMob Demo**" if you want to test the provided 
 
 Clicking the *Import* button will install it.
 
-Once that's done you will also need to ensure that the **Minimum SDK API Level** is set to at least **21** in the **Android Game Options**, as that is the minimum required API level for the AdMob SDK to build, while the Target and Compile should be on the latest:
+Once that's done you will also need to ensure that the **Minimum SDK API Level** is set to at least **23** in the **Android Game Options**, as that is the minimum required API level for the AdMob SDK (and the User Messaging Platform SDK it depends on) to build, while the Target and Compile should be on the latest:
 
 ![](assets/AdMob_MinSDK.png)
 
