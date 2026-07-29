@@ -11,17 +11,24 @@ draw_set_halign(fa_left);
 draw_text(x, y + 70, admob_consent_is_form_available() ? "Consent available" : "Consent unavailable");
 
 
-// This function checks if the current interstitial ad is loaded. This function
+// This checks whether the currently held interstitial handle (see
+// Obj_AdMob_Interstitial) still points at a live, unshown ad. This function
 // needs to return true before we can correctly show the interstitial ad.
-var interstitial_isLoaded = admob_interstitial_is_loaded();
+var _interstitial_handle = Obj_AdMob_Interstitial.interstitial_handle;
+var interstitial_isLoaded = !is_undefined(_interstitial_handle) && admob_interstitial_is_valid(_interstitial_handle);
 draw_text(x, y + 105, "Interstitial_isLoaded: " + string(interstitial_isLoaded));
 
-// This function checks if the current rewarded video ad is loaded. This function
-// needs to return true before we can correctly show the rewarded video ad.
-var rewardedVideoAd_isLoaded = admob_rewarded_video_is_loaded();
-draw_text(x, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded) + " Loaded: #" + string(admob_rewarded_video_instances_count()));
+// This checks whether the currently held rewarded video handle (see
+// Obj_AdMob_Rewarded) still points at a live, unshown ad. "Multi-loaded"
+// counts the separate pool built up via Obj_AdMob_Rewarded_Multi_Load.
+var _rewarded_video_handle = Obj_AdMob_Rewarded.rewarded_video_handle;
+var rewardedVideoAd_isLoaded = !is_undefined(_rewarded_video_handle) && admob_rewarded_video_is_valid(_rewarded_video_handle);
+draw_text(x, y + 140, "RewardedVideoAd_isLoaded: " + string(rewardedVideoAd_isLoaded) + " Multi-loaded: #" + string(array_length(Obj_AdMob_Rewarded.rewarded_video_multi_handles)));
 
-var rewardedInterstitialAd_isLoaded = admob_rewarded_interstitial_is_loaded();
+// This checks whether the currently held rewarded interstitial handle (see
+// Obj_AdMob_RewardedInterstitial) still points at a live, unshown ad.
+var _rewarded_interstitial_handle = Obj_AdMob_RewardedInterstitial.rewarded_interstitial_handle;
+var rewardedInterstitialAd_isLoaded = !is_undefined(_rewarded_interstitial_handle) && admob_rewarded_interstitial_is_valid(_rewarded_interstitial_handle);
 draw_text(x, y + 175, "RewardedInterstitialAd_isLoaded: " + string(rewardedInterstitialAd_isLoaded));
 
 // These set of function also allow to get the dimensions of the banner being displayed.

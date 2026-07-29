@@ -20,14 +20,9 @@ else
             banner_type,
             bottom,
             alignment,
-            function(data)
+            function(_result, _type)
             {
-                show_debug_message($"Banner callback: {json_stringify(data)}");
-
-                if (data.event_type == AdMobBannerCallbackEvent.LoadFailed)
-                {
-                    show_debug_message($"Banner failed: {data.error_message}");
-                }
+                show_debug_message($"Banner callback: success={_result.success}, type={_type}, error={_result.error_message}");
             }
         );
 

@@ -2,15 +2,61 @@
 module GMAdMob;
 
 // -----------------------------------------------------------------------------
+// Shared callback types
+// -----------------------------------------------------------------------------
+
+// Uniform success/failure envelope for every async callback in this extension.
+// error_message and sdk_error_code are both absent on success. sdk_error_code
+// carries Google's own LoadAdError/AdError code verbatim when the failure came
+// from the SDK; absent when the extension rejected the call before ever
+// reaching Google (see the AdMobError sync return codes below).
+[global]
+class `[[AdMobResult]]` prototype Object
+{
+    [field] property success : bool { get; set; }
+    [field, type_hint=`string?`] property error_message : gmval { get; set; }
+    [field, type_hint=`int32?`] property sdk_error_code : gmval { get; set; }
+}
+
+// Mirrors RewardItem.getAmount()/getType() directly.
+[global]
+class `[[AdMobReward]]` prototype Object
+{
+    [field] property amount : real { get; set; }
+    [field] property type : string { get; set; }
+}
+
+// Delivered by AdMob's OnPaidEventListener - always a success signal (Google's SDK has no
+// failure case for this event), so unlike AdMobResult there is no success/error_message pair.
+// ad_type/ad_unit_id are enrichment this extension adds (a single paid-event callback is shared
+// across every ad family); the rest mirrors AdValue/AdapterResponseInfo directly.
+[global]
+class `[[AdMobPaidEvent]]` prototype Object
+{
+    [field, type_hint=`AdMobAdType`] property ad_type : gmval { get; set; }
+    [field] property ad_unit_id : string { get; set; }
+    [field] property value_micros : real { get; set; }
+    [field] property currency_code : string { get; set; }
+    [field, type_hint=`AdMobPrecisionType`] property precision : gmval { get; set; }
+    [field] property mediation_adapter_class_name : string { get; set; }
+    [field, type_hint=`string?`] property ad_source_name : gmval { get; set; }
+    [field, type_hint=`string?`] property ad_source_id : gmval { get; set; }
+    [field, type_hint=`string?`] property ad_source_instance_name : gmval { get; set; }
+    [field, type_hint=`string?`] property ad_source_instance_id : gmval { get; set; }
+}
+
+// -----------------------------------------------------------------------------
 // Initialization / setup
 // -----------------------------------------------------------------------------
 
-[global, bind = typed_gml]
-function admob_initialize(callback: func): real;
+/// callback(result: AdMobResult) once initialization completes or fails.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_initialize(callback: func): gmval;
 
-[global, bind = typed_gml]
-function admob_set_test_device_id(): real;
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_set_test_device_id(): gmval;
 
+/// callback(event: AdMobPaidEvent) once per paid ad impression, across every ad family.
 [global, bind = typed_gml]
 function admob_events_on_paid_event(enabled: bool, callback: func): unit;
 
@@ -21,20 +67,23 @@ function admob_events_on_paid_event(enabled: bool, callback: func): unit;
 [global, bind = typed_gml]
 function admob_banner_set_ad_unit(ad_unit_id: string): unit;
 
-[global, bind = typed_gml]
+/// callback(result: AdMobResult, type: AdMobBannerCallbackEvent) - fires once per lifecycle
+/// event (Loaded/LoadFailed/Opened/Clicked/Impression/Closed) for as long as the banner exists.
+[global, bind = typed_gml, type_hint=`AdMobError`]
 function admob_banner_create(
     [type_hint=`AdMobBannerSize`] size,
     bottom: bool,
     callback: func
-): real;
+): gmval;
 
-[global, bind = typed_gml]
+/// callback(result: AdMobResult, type: AdMobBannerCallbackEvent) - see admob_banner_create.
+[global, bind = typed_gml, type_hint=`AdMobError`]
 function admob_banner_create_ext(
     [type_hint=`AdMobBannerSize`] size,
     bottom: bool,
     [type_hint=`AdMobBannerAlignment`] alignment,
     callback: func
-): real;
+): gmval;
 
 [global, bind = typed_gml]
 function admob_banner_get_width(): real;
@@ -61,23 +110,27 @@ function admob_banner_remove(): unit;
 [global, bind = typed_gml]
 function admob_interstitial_set_ad_unit(ad_unit_id: string): unit;
 
-[global, bind = typed_gml]
-function admob_interstitial_free_loaded_instances(count: real): unit;
+/// callback(result: AdMobResult, handle: uint64?) - handle present only on success.
+/// ad_unit_id is optional; omit to use the unit set by admob_interstitial_set_ad_unit.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_interstitial_load(
+    callback: func,
+    [type_hint=`string?`] ad_unit_id: gmval
+): gmval;
 
 [global, bind = typed_gml]
-function admob_interstitial_max_instances(value: real): unit;
+function admob_interstitial_is_valid([type_hint=`uint64`] handle: gmval): bool;
 
 [global, bind = typed_gml]
-function admob_interstitial_load(callback: func): real;
+function admob_interstitial_dispose([type_hint=`uint64`] handle: gmval): unit;
 
-[global, bind = typed_gml]
-function admob_interstitial_show(callback: func): real;
-
-[global, bind = typed_gml]
-function admob_interstitial_is_loaded(): bool;
-
-[global, bind = typed_gml]
-function admob_interstitial_instances_count(): real;
+/// callback(result: AdMobResult, type: AdMobInterstitialShowEvent) on success;
+/// callback(result: AdMobResult) with success = false on failure or an invalid/consumed handle.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_interstitial_show(
+    [type_hint=`uint64`] handle: gmval,
+    callback: func
+): gmval;
 
 // -----------------------------------------------------------------------------
 // Server-side verification
@@ -99,23 +152,28 @@ function admob_server_side_verification_clear(): unit;
 [global, bind = typed_gml]
 function admob_rewarded_video_set_ad_unit(ad_unit_id: string): unit;
 
-[global, bind = typed_gml]
-function admob_rewarded_video_free_loaded_instances(count: real): unit;
+/// callback(result: AdMobResult, handle: uint64?) - handle present only on success.
+/// ad_unit_id is optional; omit to use the unit set by admob_rewarded_video_set_ad_unit.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_rewarded_video_load(
+    callback: func,
+    [type_hint=`string?`] ad_unit_id: gmval
+): gmval;
 
 [global, bind = typed_gml]
-function admob_rewarded_video_max_instances(value: real): unit;
+function admob_rewarded_video_is_valid([type_hint=`uint64`] handle: gmval): bool;
 
 [global, bind = typed_gml]
-function admob_rewarded_video_load(callback: func): real;
+function admob_rewarded_video_dispose([type_hint=`uint64`] handle: gmval): unit;
 
-[global, bind = typed_gml]
-function admob_rewarded_video_show(callback: func): real;
-
-[global, bind = typed_gml]
-function admob_rewarded_video_is_loaded(): bool;
-
-[global, bind = typed_gml]
-function admob_rewarded_video_instances_count(): real;
+/// callback(result: AdMobResult, type: AdMobRewardedVideoShowEvent, reward: AdMobReward?) on
+/// success - reward is present only when type = Reward.
+/// callback(result: AdMobResult) with success = false on failure or an invalid/consumed handle.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_rewarded_video_show(
+    [type_hint=`uint64`] handle: gmval,
+    callback: func
+): gmval;
 
 // -----------------------------------------------------------------------------
 // Rewarded interstitial
@@ -124,23 +182,28 @@ function admob_rewarded_video_instances_count(): real;
 [global, bind = typed_gml]
 function admob_rewarded_interstitial_set_ad_unit(ad_unit_id: string): unit;
 
-[global, bind = typed_gml]
-function admob_rewarded_interstitial_free_loaded_instances(count: real): unit;
+/// callback(result: AdMobResult, handle: uint64?) - handle present only on success.
+/// ad_unit_id is optional; omit to use the unit set by admob_rewarded_interstitial_set_ad_unit.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_rewarded_interstitial_load(
+    callback: func,
+    [type_hint=`string?`] ad_unit_id: gmval
+): gmval;
 
 [global, bind = typed_gml]
-function admob_rewarded_interstitial_max_instances(value: real): unit;
+function admob_rewarded_interstitial_is_valid([type_hint=`uint64`] handle: gmval): bool;
 
 [global, bind = typed_gml]
-function admob_rewarded_interstitial_load(callback: func): real;
+function admob_rewarded_interstitial_dispose([type_hint=`uint64`] handle: gmval): unit;
 
-[global, bind = typed_gml]
-function admob_rewarded_interstitial_show(callback: func): real;
-
-[global, bind = typed_gml]
-function admob_rewarded_interstitial_is_loaded(): bool;
-
-[global, bind = typed_gml]
-function admob_rewarded_interstitial_instances_count(): real;
+/// callback(result: AdMobResult, type: AdMobRewardedInterstitialShowEvent, reward: AdMobReward?)
+/// on success - reward is present only when type = Reward.
+/// callback(result: AdMobResult) with success = false on failure or an invalid/consumed handle.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_rewarded_interstitial_show(
+    [type_hint=`uint64`] handle: gmval,
+    callback: func
+): gmval;
 
 // -----------------------------------------------------------------------------
 // App-open ads
@@ -149,11 +212,14 @@ function admob_rewarded_interstitial_instances_count(): real;
 [global, bind = typed_gml]
 function admob_app_open_ad_set_ad_unit(ad_unit_id: string): unit;
 
-[global, bind = typed_gml]
+/// callback(result: AdMobResult) on load outcome, then callback(result, type: AdMobAppOpenAdShowEvent)
+/// per show-lifecycle event whenever this ad auto-shows - same callback as admob_app_open_ad_load/
+/// _show unless one of those supplies its own.
+[global, bind = typed_gml, type_hint=`AdMobError`]
 function admob_app_open_ad_enable(
     orientation: real,
     callback: func
-): real;
+): gmval;
 
 [global, bind = typed_gml]
 function admob_app_open_ad_disable(): unit;
@@ -164,11 +230,14 @@ function admob_app_open_ad_is_enabled(): bool;
 [global, bind = typed_gml]
 function admob_app_open_ad_is_loaded(): bool;
 
-[global, bind = typed_gml]
-function admob_app_open_ad_load(callback: func): real;
+/// callback(result: AdMobResult) on load outcome.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_app_open_ad_load(callback: func): gmval;
 
-[global, bind = typed_gml]
-function admob_app_open_ad_show(callback: func): real;
+/// callback(result: AdMobResult, type: AdMobAppOpenAdShowEvent) on success;
+/// callback(result) with success = false on show failure.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_app_open_ad_show(callback: func): gmval;
 
 // -----------------------------------------------------------------------------
 // Targeting
@@ -189,26 +258,29 @@ function admob_targeting_max_ad_content_rating(
 // Consent
 // -----------------------------------------------------------------------------
 
-[global, bind = typed_gml]
+/// callback(result: AdMobResult).
+[global, bind = typed_gml, type_hint=`AdMobError`]
 function admob_consent_request_info_update(
     [type_hint=`AdMobConsentDebugGeography`] debug_geography,
     callback: func
-): real;
+): gmval;
 
-[global, bind = typed_gml]
-function admob_consent_get_status(): real;
+[global, bind = typed_gml, type_hint=`AdMobConsentStatus`]
+function admob_consent_get_status(): gmval;
 
-[global, bind = typed_gml]
-function admob_consent_get_type(): real;
+[global, bind = typed_gml, type_hint=`AdMobConsentType`]
+function admob_consent_get_type(): gmval;
 
 [global, bind = typed_gml]
 function admob_consent_is_form_available(): bool;
 
-[global, bind = typed_gml]
-function admob_consent_load(callback: func): real;
+/// callback(result: AdMobResult).
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_consent_load(callback: func): gmval;
 
-[global, bind = typed_gml]
-function admob_consent_show(callback: func): real;
+/// callback(result: AdMobResult) - fires once the consent form is dismissed.
+[global, bind = typed_gml, type_hint=`AdMobError`]
+function admob_consent_show(callback: func): gmval;
 
 [global, bind = typed_gml]
 function admob_consent_reset(): unit;
@@ -242,6 +314,7 @@ enum AdMobError:int32
     NoActiveBannerAd = -5,
     IllegalCall = -6,
     NullViewHandler = -7,
+    InvalidHandle = -8,
 }
 
 // Extension-defined banner placement values.
@@ -315,19 +388,38 @@ enum AdMobConsentType:int32
     Declined = 3,
 }
 
+// Extension-owned - distinguishes which ad family a shared admob_events_on_paid_event
+// callback fired for. Not a Google SDK enum (AdValue itself carries no ad-family concept).
+[global, bind = typed_gml]
+enum AdMobAdType:int32
+{
+    Banner = 0,
+    Interstitial = 1,
+    RewardedVideo = 2,
+    RewardedInterstitial = 3,
+    AppOpen = 4,
+}
+
+// Mirrors Android AdValue.PrecisionType / iOS GADAdValuePrecision - both use these
+// same ordinals already, no per-platform translation needed.
+[global, bind = typed_gml]
+enum AdMobPrecisionType:int32
+{
+    Unknown = 0,
+    Estimated = 1,
+    PublisherProvided = 2,
+    Precise = 3,
+}
+
 // -----------------------------------------------------------------------------
 // Callback event enums
 // -----------------------------------------------------------------------------
 // Numeric values are extension-owned. Event names correspond to the relevant
 // Google SDK callbacks; they are not raw SDK enum values.
 
-[global, bind = typed_gml]
-enum AdMobInitializeCallbackEvent:int32
-{
-    Initialized = 0,
-    Failed = 1,
-}
-
+// Banner has one ongoing callback for its whole lifecycle (unlike interstitial/rewarded's
+// separate load-then-show pair), so Loaded/LoadFailed stay in this enum rather than folding
+// into a separate load callback's AdMobResult.success.
 [global, bind = typed_gml]
 enum AdMobBannerCallbackEvent:int32
 {
@@ -336,63 +428,51 @@ enum AdMobBannerCallbackEvent:int32
     Opened = 2,
     Clicked = 3,
     Closed = 4,
+    Impression = 5,
 }
 
+// Loaded/LoadFailed/ShowFailed removed - covered by AdMobResult.success now.
+// Clicked/Impression added (were dropped entirely by the old implementation).
 [global, bind = typed_gml]
-enum AdMobInterstitialCallbackEvent:int32
+enum AdMobInterstitialShowEvent:int32
 {
-    Loaded = 0,
-    LoadFailed = 1,
-    Shown = 2,
-    ShowFailed = 3,
-    Dismissed = 4,
+    Shown = 0,
+    Dismissed = 1,
+    Clicked = 2,
+    Impression = 3,
 }
 
+// Loaded/LoadFailed/ShowFailed removed - covered by AdMobResult.success now.
+// Clicked/Impression added (were dropped entirely by the old implementation).
 [global, bind = typed_gml]
-enum AdMobRewardedVideoCallbackEvent:int32
+enum AdMobRewardedVideoShowEvent:int32
 {
-    Loaded = 0,
-    LoadFailed = 1,
-    Shown = 2,
-    ShowFailed = 3,
-    Dismissed = 4,
-    Reward = 5,
+    Shown = 0,
+    Dismissed = 1,
+    Clicked = 2,
+    Impression = 3,
+    Reward = 4,
 }
 
+// Loaded/LoadFailed/ShowFailed removed - covered by AdMobResult.success now.
+// Clicked/Impression added (were dropped entirely by the old implementation).
 [global, bind = typed_gml]
-enum AdMobRewardedInterstitialCallbackEvent:int32
+enum AdMobRewardedInterstitialShowEvent:int32
 {
-    Loaded = 0,
-    LoadFailed = 1,
-    Shown = 2,
-    ShowFailed = 3,
-    Dismissed = 4,
-    Reward = 5,
+    Shown = 0,
+    Dismissed = 1,
+    Clicked = 2,
+    Impression = 3,
+    Reward = 4,
 }
 
+// Loaded/LoadFailed/ShowFailed removed - covered by AdMobResult.success now.
+// Clicked/Impression added (were dropped entirely by the old implementation).
 [global, bind = typed_gml]
-enum AdMobAppOpenAdCallbackEvent:int32
+enum AdMobAppOpenAdShowEvent:int32
 {
-    Loaded = 0,
-    LoadFailed = 1,
-    Shown = 2,
-    ShowFailed = 3,
-    Dismissed = 4,
-}
-
-[global, bind = typed_gml]
-enum AdMobConsentCallbackEvent:int32
-{
-    RequestInfoUpdated = 0,
-    RequestInfoUpdateFailed = 1,
-    Loaded = 2,
-    LoadFailed = 3,
-    Dismissed = 4,
-    ShowFailed = 5,
-}
-
-[global, bind = typed_gml]
-enum AdMobPaidEventCallbackEvent:int32
-{
-    Paid = 0,
+    Shown = 0,
+    Dismissed = 1,
+    Clicked = 2,
+    Impression = 3,
 }

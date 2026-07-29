@@ -1,13 +1,13 @@
 /**
  * @function_partial admob_initialize
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
  * @function_partial admob_set_test_device_id
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -29,7 +29,7 @@
  * @param {Enum.AdMobBannerSize} size
  * @param {Bool} bottom
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -39,7 +39,7 @@
  * @param {Bool} bottom
  * @param {Enum.AdMobBannerAlignment} alignment
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -83,40 +83,31 @@
  */
 
 /**
- * @function_partial admob_interstitial_free_loaded_instances
- * @param {Real} count
- * @function_end
- */
-
-/**
- * @function_partial admob_interstitial_max_instances
- * @param {Real} value
- * @function_end
- */
-
-/**
  * @function_partial admob_interstitial_load
  * @param {Function} callback
- * @returns {Real}
+ * @param {String} [ad_unit_id]
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
- * @function_partial admob_interstitial_show
- * @param {Function} callback
- * @returns {Real}
- * @function_end
- */
-
-/**
- * @function_partial admob_interstitial_is_loaded
+ * @function_partial admob_interstitial_is_valid
+ * @param {Real} handle
  * @returns {Bool}
  * @function_end
  */
 
 /**
- * @function_partial admob_interstitial_instances_count
- * @returns {Real}
+ * @function_partial admob_interstitial_dispose
+ * @param {Real} handle
+ * @function_end
+ */
+
+/**
+ * @function_partial admob_interstitial_show
+ * @param {Real} handle
+ * @param {Function} callback
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -139,40 +130,31 @@
  */
 
 /**
- * @function_partial admob_rewarded_video_free_loaded_instances
- * @param {Real} count
- * @function_end
- */
-
-/**
- * @function_partial admob_rewarded_video_max_instances
- * @param {Real} value
- * @function_end
- */
-
-/**
  * @function_partial admob_rewarded_video_load
  * @param {Function} callback
- * @returns {Real}
+ * @param {String} [ad_unit_id]
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
- * @function_partial admob_rewarded_video_show
- * @param {Function} callback
- * @returns {Real}
- * @function_end
- */
-
-/**
- * @function_partial admob_rewarded_video_is_loaded
+ * @function_partial admob_rewarded_video_is_valid
+ * @param {Real} handle
  * @returns {Bool}
  * @function_end
  */
 
 /**
- * @function_partial admob_rewarded_video_instances_count
- * @returns {Real}
+ * @function_partial admob_rewarded_video_dispose
+ * @param {Real} handle
+ * @function_end
+ */
+
+/**
+ * @function_partial admob_rewarded_video_show
+ * @param {Real} handle
+ * @param {Function} callback
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -183,40 +165,31 @@
  */
 
 /**
- * @function_partial admob_rewarded_interstitial_free_loaded_instances
- * @param {Real} count
- * @function_end
- */
-
-/**
- * @function_partial admob_rewarded_interstitial_max_instances
- * @param {Real} value
- * @function_end
- */
-
-/**
  * @function_partial admob_rewarded_interstitial_load
  * @param {Function} callback
- * @returns {Real}
+ * @param {String} [ad_unit_id]
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
- * @function_partial admob_rewarded_interstitial_show
- * @param {Function} callback
- * @returns {Real}
- * @function_end
- */
-
-/**
- * @function_partial admob_rewarded_interstitial_is_loaded
+ * @function_partial admob_rewarded_interstitial_is_valid
+ * @param {Real} handle
  * @returns {Bool}
  * @function_end
  */
 
 /**
- * @function_partial admob_rewarded_interstitial_instances_count
- * @returns {Real}
+ * @function_partial admob_rewarded_interstitial_dispose
+ * @param {Real} handle
+ * @function_end
+ */
+
+/**
+ * @function_partial admob_rewarded_interstitial_show
+ * @param {Real} handle
+ * @param {Function} callback
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -230,7 +203,7 @@
  * @function_partial admob_app_open_ad_enable
  * @param {Real} orientation
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -254,14 +227,14 @@
 /**
  * @function_partial admob_app_open_ad_load
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
  * @function_partial admob_app_open_ad_show
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -287,19 +260,19 @@
  * @function_partial admob_consent_request_info_update
  * @param {Enum.AdMobConsentDebugGeography} debug_geography
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
  * @function_partial admob_consent_get_status
- * @returns {Real}
+ * @returns {Enum.AdMobConsentStatus}
  * @function_end
  */
 
 /**
  * @function_partial admob_consent_get_type
- * @returns {Real}
+ * @returns {Enum.AdMobConsentType}
  * @function_end
  */
 
@@ -312,14 +285,14 @@
 /**
  * @function_partial admob_consent_load
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
 /**
  * @function_partial admob_consent_show
  * @param {Function} callback
- * @returns {Real}
+ * @returns {Enum.AdMobError}
  * @function_end
  */
 
@@ -347,6 +320,36 @@
  */
 
 /**
+ * @struct_partial AdMobResult
+ * @member {Bool} success
+ * @member {String} [error_message]
+ * @member {Real} [sdk_error_code]
+ * @struct_end
+ */
+
+/**
+ * @struct_partial AdMobReward
+ * @member {Real} amount
+ * @member {String} type
+ * @struct_end
+ */
+
+/**
+ * @struct_partial AdMobPaidEvent
+ * @member {Enum.AdMobAdType} ad_type
+ * @member {String} ad_unit_id
+ * @member {Real} value_micros
+ * @member {String} currency_code
+ * @member {Enum.AdMobPrecisionType} precision
+ * @member {String} mediation_adapter_class_name
+ * @member {String} [ad_source_name]
+ * @member {String} [ad_source_id]
+ * @member {String} [ad_source_instance_name]
+ * @member {String} [ad_source_instance_id]
+ * @struct_end
+ */
+
+/**
  * @enum_partial AdMobError
  * @member Ok
  * @member NotInitialized
@@ -356,6 +359,7 @@
  * @member NoActiveBannerAd
  * @member IllegalCall
  * @member NullViewHandler
+ * @member InvalidHandle
  * @enum_end
  */
 
@@ -417,9 +421,21 @@
  */
 
 /**
- * @enum_partial AdMobInitializeCallbackEvent
- * @member Initialized
- * @member Failed
+ * @enum_partial AdMobAdType
+ * @member Banner
+ * @member Interstitial
+ * @member RewardedVideo
+ * @member RewardedInterstitial
+ * @member AppOpen
+ * @enum_end
+ */
+
+/**
+ * @enum_partial AdMobPrecisionType
+ * @member Unknown
+ * @member Estimated
+ * @member PublisherProvided
+ * @member Precise
  * @enum_end
  */
 
@@ -430,65 +446,45 @@
  * @member Opened
  * @member Clicked
  * @member Closed
+ * @member Impression
  * @enum_end
  */
 
 /**
- * @enum_partial AdMobInterstitialCallbackEvent
- * @member Loaded
- * @member LoadFailed
+ * @enum_partial AdMobInterstitialShowEvent
  * @member Shown
- * @member ShowFailed
  * @member Dismissed
+ * @member Clicked
+ * @member Impression
  * @enum_end
  */
 
 /**
- * @enum_partial AdMobRewardedVideoCallbackEvent
- * @member Loaded
- * @member LoadFailed
+ * @enum_partial AdMobRewardedVideoShowEvent
  * @member Shown
- * @member ShowFailed
  * @member Dismissed
+ * @member Clicked
+ * @member Impression
  * @member Reward
  * @enum_end
  */
 
 /**
- * @enum_partial AdMobRewardedInterstitialCallbackEvent
- * @member Loaded
- * @member LoadFailed
+ * @enum_partial AdMobRewardedInterstitialShowEvent
  * @member Shown
- * @member ShowFailed
  * @member Dismissed
+ * @member Clicked
+ * @member Impression
  * @member Reward
  * @enum_end
  */
 
 /**
- * @enum_partial AdMobAppOpenAdCallbackEvent
- * @member Loaded
- * @member LoadFailed
+ * @enum_partial AdMobAppOpenAdShowEvent
  * @member Shown
- * @member ShowFailed
  * @member Dismissed
- * @enum_end
- */
-
-/**
- * @enum_partial AdMobConsentCallbackEvent
- * @member RequestInfoUpdated
- * @member RequestInfoUpdateFailed
- * @member Loaded
- * @member LoadFailed
- * @member Dismissed
- * @member ShowFailed
- * @enum_end
- */
-
-/**
- * @enum_partial AdMobPaidEventCallbackEvent
- * @member Paid
+ * @member Clicked
+ * @member Impression
  * @enum_end
  */
 

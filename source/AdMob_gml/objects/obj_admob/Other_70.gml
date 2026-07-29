@@ -5,9 +5,9 @@
 //
 // Example:
 //
-// admob_interstitial_load(function(data) {
-//     if (data.event_type == AdMobInterstitialCallbackEvent.Loaded) {
-//         // loaded
+// admob_interstitial_load(function(_result, _handle) {
+//     if (_result.success) {
+//         // loaded, _handle is now valid for admob_interstitial_show()
 //     }
 // });
 //

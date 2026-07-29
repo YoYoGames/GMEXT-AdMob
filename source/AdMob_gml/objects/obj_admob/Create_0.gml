@@ -21,11 +21,11 @@ function start_ads_init_flow()
 	show_debug_message("admob_initialize GM");
 	var _init_result = admob_initialize(function(data)
 	        {
-	            show_debug_message($"admob_initialize callback: {json_stringify(data)}");
+	            show_debug_message($"admob_initialize callback: success={data.success}, error={data.error_message}");
 
 	            if (!data.success)
 	            {
-	                show_debug_message($"AdMob initialize failed: {data.code} {data.error_message}");
+	                show_debug_message($"AdMob initialize failed: {data.error_message}");
 	                return;
 	            }
 			
@@ -54,9 +54,9 @@ function start_ads_init_flow()
 
 			    admob_app_open_ad_enable(
 			        display_landscape,
-			        function(data)
+			        function(_result, _type = undefined)
 			        {
-			            show_debug_message($"admob_app_open_ad_enable: {json_stringify(data)}");
+			            show_debug_message($"admob_app_open_ad_enable: success={_result.success}, type={_type}, error={_result.error_message}");
 			        }
 			    );
 	        }

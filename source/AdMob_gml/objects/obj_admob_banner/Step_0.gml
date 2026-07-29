@@ -8,9 +8,9 @@ if (pressed && displayHeight != display_get_height())
         banner_type,
         bottom,
         alignment,
-        function(data)
+        function(_result, _type)
         {
-            show_debug_message($"Banner callback: {json_stringify(data)}");
+            show_debug_message($"Banner callback: success={_result.success}, type={_type}, error={_result.error_message}");
         }
     );
 

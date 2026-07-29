@@ -1,23 +1,29 @@
 /// @description Rewarded interstitial load/show
 
-if (admob_rewarded_interstitial_is_loaded())
+if (!is_undefined(rewarded_interstitial_handle))
 {
-    admob_rewarded_interstitial_show(
-        function(data)
-        {
-            show_debug_message($"Rewarded interstitial callback: {json_stringify(data)}");
+    var _handle = rewarded_interstitial_handle;
+    rewarded_interstitial_handle = undefined;
 
-            if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Reward)
+    admob_rewarded_interstitial_show(
+        _handle,
+        function(_result, _type, _reward)
+        {
+            show_debug_message($"Rewarded interstitial callback: success={_result.success}, type={_type}, error={_result.error_message}");
+
+            if (!is_undefined(_reward))
             {
                 show_message_async("User Earned Reward");
             }
 
-            if (data.event_type == AdMobRewardedInterstitialCallbackEvent.Dismissed
-            ||  data.event_type == AdMobRewardedInterstitialCallbackEvent.ShowFailed)
+            if (!_result.success || _type == AdMobRewardedInterstitialShowEvent.Dismissed)
             {
-                admob_rewarded_interstitial_load(function(data)
+                admob_rewarded_interstitial_load(function(_result, _handle)
 					{
-					    show_debug_message($"AdMob Interstitial Load: {json_stringify(data)}");
+					    show_debug_message($"AdMob Interstitial Load: success={_result.success}, error={_result.error_message}");
+
+					    if (_result.success)
+					        rewarded_interstitial_handle = _handle;
 					});
             }
         }
@@ -29,8 +35,11 @@ else
         "RewardedInterstitialAd still loading, try again soon"
     );
 
-    admob_rewarded_interstitial_load(function(data)
+    admob_rewarded_interstitial_load(function(_result, _handle)
 		{
-		    show_debug_message($"Rewarded Interstitial load: {json_stringify(data)}");
+		    show_debug_message($"Rewarded Interstitial load: success={_result.success}, error={_result.error_message}");
+
+		    if (_result.success)
+		        rewarded_interstitial_handle = _handle;
 		});
 }
