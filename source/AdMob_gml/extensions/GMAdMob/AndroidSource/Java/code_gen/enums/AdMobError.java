@@ -11,7 +11,8 @@ public enum AdMobError
     NoAdsLoaded((int)-4),
     NoActiveBannerAd((int)-5),
     IllegalCall((int)-6),
-    NullViewHandler((int)-7);
+    NullViewHandler((int)-7),
+    InvalidHandle((int)-8);
 
     private final int value;
     private AdMobError(int v)
@@ -42,6 +43,8 @@ public enum AdMobError
                 return AdMobError.IllegalCall;
             case -7:
                 return AdMobError.NullViewHandler;
+            case -8:
+                return AdMobError.InvalidHandle;
             default:
                 throw new IllegalArgumentException("Unknown AdMobError value: " + v);
         }

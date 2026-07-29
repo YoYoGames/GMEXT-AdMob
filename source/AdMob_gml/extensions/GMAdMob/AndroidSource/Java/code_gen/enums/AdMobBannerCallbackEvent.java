@@ -8,7 +8,8 @@ public enum AdMobBannerCallbackEvent
     LoadFailed((int)1),
     Opened((int)2),
     Clicked((int)3),
-    Closed((int)4);
+    Closed((int)4),
+    Impression((int)5);
 
     private final int value;
     private AdMobBannerCallbackEvent(int v)
@@ -33,6 +34,8 @@ public enum AdMobBannerCallbackEvent
                 return AdMobBannerCallbackEvent.Clicked;
             case 4:
                 return AdMobBannerCallbackEvent.Closed;
+            case 5:
+                return AdMobBannerCallbackEvent.Impression;
             default:
                 throw new IllegalArgumentException("Unknown AdMobBannerCallbackEvent value: " + v);
         }

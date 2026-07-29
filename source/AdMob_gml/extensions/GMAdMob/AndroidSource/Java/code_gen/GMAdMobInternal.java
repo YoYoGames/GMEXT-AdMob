@@ -7,6 +7,8 @@ import java.util.*;
 import ${YYAndroidPackageName}.GMExtWire;
 import ${YYAndroidPackageName}.GMExtWire.GMFunction;
 import ${YYAndroidPackageName}.GMExtWire.GMValue;
+import ${YYAndroidPackageName}.records.*;
+import ${YYAndroidPackageName}.codecs.*;
 import ${YYAndroidPackageName}.enums.*;
 
 public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInterface {
@@ -17,21 +19,31 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return __dispatch_queue.fetch(__ret_buffer);
     }
 
-    public double __EXT_NATIVE__admob_initialize(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_initialize(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_initialize(callback);
-        return (double)__result;
+        AdMobError __result = admob_initialize(callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_set_test_device_id()
+    public double __EXT_NATIVE__admob_set_test_device_id(ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
-        double __result = admob_set_test_device_id();
-        return (double)__result;
+        AdMobError __result = admob_set_test_device_id();
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_events_on_paid_event(ByteBuffer __arg_buffer, double __arg_buffer_length)
@@ -54,7 +66,7 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_banner_create(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_banner_create(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
@@ -67,11 +79,16 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_banner_create(size, bottom, callback);
-        return (double)__result;
+        AdMobError __result = admob_banner_create(size, bottom, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_banner_create_ext(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_banner_create_ext(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
@@ -87,8 +104,13 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_banner_create_ext(size, bottom, alignment, callback);
-        return (double)__result;
+        AdMobError __result = admob_banner_create_ext(size, bottom, alignment, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_banner_get_width()
@@ -133,50 +155,69 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_interstitial_free_loaded_instances(double count)
-    {
-        admob_interstitial_free_loaded_instances((double)count);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_interstitial_max_instances(double value)
-    {
-        admob_interstitial_max_instances((double)value);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_interstitial_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_interstitial_load(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_interstitial_load(callback);
-        return (double)__result;
+        // field: ad_unit_id, type: optional<String>
+        java.util.Optional<String> ad_unit_id = java.util.Optional.empty();
+        if (GMExtWire.readBool(__arg_buffer))
+        {
+            String __opt_ad_unit_id = GMExtWire.readString(__arg_buffer);
+            ad_unit_id = java.util.Optional.of(__opt_ad_unit_id);
+        }
+
+        AdMobError __result = admob_interstitial_load(callback, ad_unit_id);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_interstitial_show(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_interstitial_is_valid(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
-        // field: callback, type: Function
-        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
 
-        double __result = admob_interstitial_show(callback);
-        return (double)__result;
-    }
-
-    public double __EXT_NATIVE__admob_interstitial_is_loaded()
-    {
-        boolean __result = admob_interstitial_is_loaded();
+        boolean __result = admob_interstitial_is_valid(handle);
         return __result ? 1.0 : 0.0;
     }
 
-    public double __EXT_NATIVE__admob_interstitial_instances_count()
+    public double __EXT_NATIVE__admob_interstitial_dispose(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
-        double __result = admob_interstitial_instances_count();
-        return (double)__result;
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        admob_interstitial_dispose(handle);
+        return 0;
+    }
+
+    public double __EXT_NATIVE__admob_interstitial_show(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
+    {
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        // field: callback, type: Function
+        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+
+        AdMobError __result = admob_interstitial_show(handle, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_server_side_verification_set(String user_id, String custom_data)
@@ -197,50 +238,69 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_video_free_loaded_instances(double count)
-    {
-        admob_rewarded_video_free_loaded_instances((double)count);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_video_max_instances(double value)
-    {
-        admob_rewarded_video_max_instances((double)value);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_video_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_rewarded_video_load(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_rewarded_video_load(callback);
-        return (double)__result;
+        // field: ad_unit_id, type: optional<String>
+        java.util.Optional<String> ad_unit_id = java.util.Optional.empty();
+        if (GMExtWire.readBool(__arg_buffer))
+        {
+            String __opt_ad_unit_id = GMExtWire.readString(__arg_buffer);
+            ad_unit_id = java.util.Optional.of(__opt_ad_unit_id);
+        }
+
+        AdMobError __result = admob_rewarded_video_load(callback, ad_unit_id);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_video_show(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_rewarded_video_is_valid(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
-        // field: callback, type: Function
-        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
 
-        double __result = admob_rewarded_video_show(callback);
-        return (double)__result;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_video_is_loaded()
-    {
-        boolean __result = admob_rewarded_video_is_loaded();
+        boolean __result = admob_rewarded_video_is_valid(handle);
         return __result ? 1.0 : 0.0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_video_instances_count()
+    public double __EXT_NATIVE__admob_rewarded_video_dispose(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
-        double __result = admob_rewarded_video_instances_count();
-        return (double)__result;
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        admob_rewarded_video_dispose(handle);
+        return 0;
+    }
+
+    public double __EXT_NATIVE__admob_rewarded_video_show(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
+    {
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        // field: callback, type: Function
+        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+
+        AdMobError __result = admob_rewarded_video_show(handle, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_rewarded_interstitial_set_ad_unit(String ad_unit_id)
@@ -249,50 +309,69 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_interstitial_free_loaded_instances(double count)
-    {
-        admob_rewarded_interstitial_free_loaded_instances((double)count);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_interstitial_max_instances(double value)
-    {
-        admob_rewarded_interstitial_max_instances((double)value);
-        return 0;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_interstitial_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_rewarded_interstitial_load(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_rewarded_interstitial_load(callback);
-        return (double)__result;
+        // field: ad_unit_id, type: optional<String>
+        java.util.Optional<String> ad_unit_id = java.util.Optional.empty();
+        if (GMExtWire.readBool(__arg_buffer))
+        {
+            String __opt_ad_unit_id = GMExtWire.readString(__arg_buffer);
+            ad_unit_id = java.util.Optional.of(__opt_ad_unit_id);
+        }
+
+        AdMobError __result = admob_rewarded_interstitial_load(callback, ad_unit_id);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_interstitial_show(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_rewarded_interstitial_is_valid(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
-        // field: callback, type: Function
-        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
 
-        double __result = admob_rewarded_interstitial_show(callback);
-        return (double)__result;
-    }
-
-    public double __EXT_NATIVE__admob_rewarded_interstitial_is_loaded()
-    {
-        boolean __result = admob_rewarded_interstitial_is_loaded();
+        boolean __result = admob_rewarded_interstitial_is_valid(handle);
         return __result ? 1.0 : 0.0;
     }
 
-    public double __EXT_NATIVE__admob_rewarded_interstitial_instances_count()
+    public double __EXT_NATIVE__admob_rewarded_interstitial_dispose(ByteBuffer __arg_buffer, double __arg_buffer_length)
     {
-        double __result = admob_rewarded_interstitial_instances_count();
-        return (double)__result;
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        admob_rewarded_interstitial_dispose(handle);
+        return 0;
+    }
+
+    public double __EXT_NATIVE__admob_rewarded_interstitial_show(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
+    {
+        GMExtWire.order(__arg_buffer);
+
+        // field: handle, type: UInt64
+        long handle = GMExtWire.readI64(__arg_buffer);
+
+        // field: callback, type: Function
+        GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
+
+        AdMobError __result = admob_rewarded_interstitial_show(handle, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_app_open_ad_set_ad_unit(String ad_unit_id)
@@ -301,7 +380,7 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_app_open_ad_enable(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_app_open_ad_enable(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
@@ -311,8 +390,13 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_app_open_ad_enable(orientation, callback);
-        return (double)__result;
+        AdMobError __result = admob_app_open_ad_enable(orientation, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_app_open_ad_disable()
@@ -333,26 +417,36 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return __result ? 1.0 : 0.0;
     }
 
-    public double __EXT_NATIVE__admob_app_open_ad_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_app_open_ad_load(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_app_open_ad_load(callback);
-        return (double)__result;
+        AdMobError __result = admob_app_open_ad_load(callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_app_open_ad_show(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_app_open_ad_show(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_app_open_ad_show(callback);
-        return (double)__result;
+        AdMobError __result = admob_app_open_ad_show(callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_targeting_coppa(double coppa)
@@ -378,7 +472,7 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return 0;
     }
 
-    public double __EXT_NATIVE__admob_consent_request_info_update(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_consent_request_info_update(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
@@ -388,20 +482,35 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_consent_request_info_update(debug_geography, callback);
-        return (double)__result;
+        AdMobError __result = admob_consent_request_info_update(debug_geography, callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_consent_get_status()
+    public double __EXT_NATIVE__admob_consent_get_status(ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
-        double __result = admob_consent_get_status();
-        return (double)__result;
+        AdMobConsentStatus __result = admob_consent_get_status();
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobConsentStatus
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_consent_get_type()
+    public double __EXT_NATIVE__admob_consent_get_type(ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
-        double __result = admob_consent_get_type();
-        return (double)__result;
+        AdMobConsentType __result = admob_consent_get_type();
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobConsentType
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_consent_is_form_available()
@@ -410,26 +519,36 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         return __result ? 1.0 : 0.0;
     }
 
-    public double __EXT_NATIVE__admob_consent_load(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_consent_load(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_consent_load(callback);
-        return (double)__result;
+        AdMobError __result = admob_consent_load(callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
-    public double __EXT_NATIVE__admob_consent_show(ByteBuffer __arg_buffer, double __arg_buffer_length)
+    public double __EXT_NATIVE__admob_consent_show(ByteBuffer __arg_buffer, double __arg_buffer_length, ByteBuffer __ret_buffer, double __ret_buffer_length)
     {
         GMExtWire.order(__arg_buffer);
 
         // field: callback, type: Function
         GMFunction callback = GMExtWire.readGMFunction(__arg_buffer, __dispatch_queue);
 
-        double __result = admob_consent_show(callback);
-        return (double)__result;
+        AdMobError __result = admob_consent_show(callback);
+
+        GMExtWire.order(__ret_buffer);
+        // return: __result, type: enum AdMobError
+        GMExtWire.writeI32(__ret_buffer, __result.value());
+
+        return 0;
     }
 
     public double __EXT_NATIVE__admob_consent_reset()
