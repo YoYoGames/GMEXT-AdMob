@@ -104,23 +104,31 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     }
     return self;
 }
-- (double)__EXT_NATIVE__admob_initialize:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_initialize:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_initialize:callback];
+    gm_enums::AdMobError __result = [__impl admob_initialize:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_set_test_device_id
+- (double)__EXT_NATIVE__admob_set_test_device_id:(char*)__ret_buffer arg1:(double)__ret_buffer_length
 {
-    double __result = [__impl admob_set_test_device_id];
+    gm_enums::AdMobError __result = [__impl admob_set_test_device_id];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_events_on_paid_event:(char*)__arg_buffer arg1:(double)__arg_buffer_length
@@ -145,7 +153,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_banner_create:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_banner_create:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
@@ -158,12 +166,16 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_banner_create:size bottom:bottom callback:callback];
+    gm_enums::AdMobError __result = [__impl admob_banner_create:size bottom:bottom callback:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_banner_create_ext:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_banner_create_ext:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
@@ -179,9 +191,13 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_banner_create_ext:size bottom:bottom alignment:alignment callback:callback];
+    gm_enums::AdMobError __result = [__impl admob_banner_create_ext:size bottom:bottom alignment:alignment callback:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_banner_get_width
@@ -233,56 +249,66 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_interstitial_free_loaded_instances:(double)count
-{
-    [__impl admob_interstitial_free_loaded_instances:count];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_interstitial_max_instances:(double)value
-{
-    [__impl admob_interstitial_max_instances:value];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_interstitial_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_interstitial_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_interstitial_load:callback];
+    // field: ad_unit_id, type: optional<String>
+    std::optional<std::string_view> ad_unit_id = gm::wire::codec::readOptional<std::string_view>(__br);
+
+    gm_enums::AdMobError __result = [__impl admob_interstitial_load:callback ad_unit_id:ad_unit_id];
+
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_interstitial_is_valid:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    bool __result = [__impl admob_interstitial_is_valid:handle];
 
     return static_cast<double>(__result);
 }
 
-- (double)__EXT_NATIVE__admob_interstitial_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_interstitial_dispose:(char*)__arg_buffer arg1:(double)__arg_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    [__impl admob_interstitial_dispose:handle];
+
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_interstitial_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_interstitial_show:callback];
+    gm_enums::AdMobError __result = [__impl admob_interstitial_show:handle callback:callback];
 
-    return static_cast<double>(__result);
-}
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
 
-- (double)__EXT_NATIVE__admob_interstitial_is_loaded
-{
-    bool __result = [__impl admob_interstitial_is_loaded];
-
-    return static_cast<double>(__result);
-}
-
-- (double)__EXT_NATIVE__admob_interstitial_instances_count
-{
-    double __result = [__impl admob_interstitial_instances_count];
-
-    return static_cast<double>(__result);
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_server_side_verification_set:(char*)user_id arg1:(char*)custom_data
@@ -306,56 +332,66 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_rewarded_video_free_loaded_instances:(double)count
-{
-    [__impl admob_rewarded_video_free_loaded_instances:count];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_video_max_instances:(double)value
-{
-    [__impl admob_rewarded_video_max_instances:value];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_video_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_rewarded_video_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_rewarded_video_load:callback];
+    // field: ad_unit_id, type: optional<String>
+    std::optional<std::string_view> ad_unit_id = gm::wire::codec::readOptional<std::string_view>(__br);
+
+    gm_enums::AdMobError __result = [__impl admob_rewarded_video_load:callback ad_unit_id:ad_unit_id];
+
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_rewarded_video_is_valid:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    bool __result = [__impl admob_rewarded_video_is_valid:handle];
 
     return static_cast<double>(__result);
 }
 
-- (double)__EXT_NATIVE__admob_rewarded_video_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_rewarded_video_dispose:(char*)__arg_buffer arg1:(double)__arg_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    [__impl admob_rewarded_video_dispose:handle];
+
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_rewarded_video_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_rewarded_video_show:callback];
+    gm_enums::AdMobError __result = [__impl admob_rewarded_video_show:handle callback:callback];
 
-    return static_cast<double>(__result);
-}
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
 
-- (double)__EXT_NATIVE__admob_rewarded_video_is_loaded
-{
-    bool __result = [__impl admob_rewarded_video_is_loaded];
-
-    return static_cast<double>(__result);
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_video_instances_count
-{
-    double __result = [__impl admob_rewarded_video_instances_count];
-
-    return static_cast<double>(__result);
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_rewarded_interstitial_set_ad_unit:(char*)ad_unit_id
@@ -365,56 +401,66 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_free_loaded_instances:(double)count
-{
-    [__impl admob_rewarded_interstitial_free_loaded_instances:count];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_max_instances:(double)value
-{
-    [__impl admob_rewarded_interstitial_max_instances:value];
-
-    return 0;
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_rewarded_interstitial_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_rewarded_interstitial_load:callback];
+    // field: ad_unit_id, type: optional<String>
+    std::optional<std::string_view> ad_unit_id = gm::wire::codec::readOptional<std::string_view>(__br);
+
+    gm_enums::AdMobError __result = [__impl admob_rewarded_interstitial_load:callback ad_unit_id:ad_unit_id];
+
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_rewarded_interstitial_is_valid:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    bool __result = [__impl admob_rewarded_interstitial_is_valid:handle];
 
     return static_cast<double>(__result);
 }
 
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_rewarded_interstitial_dispose:(char*)__arg_buffer arg1:(double)__arg_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
+
+    [__impl admob_rewarded_interstitial_dispose:handle];
+
+    return 0;
+}
+
+- (double)__EXT_NATIVE__admob_rewarded_interstitial_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
+{
+    gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
+
+    // field: handle, type: UInt64
+    std::uint64_t handle = gm::wire::codec::readValue<std::uint64_t>(__br);
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_rewarded_interstitial_show:callback];
+    gm_enums::AdMobError __result = [__impl admob_rewarded_interstitial_show:handle callback:callback];
 
-    return static_cast<double>(__result);
-}
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
 
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_is_loaded
-{
-    bool __result = [__impl admob_rewarded_interstitial_is_loaded];
-
-    return static_cast<double>(__result);
-}
-
-- (double)__EXT_NATIVE__admob_rewarded_interstitial_instances_count
-{
-    double __result = [__impl admob_rewarded_interstitial_instances_count];
-
-    return static_cast<double>(__result);
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_app_open_ad_set_ad_unit:(char*)ad_unit_id
@@ -424,7 +470,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_app_open_ad_enable:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_app_open_ad_enable:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
@@ -434,9 +480,13 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_app_open_ad_enable:orientation callback:callback];
+    gm_enums::AdMobError __result = [__impl admob_app_open_ad_enable:orientation callback:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_app_open_ad_disable
@@ -460,28 +510,36 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return static_cast<double>(__result);
 }
 
-- (double)__EXT_NATIVE__admob_app_open_ad_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_app_open_ad_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_app_open_ad_load:callback];
+    gm_enums::AdMobError __result = [__impl admob_app_open_ad_load:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_app_open_ad_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_app_open_ad_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_app_open_ad_show:callback];
+    gm_enums::AdMobError __result = [__impl admob_app_open_ad_show:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_targeting_coppa:(double)coppa
@@ -510,7 +568,7 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return 0;
 }
 
-- (double)__EXT_NATIVE__admob_consent_request_info_update:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_consent_request_info_update:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
@@ -520,23 +578,35 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_consent_request_info_update:debug_geography callback:callback];
+    gm_enums::AdMobError __result = [__impl admob_consent_request_info_update:debug_geography callback:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_consent_get_status
+- (double)__EXT_NATIVE__admob_consent_get_status:(char*)__ret_buffer arg1:(double)__ret_buffer_length
 {
-    double __result = [__impl admob_consent_get_status];
+    gm_enums::AdMobConsentStatus __result = [__impl admob_consent_get_status];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobConsentStatus
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_consent_get_type
+- (double)__EXT_NATIVE__admob_consent_get_type:(char*)__ret_buffer arg1:(double)__ret_buffer_length
 {
-    double __result = [__impl admob_consent_get_type];
+    gm_enums::AdMobConsentType __result = [__impl admob_consent_get_type];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobConsentType
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_consent_is_form_available
@@ -546,28 +616,36 @@ static void GMInjectSelectorsIntoSubclass(Class subclass, Class base)
     return static_cast<double>(__result);
 }
 
-- (double)__EXT_NATIVE__admob_consent_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_consent_load:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_consent_load:callback];
+    gm_enums::AdMobError __result = [__impl admob_consent_load:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
-- (double)__EXT_NATIVE__admob_consent_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length
+- (double)__EXT_NATIVE__admob_consent_show:(char*)__arg_buffer arg1:(double)__arg_buffer_length arg2:(char*)__ret_buffer arg3:(double)__ret_buffer_length
 {
     gm::byteio::BufferReader __br{__arg_buffer, static_cast<size_t>(__arg_buffer_length)};
 
     // field: callback, type: Function
     gm::wire::GMFunction callback = gm::wire::codec::readFunction(__br, &__dispatch_queue);
 
-    double __result = [__impl admob_consent_show:callback];
+    gm_enums::AdMobError __result = [__impl admob_consent_show:callback];
 
-    return static_cast<double>(__result);
+    gm::byteio::BufferWriter __bw{__ret_buffer, static_cast<size_t>(__ret_buffer_length)};
+
+    // return: __result, type: enum AdMobError
+    gm::wire::codec::writeValue(__bw, __result);
+    return 0;
 }
 
 - (double)__EXT_NATIVE__admob_consent_reset

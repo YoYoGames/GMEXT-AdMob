@@ -34,12 +34,9 @@ file(MAKE_DIRECTORY "${_BUNDLE_DIR}")
 
 # --- Resolve a known-good, CURRENT macOS SDK path ---
 #
-# Don't trust whatever SDK the host Ruby's own RbConfig was built against
-# (its baked -isysroot can go stale/nonexistent after an Xcode upgrade
-# removes the old SDK version) and don't trust the ambient SDKROOT env var
-# either (unsetting it isn't enough on its own - see below). Resolve the
-# host's actual current macOS SDK fresh, every run, so this step never
-# depends on whatever state happens to be lying around on the machine.
+# The host Ruby's own baked -isysroot (from RbConfig) can go stale after an
+# Xcode upgrade removes the SDK version it was built against, so resolve the
+# actual current macOS SDK fresh instead of trusting it.
 execute_process(
   COMMAND xcrun --sdk macosx --show-sdk-path
   OUTPUT_VARIABLE _MACOS_SDK_PATH
@@ -52,28 +49,20 @@ endif()
 
 # Helper: env for ALL ruby/bundler invocations
 #
-# This runs inside an Xcode "Run Script" build phase for an iOS target, so
-# Xcode has already injected its SDK/architecture/compiler env vars (SDKROOT,
-# ARCHS, CC, CFLAGS, LDFLAGS, ...) into this process for the iOS build -
+# This runs inside an Xcode Run Script build phase for an iOS target, and
 # CMake's Xcode generator applies CMAKE_SYSTEM_NAME=iOS to every target in
-# the generated .xcodeproj, including this non-compiling utility one, so
-# there's no way to keep this target iOS-free at the project-generation
-# level. Bundler/RubyGems building a native gem extension (e.g. xcodeproj's
-# nkf dependency) inherits that environment and tries to cross-compile the
-# extension for iOS instead of the host macOS Ruby it actually links against
-# - the compiler picks up the iOS SDK/flags but links against the host
-# libruby.dylib, which fails at link time ("building for iOS, but linking in
-# dylib ... built for macOS").
+# the .xcodeproj (including this non-compiling one), so the process starts
+# with Xcode's iOS SDK/architecture/compiler env already set. Building a
+# native gem extension (e.g. xcodeproj's nkf dependency) under that
+# environment cross-compiles for iOS instead of the host macOS Ruby it
+# actually links against, and fails at link time.
 #
-# Genuinely unsetting these (--unset, not an empty string - Ruby's own
-# mkmf/RbConfig fallback logic like `ENV['CFLAGS'] || RbConfig::CONFIG[...]`
-# treats an empty string as "the user provided a value" and drops Ruby's own
-# baked default instead of falling back to it) is only half the fix: it
-# still leaves header/library resolution up to whatever sysroot Ruby's own
-# RbConfig happens to have baked in, which can itself be stale. So SDKROOT/
-# CFLAGS/CPPFLAGS/LDFLAGS get an explicit, freshly-resolved macOS sysroot
-# instead of just being unset, and only the platform/toolchain-selection
-# vars that have no reason to be set at all for a host tool are unset.
+# SDKROOT/CFLAGS/CPPFLAGS/LDFLAGS get an explicit macOS sysroot rather than
+# just being unset - Ruby's own mkmf fallback (e.g.
+# `ENV['CFLAGS'] || RbConfig::CONFIG[...]`) treats an empty string as a
+# provided value and skips its own baked default, so an explicit value is
+# needed either way. The platform/toolchain-selection vars a host tool has
+# no use for regardless are genuinely unset (--unset, not an empty string).
 set(_ENV_CMD ${CMAKE_COMMAND} -E env
   "BUNDLE_GEMFILE=${_GEMFILE}"
   "BUNDLE_PATH=${_BUNDLE_DIR}"
