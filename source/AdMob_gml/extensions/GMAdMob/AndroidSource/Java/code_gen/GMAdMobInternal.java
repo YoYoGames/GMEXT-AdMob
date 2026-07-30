@@ -29,8 +29,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_initialize(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -40,8 +41,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_set_test_device_id();
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -82,8 +84,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_banner_create(size, bottom, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -107,8 +110,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_banner_create_ext(size, bottom, alignment, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -173,8 +177,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_interstitial_load(callback, ad_unit_id);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -214,8 +219,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_interstitial_show(handle, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -256,8 +262,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_rewarded_video_load(callback, ad_unit_id);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -297,8 +304,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_rewarded_video_show(handle, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -327,8 +335,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_rewarded_interstitial_load(callback, ad_unit_id);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -368,8 +377,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_rewarded_interstitial_show(handle, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -390,8 +400,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_app_open_ad_enable(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -424,8 +435,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_app_open_ad_load(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -440,8 +452,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_app_open_ad_show(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -482,8 +495,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_consent_request_info_update(debug_geography, callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -493,8 +507,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobConsentStatus __result = admob_consent_get_status();
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobConsentStatus
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -504,8 +519,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobConsentType __result = admob_consent_get_type();
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobConsentType
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -526,8 +542,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_consent_load(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }
@@ -542,8 +559,9 @@ public abstract class GMAdMobInternal extends RunnerSocial implements GMAdMobInt
         AdMobError __result = admob_consent_show(callback);
 
         GMExtWire.order(__ret_buffer);
+        GMExtWire.IByteWriter __ret_buffer_writer = new GMExtWire.GMBufferWriter(__ret_buffer);
         // return: __result, type: enum AdMobError
-        GMExtWire.writeI32(__ret_buffer, __result.value());
+        GMExtWire.writeI32(__ret_buffer_writer, __result.value());
 
         return 0;
     }

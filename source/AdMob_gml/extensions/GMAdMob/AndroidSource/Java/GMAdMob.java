@@ -1828,7 +1828,7 @@ public class GMAdMob extends GMAdMobInternal {
 		AdRequest.Builder builder = new AdRequest.Builder();
 	
 		// As per Google's request, set the request agent
-		builder.setRequestAgent("gmext-admob-" + RunnerJNILib.extGetVersion("AdMob"));
+		builder.setRequestAgent("gmext-admob-" + GMExtUtils.GetExtensionVersion("GMAdMob"));
 	
 		// Handle CCPA compliance by adding the "rdp" parameter if the user has opted out
 		if (isRdpEnabled) {

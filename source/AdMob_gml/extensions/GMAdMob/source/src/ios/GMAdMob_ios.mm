@@ -17,8 +17,6 @@ extern UIView *g_glView;
 extern int g_DeviceWidth;
 extern int g_DeviceHeight;
 
-extern "C" const char* extGetVersion(char* _ext);
-
 static gm::wire::GMFunction g_paid_event_callback = nil;
 static gm::wire::GMFunction g_banner_callback = nil;
 static std::unordered_map<void *, gm::wire::GMFunction> g_interstitial_show_callbacks;
@@ -2259,7 +2257,7 @@ typedef void (^AdCleanerBlock)(id ad);
     GADRequest *request = [GADRequest request];
     
     // Set the request agent as per Google's requirement
-    request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", extGetVersion((char*)"AdMob")];
+    request.requestAgent = [NSString stringWithFormat:@"gmext-admob-%s", gm::ExtUtils::GetExtensionVersion("GMAdMob").c_str()];
     
     // Additional network request parameters for AdMob.
     NSMutableDictionary<NSString *, NSString *> *additionalParams = [NSMutableDictionary dictionary];

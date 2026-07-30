@@ -58,7 +58,7 @@ public final class AdMobPaidEventCodec {
         return new AdMobPaidEvent(ad_type, ad_unit_id, value_micros, currency_code, precision, mediation_adapter_class_name, ad_source_name, ad_source_id, ad_source_instance_name, ad_source_instance_id);
     }
 
-    public static void write(ByteBuffer b, AdMobPaidEvent obj)
+    public static void write(GMExtWire.IByteWriter b, AdMobPaidEvent obj)
     {
         GMExtWire.writeI32(b, obj.ad_type().value());
 

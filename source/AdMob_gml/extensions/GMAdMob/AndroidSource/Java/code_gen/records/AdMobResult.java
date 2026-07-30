@@ -12,7 +12,7 @@ public record AdMobResult(boolean success, java.util.Optional<String> error_mess
 {
     public static final int CODEC_ID = 0;
     @Override
-    public void encode(ByteBuffer b)
+    public void encode(GMExtWire.IByteWriter b)
     {
         AdMobResultCodec.write(b, this);
     }

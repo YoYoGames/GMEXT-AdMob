@@ -20,7 +20,7 @@ public final class AdMobRewardCodec {
         return new AdMobReward(amount, type);
     }
 
-    public static void write(ByteBuffer b, AdMobReward obj)
+    public static void write(GMExtWire.IByteWriter b, AdMobReward obj)
     {
         GMExtWire.writeF64(b, obj.amount());
 

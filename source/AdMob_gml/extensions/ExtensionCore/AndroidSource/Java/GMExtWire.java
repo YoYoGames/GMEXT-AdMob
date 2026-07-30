@@ -110,28 +110,47 @@ public class GMExtWire
 
     public interface ITypedStruct {
         /** Serialize JUST the payload fields (no kind/tag/codecId). */
-        void encode(ByteBuffer b);
+        void encode(IByteWriter w);
     }
 
-    public static class DataStream {
+    /**
+     * Common byte-sink contract — mirrors C++'s IByteWriter. GMByteWriter (growable)
+     * and GMBufferWriter (fixed) both implement it, so ITypedStruct.encode(),
+     * Codec.write(), and the collection helpers below are written once and work
+     * against either target, exactly like C++'s single writeValue(IByteWriter&, T)
+     * working over both VectorWriter and BufferWriter.
+     */
+    public interface IByteWriter {
+        void writeI8(byte v);
+        void writeI16(short v);
+        void writeI32(int v);
+        void writeI64(long v);
+        void writeF32(float v);
+        void writeF64(double v);
+        void writeBool(boolean v);
+        void writeString(String s);
 
-        protected static final int DEFAULT_CAP = 512;
+        /** Bulk-copy an already-encoded payload (e.g. a nested stream's finished bytes). */
+        void writeBytes(ByteBuffer src);
+    }
 
-        protected ByteBuffer buf;
+    /**
+     * Growable byte sink — mirrors C++'s VectorWriter. Grows in place instead of
+     * throwing, so generated ITypedStruct.encode() implementations never need a
+     * try/catch to handle running out of room.
+     */
+    public static final class GMByteWriter implements IByteWriter {
+        private ByteBuffer buf;
 
-        public DataStream(int capacity) {
-            buf = alloc(capacity);
+        GMByteWriter(ByteBuffer buf) {
+            this.buf = buf;
         }
 
-        public DataStream() {
-            this(DEFAULT_CAP);
+        public static GMByteWriter withCapacity(int initialCapacity) {
+            return new GMByteWriter(ByteBuffer.allocate(initialCapacity).order(ORDER));
         }
 
-        private static ByteBuffer alloc(int n) {
-            return ByteBuffer.allocate(n).order(ByteOrder.LITTLE_ENDIAN);
-        }
-
-        protected ByteBuffer need(int n) {
+        ByteBuffer need(int n) {
             if (buf.remaining() >= n)
                 return buf;
 
@@ -140,15 +159,86 @@ public class GMExtWire
             while (newCap < minCap)
                 newCap = newCap * 2; // exponential growth
 
-            ByteBuffer bigger = alloc(newCap);
+            ByteBuffer bigger = ByteBuffer.allocate(newCap).order(ORDER);
             buf.flip(); // make the written portion readable
             bigger.put(buf); // copy existing payload
             buf = bigger;
             return buf;
         }
 
+        @Override public void writeI8(byte v)     { GMExtWire.writeI8(need(1), v); }
+        @Override public void writeI16(short v)   { GMExtWire.writeI16(need(2), v); }
+        @Override public void writeI32(int v)     { GMExtWire.writeI32(need(4), v); }
+        @Override public void writeI64(long v)    { GMExtWire.writeI64(need(8), v); }
+        @Override public void writeF32(float v)   { GMExtWire.writeF32(need(4), v); }
+        @Override public void writeF64(double v)  { GMExtWire.writeF64(need(8), v); }
+        @Override public void writeBool(boolean v){ GMExtWire.writeBool(need(1), v); }
+
+        @Override
+        public void writeString(String s) {
+            byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+            need(4 + bytes.length + 1);
+            GMExtWire.writeString(buf, s);
+        }
+
+        @Override
+        public void writeBytes(ByteBuffer src) {
+            need(src.remaining());
+            buf.put(src);
+        }
+
+        int length() { return buf.position(); }
+
+        void clear() { buf.clear(); }
+
+        /** Read-only view of the bytes written so far (position 0 .. length()). */
+        ByteBuffer snapshot() {
+            ByteBuffer ro = buf.asReadOnlyBuffer();
+            ro.flip();
+            return ro;
+        }
+    }
+
+    /**
+     * Fixed-capacity byte sink — mirrors C++'s BufferWriter. Wraps an
+     * already-sized destination (e.g. the native return buffer) and never
+     * grows: writes past capacity throw, exactly like the raw ByteBuffer
+     * primitives always have.
+     */
+    public static final class GMBufferWriter implements IByteWriter {
+        private final ByteBuffer buf;
+
+        public GMBufferWriter(ByteBuffer buf) {
+            this.buf = buf;
+        }
+
+        @Override public void writeI8(byte v)      { GMExtWire.writeI8(buf, v); }
+        @Override public void writeI16(short v)    { GMExtWire.writeI16(buf, v); }
+        @Override public void writeI32(int v)      { GMExtWire.writeI32(buf, v); }
+        @Override public void writeI64(long v)     { GMExtWire.writeI64(buf, v); }
+        @Override public void writeF32(float v)    { GMExtWire.writeF32(buf, v); }
+        @Override public void writeF64(double v)   { GMExtWire.writeF64(buf, v); }
+        @Override public void writeBool(boolean v) { GMExtWire.writeBool(buf, v); }
+        @Override public void writeString(String s){ GMExtWire.writeString(buf, s); }
+        @Override public void writeBytes(ByteBuffer src) { buf.put(src); }
+    }
+
+    public static class DataStream {
+
+        protected static final int DEFAULT_CAP = 512;
+
+        protected GMByteWriter buf;
+
+        public DataStream(int capacity) {
+            buf = GMByteWriter.withCapacity(capacity);
+        }
+
+        public DataStream() {
+            this(DEFAULT_CAP);
+        }
+
         public int length() {
-            return buf.position();
+            return buf.length();
         }
 
         public void clear() {
@@ -156,105 +246,73 @@ public class GMExtWire
         }
 
         // ---- RAW (no type tag) writers ----
-        public DataStream putRawI8(byte v)    { need(1); GMExtWire.writeI8(buf, v);   return this; }
-        public DataStream putRawI16(short v)  { need(2); GMExtWire.writeI16(buf, v);  return this; }
-        public DataStream putRawI32(int v)    { need(4); GMExtWire.writeI32(buf, v);  return this; }
-        public DataStream putRawI64(long v)   { need(8); GMExtWire.writeI64(buf, v);  return this; }
-        public DataStream putRawBool(boolean v){ need(1);  GMExtWire.writeBool(buf, v); return this; }
+        public DataStream putRawI8(byte v)     { buf.writeI8(v);   return this; }
+        public DataStream putRawI16(short v)   { buf.writeI16(v);  return this; }
+        public DataStream putRawI32(int v)     { buf.writeI32(v);  return this; }
+        public DataStream putRawI64(long v)    { buf.writeI64(v);  return this; }
+        public DataStream putRawBool(boolean v){ buf.writeBool(v); return this; }
 
         public DataStream put(byte v) {
-            need(1 + 1);
-            GMExtWire.writeI8(buf, ValueType.Int8.tag);
-            GMExtWire.writeI8(buf, v);
+            buf.writeI8(ValueType.Int8.tag);
+            buf.writeI8(v);
             return this;
         }
 
         public DataStream put(short v) {
-            need(1 + 2);
-            GMExtWire.writeI8(buf, ValueType.Int16.tag);
-            GMExtWire.writeI16(buf, v);
+            buf.writeI8(ValueType.Int16.tag);
+            buf.writeI16(v);
             return this;
         }
 
         public DataStream put(int v) {
-            need(1 + 4);
-            GMExtWire.writeI8(buf, ValueType.Int32.tag);
-            GMExtWire.writeI32(buf, v);
+            buf.writeI8(ValueType.Int32.tag);
+            buf.writeI32(v);
             return this;
         }
 
         public DataStream put(long v) {
-            need(1 + 8);
-            GMExtWire.writeI8(buf, ValueType.UInt64.tag);
-            GMExtWire.writeI64(buf, v);
+            buf.writeI8(ValueType.UInt64.tag);
+            buf.writeI64(v);
             return this;
         }
 
         public DataStream put(float v) {
-            need(1 + 4);
-            GMExtWire.writeI8(buf, ValueType.Float.tag);
-            GMExtWire.writeF32(buf, v);
+            buf.writeI8(ValueType.Float.tag);
+            buf.writeF32(v);
             return this;
         }
 
         public DataStream put(double v) {
-            need(1 + 8);
-            GMExtWire.writeI8(buf, ValueType.Double.tag);
-            GMExtWire.writeF64(buf, v);
+            buf.writeI8(ValueType.Double.tag);
+            buf.writeF64(v);
             return this;
         }
 
         public DataStream put(boolean v) {
-            need(1 + 1);
-            GMExtWire.writeI8(buf, ValueType.Bool.tag);
-            GMExtWire.writeBool(buf, v);
+            buf.writeI8(ValueType.Bool.tag);
+            buf.writeBool(v);
             return this;
         }
 
         public DataStream put(String s) {
-            need(1 + 4 + s.length() + 1);
-            GMExtWire.writeI8(buf, ValueType.String.tag);
-            GMExtWire.writeString(buf, s);
+            buf.writeI8(ValueType.String.tag);
+            buf.writeString(s);
             return this;
         }
 
         public DataStream put(ITypedStruct s) {
             int codecId = resolveCodecId(s.getClass());
 
-            // s.encode() writes its fields via the non-growing static GMExtWire
-            // write helpers, so it can't share this stream's own growable `buf`
-            // directly (a struct larger than whatever capacity happens to be
-            // left would throw BufferUnderflowException instead of growing).
-            // Encode into a scratch buffer that grows-and-retries until the
-            // struct fits, then splice the finished bytes in, same as put(DataStream).
-            ByteBuffer payload = encodeWithRetry(s);
-
-            need(1 + 4 + payload.remaining());
-            GMExtWire.writeI8(buf, ValueType.TypedStruct.tag);
-            GMExtWire.writeI32(buf, codecId);
-            buf.put(payload);
+            buf.writeI8(ValueType.TypedStruct.tag);
+            buf.writeI32(codecId);
+            s.encode(buf); // writes straight into this stream's growable buffer
             return this;
-        }
-
-        private static ByteBuffer encodeWithRetry(ITypedStruct s) {
-            int cap = DEFAULT_CAP;
-            while (true) {
-                ByteBuffer scratch = alloc(cap);
-                try {
-                    s.encode(scratch);
-                    scratch.flip();
-                    return scratch;
-                } catch (BufferUnderflowException e) {
-                    cap *= 2;
-                }
-            }
         }
 
         public DataStream put(Optional<?> opt) {
             if (opt == null || !opt.isPresent()) {
                 // Empty optional => Undefined tag
-                need(1);
-                GMExtWire.writeI8(buf, ValueType.Undefined.tag);
+                buf.writeI8(ValueType.Undefined.tag);
             } else {
                 putAny(opt.get());  // delegate to normal typed path
             }
@@ -264,9 +322,8 @@ public class GMExtWire
         public DataStream put(java.util.List<?> list) {
             Objects.requireNonNull(list, "List is null");
 
-            need(1 + 2);
-            GMExtWire.writeI8(buf, ValueType.Array.tag);
-            GMExtWire.writeI16(buf, (short) list.size());
+            buf.writeI8(ValueType.Array.tag);
+            buf.writeI16((short) list.size());
 
             for (Object e : list) {
                 putAny(e);
@@ -275,25 +332,23 @@ public class GMExtWire
         }
 
         protected DataStream put(DataStream v) {
-            ByteBuffer src = v.buf.asReadOnlyBuffer();
-            src.flip();
-            need(v.length());
-            buf.put(src);
+            buf.writeBytes(v.buf.snapshot());
             return this;
         }
 
         public void writeTo(ByteBuffer target) {
-            ByteBuffer src = buf.asReadOnlyBuffer();
-            src.flip();
-            target.put(src);
+            target.put(buf.snapshot());
+        }
+
+        public void writeTo(IByteWriter target) {
+            target.writeBytes(buf.snapshot());
         }
 
         public void buildFrom(ByteBuffer src) {
             ByteBuffer r = src.asReadOnlyBuffer().order(ORDER);
             r.rewind();
             buf.clear();
-            need(r.remaining());
-            buf.put(r);
+            buf.writeBytes(r);
         }
 
         protected <T> void putAny(T v) {
@@ -360,14 +415,16 @@ public class GMExtWire
         }
 
         @Override
+        public void writeTo(IByteWriter dst) {
+            dst.writeI8(tag);
+            dst.writeI16(count);
+            super.writeTo(dst);
+        }
+
+        @Override
         protected void serializeTo(DataStream dst) {
-            // dst.buf is the growable stream being assembled for a callback/args
-            // array; writeI8/writeI16 route through the non-growing static
-            // need(ByteBuffer,int) and would throw instead of growing once dst
-            // runs out of headroom, so reserve via dst's own growing need() first.
-            dst.need(1 + 2);
-            GMExtWire.writeI8(dst.buf, tag);
-            GMExtWire.writeI16(dst.buf, count);
+            dst.buf.writeI8(tag);
+            dst.buf.writeI16(count);
             super.serializeTo(dst); // write buffer content
         }
 
@@ -440,23 +497,15 @@ public class GMExtWire
             ++count;
             // Only payload: no per-element tag. For gm_struct we rely on encode().
             if (value instanceof ITypedStruct s) {
-                // See DataStream.put(ITypedStruct): encode() writes via the
-                // non-growing static write helpers, so it can't share this
-                // stream's own growable `buf` directly.
-                ByteBuffer payload = DataStream.encodeWithRetry(s);
-                need(payload.remaining());
-                buf.put(payload);
+                s.encode(buf); // writes straight into this stream's growable buffer
+            } else if (value instanceof Integer i) {
+                buf.writeI32(i);
+            } else if (value instanceof Long l) {
+                buf.writeI64(l);
+            } else if (value instanceof String s) {
+                buf.writeString(s);
             } else {
-                // scalar/string - write raw, no GMValue tag. Same non-growing
-                // static-writer risk as the struct branch above: reserve via
-                // this stream's own growing need() before each write.
-                if (value instanceof Integer i) { need(4); GMExtWire.writeI32(buf, i); }
-                else if (value instanceof Long l) { need(8); GMExtWire.writeI64(buf, l); }
-                else if (value instanceof String s) {
-                    need(4 + s.getBytes(StandardCharsets.UTF_8).length + 1);
-                    GMExtWire.writeString(buf, s);
-                }
-                else throw new IllegalArgumentException("Unsupported elem: " + value.getClass());
+                throw new IllegalArgumentException("Unsupported elem: " + value.getClass());
             }
             return this;
         }
@@ -474,28 +523,30 @@ public class GMExtWire
             }
 
             // now write just the payload contained in buf
-            ByteBuffer src = buf.asReadOnlyBuffer();
-            src.flip();
-            dst.put(src);
+            dst.put(buf.snapshot());
+        }
+
+        @Override
+        public void writeTo(IByteWriter dst) {
+            dst.writeI8(ValueType.TypedArray.tag);
+            dst.writeI16(count);
+
+            dst.writeI8(elemTag);
+            if (codecId != null) {
+                dst.writeI32(codecId);
+            }
+
+            dst.writeBytes(buf.snapshot());
         }
 
         @Override
         protected void serializeTo(DataStream dst) {
-            // dst.buf is the growable stream being assembled for a callback/args
-            // array; these writeXxx calls route through the non-growing static
-            // need(ByteBuffer,int) and would throw instead of growing, so reserve
-            // the whole header (tag + count + elemTag [+ codecId]) via dst's own
-            // growing need() up front, same fix as CollectionStream.serializeTo().
-            dst.need(1 + 2 + 1 + (codecId != null ? 4 : 0));
-            GMExtWire.writeI8(dst.buf, ValueType.TypedArray.tag);
-            GMExtWire.writeI16(dst.buf, count);
-            GMExtWire.writeI8(dst.buf, elemTag);
-            if (codecId != null) GMExtWire.writeI32(dst.buf, codecId);
+            dst.buf.writeI8(ValueType.TypedArray.tag);
+            dst.buf.writeI16(count);
+            dst.buf.writeI8(elemTag);
+            if (codecId != null) dst.buf.writeI32(codecId);
 
-            ByteBuffer src = buf.asReadOnlyBuffer();
-            src.flip();
-            dst.need(src.remaining());
-            dst.buf.put(src);
+            dst.buf.writeBytes(buf.snapshot());
         }
     }
 
@@ -621,8 +672,7 @@ public class GMExtWire
         @Override
         public void dispatch(DataStream ev) {
             // Snapshot the bytes so caller can reuse their DataStream safely.
-            ByteBuffer ro = ev.buf.asReadOnlyBuffer();
-            ro.flip();
+            ByteBuffer ro = ev.buf.snapshot();
             DataStream copy = new DataStream(ro.remaining());
             copy.buildFrom(ro);
             q.add(copy);
@@ -818,7 +868,7 @@ public class GMExtWire
         return new GMFunction(ref, dispatcher);
     }
 
-    // Write Primitives
+    // Write Primitives — ByteBuffer target (fixed-capacity; throws if it doesn't fit)
     public static void writeI8(ByteBuffer b, byte v){ need(b,1); b.put(v); }
     public static void writeI16(ByteBuffer b, short v){ need(b,2); b.putShort(v); }
     public static void writeI32(ByteBuffer b, int v){ need(b,4); b.putInt(v); }
@@ -826,6 +876,16 @@ public class GMExtWire
     public static void writeF32(ByteBuffer b, float v){ need(b,4); b.putFloat(v); }
     public static void writeF64(ByteBuffer b, double v){ need(b,8); b.putDouble(v); }
     public static void writeBool(ByteBuffer b, boolean v){ need(b,1); b.put((byte)(v?1:0)); }
+
+    // Write Primitives — IByteWriter target (GMByteWriter grows in place; GMBufferWriter
+    // throws if it doesn't fit — the concrete type decides, this just dispatches)
+    public static void writeI8(IByteWriter w, byte v)      { w.writeI8(v); }
+    public static void writeI16(IByteWriter w, short v)    { w.writeI16(v); }
+    public static void writeI32(IByteWriter w, int v)      { w.writeI32(v); }
+    public static void writeI64(IByteWriter w, long v)     { w.writeI64(v); }
+    public static void writeF32(IByteWriter w, float v)    { w.writeF32(v); }
+    public static void writeF64(IByteWriter w, double v)   { w.writeF64(v); }
+    public static void writeBool(IByteWriter w, boolean v) { w.writeBool(v); }
 
     // Strings: length-prefixed UTF-8 + NUL
     public static String readString(ByteBuffer b){
@@ -844,17 +904,23 @@ public class GMExtWire
         b.put(bytes);
         b.put((byte)0);
     }
+    public static void writeString(IByteWriter w, String s){ w.writeString(s); }
+
+    // Reads always target a fixed, fully-populated ByteBuffer (no growth needed).
+    // Writes always build against IByteWriter (see ITypedStruct.encode and
+    // Codec.write — the only producers of these calls; GMByteWriter and
+    // GMBufferWriter are the two concrete targets). There is deliberately only
+    // one Writer<T> family: a ByteBuffer-flavored twin would have no callers.
+    @FunctionalInterface public interface Reader<T>{ T read(ByteBuffer b); }
+    @FunctionalInterface public interface Writer<T>{ void write(IByteWriter b, T v); }
 
     // Optional<T>: 1-byte presence, then payload
-    @FunctionalInterface public interface Reader<T>{ T read(ByteBuffer b); }
-    @FunctionalInterface public interface Writer<T>{ void write(ByteBuffer b, T v); }
-
     public static <T> Optional<T> readOptional(ByteBuffer b, Reader<T> r){
         boolean present = readBool(b);
         return present ? Optional.of(r.read(b)) : Optional.empty();
     }
-    public static <T> void writeOptional(ByteBuffer b, Optional<T> v, Writer<T> w){
-        writeBool(b, v!=null && v.isPresent());
+    public static <T> void writeOptional(IByteWriter b, Optional<T> v, Writer<T> w){
+        b.writeBool(v!=null && v.isPresent());
         if (v!=null && v.isPresent()) w.write(b, v.get());
     }
 
@@ -866,8 +932,8 @@ public class GMExtWire
         for (int i=0;i<count;i++) out.add(r.read(b));
         return out;
     }
-    public static <T> void writeList(ByteBuffer b, List<T> xs, Writer<T> w){
-        writeI32(b, xs.size());
+    public static <T> void writeList(IByteWriter b, List<T> xs, Writer<T> w){
+        b.writeI32(xs.size());
         for (T x: xs) w.write(b, x);
     }
 
@@ -877,7 +943,7 @@ public class GMExtWire
         for (int i=0;i<count;i++) out.add(r.read(b));
         return out;
     }
-    public static <T> void writeVector(ByteBuffer b, List<T> xs, Writer<T> w){
+    public static <T> void writeVector(IByteWriter b, List<T> xs, Writer<T> w){
         for (T x: xs) w.write(b, x);
     }
 
@@ -886,7 +952,7 @@ public class GMExtWire
         for (int i=0;i<n;i++) out[i] = r.read(b);
         return out;
     }
-    public static <T> void writeFixedArray(ByteBuffer b, T[] arr, Writer<T> w){
+    public static <T> void writeFixedArray(IByteWriter b, T[] arr, Writer<T> w){
         for (T t: arr) w.write(b, t);
     }
 

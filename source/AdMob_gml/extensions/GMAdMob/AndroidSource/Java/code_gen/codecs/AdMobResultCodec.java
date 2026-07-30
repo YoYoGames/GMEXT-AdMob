@@ -33,7 +33,7 @@ public final class AdMobResultCodec {
         return new AdMobResult(success, error_message, sdk_error_code);
     }
 
-    public static void write(ByteBuffer b, AdMobResult obj)
+    public static void write(GMExtWire.IByteWriter b, AdMobResult obj)
     {
         GMExtWire.writeBool(b, obj.success());
 

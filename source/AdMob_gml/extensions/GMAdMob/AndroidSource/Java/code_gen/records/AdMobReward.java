@@ -11,7 +11,7 @@ public record AdMobReward(double amount, String type) implements GMExtWire.IType
 {
     public static final int CODEC_ID = 1;
     @Override
-    public void encode(ByteBuffer b)
+    public void encode(GMExtWire.IByteWriter b)
     {
         AdMobRewardCodec.write(b, this);
     }
