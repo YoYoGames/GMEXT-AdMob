@@ -16,7 +16,7 @@
   "copyToTargets":12,
   "description":"",
   "exportToGame":true,
-  "extensionVersion":"2.0.1",
+  "extensionVersion":"2.0.2",
   "files":[
     {"$GMExtensionFile":"v1","%Name":"","constants":[],"copyToTargets":-1,"filename":"GMAdMob.ext","final":"","functions":[
         {"$GMExtensionFunction":"","%Name":"__admob_initialize","argCount":4,"args":[1,2,1,2,],"documentation":"@param {Pointer} _arg_buffer\r\n@param {Real} _arg_buffer_length\r\n@param {Pointer} _ret_buffer\r\n@param {Real} _ret_buffer_length\r\n@returns {Real}","externalName":"__EXT_NATIVE__admob_initialize","help":"","hidden":true,"kind":4,"name":"__admob_initialize","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
